@@ -7,6 +7,6 @@ Description: More about what it does (maybe more than one line)
 License: MIT + file LICENSE
 Depends: R (>= 3.0.0)
 License: MIT + file LICENSE
-LazyData: true
+LazyData: false
 Suggests: testthat
 Imports: dplyr, jsonlite, purrr, data.table, magrittr, stringr, tidyr, lubridate
