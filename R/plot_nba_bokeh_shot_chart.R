@@ -132,10 +132,14 @@ plot_nba_player_bokeh_shotchart <- function(player,
   
   
   data.shots <-
-    data$shots
+    data$shots %>% 
+    tbl_df
   
   data.shots %<>%
     mutate(shot_made = ifelse(shot_made_flag == T, "YES", "NO"))
+  
+  data.shots %>% 
+    dplyr::filter(shot_made == 'YES')
   
   if(exclude_backcourt == T){
     data.shots %<>% 
@@ -472,7 +476,7 @@ plot_nba_player_bokeh_shotchart <- function(player,
     )
   
   data.shots %<>%
-    mutate(url.photo = 'http://stats.nba.com/media/players/230x185/' %>% paste0(id.player, '.png'))
+    mutate(url_photo = 'http://stats.nba.com/media/players/230x185/' %>% paste0(id.player, '.png'))
   
   names(data.shots) %<>%
     gsub('\\.', '\\_', .)
@@ -593,7 +597,8 @@ plot_nba_player_bokeh_shotchart <- function(player,
       ly_points(
         loc_x,
         loc_y,
-        data = data.shots %>%
+        data = 
+          data.shots %>%
           dplyr::filter(shot_made == "YES"),
         color = "black",
         fill_color = "black",
@@ -686,7 +691,8 @@ plot_nba_player_bokeh_shotchart <- function(player,
       ly_points(
         loc_x,
         loc_y,
-        data = data.shots %>%
+        data = 
+          data.shots %>%
           dplyr::filter(shot_made == "NO"),
         color = "red",
         fill_color = "red",
