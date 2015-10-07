@@ -64,9 +64,9 @@ get_player_season_shot_data <- function(player,
   if (year_season_end < 1997) {
     stop.message <-
       "Sorry NBA Shooting data exists only since the 1996-97 Season!!"
-    stop(stop.message, call. = F)
-  } else {
-    p <-
+    stop(stop.message)
+  }
+  p <-
       player %>%
       str_to_lower() %>% 
       str_replace_all('\\.','')
@@ -109,7 +109,8 @@ get_player_season_shot_data <- function(player,
       against_team %<>%
         str_to_title()
       
-      against_team_id <-
+      if (!against_team %>% is.na){
+        against_team_id <-
         teams_ids %>%
         dplyr::filter(name.team == against_team) %>%
         .$id.team %>%
