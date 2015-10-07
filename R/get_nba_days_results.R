@@ -24,7 +24,7 @@ get_nba_days_scores <- function(date, return_message = T) {
     stop("Make sure you enter date as a character!!")
   }
 
-  if (date %>%  guess_formats("mdy") %>% length == 0) {
+  if (date %>%  lubridate::guess_formats("mdy") %>% length == 0) {
     stop("Enter valid date in month, day, year format")
   }
 
