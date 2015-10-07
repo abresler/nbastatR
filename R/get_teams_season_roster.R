@@ -37,7 +37,6 @@ get_nba_teams_seasons_roster <- function(team, year_season_end = 2016,
     year_season_start %>%
     paste(year_season_end %>% substr(start = 3, stop = 4),
           sep = "-")
-  )
   
   t <-
     team %>% 
