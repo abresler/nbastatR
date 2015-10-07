@@ -28,9 +28,9 @@
 #' @return
 #' @export
 #'
-#' @examples nba_team_bokeh_shotchart(team = "Nets", plot_hex = F, quarter_range = c(3,4))
+#' @examples plot_nba_team_season_bokeh_shotchart(team = "Nets", plot_hex = F, quarter_range = c(3,4))
 
-nba_team_season_bokeh_shotchart <- function(team = "Nets",
+plot_nba_team_season_bokeh_shotchart <- function(team = "Nets",
                                      year_roster = 2016,
                                      year_data = 2015,
                                      plot_hex = T,

@@ -155,8 +155,7 @@ get_team_season_shot_data <- function(team,
     
     all_shots %<>%
       bind_rows(data$shots)
-    
-  }
+    }
   all_shots %<>%
     left_join(roster_data %>%
                 select(id.player, name.player, id.position))

@@ -23,12 +23,12 @@
 #' @return
 #' @export
 #'
-#' @examples  get_nba_player_bokeh_shotchart( player = "Thomas Robinson", exclude_backcourt = T, shots_type = c("Dunk", "Layup", "Hook", "Jump Shot"))
+#' @examples  plot_nba_player_bokeh_shotchart( player = "Thomas Robinson", exclude_backcourt = T, shots_type = c("Dunk", "Layup", "Hook", "Jump Shot"))
 # 
 #' 
 #' shot_areas = c('Paint', 'Mid-Range'), use_shot_zone_side = T, season_segment = 'Post All-Star', 
 #' year_season_end = 2015, author = "Alex Bresler")
-get_nba_player_bokeh_shotchart <- function(player,
+plot_nba_player_bokeh_shotchart <- function(player,
                                        year_season_end = 2015,
                                        plot_hex = T,
                                        author = "Alex Bresler",
