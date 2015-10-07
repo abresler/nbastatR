@@ -95,17 +95,6 @@ get_player_season_shot_data <- function(player,
       .$id.player
     
     ## Teams
-    if (!against_team %>% is.na) {
-      if ('Desktop/cre_sport_finance_data_apis/sports/functions/nba_stats/get_nba_franchise_history.R' %>%
-          file.exists()) {
-        source(
-          'Desktop/cre_sport_finance_data_apis/sports/functions/nba_stats/get_nba_franchise_history.R'
-        )
-      } else {
-        source(
-          'https://gist.githubusercontent.com/abresler/fcdf63eccda3ebb6bc6f/raw/72116d372d249b10580a70466e63e5b2bea9374a/get_nba_franchise_history.r'
-        )
-      }
       teams_ids <-
         get_nba_franchise_data(return_franchises = 'current') %>%
         select(team_id, team_city, team_name) %>%
