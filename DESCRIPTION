@@ -1,0 +1,12 @@
+Package: nbastatR
+Type: Package
+Title: Interface to the NBA stats API
+Version: 0.1.0
+Authors@R: c(person("Alex", "Bresler", email = "abresler@asbcllc.com", role = c("aut", "cre"))
+Description: More about what it does (maybe more than one line)
+License: MIT + file LICENSE
+Depends: R (>= 3.0.0)
+License: MIT + file LICENSE
+LazyData: true
+Suggests: testthat
+Imports: dplyr, jsonlite, purrr, rbokeh, data.table, magrittr, stringr, tidyr, lubridate
