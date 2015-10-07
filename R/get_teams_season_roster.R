@@ -25,13 +25,6 @@ get_nba_teams_seasons_roster <- function(team,
     )
   options(warn = -1)
   lapply(packages, library, character.only = T)
-  active_teams <- 
-    c("76ers", "Bucks", "Bulls", "Cavaliers", "Celtics", "Clippers", 
-      "Grizzlies", "Hawks", "Heat", "Hornets", "Jazz", "Kings", "Knicks", 
-      "Lakers", "Magic", "Mavericks", "Nets", "Nuggets", "Pacers", 
-      "Pelicans", "Pistons", "Raptors", "Rockets", "Spurs", "Suns", 
-      "Thunder", "Timberwolves", "Trail Blazers", "Warriors", "Wizards"
-    )
   year_season_start <-
     year_season_end - 1
   
@@ -44,7 +37,13 @@ get_nba_teams_seasons_roster <- function(team,
     team %>% 
     str_to_title()
   
-  if (t %in% active_teams){
+  if (t %in%  c("76ers", "Bucks", "Bulls", "Cavaliers", "Celtics", "Clippers", 
+        "Grizzlies", "Hawks", "Heat", "Hornets", "Jazz", "Kings", "Knicks", 
+        "Lakers", "Magic", "Mavericks", "Nets", "Nuggets", "Pacers", 
+        "Pelicans", "Pistons", "Raptors", "Rockets", "Spurs", "Suns", 
+        "Thunder", "Timberwolves", "Trail Blazers", "Warriors", "Wizards"
+      )
+  ){
     teams <-
       nbastatR::get_nba_franchise_data(return_franchises = 'current') %>%
       rename(id.team = team_id, city.team = team_city, name.team = team_name) %>%
