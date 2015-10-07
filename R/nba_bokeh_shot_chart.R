@@ -23,24 +23,7 @@
 #' @return
 #' @export
 #'
-#' @examples 
-packages <- c(
-  'dplyr',
-  'magrittr',
-  'jsonlite',
-  'tidyr',
-  'stringr',
-  'formattable',
-  #devtools::install_github(renkun-ken/formattable)
-  'rbokeh',
-  #devtools::install_github(hafen/rbokeh)
-  'hexbin',
-  'stringr',
-  'tidyr'
-)
-options(warn = -1)
-#nba_player_bokeh_shotchart( player = "Thomas Robinson", exclude_backcourt = T, shots_type = c("Dunk", "Layup", "Hook", "Jump Shot"))
-lapply(packages, library, character.only = T)
+#' @examples  get_nba_player_bokeh_shotchart( player = "Thomas Robinson", exclude_backcourt = T, shots_type = c("Dunk", "Layup", "Hook", "Jump Shot"))
 # 
 #' 
 #' shot_areas = c('Paint', 'Mid-Range'), use_shot_zone_side = T, season_segment = 'Post All-Star', 
@@ -75,17 +58,22 @@ get_nba_player_bokeh_shotchart <- function(player,
                                        #NA Post All-Star, Pre All-Star
                                        exclude_backcourt = T
 ) {
-  if ('Desktop/cre_sport_finance_data_apis/sports/functions/nba_stats/get_player_season_shotdata.R' %>%
-      file.exists()) {
-    source(
-      'Desktop/cre_sport_finance_data_apis/sports/functions/nba_stats/get_player_season_shotdata.R'
-    )
-  } else {
-    source(
-      'https://gist.githubusercontent.com/abresler/55d57d6ffe6f9931df8a/raw/c20df406c8b2812033453130e9f6a51af5ab380e/get_nba_player_season_shotchart.r'
-    )
-  }
-  
+  packages <- c(
+    'dplyr',
+    'magrittr',
+    'jsonlite',
+    'tidyr',
+    'stringr',
+    'formattable',
+    #devtools::install_github(renkun-ken/formattable)
+    'rbokeh',
+    #devtools::install_github(hafen/rbokeh)
+    'hexbin',
+    'stringr',
+    'tidyr'
+  )
+  options(warn = -1)
+  lapply(packages, library, character.only = T)
   p <-
     player
   
@@ -123,7 +111,7 @@ get_nba_player_bokeh_shotchart <- function(player,
     season_segment
   
   data <- 
-    get_player_season_shot_data(player = p,year_season_end = yse,use_shot_zone_side = uid,
+    nbastatR::get_player_season_shot_data(player = p,year_season_end = yse,use_shot_zone_side = uid,
                                  season_type = st,shots_type = shot_t,
                                  shot_areas = sa,
                                  vs_conference = vs_conf,vs_division = vs_div,

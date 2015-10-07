@@ -1,17 +1,3 @@
-packages <- #need all of these installed including some from github
-  c(
-    'dplyr',
-    'magrittr',
-    'jsonlite',
-    'tidyr',
-    'stringr',
-    'lubridate',
-    'stringr',
-    'tidyr'
-  )
-options(warn = -1)
-lapply(packages, library, character.only = T)
-#nets <- get_nba_teams_seasons_roster(team = "Nets", year_season_end = 2016, include_coaches = F)
 #' Title
 #'
 #' @param team  can be = #c("76ers", "Bucks", "Bulls", "Cavaliers", "Celtics", "Clippers", 
@@ -30,6 +16,19 @@ lapply(packages, library, character.only = T)
 get_nba_teams_seasons_roster <- function(team, year_season_end = 2016,
                                          include_coaches = F,
                                          return_message = T){
+  packages <- #need all of these installed including some from github
+    c(
+      'dplyr',
+      'magrittr',
+      'jsonlite',
+      'tidyr',
+      'stringr',
+      'lubridate',
+      'stringr',
+      'tidyr'
+    )
+  options(warn = -1)
+  lapply(packages, library, character.only = T)
   
   year_season_start <-
     year_season_end - 1
@@ -38,16 +37,7 @@ get_nba_teams_seasons_roster <- function(team, year_season_end = 2016,
     year_season_start %>%
     paste(year_season_end %>% substr(start = 3, stop = 4),
           sep = "-")
-  if ('Desktop/cre_sport_finance_data_apis/sports/functions/nba_stats/get_nba_franchise_history.R' %>%
-      file.exists()) {
-    source(
-      'Desktop/cre_sport_finance_data_apis/sports/functions/nba_stats/get_nba_franchise_history.R'
-    )
-  } else {
-    source(
-      'https://gist.githubusercontent.com/abresler/fcdf63eccda3ebb6bc6f/raw/72116d372d249b10580a70466e63e5b2bea9374a/get_nba_franchise_history.r'
-    )
-  }
+  )
   
   t <-
     team %>% 
@@ -63,11 +53,12 @@ get_nba_teams_seasons_roster <- function(team, year_season_end = 2016,
   
   if (t %in% active_teams){
     teams <-
-      get_nba_franchise_data(return_franchises = 'current') %>%
+      nbastatR::get_nba_franchise_data(return_franchises = 'current') %>%
       rename(id.team = team_id, city.team = team_city, name.team = team_name) %>%
       mutate(team = paste(city.team, name.team)) %>% 
       ungroup %>% 
       mutate(id.team = id.team %>% as.numeric)
+    
     teams$name.team %>% sort(F) %>% emacs
     teams_ids <-
       teams %>% 

@@ -20,20 +20,9 @@
 #' @param return_message
 #'
 #' @return
-#' @export get_player_season_shot_data(player = "K.J. Mcdaniels", year_season_end = 2015)
+#' @export 
 #'
-#' @examples
-packages <- #need all of these installed including some from github
-  c('dplyr',
-    'magrittr',
-    'jsonlite',
-    'tidyr',
-    'stringr',
-    'data.table',
-    'tidyr')
-options(warn = -1, show.error.messages = F)
-lapply(packages, library, character.only = T)
-#lebron <- get_player_season_shot_data(player = "Lebron James", year_season_end = 2015,shots_type = c("Dunk", "Jump Shot"))
+#' @examples get_player_season_shot_data(player = "K.J. Mcdaniels", year_season_end = 2015)
 get_player_season_shot_data <- function(player,
                                         year_season_end = 2015,
                                         use_shot_zone_side = F,
@@ -62,6 +51,16 @@ get_player_season_shot_data <- function(player,
                                         #NA Post All-Star, Pre All-Star
                                         exclude_backcourt = T,
                                         return_message = T) {
+  packages <- #need all of these installed including some from github
+    c('dplyr',
+      'magrittr',
+      'jsonlite',
+      'tidyr',
+      'stringr',
+      'data.table',
+      'tidyr')
+  options(warn = -1, show.error.messages = F)
+  lapply(packages, library, character.only = T)
   if (year_season_end < 1997) {
     stop.message <-
       "Sorry NBA Shooting data exists only since the 1996-97 Season!!"
@@ -80,20 +79,8 @@ get_player_season_shot_data <- function(player,
       paste(year_season_end %>% substr(start = 3, stop = 4),
             sep = "-")
     
-    
-    if ('Desktop/cre_sport_finance_data_apis/sports/functions/nba_stats/get_nba_players_ids.R' %>%
-        file.exists()) {
-      source(
-        'Desktop/cre_sport_finance_data_apis/sports/functions/nba_stats/get_nba_players_ids.R'
-      )
-    } else {
-      source(
-        'https://gist.githubusercontent.com/abresler/557c73f9e20f495ca2dd/raw/370ea83530f8ea37e5e6fc7ea59e389eaf5f3856/get_nba_players_ids.r'
-      )
-    }
-    
     players <-
-      get_nba_players_ids()
+      nbastatR::get_nba_players_ids()
     
     if (players %>% mutate(name.player = name.player %>% str_to_lower %>% str_replace_all('\\.','')) %>% dplyr::filter(name.player == p) %>% .$id.player %>% length == 0) {
       paste0(player,

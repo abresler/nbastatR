@@ -1,17 +1,25 @@
-packages <- #need all of these installed including some from github
-  c(
-    'dplyr',
-    'magrittr',
-    'jsonlite',
-    'tidyr',
-    'stringr',
-    'tidyr'
-  )
-options(warn = -1)
-lapply(packages, library, character.only = T)
-#test <- get_nba_franchise_data(return_franchises = 'all')
+#' Title
+#'
+#' @param return_franchises 
+#' @param return_message 
+#'
+#' @return
+#' @export
+#'
+#' @examples
 get_nba_franchise_data <- function(return_franchises = c('all', 'active', 'current'),
                                    return_message = T){
+  packages <- #need all of these installed including some from github
+    c(
+      'dplyr',
+      'magrittr',
+      'jsonlite',
+      'tidyr',
+      'stringr',
+      'tidyr'
+    )
+  options(warn = -1)
+  lapply(packages, library, character.only = T)
   team_history_url <-
     'http://stats.nba.com/stats/franchisehistory?LeagueID=00'
   

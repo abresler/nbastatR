@@ -30,23 +30,6 @@
 #'
 #' @examples nba_team_bokeh_shotchart(team = "Nets", plot_hex = F, quarter_range = c(3,4))
 
-packages <- c(
-  'dplyr',
-  'magrittr',
-  'jsonlite',
-  'tidyr',
-  'stringr',
-  'formattable',
-  #devtools::install_github(renkun-ken/formattable)
-  'rbokeh',
-  #devtools::install_github(hafen/rbokeh)
-  'hexbin',
-  'stringr',
-  'tidyr'
-)
-options(warn = -1)
-lapply(packages, library, character.only = T)
-
 nba_team_season_bokeh_shotchart <- function(team = "Nets",
                                      year_roster = 2016,
                                      year_data = 2015,
@@ -68,16 +51,23 @@ nba_team_season_bokeh_shotchart <- function(team = "Nets",
                                      outcome = NA,
                                      season_segment = NA,
                                      exclude_backcourt = T) {
-  if ('Desktop/cre_sport_finance_data_apis/sports/functions/nba_stats/get_all_teams_season_shot_data.R' %>%
-      file.exists()) {
-    source(
-      'Desktop/cre_sport_finance_data_apis/sports/functions/nba_stats/get_all_teams_season_shot_data.R'
-    )
-  } else {
-    source(
-      'https://gist.githubusercontent.com/abresler/8cf78e3972f9c4f6c3ea/raw/77e997693bdaf4a7f9cc13fe6414e37162746886/get_all_teams_season_shotdata.r'
-    )
-  }
+  packages <- c(
+    'dplyr',
+    'magrittr',
+    'jsonlite',
+    'tidyr',
+    'stringr',
+    'formattable',
+    #devtools::install_github(renkun-ken/formattable)
+    'rbokeh',
+    #devtools::install_github(hafen/rbokeh)
+    'hexbin',
+    'stringr',
+    'tidyr'
+  )
+  options(warn = -1)
+  lapply(packages, library, character.only = T)
+  
   
   t <-
     team %>%
@@ -121,7 +111,7 @@ nba_team_season_bokeh_shotchart <- function(team = "Nets",
     season_segment
   
   data <-
-    get_team_season_shot_data(
+    nbastatR::get_team_season_shot_data(
       team = t,
       year_roster = ysr,
       year_data = ysd,

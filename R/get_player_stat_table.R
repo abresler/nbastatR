@@ -1,26 +1,26 @@
-options(warn = -1)
-packages <-
-  c(
-    'rvest',
-    'stringr',
-    'lubridate' ,
-    'stringi',
-    'readr',
-    'urltools',
-    'data.table',
-    'curl',
-    'tidyr',
-    'magrittr',
-    'formattable',
-    'httr',
-    'dplyr',
-    'readxl'
-  )
-
-lapply(packages, library, character.only = T)
 get_bref_season_player_stats <- function(year_end_season, use_traded_player_team_total = F,
            stat_type = c("Advanced", "Totals", "Per Minute", "Per Game"),
            league = 'NBA') {
+  options(warn = -1)
+  packages <-
+    c(
+      'rvest',
+      'stringr',
+      'lubridate' ,
+      'stringi',
+      'readr',
+      'urltools',
+      'data.table',
+      'curl',
+      'tidyr',
+      'magrittr',
+      'formattable',
+      'httr',
+      'dplyr',
+      'readxl'
+    )
+  
+  lapply(packages, library, character.only = T)
     bref_team_base <-
       'http://www.basketball-reference.com/leagues/'
     bref_base <-

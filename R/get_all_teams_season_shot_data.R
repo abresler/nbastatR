@@ -1,14 +1,29 @@
-packages <- #need all of these installed including some from github
-  c('dplyr',
-    'magrittr',
-    'jsonlite',
-    'tidyr',
-    'stringr',
-    'data.table',
-    'tidyr')
-options(warn = -1)
-lapply(packages, library, character.only = T)
-#data <- get_team_season_shot_data(team = "Nets", year_roster = 2016, year_data = 2016, season_type = "Pre Season")
+#' Get Teams Shot Data
+#'
+#' @param team 
+#' @param year_roster 
+#' @param year_data 
+#' @param use_shot_zone_side 
+#' @param season_type 
+#' @param positions 
+#' @param shots_type 
+#' @param shot_areas 
+#' @param vs_conference 
+#' @param vs_division 
+#' @param quarter_range 
+#' @param minute_range 
+#' @param against_team 
+#' @param game_location 
+#' @param game_month 
+#' @param outcome 
+#' @param season_segment 
+#' @param exclude_backcourt 
+#' @param return_message 
+#'
+#' @return
+#' @export
+#'
+#' @examples
 get_team_season_shot_data <- function(team,
                                       year_roster = 2015,
                                       year_data = 2015,
@@ -38,6 +53,16 @@ get_team_season_shot_data <- function(team,
                                       #NA Post All-Star, Pre All-Star
                                       exclude_backcourt = T,
                                       return_message = T) {
+  packages <- #need all of these installed including some from github
+    c('dplyr',
+      'magrittr',
+      'jsonlite',
+      'tidyr',
+      'stringr',
+      'data.table',
+      'tidyr')
+  options(warn = -1)
+  lapply(packages, library, character.only = T)
   if (year_data < 1997) {
     "Sorry NBA Shooting data exists only since the 1996-97 season!!" %>%
       message()
@@ -46,17 +71,6 @@ get_team_season_shot_data <- function(team,
     t <-
       team %>%
       str_to_title()
-    
-    if ('Desktop/cre_sport_finance_data_apis/sports/functions/nba_stats/get_teams_seasons_rosters.r' %>%
-        file.exists()) {
-      source(
-        'Desktop/cre_sport_finance_data_apis/sports/functions/nba_stats/get_teams_seasons_rosters.r'
-      )
-    } else {
-      source(
-        'https://gist.githubusercontent.com/abresler/cfe641e1d1ff614675f7/raw/eeab97fa18c836b92e3589720ec6292d0de3a165/get_teams_seasons_rosters.r'
-      )
-    }
     
     yr <-
       year_roster
@@ -71,17 +85,6 @@ get_team_season_shot_data <- function(team,
         include_coaches = F,
         return_message = F
       )
-    
-    if ('Desktop/cre_sport_finance_data_apis/sports/functions/nba_stats/get_player_season_shotdata.R' %>%
-        file.exists()) {
-      source(
-        'Desktop/cre_sport_finance_data_apis/sports/functions/nba_stats/get_player_season_shotdata.R'
-      )
-    } else {
-      source(
-        'https://gist.githubusercontent.com/abresler/55d57d6ffe6f9931df8a/raw/c20df406c8b2812033453130e9f6a51af5ab380e/get_nba_player_season_shotchart.r'
-      )
-    }
     
     uid <-
       use_shot_zone_side

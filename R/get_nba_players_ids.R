@@ -1,15 +1,22 @@
-packages <- #need all of these installed including some from github
-  c('dplyr',
-    'magrittr',
-    'jsonlite',
-    'tidyr',
-    'stringr',
-    'data.table',
-    'tidyr')
-options(warn = -1)
-lapply(packages, library, character.only = T)
-#players <- get_nba_players_ids(active_only = F)
+#' Title
+#'
+#' @param active_only 
+#'
+#' @return
+#' @export
+#'
+#' @examples
 get_nba_players_ids <- function(active_only = F){
+  packages <- #need all of these installed including some from github
+    c('dplyr',
+      'magrittr',
+      'jsonlite',
+      'tidyr',
+      'stringr',
+      'data.table',
+      'tidyr')
+  options(warn = -1)
+  lapply(packages, library, character.only = T)
   players.url <-
     "http://stats.nba.com/stats/commonallplayers?IsOnlyCurrentSeason=0&LeagueID=00&Season=2015-16"
   
