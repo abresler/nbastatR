@@ -1,11 +1,6 @@
 #' Title
 #'
-#' @param team  can be = #c("76ers", "Bucks", "Bulls", "Cavaliers", "Celtics", "Clippers", 
-  #"Grizzlies", "Hawks", "Heat", "Hornets", "Jazz", "Kings", "Knicks", 
-  #"Lakers", "Magic", "Mavericks", "Nets", "Nuggets", "Pacers", 
-  #"Pelicans", "Pistons", "Raptors", "Rockets", "Spurs", "Suns", 
-  #"Thunder", "Timberwolves", "Trail Blazers", "Warriors", "Wizards")
-#' @param year_season_end 
+#' @param team 
 #' @param include_coaches 
 #' @param return_message 
 #'
@@ -13,7 +8,8 @@
 #' @export
 #'
 #' @examples
-get_nba_teams_seasons_roster <- function(team, year_season_end = 2016,
+get_nba_teams_seasons_roster <- function(team, 
+                                         year_season_end = 2016,
                                          include_coaches = F,
                                          return_message = T){
   packages <- #need all of these installed including some from github
@@ -29,7 +25,13 @@ get_nba_teams_seasons_roster <- function(team, year_season_end = 2016,
     )
   options(warn = -1)
   lapply(packages, library, character.only = T)
-  
+  active_teams <- 
+    c("76ers", "Bucks", "Bulls", "Cavaliers", "Celtics", "Clippers", 
+      "Grizzlies", "Hawks", "Heat", "Hornets", "Jazz", "Kings", "Knicks", 
+      "Lakers", "Magic", "Mavericks", "Nets", "Nuggets", "Pacers", 
+      "Pelicans", "Pistons", "Raptors", "Rockets", "Spurs", "Suns", 
+      "Thunder", "Timberwolves", "Trail Blazers", "Warriors", "Wizards"
+    )
   year_season_start <-
     year_season_end - 1
   
@@ -41,14 +43,6 @@ get_nba_teams_seasons_roster <- function(team, year_season_end = 2016,
   t <-
     team %>% 
     str_to_title()
-  
-  active_teams <- 
-    c("76ers", "Bucks", "Bulls", "Cavaliers", "Celtics", "Clippers", 
-      "Grizzlies", "Hawks", "Heat", "Hornets", "Jazz", "Kings", "Knicks", 
-      "Lakers", "Magic", "Mavericks", "Nets", "Nuggets", "Pacers", 
-      "Pelicans", "Pistons", "Raptors", "Rockets", "Spurs", "Suns", 
-      "Thunder", "Timberwolves", "Trail Blazers", "Warriors", "Wizards"
-    )
   
   if (t %in% active_teams){
     teams <-
