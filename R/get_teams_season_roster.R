@@ -58,7 +58,6 @@ get_nba_teams_seasons_roster <- function(team, year_season_end = 2016,
       ungroup %>% 
       mutate(id.team = id.team %>% as.numeric)
     
-    teams$name.team %>% sort(F) %>% emacs
     teams_ids <-
       teams %>% 
       select(id.team, city.team, name.team, team)
