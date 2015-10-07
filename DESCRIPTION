@@ -9,4 +9,4 @@ Depends: R (>= 3.0.0)
 License: MIT + file LICENSE
 LazyData: true
 Suggests: testthat
-Imports: dplyr, jsonlite, purrr, rbokeh, data.table, magrittr, stringr, tidyr, lubridate
+Imports: dplyr, jsonlite, purrr, data.table, magrittr, stringr, tidyr, lubridate
