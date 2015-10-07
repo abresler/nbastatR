@@ -23,6 +23,7 @@
 #' @export
 #'
 #' @examples get_player_season_shot_data(player = "K.J. Mcdaniels", year_season_end = 2015)
+
 get_player_season_shot_data <- function(player,
                                         year_season_end = 2015,
                                         use_shot_zone_side = F,
@@ -96,15 +97,13 @@ get_player_season_shot_data <- function(player,
   
   ## Teams
   teams_ids <-
-    get_nba_franchise_data(return_franchises = 'current') %>%
+    nbastatR::get_nba_franchise_data(return_franchises = 'current') %>%
     select(team_id, team_city, team_name) %>%
-    mutate(team = paste(team_city, team_name)) %>%
-    rename(
-      id.team = team_id,
-      name.team = team_name,
-      id.game_event = game_event_id,
-      city.team = team_city
-    )
+    mutate(team = paste(team_city, team_name)) %>% 
+    tbl_df
+  
+  names(teams_ids) <-
+    c('id.team', 'name.team', 'id.game_event', 'city.team')
   
   against_team %<>%
     str_to_title()
