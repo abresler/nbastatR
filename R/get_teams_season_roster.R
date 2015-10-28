@@ -60,7 +60,7 @@ get_nba_teams_seasons_roster <- function(team,
   )
   ){
     teams <-
-      nbastatR::get_nba_franchise_data(return_franchises = 'current') %>%
+      get_nba_franchise_data(return_franchises = 'current') %>%
       rename(id.team = team_id, city.team = team_city, name.team = team_name) %>%
       mutate(team = paste(city.team, name.team)) %>%
       ungroup %>%

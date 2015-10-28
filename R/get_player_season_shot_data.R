@@ -81,7 +81,7 @@ get_player_season_shot_data <- function(player,
           sep = "-")
 
   players <-
-    nbastatR::get_nba_players_ids()
+    get_nba_players_ids()
 
   if (players %>% mutate(name.player = name.player %>% str_to_lower %>% str_replace_all('\\.', '')) %>% dplyr::filter(name.player == p) %>% .$id.player %>% length == 0) {
     paste0(player,
@@ -97,7 +97,7 @@ get_player_season_shot_data <- function(player,
 
   ## Teams
   teams_ids <-
-    nbastatR::get_nba_franchise_data(return_franchises = 'current') %>%
+    get_nba_franchise_data(return_franchises = 'current') %>%
     dplyr::select(team_id, team_city, team_name) %>%
     mutate(team = paste(team_city, team_name)) %>%
     tbl_df

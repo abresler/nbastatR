@@ -83,7 +83,7 @@ get_team_season_shot_data <- function(team,
     F
 
   roster_data <-
-    nbastatR::get_nba_teams_seasons_roster(
+    get_nba_teams_seasons_roster(
       team = t,
       year_season_end = yr,
       include_coaches = F,
@@ -133,7 +133,7 @@ get_team_season_shot_data <- function(team,
 
   for (p in players) {
     data <-
-      nbastatR::get_player_season_shot_data(
+      get_player_season_shot_data(
         player = p,
         year_season_end = yd,
         use_shot_zone_side = uid,

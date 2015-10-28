@@ -119,7 +119,7 @@ get_headers <- function(){
   return(headers_df)
 }
 players <-
-  nbastatR::get_nba_players_ids()
+  get_nba_players_ids()
 get_nba_career_stat_table <- function(i, json_data, tables_names, use_totals) {
   headers_df <-
     get_headers()

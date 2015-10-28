@@ -3,7 +3,7 @@ get_all_player_career_season_stats <-
            per_mode = "Totals",
            return_message = T) {
     players <-
-      nbastatR::get_nba_players_ids()
+      get_nba_players_ids()
 
     mode <-
       per_mode %>%

@@ -1,15 +1,15 @@
 #' Gets NBA team Bokeh Shot Chart
 #'
-#' @param team  can be = #c("76ers", "Bucks", "Bulls", "Cavaliers", "Celtics", "Clippers", 
-#"Grizzlies", "Hawks", "Heat", "Hornets", "Jazz", "Kings", "Knicks", 
-#"Lakers", "Magic", "Mavericks", "Nets", "Nuggets", "Pacers", 
-#"Pelicans", "Pistons", "Raptors", "Rockets", "Spurs", "Suns", 
+#' @param team  can be = #c("76ers", "Bucks", "Bulls", "Cavaliers", "Celtics", "Clippers",
+#"Grizzlies", "Hawks", "Heat", "Hornets", "Jazz", "Kings", "Knicks",
+#"Lakers", "Magic", "Mavericks", "Nets", "Nuggets", "Pacers",
+#"Pelicans", "Pistons", "Raptors", "Rockets", "Spurs", "Suns",
 #"Thunder", "Timberwolves", "Trail Blazers", "Warriors", "Wizards")
 #' @param year_roster - year of the roster
-#' @param year_data 
+#' @param year_data
 #' @param plot_hex - T or F, shows
-#' @param author 
-#' @param use_shot_zone_side 
+#' @param author
+#' @param use_shot_zone_side
 #' @param season_type - Regular Season, Pre Season, Playoffs, All Star
 #' @param positions  - G, FA, C
 #' @param shots_type -  ('Dunk', 'Layup', 'Jump Shot', "Fadeaway", "Bank", "Tip",'Hook')
@@ -20,10 +20,10 @@
 #' @param minute_range - 0:12
 #' @param against_team - Same as team
 #' @param game_location - NA or Home, Road
-#' @param game_month 
+#' @param game_month
 #' @param outcome  - NA, W, L
 #' @param season_segment NA, Post All-Star, Pre All-Star
-#' @param exclude_backcourt 
+#' @param exclude_backcourt
 #'
 #' @return
 #' @export
@@ -37,7 +37,7 @@ plot_nba_team_season_bokeh_shotchart <- function(team = "Nets",
                                      author = "Alex Bresler",
                                      use_shot_zone_side = T,
                                      season_type = "Regular Season",
-                                     positions = c('G', 'F', 'C'), 
+                                     positions = c('G', 'F', 'C'),
                                      shots_type = c('Dunk', 'Layup', 'Jump Shot', "Fadeaway", "Bank", "Tip",
                                                     'Hook'),
                                      shot_areas = c('Three Point', "Paint", "Mid-Range"),
@@ -67,18 +67,18 @@ plot_nba_team_season_bokeh_shotchart <- function(team = "Nets",
   )
   options(warn = -1)
   lapply(packages, library, character.only = T)
-  
-  
+
+
   t <-
     team %>%
     str_to_title()
-  
+
   ysr <-
     year_roster
-  
+
   ysd <-
     year_data
-  
+
   uid <-
     use_shot_zone_side
   st <-
@@ -109,9 +109,9 @@ plot_nba_team_season_bokeh_shotchart <- function(team = "Nets",
     positions
   season_seg <-
     season_segment
-  
+
   data <-
-    nbastatR::get_team_season_shot_data(
+    get_team_season_shot_data(
       team = t,
       year_roster = ysr,
       year_data = ysd,
@@ -132,38 +132,38 @@ plot_nba_team_season_bokeh_shotchart <- function(team = "Nets",
       exclude_backcourt = eb,
       return_message = F
     )
-  
+
   year_season_start <-
     ysd - 1
-  
+
   id.season <-
     year_season_start %>%
     paste(ysd %>% substr(start = 3, stop = 4),
           sep = "-")
-  
+
   data.shots <-
     data$shots
-  
+
   data.shots %<>%
     mutate(shot_made = ifelse(shot_made_flag == T, "YES", "NO"))
-  
+
   if (exclude_backcourt == T) {
     data.shots %<>%
       dplyr::filter(!id.side %in% 'BC')
   }
   parameters <-
     data$parameters
-  
+
   summary_shots <-
     data.shots %>%
     group_by(shot_made_flag) %>%
     summarise(shots = n())
-  
+
   accuracy_data <-
     data.shots %>%
     group_by(shot_zone_basic) %>%
     mutate(shot_value = ifelse(shot_made_flag == TRUE, 1, 0))
-  
+
   nba_ids <-
     data_frame(
       team = c(
@@ -265,13 +265,13 @@ plot_nba_team_season_bokeh_shotchart <- function(team = "Nets",
         )
     ) %>%
     mutate(url.logo = 'http://stats.nba.com/media/img/teams/logos/' %>% paste0(slug_current, '_logo.svg'))
-  
+
   url.team.logo <-
     nba_ids %>%
     dplyr::filter(name == t) %>%
     .$url.logo
-  
-  
+
+
   ## Parameter Label
   if (minute_range  == 0:12) {
     minute_label <-
@@ -282,25 +282,25 @@ plot_nba_team_season_bokeh_shotchart <- function(team = "Nets",
       paste0(collapse = ', ') %>%
       paste0('Minutes ', .)
   }
-  
+
   if (quarter_range %>% length == 1) {
     quarter_label <-
       "Quarter " %>%
       paste0(quarter_range)
   }
-  
+
   if (quarter_range %>% length > 6) {
     quarter_label <-
       "All Quarters"
   }
-  
+
   if (quarter_range %>% length ==  2 |
       quarter_range %>% length == 3) {
     quarter_label <-
       "Quarters " %>%
       paste0(quarter_range %>% paste0(collapse = " and "))
   }
-  
+
   if (outcome %>% is.na) {
     outcome_label <-
       ''
@@ -310,7 +310,7 @@ plot_nba_team_season_bokeh_shotchart <- function(team = "Nets",
       str_replace("W", "In Wins ") %>%
       str_replace("L", "In Losses ")
   }
-  
+
   if (against_team %>% is.na) {
     opponent_label <-
       'VS. All Opponents'
@@ -319,7 +319,7 @@ plot_nba_team_season_bokeh_shotchart <- function(team = "Nets",
       ' VS.' %>%
       paste(against_team)
   }
-  
+
   if (vs_conference %>% is.na) {
     conf_label <-
       ''
@@ -328,7 +328,7 @@ plot_nba_team_season_bokeh_shotchart <- function(team = "Nets",
       ', ' %>%
       paste0(vs_conference, 'ern Conference')
   }
-  
+
   if (vs_division %>% is.na) {
     division_label <-
       ''
@@ -337,7 +337,7 @@ plot_nba_team_season_bokeh_shotchart <- function(team = "Nets",
       ', ' %>%
       paste(vs_division, 'Division')
   }
-  
+
   if (game_location %>% is.na) {
     location_label <-
       ''
@@ -347,7 +347,7 @@ plot_nba_team_season_bokeh_shotchart <- function(team = "Nets",
       str_replace("Home", " at Home") %>%
       str_replace("Road", " on Road")
   }
-  
+
   if (pos %>% length == 3) {
     position_label <-
       ", All Positions"
@@ -358,12 +358,12 @@ plot_nba_team_season_bokeh_shotchart <- function(team = "Nets",
       paste0(collapse = ', ') %>%
       paste0(', ', .)
   }
-  
+
   if (pos %>% length == 2) {
     position_label <-
       paste0(' ', pos)
   }
-  
+
   if (game_month %>% is.na) {
     month_label <-
       ''
@@ -372,7 +372,7 @@ plot_nba_team_season_bokeh_shotchart <- function(team = "Nets",
       ' During Month ' %>%
       paste0(game_month)
   }
-  
+
   if (season_segment %>% is.na) {
     season_segment_label <-
       ''
@@ -381,7 +381,7 @@ plot_nba_team_season_bokeh_shotchart <- function(team = "Nets",
       season_segment %>%
       paste0(', ', .)
   }
-  
+
   if (shot_areas %>% length == 3) {
     shot_area_label <-
       ', All Shot Areas'
@@ -390,33 +390,33 @@ plot_nba_team_season_bokeh_shotchart <- function(team = "Nets",
       ' from ' %>%
       paste0(shot_areas %>% paste0(collapse = ' & the '))
   }
-  
-  team_label <- 
+
+  team_label <-
     nba_ids %>%
     dplyr::filter(name == t) %>%
-    .$team %>% 
+    .$team %>%
     paste0(" Shot Chart", shot_area_label) %>%
     str_trim
-  
+
   if (ysd == ysr) {
-    season_label <- 
+    season_label <-
       paste0(id.season)
   } else {
     id.season.roster <-
       paste0(ysr - 1, "-", substr(ysr, 3, 4))
-    
+
     season_label <-
       paste0(id.season, ' Data, ', id.season.roster, ' Roster ')
   }
-  
+
   line_2_label <-
     paste(season_label, season_type, season_segment_label) %>%
     str_trim
-  
+
   line_3_label <-
     quarter_label %>%
     paste0(', & ', minute_label, month_label)
-  
+
   line_4_label <-
     outcome_label %>%
     paste0(opponent_label,
@@ -425,7 +425,7 @@ plot_nba_team_season_bokeh_shotchart <- function(team = "Nets",
            location_label,
            position_label) %>%
     str_trim
-  
+
   if (use_shot_zone_side == F) {
     ad <-
       data.shots %>%
@@ -442,7 +442,7 @@ plot_nba_team_season_bokeh_shotchart <- function(team = "Nets",
             accuracy_label = percent(accuracy)
           )
       )
-    
+
     shot_zone_df <-
       data_frame(
         shot_zone_basic = c(
@@ -458,7 +458,7 @@ plot_nba_team_season_bokeh_shotchart <- function(team = "Nets",
         angle = c(0, 0, -175, 0, 0, 150),
         color = c("white", 'white', 'white', 'white', 'white', 'white')
       )
-    
+
     accuracy_plot_data <-
       shot_zone_df %>%
       left_join(ad %>% select(accuracy, shot_area, shot_zone_basic)) %>%
@@ -481,7 +481,7 @@ plot_nba_team_season_bokeh_shotchart <- function(team = "Nets",
             accuracy_label = percent(accuracy)
           )
       )
-    
+
     shot_side_label_df <-
       data_frame(
         shot_side = c(
@@ -559,16 +559,16 @@ plot_nba_team_season_bokeh_shotchart <- function(team = "Nets",
           'white'
         )
       )
-    
+
     accuracy_plot_data <-
       shot_side_label_df %>%
       left_join(ad %>% select(shot_side, accuracy, shot_area)) %>%
       mutate(accuracy_label = accuracy %>% percent %>%
                paste(shot_side, ., sep = " ")) %>%
       dplyr::filter(shot_area %in% shot_areas)
-    
+
   }
-  
+
   performance_name <-
     summary_shots$shots[2] %>% comma(digits = 0) %>%
     paste0(
@@ -578,7 +578,7 @@ plot_nba_team_season_bokeh_shotchart <- function(team = "Nets",
       summary_shots$shots[2] / data.shots %>% nrow * 100 %>% digits(2),
       '% FG PCT'
     )
-  
+
   title_df <-
     data_frame(
       loc_x = c(-200, -200, 0, 0, 0, 0, 0),
@@ -594,25 +594,25 @@ plot_nba_team_season_bokeh_shotchart <- function(team = "Nets",
         performance_name
       )
     )
-  
+
   data.shots %<>%
     mutate(url.photo = 'http://stats.nba.com/media/players/230x185/' %>% paste0(id.player, '.png'))
-  
+
   names(data.shots) %<>%
     gsub('\\.', '\\_', .)
-  
+
   aspect <-
     993 / 1155
-  
+
   tools <-
     c("reset",
       'box_select',
       "crosshair",
       "box_zoom")
-  
+
   court <-
     'https://raw.githubusercontent.com/weinfz/nba_shot_value_charts/master/court.png'
-  
+
   html_point_hover <-
     '<div>
   <div>

@@ -111,7 +111,7 @@ plot_nba_player_bokeh_shotchart <- function(player,
     season_segment
 
   data <-
-    nbastatR::get_player_season_shot_data(player = p,year_season_end = yse,use_shot_zone_side = uid,
+    get_player_season_shot_data(player = p,year_season_end = yse,use_shot_zone_side = uid,
                                  season_type = st,shots_type = shot_t,
                                  shot_areas = sa,
                                  vs_conference = vs_conf,vs_division = vs_div,
