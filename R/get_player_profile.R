@@ -9,7 +9,7 @@ packages <- #need all of these installed including some from github
     'tidyr')
 options(warn = -1)
 players <-
-  get_nba_players_ids()
+  nbastatR::get_nba_players_ids()
 
 height_in_inches <-
   function(height) {
