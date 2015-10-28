@@ -9,8 +9,6 @@
 #' @export
 #'
 #' @examples
-#all_data <- get_batch_player_gamelogs(year.season_start = 2015, season_type = "Pre Season",
- #                         return_message = T)
 get_batch_player_gamelogs <-
   function(year.season_start,
            season_type,
