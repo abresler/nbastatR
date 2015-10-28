@@ -66,27 +66,30 @@ get_team_season_shot_data <- function(team,
   if (year_data < 1997) {
     stop.message <-
       "Sorry NBA Shooting data exists only since the 1996-97 season!!"
-    
+
     stop(stop.message)
   }
   t <-
     team %>%
     str_to_title()
-  
+
   yr <-
     year_roster
-  
+
   yd <-
     year_data
-  
+
+  rm <-
+    F
+
   roster_data <-
     nbastatR::get_nba_teams_seasons_roster(
       team = t,
       year_season_end = yr,
       include_coaches = F,
-      return_message = F
+      return_message = rm
     )
-  
+
   uid <-
     use_shot_zone_side
   st <-
@@ -113,21 +116,21 @@ get_team_season_shot_data <- function(team,
     game_month
   out <-
     outcome
-  
+
   season_seg <-
     season_segment
-  
+
   players <-
     roster_data %>%
     dplyr::filter(years.experience > 0, id.position %in% positions) %>%
     .$name.player
-  
+
   all_params <-
     data_frame()
-  
+
   all_shots <-
     data_frame()
-  
+
   for (p in players) {
     data <-
       nbastatR::get_player_season_shot_data(
@@ -147,23 +150,23 @@ get_team_season_shot_data <- function(team,
         outcome = out,
         season_segment = season_seg,
         exclude_backcourt = eb,
-        return_message = F
+        return_message = rm
       )
-    
+
     all_params %<>%
       bind_rows(data$parameters)
-    
+
     all_shots %<>%
       bind_rows(data$shots)
     }
   all_shots %<>%
     left_join(roster_data %>%
-                select(id.player, name.player, id.position))
-  
+                dplyr::select(id.player, name.player, id.position))
+
   data <-
     list(all_params,
          all_shots)
-  
+
   names(data) <-
     c('parameters', 'shots')
   return(data)

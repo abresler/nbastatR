@@ -106,7 +106,7 @@ get_nba_days_scores <- function(date, return_message = T) {
           is.final = text.games_status %>% str_detect("Final"),
           id.season
         ) %>%
-        select(
+        dplyr::select(
           -c(
             game_date_est,
             live_pc_time,
@@ -115,7 +115,7 @@ get_nba_days_scores <- function(date, return_message = T) {
             text.games_status
           )
         ) %>%
-        select(
+        dplyr::select(
           id.season,
           date,
           sequence.game,
@@ -128,7 +128,7 @@ get_nba_days_scores <- function(date, return_message = T) {
 
       names_numeric_cols <-
         game_data %>%
-        select(
+        dplyr::select(
           -c(
             id.season,
             date,
@@ -198,12 +198,12 @@ get_nba_days_scores <- function(date, return_message = T) {
       line_score_data %<>%
         separate(team.record, sep = '\\-', c('wins', 'losses')) %>%
         mutate(date = parsed_date, id.season) %>%
-        select(-game_date_est) %>%
-        select(id.season, date, everything())
+        dplyr::select(-game_date_est) %>%
+        dplyr::select(id.season, date, everything())
 
       names_numeric_cols <-
         line_score_data %>%
-        select(-c(id.season, date, slug.team, city.team, id.game)) %>%
+        dplyr::select(-c(id.season, date, slug.team, city.team, id.game)) %>%
         names
 
       line_score_data %<>%
@@ -214,10 +214,10 @@ get_nba_days_scores <- function(date, return_message = T) {
         line_score_data %>%
         group_by(id.game) %>%
         dplyr::filter(pts == max(pts)) %>%
-        select(id.game, slug.winner = slug.team)
+        dplyr::select(id.game, slug.winner = slug.team)
         ) %>%
         mutate(is.winning_team = ifelse(slug.winner == slug.team, T, F)) %>%
-        select(id.season:id.game, is.winning_team, everything())
+        dplyr::select(id.season:id.game, is.winning_team, everything())
     }
   } else {
     line_score_data <-
@@ -241,12 +241,12 @@ get_nba_days_scores <- function(date, return_message = T) {
 
       series_standing_data %<>%
         mutate(date = parsed_date, id.season) %>%
-        select(-game_date_est) %>%
-        select(id.season, date, everything())
+        dplyr::select(-game_date_est) %>%
+        dplyr::select(id.season, date, everything())
 
       names_numeric_cols <-
         series_standing_data %>%
-        select(-c(id.season, date, city.series_leader, id.game)) %>%
+        dplyr::select(-c(id.season, date, city.series_leader, id.game)) %>%
         names
 
       series_standing_data %<>%
@@ -284,14 +284,14 @@ get_nba_days_scores <- function(date, return_message = T) {
         separate(last_game_date_est,
                  sep = 'T',
                  into = c('date.last', 'ignore')) %>%
-        select(-ignore) %>%
+        dplyr::select(-ignore) %>%
         mutate(date = parsed_date,
                id.season,
                date.last = date.last %>% ymd %>% as.Date)
 
       names_numeric_cols <-
         last_meeting_data %>%
-        select(
+        dplyr::select(
           c(
             id.home_team.last,
             id.away_team.last,
@@ -303,7 +303,7 @@ get_nba_days_scores <- function(date, return_message = T) {
 
       last_meeting_data %<>%
         mutate_each_(funs(as.numeric), vars = names_numeric_cols) %>%
-        select(
+        dplyr::select(
           id.season,
           date,
           date.last,
@@ -341,7 +341,7 @@ get_nba_days_scores <- function(date, return_message = T) {
         )
 
       east_standings_by_day_data %<>%
-        select(-c(id.league, id.season)) %>%
+        dplyr::select(-c(id.league, id.season)) %>%
         separate(home_record,
                  sep = '\\-',
                  into = c('wins.home', 'losses.home')) %>%
@@ -350,7 +350,7 @@ get_nba_days_scores <- function(date, return_message = T) {
                  into = c('wins.away', 'losses.away'))
 
       names_numeric_cols <-
-        east_standings_by_day_data %>% select(-c(name.conference, city.team, date.standings)) %>% names
+        east_standings_by_day_data %>% dplyr::select(-c(name.conference, city.team, date.standings)) %>% names
 
       east_standings_by_day_data %<>%
         mutate_each_(funs(as.numeric), vars = names_numeric_cols) %>%
@@ -359,7 +359,7 @@ get_nba_days_scores <- function(date, return_message = T) {
           date = parsed_date,
           date.standings = date.standings %>% as.Date('%m/%d/%Y')
         ) %>%
-        select(id.season, date, everything())
+        dplyr::select(id.season, date, everything())
     }
   } else {
     east_standings_by_day_data <-
@@ -387,7 +387,7 @@ get_nba_days_scores <- function(date, return_message = T) {
         )
 
       west_standings_by_day_data %<>%
-        select(-c(id.league, id.season)) %>%
+        dplyr::select(-c(id.league, id.season)) %>%
         separate(home_record,
                  sep = '\\-',
                  into = c('wins.home', 'losses.home')) %>%
@@ -396,7 +396,7 @@ get_nba_days_scores <- function(date, return_message = T) {
                  into = c('wins.away', 'losses.away'))
 
       names_numeric_cols <-
-        west_standings_by_day_data %>% select(-c(name.conference, city.team, date.standings)) %>% names
+        west_standings_by_day_data %>% dplyr::select(-c(name.conference, city.team, date.standings)) %>% names
 
       west_standings_by_day_data %<>%
         mutate_each_(funs(as.numeric), vars = names_numeric_cols) %>%
@@ -405,7 +405,7 @@ get_nba_days_scores <- function(date, return_message = T) {
           date = parsed_date,
           date.standings = date.standings %>% as.Date('%m/%d/%Y')
         ) %>%
-        select(id.season, date, everything())
+        dplyr::select(id.season, date, everything())
 
     }
   } else {
@@ -433,7 +433,7 @@ get_nba_days_scores <- function(date, return_message = T) {
           date = parsed_date,
           is.player_tracking_available = ifelse(pt_available == "1", T, F)
         ) %>%
-        select(-pt_available)
+        dplyr::select(-pt_available)
     }
   } else {
     player_tracking_data_available <-
@@ -463,12 +463,12 @@ get_nba_days_scores <- function(date, return_message = T) {
         )
 
       names_numeric_cols <-
-        team_leader_data %>% select(id.team, pts, reb, ast) %>% names
+        team_leader_data %>% dplyr::select(id.team, pts, reb, ast) %>% names
 
       team_leader_data %<>%
         mutate_each_(funs(as.numeric), vars = names_numeric_cols) %>%
         mutate(id.season, date = parsed_date) %>%
-        select(id.season, date, everything())
+        dplyr::select(id.season, date, everything())
     }
   } else {
     team_leader_data <-
@@ -501,7 +501,7 @@ get_nba_days_scores <- function(date, return_message = T) {
       fun_data <-
         team_leader_data %>%
         sample_n(1) %>%
-        select(name.player.pts_leader, pts, name.team)
+        dplyr::select(name.player.pts_leader, pts, name.team)
 
       fun_fact <-
         '.\nDid you know that ' %>%

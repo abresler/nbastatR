@@ -71,50 +71,50 @@ get_player_season_shot_data <- function(player,
     player %>%
     str_to_lower() %>%
     str_replace_all('\\.', '')
-  
+
   year_season_start <-
     year_season_end - 1
-  
+
   id.season <-
     year_season_start %>%
     paste(year_season_end %>% substr(start = 3, stop = 4),
           sep = "-")
-  
+
   players <-
     nbastatR::get_nba_players_ids()
-  
+
   if (players %>% mutate(name.player = name.player %>% str_to_lower %>% str_replace_all('\\.', '')) %>% dplyr::filter(name.player == p) %>% .$id.player %>% length == 0) {
     paste0(player,
            ' is not a valid player, try capitalizing or checking spelling') %>%
       message
   }
-  
+
   id.player <-
     players %>%
     dplyr::mutate(name.player = name.player %>% str_to_lower %>% str_replace_all('\\.', '')) %>%
     dplyr::filter(name.player == p) %>%
     .$id.player
-  
+
   ## Teams
   teams_ids <-
     nbastatR::get_nba_franchise_data(return_franchises = 'current') %>%
-    select(team_id, team_city, team_name) %>%
-    mutate(team = paste(team_city, team_name)) %>% 
+    dplyr::select(team_id, team_city, team_name) %>%
+    mutate(team = paste(team_city, team_name)) %>%
     tbl_df
-  
+
   names(teams_ids) <-
     c('id.team', 'name.team', 'id.game_event', 'city.team')
-  
+
   against_team %<>%
     str_to_title()
-  
+
   if (!against_team %>% is.na) {
     against_team_id <-
       teams_ids %>%
       dplyr::filter(name.team == against_team) %>%
       .$id.team %>%
       as.numeric()
-    
+
     against_team_stem <-
       'OpponentTeamID=' %>%
       paste0(against_team_id)
@@ -122,29 +122,29 @@ get_player_season_shot_data <- function(player,
     against_team_stem <-
       'OpponentTeamID=0'
   }
-  
+
   ## URL construction
-  
+
   base_url <-
     'http://stats.nba.com/stats/shotchartdetail?CFID=33&CFPARAMS=' %>%
     paste0(
       id.season,
       '&ContextFilter=&ContextMeasure=FGA&DateFrom=&DateTo=&GameID=&GameSegment=&LastNGames=0&LeagueID=00'
     )
-  
+
   player_stem <-
     'PlayerID=' %>%
     paste0(id.player)
-  
+
   season_type_stem <-
     'SeasonType=' %>%
     paste0(season_type %>% str_replace('\\ ', '+'))
-  
+
   season_stem <-
     "Season=" %>%
     paste0(id.season)
-  
-  
+
+
   if (game_location %>% is.na()) {
     location_stem <-
       'Location='
@@ -153,7 +153,7 @@ get_player_season_shot_data <- function(player,
       'Location=' %>%
       paste0(game_location)
   }
-  
+
   if (game_month %>% is.na()) {
     month_stem <-
       'Month=0'
@@ -162,7 +162,7 @@ get_player_season_shot_data <- function(player,
       'Month=' %>%
       paste0(game_month)
   }
-  
+
   if (outcome %>% is.na) {
     outcome_stem <-
       'Outcome='
@@ -171,7 +171,7 @@ get_player_season_shot_data <- function(player,
       'Outcome=' %>%
       paste0(outcome)
   }
-  
+
   if (position %>% is.na) {
     position_stem <-
       'Position='
@@ -180,7 +180,7 @@ get_player_season_shot_data <- function(player,
       'Position=' %>%
       paste0(position)
   }
-  
+
   if (season_segment %>% is.na) {
     season_segment_stem <-
       'SeasonSegment='
@@ -189,7 +189,7 @@ get_player_season_shot_data <- function(player,
       'SeasonSegment=' %>%
       paste0(season_segment %>% str_replace('\\ ', '+'))
   }
-  
+
   if (vs_conference %>% is.na) {
     conference_stem <-
       'VsConference='
@@ -198,7 +198,7 @@ get_player_season_shot_data <- function(player,
       'VsConference=' %>%
       paste0(vs_conference)
   }
-  
+
   if (vs_division %>% is.na) {
     division_stem <-
       'VsDivision='
@@ -207,10 +207,10 @@ get_player_season_shot_data <- function(player,
       'VsDivision=' %>%
       paste0(vs_division)
   }
-  
+
   final_stem <-
     'mode=Advanced&showDetails=0&showShots=1&showZones=1'
-  
+
   shot_data_url <-
     base_url %>%
     paste(
@@ -233,9 +233,9 @@ get_player_season_shot_data <- function(player,
       'TeamID=0',
       sep = '&'
     )
-  
+
   ## parameters
-  
+
   parameter_df <-
     data_frame(
       id.season,
@@ -269,12 +269,12 @@ get_player_season_shot_data <- function(player,
       ),
       date.data = Sys.Date()
     )
-  
-  
+
+
   json_data <-
     shot_data_url %>%
     jsonlite::fromJSON(simplifyDataFrame = T)
-  
+
   if (json_data$resultSets$rowSet %>%
       .[1] %>%
       data.frame %>%
@@ -284,13 +284,13 @@ get_player_season_shot_data <- function(player,
       .[1] %>%
       data.frame %>%
       tbl_df
-    
+
     names(data.shots) <-
       json_data$resultSets$headers %>%
       .[1] %>%
       unlist %>%
       str_to_lower()
-    
+
     data.shots %<>%
       mutate_each(funs(as.numeric), matches("loc")) %>%
       mutate_each(funs(as.numeric), matches("remaining")) %>%
@@ -301,12 +301,12 @@ get_player_season_shot_data <- function(player,
         shot_attempted_flag = "1" %>% grepl(shot_attempted_flag),
         shot_made_flag = "1" %>% grepl(shot_made_flag)
       )
-    
+
     if (exclude_backcourt == T) {
       data.shots %<>%
         dplyr::filter(!shot_zone_basic == 'Backcourt')
     }
-    
+
     sides <-
       c(
         "Above the Break 3, BC",
@@ -325,7 +325,7 @@ get_player_season_shot_data <- function(player,
         "Restricted Area, C",
         "Right Corner 3, R"
       )
-    
+
     shot_zone_df <-
       data_frame(
         shot_zone_basic = c(
@@ -338,7 +338,7 @@ get_player_season_shot_data <- function(player,
         ),
         shot_area = c(rep('Three Point', 3), 'Mid-Range', rep('Paint', 2))
       )
-    
+
     shot_zone_detail <-
       data_frame(shot_side = sides) %>%
       separate(
@@ -348,16 +348,16 @@ get_player_season_shot_data <- function(player,
         remove = F
       ) %>%
       left_join(shot_zone_df)
-    
+
     data.shots %<>%
       dplyr::filter(period %in% quarter_range) %>%
       mutate(minute = 12 - minutes_remaining) %>%
       dplyr::filter(minute %in% minute_range)
-    
+
     shots_type %<>%
       str_to_lower %>%
       paste0(collapse = "|")
-    
+
     data.shots %<>%
       rename(
         id.player = player_id,
@@ -366,7 +366,7 @@ get_player_season_shot_data <- function(player,
         id.team = team_id,
         name.player = player_name
       ) %>%
-      select(-grid_type) %>%
+      dplyr::select(-grid_type) %>%
       mutate(
         id.season,
         is.shot_made = ifelse(shot_made_flag == T, T, F),
@@ -381,26 +381,26 @@ get_player_season_shot_data <- function(player,
       dplyr::filter(shot_area %in% shot_areas) %>%
       mutate(st = action_type %>% str_to_lower()) %>%
       dplyr::filter(st %like% shots_type) %>%
-      select(-st) %>%
-      select(id.season,
+      dplyr::select(-st) %>%
+      dplyr::select(id.season,
              name.player,
              id.player,
              is.shot_made,
              shot_area,
              everything())
-    
+
     data.shots %<>%
       mutate(
         second = 60 - seconds_remaining,
         time.game = (12 * (period - 1) + minute) %>% paste0(' min ', second, ' sec')
       )
-    
+
     data <-
       list(parameter_df, data.shots)
-    
+
     names(data) <-
       c('parameters', 'shots')
-    
+
     if (return_message == T) {
       "Congrats, you got " %>%
         paste0(data.shots %>% nrow,

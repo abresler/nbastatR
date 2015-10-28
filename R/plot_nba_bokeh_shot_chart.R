@@ -1,32 +1,32 @@
 #' Get's NBA player's season shot chart with specific parameters
 #'
-#' @param player 
-#' @param year_season_end 
-#' @param plot_hex 
-#' @param author 
-#' @param use_shot_zone_side 
-#' @param season_type 
-#' @param shot_areas 
-#' @param shot_types 
-#' @param vs_conference 
-#' @param vs_division 
-#' @param quarter_range 
-#' @param minute_range 
-#' @param against_team 
-#' @param game_location 
-#' @param game_month 
-#' @param outcome 
-#' @param position 
-#' @param season_segment 
-#' @param exclude_backcourt 
+#' @param player
+#' @param year_season_end
+#' @param plot_hex
+#' @param author
+#' @param use_shot_zone_side
+#' @param season_type
+#' @param shot_areas
+#' @param shot_types
+#' @param vs_conference
+#' @param vs_division
+#' @param quarter_range
+#' @param minute_range
+#' @param against_team
+#' @param game_location
+#' @param game_month
+#' @param outcome
+#' @param position
+#' @param season_segment
+#' @param exclude_backcourt
 #'
 #' @return
 #' @export
 #'
 #' @examples  plot_nba_player_bokeh_shotchart( player = "Thomas Robinson", exclude_backcourt = T, shots_type = c("Dunk", "Layup", "Hook", "Jump Shot"))
-# 
-#' 
-#' shot_areas = c('Paint', 'Mid-Range'), use_shot_zone_side = T, season_segment = 'Post All-Star', 
+#
+#'
+#' shot_areas = c('Paint', 'Mid-Range'), use_shot_zone_side = T, season_segment = 'Post All-Star',
 #' year_season_end = 2015, author = "Alex Bresler")
 plot_nba_player_bokeh_shotchart <- function(player,
                                        year_season_end = 2015,
@@ -76,41 +76,41 @@ plot_nba_player_bokeh_shotchart <- function(player,
   lapply(packages, library, character.only = T)
   p <-
     player
-  
-  yse <- 
+
+  yse <-
     year_season_end
   uid <-
     use_shot_zone_side
-  st <- 
-    season_type 
-  sa <- 
+  st <-
+    season_type
+  sa <-
     shot_areas
-  shot_t <- 
-    shots_type 
-  eb <- 
+  shot_t <-
+    shots_type
+  eb <-
     exclude_backcourt
-  vs_conf <- 
+  vs_conf <-
     vs_conference
-  vs_div <- 
+  vs_div <-
     vs_division
-  q_range <- 
+  q_range <-
     quarter_range
-  min_range <- 
+  min_range <-
     minute_range
-  ag_team <- 
+  ag_team <-
     against_team
-  game_loc <- 
+  game_loc <-
     game_location
-  game_mon <- 
+  game_mon <-
     game_month
-  out <- 
+  out <-
     outcome
-  pos <- 
+  pos <-
     position
-  season_seg <- 
+  season_seg <-
     season_segment
-  
-  data <- 
+
+  data <-
     nbastatR::get_player_season_shot_data(player = p,year_season_end = yse,use_shot_zone_side = uid,
                                  season_type = st,shots_type = shot_t,
                                  shot_areas = sa,
@@ -121,47 +121,47 @@ plot_nba_player_bokeh_shotchart <- function(player,
                                  season_segment = season_seg, exclude_backcourt = eb,
                                  return_message = T
     )
-  
+
   year_season_start <-
     yse - 1
-  
+
   id.season <-
     year_season_start %>%
     paste(yse %>% substr(start = 3, stop = 4),
           sep = "-")
-  
-  
+
+
   data.shots <-
-    data$shots %>% 
+    data$shots %>%
     tbl_df
-  
+
   data.shots %<>%
     mutate(shot_made = ifelse(shot_made_flag == T, "YES", "NO"))
-  
-  data.shots %>% 
+
+  data.shots %>%
     dplyr::filter(shot_made == 'YES')
-  
+
   if(exclude_backcourt == T){
-    data.shots %<>% 
+    data.shots %<>%
       dplyr::filter(!id.side %in% 'BC')
   }
-  
+
   parameters <-
     data$parameters
-  
-  url.player.photo <- 
+
+  url.player.photo <-
     parameters$url.player.photo
-  
+
   summary_shots <-
     data.shots %>%
     group_by(shot_made_flag) %>%
     summarise(shots = n())
-  
+
   accuracy_data <-
     data.shots %>%
     group_by(shot_zone_basic) %>%
     mutate(shot_value = ifelse(shot_made_flag == TRUE, 1, 0))
-  
+
   ## Parameter Label
   if (minute_range  == 0:12) {
     minute_label <-
@@ -172,25 +172,25 @@ plot_nba_player_bokeh_shotchart <- function(player,
       paste0(collapse = ', ') %>%
       paste0('Minutes ', .)
   }
-  
+
   if (quarter_range %>% length == 1) {
     quarter_label <-
       "Quarter " %>%
       paste0(quarter_range)
   }
-  
+
   if (quarter_range %>% length > 6) {
     quarter_label <-
       "All Quarters"
   }
-  
+
   if (quarter_range %>% length ==  2 |
       quarter_range %>% length == 3) {
     quarter_label <-
       "Quarters " %>%
       paste0(quarter_range %>% paste0(collapse = " and "))
   }
-  
+
   if (outcome %>% is.na) {
     outcome_label <-
       ''
@@ -200,7 +200,7 @@ plot_nba_player_bokeh_shotchart <- function(player,
       str_replace("W", "In Wins ") %>%
       str_replace("L", "In Losses ")
   }
-  
+
   if (against_team %>% is.na) {
     opponent_label <-
       'VS. All Opponents'
@@ -209,7 +209,7 @@ plot_nba_player_bokeh_shotchart <- function(player,
       ' VS.' %>%
       paste(against_team)
   }
-  
+
   if (vs_conference %>% is.na) {
     conf_label <-
       ''
@@ -218,7 +218,7 @@ plot_nba_player_bokeh_shotchart <- function(player,
       ', ' %>%
       paste0(vs_conference, 'ern Conference')
   }
-  
+
   if (vs_division %>% is.na) {
     division_label <-
       ''
@@ -227,7 +227,7 @@ plot_nba_player_bokeh_shotchart <- function(player,
       ', ' %>%
       paste(vs_division, 'Division')
   }
-  
+
   if (game_location %>% is.na) {
     location_label <-
       ''
@@ -237,7 +237,7 @@ plot_nba_player_bokeh_shotchart <- function(player,
       str_replace("Home", " at Home") %>%
       str_replace("Road", " on Road")
   }
-  
+
   if (position %>% is.na) {
     position_label <-
       ''
@@ -246,7 +246,7 @@ plot_nba_player_bokeh_shotchart <- function(player,
       ', as a ' %>%
       paste0(position)
   }
-  
+
   if (game_month %>% is.na) {
     month_label <-
       ''
@@ -255,7 +255,7 @@ plot_nba_player_bokeh_shotchart <- function(player,
       ' During Month ' %>%
       paste0(game_month)
   }
-  
+
   if (season_segment %>% is.na) {
     season_segment_label <-
       ''
@@ -264,44 +264,44 @@ plot_nba_player_bokeh_shotchart <- function(player,
       season_segment %>%
       paste0(', ', .)
   }
-  
+
   if(shot_areas %>% length == 3){
     shot_area_label <-
       ' All Shot Areas'
   } else {
-    shot_area_label <- 
-      ' from ' %>% 
+    shot_area_label <-
+      ' from ' %>%
       paste0(shot_areas %>% paste0(collapse = ' & the '))
   }
-  
+
   player_name <-
     player %>%
     paste0(" Shot Chart", shot_area_label)
-  
+
   if(shots_type %>% length < 7){
     if(shots_type %>% length > 1){
     shot_type_label <-
-      " On " %>% 
+      " On " %>%
       paste0(shots_type %>% paste0(collapse = ", "), " Shots")
   } else {
     shot_type_label <-
-      " On " %>% 
+      " On " %>%
       paste0(shots_type,' Shots')
   }
   } else{
-    shot_type_label <- 
+    shot_type_label <-
       ''
   }
-  
+
   line_2_label <-
     id.season %>%
     paste(season_type, season_segment_label) %>%
     str_trim
-  
+
   line_3_label <-
     quarter_label %>%
     paste0(', & ', minute_label, month_label)
-  
+
   line_4_label <-
     outcome_label %>%
     paste0(opponent_label,
@@ -311,11 +311,11 @@ plot_nba_player_bokeh_shotchart <- function(player,
            position_label,
            shot_type_label) %>%
     str_trim
-  
+
   if (use_shot_zone_side == F ) {
     ad <-
       data.shots %>%
-      select(shot_zone_basic, shot_area) %>%
+      dplyr::select(shot_zone_basic, shot_area) %>%
       distinct() %>%
       arrange((shot_zone_basic)) %>%
       left_join(
@@ -328,27 +328,27 @@ plot_nba_player_bokeh_shotchart <- function(player,
             accuracy_label = percent(accuracy)
           )
       )
-    
-    shot_zone_df <- 
+
+    shot_zone_df <-
       data_frame(
-        shot_zone_basic = c("Above the Break 3", "In The Paint (Non-RA)", "Left Corner 3", 
+        shot_zone_basic = c("Above the Break 3", "In The Paint (Non-RA)", "Left Corner 3",
                             "Mid-Range", "Restricted Area", "Right Corner 3"),
         loc_x = c(0, 0, -209, 0, 0, 209),
         loc_y = c(280, 90, 180, 160, -25, 180),
         angle = c(0, 0, -175, 0, 0, 150),
         color = c("#1100a8", '#1100a8', 'white', '#1100a8', 'white', 'white')
       )
-    
+
     accuracy_plot_data <-
-      shot_zone_df %>% 
-      left_join(ad %>% select(accuracy, shot_area, shot_zone_basic)) %>% 
+      shot_zone_df %>%
+      left_join(ad %>% dplyr::select(accuracy, shot_area, shot_zone_basic)) %>%
       mutate(accuracy_label = accuracy %>% percent %>%
                paste(shot_zone_basic, ., sep = "\n")) %>%
       dplyr::filter(shot_area %in% shot_areas)
   } else {
-    ad <- 
+    ad <-
       data.shots %>%
-      select(shot_side, shot_area) %>%
+      dplyr::select(shot_side, shot_area) %>%
       distinct() %>%
       arrange((shot_side)) %>%
       left_join(
@@ -361,8 +361,8 @@ plot_nba_player_bokeh_shotchart <- function(player,
             accuracy_label = percent(accuracy)
           )
       )
-    
-    shot_side_label_df <- 
+
+    shot_side_label_df <-
       data_frame(
         shot_side = c(
           "Above the Break 3, C",
@@ -439,16 +439,16 @@ plot_nba_player_bokeh_shotchart <- function(player,
           'white'
         )
       )
-    
-    accuracy_plot_data <- 
-      shot_side_label_df %>% 
-      left_join(ad %>% select(shot_side, accuracy, shot_area)) %>%
+
+    accuracy_plot_data <-
+      shot_side_label_df %>%
+      left_join(ad %>% dplyr::select(shot_side, accuracy, shot_area)) %>%
       mutate(accuracy_label = accuracy %>% percent %>%
-               paste(shot_side, ., sep = " ")) %>% 
+               paste(shot_side, ., sep = " ")) %>%
       dplyr::filter(shot_area %in% shot_areas)
-    
+
   }
-  
+
   performance_name <-
     summary_shots$shots[2] %>% comma(digits = 0) %>%
     paste0(
@@ -458,7 +458,7 @@ plot_nba_player_bokeh_shotchart <- function(player,
       summary_shots$shots[2] / data.shots %>% nrow * 100 %>% digits(2),
       '% FG PCT'
     )
-  
+
   title_df <-
     data_frame(
       loc_x = c(-200, -200, 0, 0, 0, 0, 0),
@@ -474,25 +474,25 @@ plot_nba_player_bokeh_shotchart <- function(player,
         performance_name
       )
     )
-  
+
   data.shots %<>%
     mutate(url_photo = 'http://stats.nba.com/media/players/230x185/' %>% paste0(id.player, '.png'))
-  
+
   names(data.shots) %<>%
     gsub('\\.', '\\_', .)
-  
+
   aspect <-
     993 / 1155
-  
+
   tools <-
     c("reset",
       'box_select',
       "crosshair",
       "box_zoom")
-  
+
   court <-
     'https://raw.githubusercontent.com/weinfz/nba_shot_value_charts/master/court.png'
-  
+
   html_point_hover <-
     '<div>
   <div>
@@ -527,7 +527,7 @@ plot_nba_player_bokeh_shotchart <- function(player,
   </div>
   </div>
   '
-  
+
   if (plot_hex == T) {
     p <-
       figure(
@@ -597,7 +597,7 @@ plot_nba_player_bokeh_shotchart <- function(player,
       ly_points(
         loc_x,
         loc_y,
-        data = 
+        data =
           data.shots %>%
           dplyr::filter(shot_made == "YES"),
         color = "black",
@@ -605,7 +605,7 @@ plot_nba_player_bokeh_shotchart <- function(player,
         glyph = 20,
         alpha = 1,
         size = 2.5,
-        hover = 
+        hover =
           html_point_hover
       ) %>%
       ly_points(
@@ -691,7 +691,7 @@ plot_nba_player_bokeh_shotchart <- function(player,
       ly_points(
         loc_x,
         loc_y,
-        data = 
+        data =
           data.shots %>%
           dplyr::filter(shot_made == "NO"),
         color = "red",
