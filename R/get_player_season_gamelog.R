@@ -245,7 +245,7 @@ get_player_season_gamelog <- function(player,
       mutate(
         id.season = season,
         is.win = wl %>% str_detect("W"),
-        date.game = date.game %>% mdy() %>% as.Date,
+        date.game = date.game %>% lubridate::mdy() %>% as.Date,
         is.home_game = matchup %>% str_detect("vs. "),
         is.video_available = is.video_available %>% str_detect("1"),
         slug.team = slug.team %>% str_trim,
