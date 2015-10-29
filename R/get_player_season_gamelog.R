@@ -302,6 +302,7 @@ get_player_season_gamelog <- function(player,
     }
     return(data)
   } else {
+    
     "Sorry " %>%
       paste0(player, " has no data for ", season, " " , season_type) %>%
       message
