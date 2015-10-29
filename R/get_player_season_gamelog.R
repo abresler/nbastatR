@@ -109,7 +109,7 @@ get_nba_players_ids <- function(active_only = F) {
 #' @return
 #' @export
 #'
-#' @examples get_player_season_gamelog(player = "John Stockton", year.season_start = 1994,include_player_metadata = T)
+#' @examples get_player_season_gamelog(player = "John Stockton", year.season_start = 1994, include_player_metadata = T)
 #get_player_season_gamelog(id.player = 201945, season_type = "Pre Season", year.season_start = 2015)
 get_player_season_gamelog <- function(player,
                                       id.player = NULL,
@@ -137,11 +137,14 @@ get_player_season_gamelog <- function(player,
     season_type %>%
     str_replace(pattern = '\\ ', '\\+')
 
-  if (id.player %>% is.null()) {
+  if (id.player %>% is.null) {
     id.player <-
       players %>%
       dplyr::filter(name.player == player) %>%
       .$id.player
+
+    id <-
+      id.player
 
     start.season <-
       players %>%
