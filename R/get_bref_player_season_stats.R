@@ -309,7 +309,7 @@ get_bref_player_season_stat_table <-
       data_frame(name.player = player, url.bref.player, stem.player) %>%
       separate(stem.player, c('letter.first', 'id.bref.player'), #  Separates the remaining 2 parts by its delimiter the / we only want the second column which contains the id
                sep = '/') %>%
-      select(-letter.first) # removes the unneeded column
+      dplyr::select(-letter.first) # removes the unneeded column
 
     ## Resolve the team ids
 
