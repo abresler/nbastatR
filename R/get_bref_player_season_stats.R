@@ -225,7 +225,7 @@ get_bref_player_season_stat_table <-
       left_join(data_frame(name.bref = headers) %>%
                   group_by(name.bref) %>%
                   tally()) %>%
-      rename(total.count = n) %>%
+      dplyr::rename(total.count = n) %>%
       mutate(names.bref = ifelse(
         total.count == 1,
         name.bref,
@@ -321,7 +321,7 @@ get_bref_player_season_stat_table <-
       read_csv # imports my team data
 
     teams_ids %<>%
-      rename(slug.team.bref = id.bref.team,
+      dplyr::rename(slug.team.bref = id.bref.team,
              slug.team.bref.current = id.bref.current_team)
 
     table %<>%
