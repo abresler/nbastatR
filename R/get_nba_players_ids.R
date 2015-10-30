@@ -260,7 +260,7 @@ get_nba_players_ids <- function(active_only = F) {
       team = ifelse(city.team %>% is.na, NA, paste(city.team, name.team)),
       seasons.played = year.to - year.from,
       url.player = id.player %>% paste0('http://stats.nba.com/player/#!/', .),
-      image.player = id.player %>% paste0('http://stats.nba.com/media/players/230x185/',.,'.png')
+      image.player = id.player %>% paste0('http://stats.nba.com/media/players/132x132/',.,'.png')
     ) %>%
     dplyr::select(
       name.player,
