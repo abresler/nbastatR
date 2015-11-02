@@ -309,6 +309,7 @@ get_nba_synergy_stats <-
 get_all_team_synergy_stats <-
   function(include_defense = T,
            include_offense = T,
+           return_message = T,
            tidy_data = T) {
     inc_o <-
       include_offense
