@@ -1,20 +1,3 @@
-packages <- #need all of these installed including some from github
-  c(
-    'dplyr',
-    'magrittr',
-    'jsonlite',
-    'tidyr',
-    'purrr',
-    'purrr',
-    'stringr',
-    'lubridate',
-    'tidyr'
-  )
-options(warn = -1)
-
-lapply(packages, library, character.only = T)
-
-
 get_synergy_headers <- function() {
   synergy_option_df <-
     data_frame(
@@ -133,6 +116,21 @@ get_nba_synergy_stats <-
            include_offense = T,
            type_table = "team",
            return_message = T) {
+    packages <- #need all of these installed including some from github
+      c(
+        'dplyr',
+        'magrittr',
+        'jsonlite',
+        'tidyr',
+        'purrr',
+        'purrr',
+        'stringr',
+        'lubridate',
+        'tidyr'
+      )
+    options(warn = -1)
+
+    lapply(packages, library, character.only = T)
     if (!type_table %>% str_to_lower() %in% c("team", "player")) {
       stop("Sorry type of table can only be team or player", call. = F)
     }
@@ -345,11 +343,6 @@ get_all_team_synergy_stats <-
       compact %>%
       bind_rows
 
-    if (return_message == T) {
-      "You got all team play types " %>%
-        message()
-    }
-
     if (tidy_data == T) {
       all_data %<>%
         dplyr::select(-c(name.table, id.team, city.team)) %>%
@@ -362,8 +355,7 @@ get_all_team_synergy_stats <-
         ) %>%
         dplyr::select(-c(stem.table, item)) %>%
         spread(name.item, value) %>%
-        mutate(date.date = Sys.Date()) %>%
-        dplyr::select(-stem.table)
+        mutate(date.date = Sys.Date())
 
     }
   return(all_data)
