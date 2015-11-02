@@ -8,6 +8,16 @@ packages <-
     'stringr',
     'lubridate')
 lapply(packages, library, character.only = T)
+get_fanduel_bref_players <- function(){
+  fd_bref_name_df <-
+    data_frame(name.fanduel = c("Louis Amundson", "Ishmael Smith", "Luc Richard Mbah a Moute" ,
+                                "Brad Beal", "Roy Devyn Marble",
+                                "Jose Juan Barea"),
+               name.bref =  c("Lou Amundson", "Ish Smith",  "Luc Mbah a Moute",  "Bradley Beal", "Devyn Marble",
+                              "J.J. Barea"),
+               is.different_name = T)
+  return(fd_bref_name_df)
+}
 
 get_headers_css_data <- function() {
   headers <-
@@ -155,7 +165,9 @@ get_bref_player_season_stat_table <-
   function(season_start = 2015,
            stat_type = 'Totals',
            use_totals = T,
-           return_message = T) {
+           return_message = T,
+           resolve_to_fanduel = T
+           ) {
     base <-
       'http://www.basketball-reference.com/leagues/'
     season_end <-
@@ -344,6 +356,21 @@ get_bref_player_season_stat_table <-
     } else {
       table %<>%
         dplyr::filter(!slug.team.bref == "TOT")
+    }
+
+    if (resolve_to_fanduel == T ){
+      fd_names <-
+        get_fanduel_bref_players()
+
+      data %<>%
+        left_join(fd_names %>%
+                    dplyr::rename(name.player = name.bref))
+      data %<>%
+        mutate(
+          is.different_name = ifelse(is.different_name %>% is.na, F, T),
+          name.player = ifelse(is.different_name == T, name.fanduel, name.player)) %>%
+        dplyr::select(-c(is.different_name, name.fanduel)) %>%
+        arrange(name.player)
     }
 
     if (return_message == T) {

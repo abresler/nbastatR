@@ -9,6 +9,54 @@
 #' @export
 #'
 #' @examples
+get_fd_name_df <- function(){
+  fd_nba_name_df <-
+    data_frame(
+      name.fanduel = c(
+        "Louis Amundson",
+        "Ishmael Smith",
+        "C.J. Wilcox",
+        "Glenn Robinson III",
+        "Joseph Young",
+        "Luc Richard Mbah a Moute",
+        "T.J. Warren",
+        "Nene Hilario",
+        "P.J. Tucker",
+        "J.J. Redick",
+        "C.J. Miles",
+        "C.J. McCollum",
+        "Brad Beal",
+        "Roy Devyn Marble",
+        "K.J. McDaniels",
+        "C.J. Watson",
+        "J.J. Hickson",
+        "Jose Juan Barea"
+      ),
+      name.nba =  c(
+        "Lou Amundson",
+        "Ish Smith",
+        "CJ Wilcox",
+        "Glenn Robinson",
+        "Joe Young",
+        "Luc Mbah a Moute",
+        "TJ Warren",
+        "Nene",
+        "PJ Tucker",
+        "JJ Redick",
+        "CJ Miles",
+        "CJ McCollum",
+        "Bradley Beal",
+        "Devyn Marble",
+        "KJ McDaniels",
+        "CJ Watson",
+        "JJ Hickson",
+        "Jose Juan Barea"
+      ),
+      is.different_name = T
+    )
+  return(fd_nba_name_df)
+}
+
 get_headers <- function() {
   headers_df <-
     data_frame(
@@ -183,7 +231,7 @@ get_headers <- function() {
   return(headers_df)
 }
 
-get_nba_players_ids <- function(active_only = F) {
+get_nba_players_ids <- function(active_only = F, resolve_to_fanduel = T) {
   players.url <-
     "http://stats.nba.com/stats/commonallplayers?IsOnlyCurrentSeason=0&LeagueID=00&Season=2015-16"
 
@@ -251,7 +299,8 @@ get_nba_players_ids <- function(active_only = F) {
       slug.team = ifelse(slug.team == '', NA, slug.team),
       team = ifelse(city.team %>% is.na, NA, paste(city.team, name.team)),
       seasons.played = year.to - year.from,
-      url.player = id.player %>% paste0('http://stats.nba.com/player/#!/', .)
+      url.player = id.player %>% paste0('http://stats.nba.com/player/#!/', .),
+      image.player = id.player %>% paste0('http://stats.nba.com/media/players/132x132/',.,'.png')
     ) %>%
     dplyr::select(
       name.player,
@@ -268,6 +317,21 @@ get_nba_players_ids <- function(active_only = F) {
   if (active_only == T) {
     data %<>%
       dplyr::filter(is.active_player == T)
+  }
+
+  if (resolve_to_fanduel == T ){
+    fd_names <-
+      get_fd_name_df()
+
+    data %<>%
+      left_join(fd_names %>%
+                  dplyr::rename(name.player = name.nba))
+    data %<>%
+      mutate(
+        is.different_name = ifelse(is.different_name %>% is.na, F, T),
+        name.player = ifelse(is.different_name == T, name.fanduel, name.player)) %>%
+      dplyr::select(-c(is.different_name, name.fanduel)) %>%
+      arrange(name.player)
   }
 
   return(data)
