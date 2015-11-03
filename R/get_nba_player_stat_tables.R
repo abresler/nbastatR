@@ -293,7 +293,7 @@ get_nba_traditional_player_season_stat_table <-
            shot_clock_range = NA,
            starter_bench = NA,
            weight = NA,
-           return_metadata = T,
+           return_metadata = F,
            return_message = T,
            ...) {
     if (year.season_start < 1996) {
@@ -534,7 +534,7 @@ get_nba_traditional_player_season_stat_table <-
         'Base'
     }
 
-    if (oppononent %>% length > 0 | team %>% length > 0) {
+    if (opponent %>% length > 0 | team %>% length > 0) {
       teams_ids <-
         get_nba_franchise_data(return_franchises = 'current', return_message = F) %>%
         dplyr::select(team_id, team_city, team_name) %>%
@@ -1110,7 +1110,7 @@ get_nba_traditional_player_season_stat_table <-
           mutate(height)
       }
 
-      if (!last_n_games %>% is.na) {
+      if (last_n_games > 0) {
         data %<>%
           mutate(last_n_games) %>%
           dplyr::select(id.season, last_n_games, everything())
@@ -1122,7 +1122,7 @@ get_nba_traditional_player_season_stat_table <-
           dplyr::select(id.season, location, everything())
       }
 
-      if (!month %>% is.na) {
+      if (month > 0) {
         data %<>%
           mutate(month) %>%
           dplyr::select(id.season, month, everything())
@@ -1134,7 +1134,7 @@ get_nba_traditional_player_season_stat_table <-
           dplyr::select(id.season, outcome, everything())
       }
 
-      if (!period %>% is.na) {
+      if (period > 0) {
         data %<>%
           mutate(period) %>%
           dplyr::select(id.season, period, everything())
@@ -1152,7 +1152,7 @@ get_nba_traditional_player_season_stat_table <-
           dplyr::select(id.season, player_position, everything())
       }
 
-      if (!playoff_round %>% is.na) {
+      if (playoff_round > 0 ) {
         data %<>%
           mutate(playoff_round) %>%
           dplyr::select(id.season, playoff_round, everything())
@@ -1174,6 +1174,11 @@ get_nba_traditional_player_season_stat_table <-
           mutate(weight) %>%
           dplyr::select(id.season, weight, everything())
       }
+    }
+    if(return_message == T) {
+      "You got " %>%
+        paste0(measure_type, " data for players in the ", id.season, " season") %>%
+        message()
     }
     return(data)
   }

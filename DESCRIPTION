@@ -1,9 +1,9 @@
 Package: nbastatR
 Type: Package
-Title: An interface for NBA data
-Version: 0.1.0
+Title: R's interface to NBA data
+Version: 0.1.01
 Authors@R: c(person("Alex", "Bresler", email = "abresler@asbcllc.com", role = c("aut", "cre")))
-Description: Pulls in and visualizes historic NBA data from various sources including NBA api
+Description: R's resource to bring in NBA data from the myraid of repositories across the web.
 License: MIT + file LICENSE
 Depends: R (>= 3.0.0)
 License: MIT + file LICENSE
