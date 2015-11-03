@@ -1,14 +1,3 @@
-packages <- #need all of these installed including some from github
-  c('dplyr',
-    'magrittr',
-    'jsonlite',
-    'tidyr',
-    'purrr',
-    'stringr',
-    'lubridate',
-    'tidyr')
-options(warn = -1)
-lapply(packages, library, character.only = T)
 get_headers <- function() {
   headers_df <-
     data_frame(
@@ -296,6 +285,17 @@ get_nba_traditional_player_season_stat_table <-
            return_metadata = F,
            return_message = T,
            ...) {
+    packages <- #need all of these installed including some from github
+      c('dplyr',
+        'magrittr',
+        'jsonlite',
+        'tidyr',
+        'purrr',
+        'stringr',
+        'lubridate',
+        'tidyr')
+    options(warn = -1)
+    lapply(packages, library, character.only = T)
     if (year.season_start < 1996) {
       stop("Sorry data only goes back to the 1996-97 Season")
     }

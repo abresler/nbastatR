@@ -411,7 +411,7 @@ get_all_player_synergy_stats <-
           name.item = item %>% paste0('.', stem.table %>% str_to_lower()),
           value = value %>% as.numeric()
         ) %>%
-        dplyr::select(-c(stem.table, item)) %>%
+        dplyr::select(-c(item)) %>%
         spread(name.item, value) %>%
         mutate(date.date = Sys.Date()) %>%
         dplyr::select(-stem.table)
