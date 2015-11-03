@@ -7,16 +7,16 @@
 #' @export
 #'
 #' @examples data <- get_nba_days_scores(date = "11-09-1983")
+packages <- #need all of these installed including some from github
+	c('dplyr',
+		'magrittr',
+		'jsonlite',
+		'tidyr',
+		'stringr',
+		'lubridate')
+options(warn = -1)
+lapply(packages, library, character.only = T)
 get_nba_days_scores <- function(date, return_message = T) {
-  packages <- #need all of these installed including some from github
-    c('dplyr',
-      'magrittr',
-      'jsonlite',
-      'tidyr',
-      'stringr',
-      'lubridate')
-  options(warn = -1)
-  lapply(packages, library, character.only = T)
   if(!date %>% class == "character"){
     stop("Make sure you enter date as a character!!")
   }

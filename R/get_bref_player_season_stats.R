@@ -1,13 +1,4 @@
-packages <-
-  c('rvest',
-    'dplyr',
-    'magrittr',
-    'httr',
-    'purrr',
-    'tidyr',
-    'stringr',
-    'lubridate')
-lapply(packages, library, character.only = T)
+
 get_fanduel_bref_players <- function(){
   fd_bref_name_df <-
     data_frame(name.fanduel = c("Louis Amundson", "Ishmael Smith", "Luc Richard Mbah a Moute" ,
@@ -168,6 +159,16 @@ get_bref_player_season_stat_table <-
            return_message = T,
            resolve_to_fanduel = T
            ) {
+  	packages <-
+  		c('rvest',
+  			'dplyr',
+  			'magrittr',
+  			'httr',
+  			'purrr',
+  			'tidyr',
+  			'stringr',
+  			'lubridate')
+  	lapply(packages, library, character.only = T)
     base <-
       'http://www.basketball-reference.com/leagues/'
     season_end <-

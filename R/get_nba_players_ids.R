@@ -7,16 +7,7 @@
 #'
 #' @examples
 #'
-packages <- #need all of these installed including some from github
-  c('dplyr',
-    'magrittr',
-    'jsonlite',
-    'tidyr',
-    'stringr',
-    'data.table',
-    'tidyr')
-options(warn = -1)
-lapply(packages, library, character.only = T)
+
 
 get_fd_name_df <- function(){
   fd_nba_name_df <-
@@ -241,7 +232,17 @@ get_headers <- function() {
 }
 
 get_nba_players_ids <- function(active_only = F, resolve_to_fanduel = T) {
-  players.url <-
+	packages <- #need all of these installed including some from github
+		c('dplyr',
+			'magrittr',
+			'jsonlite',
+			'tidyr',
+			'stringr',
+			'data.table',
+			'tidyr')
+	options(warn = -1)
+	lapply(packages, library, character.only = T)
+	players.url <-
     "http://stats.nba.com/stats/commonallplayers?IsOnlyCurrentSeason=0&LeagueID=00&Season=2015-16"
 
   json_data <-

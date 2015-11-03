@@ -516,6 +516,7 @@ get_player_career_stat <- function(player,
       'data.table',
       'tidyr')
   options(warn = -1)
+  lapply(packages, library, character.only = T)
 
 
   if (id.player %>% is.null()) {

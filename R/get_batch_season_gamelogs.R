@@ -9,7 +9,8 @@
 #' @export
 #'
 #' @examples
-#' packages <- #need all of these installed including some from github
+#' 
+packages <- #need all of these installed including some from github
 c('dplyr',
   'magrittr',
   'jsonlite',
