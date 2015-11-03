@@ -177,17 +177,6 @@ clean_to_stem <- function(x) {
 }
 get_nba_franchise_data <- function(return_franchises = c('all', 'active', 'current'),
                                    return_message = T){
-  packages <- #need all of these installed including some from github
-    c(
-      'dplyr',
-      'magrittr',
-      'jsonlite',
-      'tidyr',
-      'stringr',
-      'tidyr'
-    )
-  options(warn = -1)
-  lapply(packages, library, character.only = T)
   team_history_url <-
     'http://stats.nba.com/stats/franchisehistory?LeagueID=00'
 
