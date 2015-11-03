@@ -9,6 +9,17 @@
 #' @export
 #'
 #' @examples
+#' packages <- #need all of these installed including some from github
+c('dplyr',
+  'magrittr',
+  'jsonlite',
+  'tidyr',
+  'purrr',
+  'stringr',
+  'lubridate',
+  'tidyr')
+options(warn = -1)
+lapply(packages, library, character.only = T)
 get_fd_name_df <- function(){
   fd_nba_name_df <-
     data_frame(
