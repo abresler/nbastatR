@@ -248,7 +248,7 @@ get_nba_franchise_data <- function(return_franchises = c('all', 'active', 'curre
 }
 get_nba_traditional_player_season_stat_table <-
   function(year.season_start = 2015,
-           season_type = "Regular Season",
+    season_type = "Regular Season",
            measure_type = "Base",
            per_mode = "Totals",
            is.pace_adjusted = F,
@@ -283,6 +283,7 @@ get_nba_traditional_player_season_stat_table <-
            starter_bench = NA,
            weight = NA,
            return_metadata = F,
+    include_measure_name = T,
            return_message = T,
            ...) {
     packages <- #need all of these installed including some from github
@@ -987,6 +988,11 @@ get_nba_traditional_player_season_stat_table <-
       ) %>%
       dplyr::select(id.season:per_mode, everything())
 
+    if(include_measure_name == F){
+      data %<>%
+        dplyr::select(-measure_type)
+    }
+
     if (return_metadata == T) {
       metadata_df <-
         data_frame(
@@ -1181,4 +1187,59 @@ get_nba_traditional_player_season_stat_table <-
         message()
     }
     return(data)
+  }
+
+
+
+get_all_player_traditional_stat_tables <-
+  function(year.season_start = 2015,
+           season_type = "Regular Season",
+           per_mode = "PerGame") {
+
+    ys <-
+      year.season_start
+
+    st <-
+      season_type
+
+    pm <-
+      per_mode
+
+    measures <-
+      c("Base", "Advanced", "Usage", "Scoring", "Misc")
+
+    all_data <-
+      get_nba_traditional_player_season_stat_table(
+        season_type = st,
+        measure_type = measures[1],
+        per_mode = pm,
+        include_measure_name = F,
+        year.season_start = ys,
+      )
+    for (m in measures[2:length(measures)]) {
+      df <-
+        get_nba_traditional_player_season_stat_table(
+          season_type = st,
+          measure_type = m,
+          per_mode = pm,
+          include_measure_name = F,
+          year.season_start = ys,
+        )
+
+      exclude <-
+        c("age", "blk", "date.data", "fga", "fga.blocked", "fgm", "fouls",
+          "fouls.drawn", "gp", "id.season", "id.team", "is.pace_adjusted",
+          "is.rank", "losses", "min", "name.player", "pct.ast", "pct.dreb",
+          "pct.fg", "pct.oreb", "pct.reb", "pct.usg", "pct.wins", "per_mode",
+          "season_type", "slug.team", "wins")
+
+
+      df <-
+        df[,!names(df) %in% exclude]
+
+      all_data %<>%
+        left_join(df)
+    }
+    return(all_data)
+
   }

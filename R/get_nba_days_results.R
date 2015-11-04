@@ -96,7 +96,6 @@ get_nba_days_scores <- function(date, return_message = T) {
         game_data$year.season_start %>% unique %>%
         paste0('-', year_season_end %>% substr(3, 4))
 
-
       game_data %<>%
         separate(gamecode, sep = '\\/', c('date', 'teamslugs')) %>%
         mutate(
@@ -218,11 +217,12 @@ get_nba_days_scores <- function(date, return_message = T) {
         ) %>%
         mutate(is.winning_team = ifelse(slug.winner == slug.team, T, F)) %>%
         dplyr::select(id.season:id.game, is.winning_team, everything())
-    }
-  } else {
+    } else {
     line_score_data <-
       data_frame()
+    }
   }
+
   if ('SeriesStandings' %in% table_names) {
     if (json_data$resultSets$rowSet[3] %>% data.frame %>% nrow > 0) {
       series_standing_data <-
@@ -251,11 +251,10 @@ get_nba_days_scores <- function(date, return_message = T) {
 
       series_standing_data %<>%
         mutate_each_(funs(as.numeric), vars = names_numeric_cols)
+    }  else {
+      series_standing_data <-
+        data_frame()
     }
-  } else {
-    series_standing_data <-
-      data_frame()
-
   }
 
   if ('LastMeeting' %in% table_names) {
@@ -314,10 +313,10 @@ get_nba_days_scores <- function(date, return_message = T) {
           everything()
         )
 
-    }
-  } else {
+    } else {
     last_meeting_data <-
       data_frame()
+    }
   }
 
   if ('EastConfStandingsByDay' %in% table_names) {
@@ -360,10 +359,10 @@ get_nba_days_scores <- function(date, return_message = T) {
           date.standings = date.standings %>% as.Date('%m/%d/%Y')
         ) %>%
         dplyr::select(id.season, date, everything())
-    }
-  } else {
+    } else {
     east_standings_by_day_data <-
       data_frame()
+    }
   }
 
   if ('WestConfStandingsByDay' %in% table_names) {
@@ -408,9 +407,10 @@ get_nba_days_scores <- function(date, return_message = T) {
         dplyr::select(id.season, date, everything())
 
     }
-  } else {
+    else {
     west_standings_by_day_data <-
       data_frame()
+    }
   }
 
   if (west_standings_by_day_data %>% nrow > 0 &
@@ -434,10 +434,10 @@ get_nba_days_scores <- function(date, return_message = T) {
           is.player_tracking_available = ifelse(pt_available == "1", T, F)
         ) %>%
         dplyr::select(-pt_available)
-    }
-  } else {
+    } else {
     player_tracking_data_available <-
       data_frame()
+    }
   }
 
   if ('TeamLeaders' %in% table_names) {
@@ -470,9 +470,10 @@ get_nba_days_scores <- function(date, return_message = T) {
         mutate(id.season, date = parsed_date) %>%
         dplyr::select(id.season, date, everything())
     }
-  } else {
+    else {
     team_leader_data <-
       data_frame()
+    }
   }
 
   data <-
