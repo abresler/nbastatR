@@ -226,7 +226,7 @@ get_nba_players_ids <- function(active_only = F, resolve_to_fanduel = T) {
       'lubridate',
       'tidyr')
   options(warn = -1)
-
+  lapply(packages, library, character.only = T)
   players.url <-
     "http://stats.nba.com/stats/commonallplayers?IsOnlyCurrentSeason=0&LeagueID=00&Season=2015-16"
 
@@ -356,6 +356,7 @@ get_player_profile <- function(player,
                                include_headline_stat = T,
                                return_message = T) {
   packages <- #need all of these installed including some from github
+    packages <- #need all of these installed including some from github
     c('dplyr',
       'magrittr',
       'jsonlite',
@@ -365,6 +366,7 @@ get_player_profile <- function(player,
       'lubridate',
       'tidyr')
   options(warn = -1)
+  lapply(packages, library, character.only = T)
 
   if (id.player %>% is.null()) {
     id.player <-
@@ -524,6 +526,7 @@ get_player_season_gamelog <- function(player,
       'lubridate',
       'tidyr')
   options(warn = -1)
+  lapply(packages, library, character.only = T)
 
   seasons_types <-
     c("Regular Season", "Playoffs", "Pre Season", "All Star")
