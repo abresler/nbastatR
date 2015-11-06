@@ -336,10 +336,6 @@ get_batch_player_gamelogs <-
 
       return(data)
     }
-
-    players <-
-      get_nba_players_ids()
-
     height_in_inches <-
       function(height) {
         height_ft_in <-
@@ -371,8 +367,8 @@ get_batch_player_gamelogs <-
           'tidyr')
       options(warn = -1)
       lapply(packages, library, character.only = T)
-
-
+      players <-
+        get_nba_players_ids()
       if (id.player %>% is.null()) {
         id.player <-
           players %>%
