@@ -332,9 +332,6 @@ get_nba_players_ids <- function(active_only = F, resolve_to_fanduel = T) {
   return(data)
 }
 
-players <-
-  get_nba_players_ids()
-
 height_in_inches <-
   function(height) {
     height_ft_in <-
@@ -367,6 +364,8 @@ get_player_profile <- function(player,
       'tidyr')
   options(warn = -1)
   lapply(packages, library, character.only = T)
+  players <-
+    get_nba_players_ids()
 
   if (id.player %>% is.null()) {
     id.player <-
