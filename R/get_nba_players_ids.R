@@ -8,6 +8,16 @@
 #' @examples
 #'
 
+packages <- #need all of these installed including some from github
+  c('dplyr',
+    'magrittr',
+    'jsonlite',
+    'tidyr',
+    'stringr',
+    'data.table',
+    'tidyr')
+options(warn = -1)
+lapply(packages, library, character.only = T)
 
 get_fd_name_df <- function(){
   fd_nba_name_df <-
@@ -115,33 +125,30 @@ get_headers <- function() {
         "VIDEO_AVAILABLE",
         "GAME_DATE",
         "Game_ID",
-        "PERSON_ID",
-        "FIRST_NAME",
-        "LAST_NAME",
-        "DISPLAY_FIRST_LAST",
-        "DISPLAY_LAST_COMMA_FIRST",
-        "DISPLAY_FI_LAST",
-        "BIRTHDATE",
-        "SCHOOL",
-        "COUNTRY",
-        "LAST_AFFILIATION",
-        "HEIGHT",
-        "WEIGHT",
-        "SEASON_EXP",
-        "JERSEY",
-        "POSITION",
-        "ROSTERSTATUS",
-        "TEAM_NAME",
-        "TEAM_CODE",
-        "TEAM_CITY",
-        "PLAYERCODE",
-        "FROM_YEAR",
-        "TO_YEAR",
-        "DLEAGUE_FLAG",
-        "GAMES_PLAYED_FLAG",
-        "PLAYER_NAME",
-        "TimeFrame",
-        "PIE"
+        "PERSON_ID", "FIRST_NAME", "LAST_NAME", "DISPLAY_FIRST_LAST",
+        "DISPLAY_LAST_COMMA_FIRST", "DISPLAY_FI_LAST", "BIRTHDATE", "SCHOOL",
+        "COUNTRY", "LAST_AFFILIATION", "HEIGHT", "WEIGHT", "SEASON_EXP",
+        "JERSEY", "POSITION", "ROSTERSTATUS", "TEAM_NAME", "TEAM_CODE",
+        "TEAM_CITY", "PLAYERCODE", "FROM_YEAR", "TO_YEAR", "DLEAGUE_FLAG",
+        "GAMES_PLAYED_FLAG", "PLAYER_NAME", "TimeFrame", "PIE",
+        "AGE", "W", "L", "W_PCT", "BLKA", "PFD", "DD2", "TD3", "CFID",
+        "CFPARAMS", "OFF_RATING", "DEF_RATING", "NET_RATING", "AST_PCT", "AST_TO",
+        "AST_RATIO", "OREB_PCT", "DREB_PCT", "REB_PCT", "TM_TOV_PCT",
+        "EFG_PCT", "TS_PCT", "USG_PCT", "PACE", "FGM_PG", "FGA_PG",
+        "PTS_OFF_TOV", "PTS_2ND_CHANCE", "PTS_FB", "PTS_PAINT", "OPP_PTS_OFF_TOV",
+        "OPP_PTS_2ND_CHANCE", "OPP_PTS_FB", "OPP_PTS_PAINT",
+        "PCT_FGA_2PT", "PCT_FGA_3PT", "PCT_PTS_2PT", "PCT_PTS_2PT_MR",
+        "PCT_PTS_3PT", "PCT_PTS_FB", "PCT_PTS_FT", "PCT_PTS_OFF_TOV",
+        "PCT_PTS_PAINT", "PCT_AST_2PM", "PCT_UAST_2PM", "PCT_AST_3PM",
+        "PCT_UAST_3PM", "PCT_AST_FGM", "PCT_UAST_FGM",
+        "PCT_FGM", "PCT_FGA", "PCT_FG3M", "PCT_FG3A", "PCT_FTM", "PCT_FTA",
+        "PCT_OREB", "PCT_DREB", "PCT_REB", "PCT_AST", "PCT_TOV", "PCT_STL",
+        "PCT_BLK", "PCT_BLKA", "PCT_PF", "PCT_PFD", "PCT_PTS",
+        "FTA_RATE", "OPP_EFG_PCT", "OPP_FTA_RATE", "OPP_TOV_PCT", "OPP_OREB_PCT",
+        "OPP_FGM", "OPP_FGA", "OPP_FG_PCT", "OPP_FG3M", "OPP_FG3A",
+        "OPP_FG3_PCT", "OPP_FTM", "OPP_FTA", "OPP_FT_PCT", "OPP_OREB",
+        "OPP_DREB", "OPP_REB", "OPP_AST", "OPP_TOV", "OPP_STL", "OPP_BLK",
+        "OPP_BLKA", "OPP_PF", "OPP_PFD", "OPP_PTS"
       ),
       name.actual = c(
         "id.player",
@@ -169,7 +176,7 @@ get_headers <- function() {
         "stl",
         "blk",
         "tov",
-        "pf",
+        "fouls",
         "pts",
         "id.organization",
         "name.school",
@@ -198,33 +205,30 @@ get_headers <- function() {
         "is.video_available",
         "date.game",
         "id.game",
-        "id.player",
-        "name.first",
-        "name.last",
-        "name.player",
-        "name.last.display",
-        "name.middle.display",
-        "date.birth",
-        "school",
-        "country",
-        "college.non_nba_team",
-        "height",
-        "weight.lbs",
-        "years.experience",
-        "jersey",
-        "position",
-        "status.roster",
-        "name.team",
-        "code.team",
-        "city.team",
-        "slug.player",
-        "year.from",
-        "year.to",
-        "has.d_league_data",
-        "gp.flag",
-        "name.player",
-        "id.season",
-        "pie"
+        "id.player", "name.first", "name.last", "name.player",
+        "name.last.display", "name.middle.display", "date.birth", "school",
+        "country", "college.non_nba_team", "height", "weight.lbs", "years.experience",
+        "jersey", "position", "status.roster", "team", "code.team",
+        "city.team", "slug.player", "year.from", "year.to", "has.d_league_data",
+        "gp.flag", "name.player", "id.season", "pie",
+        "age", "wins", "losses", "pct.wins", "fga.blocked", "fouls.drawn", "double_doubles", "triple_doubles", "cfid",
+        "cfparms", "ortg", "drtg", "netrtg", "pct.ast", "ratio.ast.to",
+        "ratio.ast", "pct.oreb", "pct.dreb", "pct.reb", "ratio.to",
+        "pct.efg", "pct.ts", "pct.usg", "pace", "fgm.per_game", "fga.per_game",
+        "pts.off_to", "pts.2nd_chance", "pts.fastbreak", "pts.paint", "pts.off_to.opponent",
+        "pts.2nd_chance.opponent", "pts.fastbreak.opponent", "pts.paint.opponent",
+        "pct.fga2a", "pct.fga3a", "pct.pts.fg2m", "pct.pts.mid_range_2",
+        "pct.pts.fg3m", "pct.pts.fast_break", "pct.pts.ft", "pct.pts.off_tos",
+        "pct.paints.paint", "pct.fg2m.assisted", "pct.fg2m.unassisted", "pct.fg3m.assisted",
+        "pct.fg3m.unassisted", "pct.fgm.assisted", "pct.fgm.unassisted",
+        "pct.fgm", "pct.fga", "pct.fg3m", "pct.fg3a", "pct.ftm", "pct.fta",
+        "pct.oreb", "pct.dreb", "pct.reb", "pct.ast", "pct.tov", "pct.stl",
+        "pct.blk", "pct.blocked", "pct.fouls", "pct.fouls.drawn", "pct.pts",
+        "rate.fta", "pct.efg.opp", "rate.fta.opp", "pct.tov.opp", "pct.oreb.opp",
+        "fgm.opp", "fga.opp", "pct.fg.opp", "fg3m.opp", "fg3a.opp",
+        "pct.fg3.opp", "ftm.opp", "fta.opp", "pct.ft.opp", "oreb.opp",
+        "dreb.opp", "rep.opp", "ast.opp", "tov.opp", "stl.opp", "blk.opp",
+        "fga.blocked.opp", "fouls.opp", "fouls.drawn.opp", "pts.opp"
       ),
       id.row = 1:length(name.actual)
     )
@@ -232,16 +236,7 @@ get_headers <- function() {
 }
 
 get_nba_players_ids <- function(active_only = F, resolve_to_fanduel = T) {
-	packages <- #need all of these installed including some from github
-		c('dplyr',
-			'magrittr',
-			'jsonlite',
-			'tidyr',
-			'stringr',
-			'data.table',
-			'tidyr')
-	options(warn = -1)
-	lapply(packages, library, character.only = T)
+
 	players.url <-
     "http://stats.nba.com/stats/commonallplayers?IsOnlyCurrentSeason=0&LeagueID=00&Season=2015-16"
 
@@ -304,10 +299,9 @@ get_nba_players_ids <- function(active_only = F, resolve_to_fanduel = T) {
     mutate(
       id.team = ifelse(id.team == 0, NA, id.team),
       city.team = ifelse(city.team == '', NA, city.team),
-      name.team = ifelse(name.team == '', NA, name.team),
       code.team = ifelse(code.team == '', NA, code.team),
       slug.team = ifelse(slug.team == '', NA, slug.team),
-      team = ifelse(city.team %>% is.na, NA, paste(city.team, name.team)),
+      team = ifelse(city.team %>% is.na, NA, paste(city.team, team)),
       seasons.played = year.to - year.from,
       url.player = id.player %>% paste0('http://stats.nba.com/player/#!/', .),
       image.player = id.player %>% paste0('http://stats.nba.com/media/players/132x132/',.,'.png')

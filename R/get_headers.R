@@ -77,7 +77,12 @@ get_headers <- function() {
         "PCT_UAST_3PM", "PCT_AST_FGM", "PCT_UAST_FGM",
         "PCT_FGM", "PCT_FGA", "PCT_FG3M", "PCT_FG3A", "PCT_FTM", "PCT_FTA",
         "PCT_OREB", "PCT_DREB", "PCT_REB", "PCT_AST", "PCT_TOV", "PCT_STL",
-        "PCT_BLK", "PCT_BLKA", "PCT_PF", "PCT_PFD", "PCT_PTS"
+        "PCT_BLK", "PCT_BLKA", "PCT_PF", "PCT_PFD", "PCT_PTS",
+        "FTA_RATE", "OPP_EFG_PCT", "OPP_FTA_RATE", "OPP_TOV_PCT", "OPP_OREB_PCT",
+        "OPP_FGM", "OPP_FGA", "OPP_FG_PCT", "OPP_FG3M", "OPP_FG3A",
+        "OPP_FG3_PCT", "OPP_FTM", "OPP_FTA", "OPP_FT_PCT", "OPP_OREB",
+        "OPP_DREB", "OPP_REB", "OPP_AST", "OPP_TOV", "OPP_STL", "OPP_BLK",
+        "OPP_BLKA", "OPP_PF", "OPP_PFD", "OPP_PTS"
       ),
       name.actual = c(
         "id.player",
@@ -137,7 +142,7 @@ get_headers <- function() {
         "id.player", "name.first", "name.last", "name.player",
         "name.last.display", "name.middle.display", "date.birth", "school",
         "country", "college.non_nba_team", "height", "weight.lbs", "years.experience",
-        "jersey", "position", "status.roster", "name.team", "code.team",
+        "jersey", "position", "status.roster", "team", "code.team",
         "city.team", "slug.player", "year.from", "year.to", "has.d_league_data",
         "gp.flag", "name.player", "id.season", "pie",
         "age", "wins", "losses", "pct.wins", "fga.blocked", "fouls.drawn", "double_doubles", "triple_doubles", "cfid",
@@ -152,7 +157,12 @@ get_headers <- function() {
         "pct.fg3m.unassisted", "pct.fgm.assisted", "pct.fgm.unassisted",
         "pct.fgm", "pct.fga", "pct.fg3m", "pct.fg3a", "pct.ftm", "pct.fta",
         "pct.oreb", "pct.dreb", "pct.reb", "pct.ast", "pct.tov", "pct.stl",
-        "pct.blk", "pct.blocked", "pct.fouls", "pct.fouls.drawn", "pct.pts"
+        "pct.blk", "pct.blocked", "pct.fouls", "pct.fouls.drawn", "pct.pts",
+        "rate.fta", "pct.efg.opp", "rate.fta.opp", "pct.tov.opp", "pct.oreb.opp",
+        "fgm.opp", "fga.opp", "pct.fg.opp", "fg3m.opp", "fg3a.opp",
+        "pct.fg3.opp", "ftm.opp", "fta.opp", "pct.ft.opp", "oreb.opp",
+        "dreb.opp", "rep.opp", "ast.opp", "tov.opp", "stl.opp", "blk.opp",
+        "fga.blocked.opp", "fouls.opp", "fouls.drawn.opp", "pts.opp"
       ),
       id.row = 1:length(name.actual)
     )
