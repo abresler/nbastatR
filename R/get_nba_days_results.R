@@ -677,11 +677,12 @@ get_days_games <- function(is.today = T, date = NA) {
   }
 
   t <-
-    todays_game %>%
-    dplyr::select(-game) %>%
+    games.today %>%
     left_join(all_games) %>%
     left_join(matchups) %>%
-    dplyr::select(date,id.game, game, everything())
+    mutate(both.back_to_back = ifelse(is.away_team.back_to_back == T & is.home_team.back_to_back == T, T, F))
+    dplyr::select(id.season, date,id.game, game, everything()) %>%
+
 
   return(t)
 }
