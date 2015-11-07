@@ -518,7 +518,72 @@ get_nba_days_scores <- function(date, return_message = T) {
   }
   return(data)
 }
+get_team_ids_to_fanduel <-
+  function(){
+    team_ids <-
+      data_frame(
+        slug.team = c(
+          "ATL",
+          "BKN",
+          "BOS",
+          "CLE",
+          "GSW",
+          "HOU",
+          "IND",
+          "LAC",
+          "MIL",
+          "NYK",
+          "OKC",
+          "ORL",
+          "PHI",
+          "PHX",
+          "POR",
+          "SAC",
+          "SAS",
+          "TOR",
+          "UTA",
+          "WAS",
+          "NOP",
+          "DAL",
+          "MEM",
+          "MIL",
+          "CHI",
+          "CHA",
+          "MIN"
 
+        ),
+        slug.team.fanduel = c(
+          "ATL",
+          "BKN",
+          "BOS",
+          "CLE",
+          "GS",
+          "HOU",
+          "IND",
+          "LAC",
+          "MIL",
+          "NY",
+          "OKC",
+          "ORL",
+          "PHI",
+          "PHO",
+          "POR",
+          "SA",
+          "SAC",
+          "TOR",
+          "UTA",
+          "WAS",
+          "NO",
+          "DAL",
+          "MEM",
+          "MIL",
+          "CHI",
+          "CHA",
+          "MIN"
+        )
+      )
+    return(team_ids)
+  }
 get_days_games <- function(is.today = T, date = NA) {
   packages <- #need all of these installed including some from github
     c('dplyr',
@@ -529,53 +594,6 @@ get_days_games <- function(is.today = T, date = NA) {
       'lubridate')
   options(warn = -1)
   lapply(packages, library, character.only = T)
-  team_ids <-
-    data_frame(
-      slug.team = c(
-        "ATL",
-        "BKN",
-        "BOS",
-        "CLE",
-        "GSW",
-        "HOU",
-        "IND",
-        "LAC",
-        "MIL",
-        "NYK",
-        "OKC",
-        "ORL",
-        "PHI",
-        "PHX",
-        "POR",
-        "SAC",
-        "SAS",
-        "TOR",
-        "UTA",
-        "WAS"
-      ),
-      slug.team.fanduel = c(
-        "ATL",
-        "BKN",
-        "BOS",
-        "CLE",
-        "GS",
-        "HOU",
-        "IND",
-        "LAC",
-        "MIL",
-        "NY",
-        "OKC",
-        "ORL",
-        "PHI",
-        "PHO",
-        "POR",
-        "SA",
-        "SAC",
-        "TOR",
-        "UTA",
-        "WAS"
-      )
-    )
   get_dates_teams <- function(data){
     data %<>%
       dplyr::select(date, id.game, slug.home_team, slug.away_team) %>%
@@ -683,6 +701,14 @@ get_days_games <- function(is.today = T, date = NA) {
     mutate(both.back_to_back = ifelse(is.away_team.back_to_back == T & is.home_team.back_to_back == T, T, F)) %>%
     dplyr::select(id.season, date,id.game, game,both.back_to_back, everything())
 
+  both_b2b <-
+    t %>%
+    dplyr::select(id.game, both.back_to_back)
 
-  return(t)
+
+  data <-
+    list(teams %>% left_join(both_b2b), t)
+  names(data) <-
+    c('teams_today', 'games_today')
+  return(data)
 }
