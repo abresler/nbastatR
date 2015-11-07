@@ -656,7 +656,7 @@ get_days_games <- function(is.today = T, date = NA) {
     left_join(away_teams)
 
   teams <-
-    games.today
+    todays_teams
 
   game_id <-
     games.today$id.game %>% unique
@@ -664,7 +664,8 @@ get_days_games <- function(is.today = T, date = NA) {
     data_frame()
 
   for (id in game_id) {
-    t <- teams %>%
+    t <-
+      teams %>%
       dplyr::filter(id.game == id) %>%
       .$slug.team
 
@@ -675,9 +676,12 @@ get_days_games <- function(is.today = T, date = NA) {
       bind_rows(g)
   }
 
-  teams %<>%
+  t <-
+    todays_game %>%
+    dplyr::select(-game) %>%
     left_join(all_games) %>%
-    left_join(matchups)
+    left_join(matchups) %>%
+    dplyr::select(date,id.game, game, everything())
 
-  return(teams)
+  return(t)
 }
