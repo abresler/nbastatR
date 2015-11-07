@@ -39,9 +39,7 @@ get_nba_days_scores <- function(date, return_message = T) {
       stop("Sorry data starts in the 1948 season")
   }
 
-  if (parsed_date > Sys.Date()){
-    stop("Sorry we can only get NBA games in the past, not the future!!")
-  }
+
 
   date_stem <-
     parsed_date %>%
@@ -519,4 +517,167 @@ get_nba_days_scores <- function(date, return_message = T) {
       message()
   }
   return(data)
+}
+
+get_days_games <- function(is.today = T, date = NA) {
+  packages <- #need all of these installed including some from github
+    c('dplyr',
+      'magrittr',
+      'jsonlite',
+      'tidyr',
+      'stringr',
+      'lubridate')
+  options(warn = -1)
+  lapply(packages, library, character.only = T)
+  team_ids <-
+    data_frame(
+      slug.team = c(
+        "ATL",
+        "BKN",
+        "BOS",
+        "CLE",
+        "GSW",
+        "HOU",
+        "IND",
+        "LAC",
+        "MIL",
+        "NYK",
+        "OKC",
+        "ORL",
+        "PHI",
+        "PHX",
+        "POR",
+        "SAC",
+        "SAS",
+        "TOR",
+        "UTA",
+        "WAS"
+      ),
+      slug.team.fanduel = c(
+        "ATL",
+        "BKN",
+        "BOS",
+        "CLE",
+        "GS",
+        "HOU",
+        "IND",
+        "LAC",
+        "MIL",
+        "NY",
+        "OKC",
+        "ORL",
+        "PHI",
+        "PHO",
+        "POR",
+        "SA",
+        "SAC",
+        "TOR",
+        "UTA",
+        "WAS"
+      )
+    )
+  get_dates_teams <- function(data){
+    data %<>%
+      dplyr::select(date, id.game, slug.home_team, slug.away_team) %>%
+      gather(location, slug.team, -id.game, -date) %>%
+      mutate(
+        location = location %>% as.character(),
+        is.home_game = ifelse(location == 'slug.home_team', T, F)
+      ) %>%
+      dplyr::select(-location) %>%
+      dplyr::select(date, everything())
+    return(data)
+  }
+  get_date_char <- function(date){
+    dates <-
+      date %>%
+      str_split('\\-') %>% unlist
+    date.char <-
+      paste(dates[2], dates[3], dates[1], sep = '-')
+    return(date.char)
+  }
+  if(is.today == T){
+    date <-
+      Sys.Date() %>%
+      get_date_char(date = .)
+  }
+
+  tomorrow <-
+    (date %>% mdy %>% as.Date() + 1) %>%
+    get_date_char
+
+  yesterday <-
+    (date %>% mdy %>% as.Date() -1) %>% as.character() %>%
+    get_date_char
+
+  games.today <-
+    get_nba_days_scores(date = date) %>%
+    .$games
+
+  todays_teams <-
+    games.today %>%
+    get_dates_teams()
+
+
+  playing_tomorrow <-
+    get_nba_days_scores(date = tomorrow) %>%
+    .$games %>%
+    get_dates_teams
+
+  played_yesterday <-
+    get_nba_days_scores(date = yesterday) %>%
+    .$games %>%
+    get_dates_teams
+
+  todays_teams %<>%
+    mutate(played.yesterday = todays_teams$slug.team %in% played_yesterday$slug.team,
+           playing.tomorrow = todays_teams$slug.team %in% playing_tomorrow$slug.team,
+           is.back_to_back = ifelse(played.yesterday == T|playing.tomorrow == T, T, F)
+    )
+
+  home_teams <-
+    todays_teams %>%
+    dplyr::filter(is.home_game == T) %>%
+    dplyr::rename(slug.home_team = slug.team, is.home_team.played_yesterday = played.yesterday,
+                  is.home_team.playing_tomorrow = playing.tomorrow,
+                  is.home_team.back_to_back = is.back_to_back) %>%
+    dplyr::select(-is.home_game)
+
+  away_teams <-
+    todays_teams %>%
+    dplyr::filter(is.home_game == F) %>%
+    dplyr::rename(slug.away_team = slug.team, is.away_team.played_yesterday = played.yesterday,
+                  is.away_team.playing_tomorrow = playing.tomorrow,
+                  is.away_team.back_to_back = is.back_to_back) %>%
+    dplyr::select(-is.home_game)
+
+  matchups <-
+    home_teams %>%
+    left_join(away_teams)
+
+  teams <-
+    games.today
+
+  game_id <-
+    games.today$id.game %>% unique
+  all_games <-
+    data_frame()
+
+  for (id in game_id) {
+    t <- teams %>%
+      dplyr::filter(id.game == id) %>%
+      .$slug.team
+
+    g <-
+      data_frame(id.game = id, game = t[2] %>% paste0('@', t[1]))
+
+    all_games %<>%
+      bind_rows(g)
+  }
+
+  teams %<>%
+    left_join(all_games) %>%
+    left_join(matchups)
+
+  return(teams)
 }
