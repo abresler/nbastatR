@@ -2,46 +2,18 @@
 get_fd_name_df <- function(){
   fd_nba_name_df <-
     data_frame(
-      name.fanduel = c(
-        "Louis Amundson",
-        "Ishmael Smith",
-        "C.J. Wilcox",
-        "Glenn Robinson III",
-        "Joseph Young",
-        "Luc Richard Mbah a Moute",
-        "T.J. Warren",
-        "Nene Hilario",
-        "P.J. Tucker",
-        "J.J. Redick",
-        "C.J. Miles",
-        "C.J. McCollum",
-        "Brad Beal",
-        "Roy Devyn Marble",
-        "K.J. McDaniels",
-        "C.J. Watson",
-        "J.J. Hickson",
-        "Jose Juan Barea"
-      ),
-      name.nba =  c(
-        "Lou Amundson",
-        "Ish Smith",
-        "CJ Wilcox",
-        "Glenn Robinson",
-        "Joe Young",
-        "Luc Mbah a Moute",
-        "TJ Warren",
-        "Nene",
-        "PJ Tucker",
-        "JJ Redick",
-        "CJ Miles",
-        "CJ McCollum",
-        "Bradley Beal",
-        "Devyn Marble",
-        "KJ McDaniels",
-        "CJ Watson",
-        "JJ Hickson",
-        "Jose Juan Barea"
-      ),
+      name.fanduel = c("C.J. Watson", "J.J. Redick", "Louis Williams", "C.J. Miles",
+                         "Chuck Hayes", "J.J. Hickson", "Bradley Beal", "P.J. Tucker",
+                         "Ish Smith", "Luc Richard Mbah a Moute", "Moe Harkless", "C.J. McCollum",
+                         "Nene Hilario", "K.J. McDaniels", "P.J. Hairston", "J.J. Barea",
+                         "Glenn Robinson", "T.J. Warren", "R.J. Hunter", "Joseph Young",
+                         "Larry Nance", "T.J. McConnell", "Raulzinho Neto"),
+      name.nba = c("C.J. Watson", "J.J. Redick", "Lou Williams", "C.J. Miles",
+                   "Charles Hayes", "J.J. Hickson", "Brad Beal", "P.J. Tucker",
+                   "Ishmael Smith", "Luc Richard Mbah a Moute", "Maurice Harkless", "C.J. McCollum",
+                   "Nene Hilario", "K.J. McDaniels", "P.J. Hairston", "Jose Juan Barea",
+                   "Glenn Robinson III", "T.J. Warren", "RJ Hunter", "Joseph Young",
+                   "Larry Nance", "TJ McConnell", "Raul Neto"),
       is.different_name = T
     )
   return(fd_nba_name_df)
@@ -679,6 +651,8 @@ get_player_season_gamelog <- function(player,
         everything()
       )
 
+
+
     if (include_date_detail == T) {
       data %<>%
         mutate(day.game = date.game %>% strftime('%A'),
@@ -693,6 +667,16 @@ get_player_season_gamelog <- function(player,
           return_message = F,
           include_headline_stat = F
         )
+
+      fd_names <-
+        get_fd_name_df()
+      if(profile$name.player %in% fd_names$name.nba == T){
+        np <- profile$name.player
+        profile$name.player <-
+          fd_names %>%
+          dplyr::filter(name.nba == np) %>%
+          .$name.fanduel
+      }
 
       data <-
         profile %>%

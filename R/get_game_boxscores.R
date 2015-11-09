@@ -173,7 +173,31 @@ get_headers <- function() {
         "PLAYER2_ID", "PLAYER2_NAME", "PLAYER2_TEAM_ID", "PLAYER2_TEAM_CITY",
         "PLAYER2_TEAM_NICKNAME", "PLAYER2_TEAM_ABBREVIATION", "PERSON3TYPE",
         "PLAYER3_ID", "PLAYER3_NAME", "PLAYER3_TEAM_ID", "PLAYER3_TEAM_CITY",
-        "PLAYER3_TEAM_NICKNAME", "PLAYER3_TEAM_ABBREVIATION"
+        "PLAYER3_TEAM_NICKNAME", "PLAYER3_TEAM_ABBREVIATION",
+        "SPD", "DIST", "ORBC", "DRBC", "RBC", "TCHS", "SAST", "FTAST",
+        "PASS", "CFGM", "CFGA", "CFG_PCT", "UFGM", "UFGA", "UFG_PCT",
+        "DFGM", "DFGA", "DFG_PCT","TEAM_NICKNAME",'FAN_DUEL_PTS',
+        "JERSEY_NUM", "PLAYER_POSITION", "LOCATION",
+        "EVENT_NUM", "HOME_PCT", "VISITOR_PCT", "HOME_PTS", "VISITOR_PTS",
+        "HOME_SCORE_MARGIN", "SECONDS_REMAINING", "HOME_POSS_IND", "HOME_G",
+        "DESCRIPTION", "ISVISIBLE",
+        "HOME_TEAM_ID", "HOME_TEAM_ABR", "HOME_TEAM_PTS", "VISITOR_TEAM_ID",
+        "VISITOR_TEAM_ABR", "VISITOR_TEAM_PTS",
+          "GAME_DATE_EST", "GAME_SEQUENCE", "GAME_STATUS_ID", "GAME_STATUS_TEXT",
+          "GAMECODE", "SEASON", "LIVE_PERIOD", "LIVE_PC_TIME", "NATL_TV_BROADCASTER_ABBREVIATION",
+          "LIVE_PERIOD_TIME_BCAST", "WH_STATUS", "LARGEST_LEAD", "LEAD_CHANGES",
+          "TIMES_TIED", "ids.officials", "officials", "jerseys.official",
+          "id.team", "players.inactive", "id.players.inactive", "ATTENDANCE",
+          "GAME_TIME", "TEAM_CITY_NAME", "TEAM_WINS_LOSSES", "PTS_QTR1",
+          "PTS_QTR2", "PTS_QTR3", "PTS_QTR4", "PTS_OT1", "PTS_OT2", "PTS_OT3",
+          "PTS_OT4", "PTS_OT5", "PTS_OT6", "PTS_OT7", "PTS_OT8", "PTS_OT9",
+          "PTS_OT10", "LAST_GAME_ID", "LAST_GAME_DATE_EST", "LAST_GAME_HOME_TEAM_ID",
+          "LAST_GAME_HOME_TEAM_CITY", "LAST_GAME_HOME_TEAM_NAME", "LAST_GAME_HOME_TEAM_ABBREVIATION",
+          "LAST_GAME_HOME_TEAM_POINTS", "LAST_GAME_VISITOR_TEAM_ID", "LAST_GAME_VISITOR_TEAM_CITY",
+          "LAST_GAME_VISITOR_TEAM_NAME", "LAST_GAME_VISITOR_TEAM_CITY1",
+          "LAST_GAME_VISITOR_TEAM_POINTS", "HOME_TEAM_WINS", "HOME_TEAM_LOSSES",
+          "SERIES_LEADER", "VIDEO_AVAILABLE_FLAG", "PT_AVAILABLE", "PT_XYZ_AVAILABLE"
+
       ),
       name.actual = c(
         "id.player",
@@ -328,7 +352,41 @@ get_headers <- function() {
         "comment",
         "tov",
         "starter_bench", "ratio.ast.to",
-        "rate.fta", "pct.efg.opponent", "rate.fta.opponent", "rate.tov.opponent", "pct.oreb.opponent"
+        "rate.fta", "pct.efg.opponent", "rate.fta.opponent", "rate.tov.opponent", "pct.oreb.opponent",
+        "id.event", "id.type.type", "id.action.type", "period",
+        "time", "minute.quarter", "play.home.description", "play.neutral.description",
+        "play.visitor.description", "score", "score.margin", "type.player.1",
+        "id.player.1", "name.player.1", "id.team.player.1", "city.team.player.1",
+        "name.team.player.1", "slug.team.player.1", "type.player.2",
+        "id.player.2", "name.player.2", "id.team.player.2", "city.team.player.2",
+        "name.team.player.2", "slug.team.player.2","type.player.3",
+        "id.player.3", "name.player.3", "id.team.player.3", "city.team.player.3",
+        "name.team.player.3", "slug.team.player.3",
+        "avg.mph", "distance.miles", "oreb.chances", "dreb.chances", "reb.chances",
+        "touches", "ast.secondary", "ast.to.fta",
+        "passes", "fgm.contested", "fga.contested", "pct.fg.contested", "fgm.uncontested", "fga.uncontested", "pct.fg.uncontested",
+        "fgm.opponent.rim_defense", "fga.opponent.rim_defense", "pct.fgm.opponent.rim_defense",
+        "name.team",'points.fanduel',"jersey", "position", "location",
+        "id.event", "pct.win_prob.home", "pct.win_prob.away", "points.home", "points.away",
+        "score.margin.home", "quarter.seconds_remaining", "is.home.possesion", "home.g",
+        "play", "is.visible",
+        "id.team.home", "slug.team.home", "points.team.home", "id.team.away",
+        "slug.team.away", "points.team.away",
+        "date.game", "sequence.game", "id.stats.game", "text.status.game",
+        "slug.game", "year.season_start", "period.live", "time.live.pc", "network.tv",
+        "period.live.broadcast", "status.wh", "lead.largest", "lead.changes",
+        "times.tied", "ids.officials", "officials", "jerseys.official",
+        "id.team", "players.inactive", "id.players.inactive", "attendance",
+        "time.game", "city.team", "record.team", "points.q1",
+        "points.q2", "points.q3", "points.q4", "points.ot.1", "points.ot.2", "points.ot.3",
+        "points.ot.4", "points.ot.5", "points.ot.6", "points.ot.7", "points.ot.8", "points.ot.9",
+        "points.ot.10", "id.game.last", "date.game.last", "id.team.home.last",
+        "city.team.home.last", "name.team.home.last", "slug.team.home.last",
+        "points.team.home.last",
+        "id.team.away.last",
+        "city.team.away.last", "name.team.away.last", "slug.team.away.last",
+        "points.team.away.last","wins.team.home", "losses.team.home",
+        "team.series_leader", "is.video_available", "is.pt.available", "is.pt.xyz.available"
       ),
       id.row = 1:length(name.actual)
     )
@@ -353,14 +411,10 @@ get_header_names <- function(headers){
       actual_names
     return(actual_headers)
 }
-
-get_game_id_box_score_data <-
+get_boxscore_url <-
   function(game_id,
-           box_score_table = "Play by Play",
-           time_period = "All",
-           include_team = T,
-           include_bench_starter = F,
-           ...) {
+           box_score_table,
+           time_period) {
     tables <-
       c(
         "Summary",
@@ -570,6 +624,32 @@ get_game_id_box_score_data <-
         StartPeriod_stem
       )
 
+    if (box_score_table == "Win Probability"){
+      url_json <-
+        paste0('http://stats.nba.com/stats/winprobabilitypbp?GameID=',
+               game_id, '&RunType=each+second')
+    }
+    return(url_json)
+  }
+get_game_id_box_score_data <-
+  function(game_id,
+           box_score_table = "Traditional",
+           time_period = "All",
+           include_team = T,
+           include_bench_starter = F,
+           return_wide = F,
+           include_game_data = F,
+           return_message = T,
+           ...) {
+    t <-
+      box_score_table
+    p <-
+      time_period
+    g <-
+      game_id
+    url_json <-
+      get_boxscore_url(game_id  = g, box_score_table = t, time_period = p)
+
     json_data <-
       url_json %>%
       fromJSON(simplifyDataFrame = T, flatten = T)
@@ -579,6 +659,166 @@ get_game_id_box_score_data <-
 
     headers_df <-
       get_headers()
+
+    if (t == "Summary") {
+      all_summary_data <-
+        data_frame()
+      for (i in 1:length(tables_names)){
+        if (tables_names[i] == "Officials"){
+          js_data <-
+            json_data$resultSets$rowSet[i] %>%
+            data.frame() %>%
+            tbl_df
+          headers <-
+            json_data$resultSets$headers[i] %>% unlist
+
+          names(js_data) <-
+            headers
+
+          js_data %<>%
+            mutate(official = FIRST_NAME %>% paste(LAST_NAME)) %>%
+            dplyr::select(official, jersey = JERSEY_NUM, id = OFFICIAL_ID)
+
+          js_data <-
+            data_frame(ids.officials = js_data$id %>% paste(collapse = ', '),
+                     officials = js_data$official %>% paste(collapse = ', '),
+                     jerseys.official = js_data$jersey %>% paste(collapse = ', ')
+                     )
+
+        }
+
+        if(tables_names[i] == "InactivePlayers"){
+          js_data <-
+            json_data$resultSets$rowSet[i] %>%
+            data.frame() %>%
+            tbl_df
+
+          headers <-
+            json_data$resultSets$headers[i] %>% unlist
+
+          names(js_data) <-
+            headers
+
+          js_data %<>%
+            mutate(name.player = FIRST_NAME %>% paste(LAST_NAME),
+                   team = TEAM_CITY %>% paste(TEAM_NAME)) %>%
+            dplyr::select(id.player = PLAYER_ID, name.player, jersey = JERSEY_NUM,
+                          id.team = TEAM_ID, team
+                          )
+
+          js_data %<>%
+            group_by(id.team) %>%
+            summarise(players.inactive = name.player %>% paste(collapse = ', '),
+                      id.players.inactive = id.player %>% paste(collapse = ', ')) %>%
+            mutate(id.game = game_id) %>%
+            ungroup()
+        }
+
+        if(tables_names[i] == 'GameInfo'){
+          headers <-
+            json_data$resultSets$headers[i] %>% unlist
+
+          js_data <-
+            json_data$resultSets$rowSet[i] %>%
+            data.frame() %>%
+            tbl_df
+
+          actual_names <-
+            headers %>%
+            get_header_names %>%
+            .$name.actual
+
+          names(js_data) <-
+            actual_names
+
+          js_data %<>%
+            dplyr::select(-date.game)
+        }
+
+        if(!tables_names[i] %in% c('Officials','InactivePlayers','GameInfo')){
+          headers <-
+          json_data$resultSets$headers[i] %>% unlist
+
+        js_data <-
+          json_data$resultSets$rowSet[i] %>%
+          data.frame() %>%
+          tbl_df
+
+        actual_names <-
+          headers %>%
+          get_header_names %>%
+          .$name.actual
+
+        names(js_data) <-
+          actual_names
+        }
+        if(!"GAME_ID" %in% names(js_data)){
+          js_data %<>%
+            mutate(id.game = game_id)
+        }
+        if (i == 1) {
+          all_summary_data %<>%
+          bind_rows(js_data)
+        } else {
+          all_summary_data %<>%
+            left_join(js_data)
+        }
+
+      }
+      all_summary_data %<>%
+        dplyr::rename(is.final = text.status.game,
+                      points.team = pts) %>%
+        mutate(team = city.team %>% paste(name.team),
+               is.home = ifelse(id.team == id.team.home, T,F),
+               date.game = date.game %>% substr(1, 10) %>% lubridate::ymd %>% as.Date(),
+               is.final = ifelse(is.final == "Final", T, F)) %>%
+        dplyr::select(is.home, team, date.game:points.team) %>%
+        dplyr::select(-c(period.live:id.league, id.stats.game, city.team, name.team, id.team.home, id.team.away,slug.game, sequence.game))
+
+      if (return_wide == T){
+        summary_wide <-
+          all_summary_data %>%
+          gather(item, value, -c(is.home, date.game, id.game, is.final, year.season_start,lead.changes:jerseys.official, attendance, time.game)) %>%
+          mutate(item = item %>% as.character()) %>%
+          mutate(item = ifelse(is.home == T, item %>% paste0('.home'), item %>% paste0('.away'))) %>%
+          dplyr::select(-is.home) %>%
+          spread(item, value) %>%
+          dplyr::select(date.game, id.game, team.home, record.team.home, slug.team.home, team.away, record.team.away, slug.team.away, everything()) %>%
+          separate(record.team.home, into = c('wins.team.home', 'losses.team.home'), sep = '\\-') %>%
+          separate(record.team.away, into = c('wins.team.away', 'losses.team.away'), sep = '\\-')
+
+        data <-
+          summary_wide %>%
+          mutate_each_(funs(as.numeric(.)),vars =
+                         summary_wide %>% dplyr::select(wins.team.home, losses.team.home ,wins.team.away,losses.team.away,
+                                                        year.season_start:times.tied,attendance,
+                                                        lead.largest.away, lead.largest.home,
+                                                        points.ot.1.away:pts.paint.home,id.team.home, id.team.away
+                         ) %>% names
+          ) %>%
+          mutate(id.season = year.season_start %>% paste0("-", (year.season_start + 1) %>% substr(3,4))) %>%
+          dplyr::select(id.season,id.game, date.game,everything())
+
+      } else {
+        data <-
+          all_summary_data %>%
+          mutate_each_(funs(as.numeric(.)),vars =
+                         all_summary_data %>% dplyr::select(
+                           id.team, year.season_start,pts.paint:times.tied,
+                           attendance, points.q1:points.ot.10,points.team
+                         ) %>% names
+          ) %>%
+          separate(record.team, into = c('team.wins', 'team.losses'), sep = '\\-') %>%
+          mutate(team.wins = team.wins %>% as.numeric,
+                 team.losses = team.losses %>% as.numeric,
+                 id.season = year.season_start %>% paste0("-", (year.season_start + 1) %>% substr(3,4))) %>%
+          dplyr::select(id.season, id.game, date.game, is.home,team,points.team,everything())
+
+      }
+      data %<>%
+        mutate(name.table = "Summary",
+               table.boxscore = t)
+    }
 
     if (t == "Traditional") {
       if ('PlayerStats' %in% tables_names) {
@@ -966,7 +1206,7 @@ get_game_id_box_score_data <-
       if (include_team == T) {
         team <-
           team_data %>%
-          dplyr::select(id.team, min:fouls.drawn)
+          dplyr::select(-c(id.game:slug.team, plus.minus, name.table, table.boxscore))
 
         names(team)[2:length(names(team))] %<>%
           paste0('.team')
@@ -1262,8 +1502,65 @@ get_game_id_box_score_data <-
       }
     }
 
-    if (t == "Four Factors") {
-      if ('sqlPlayersFourFactors' %in% tables_names) {
+    if (t == "Play by Play") {
+      if ('PlayByPlay' %in% tables_names) {
+        if (json_data$resultSets$rowSet[1] %>%
+            data.frame %>%
+            tbl_df %>% nrow > 0) {
+          headers <-
+            json_data$resultSets$headers[1] %>%
+            unlist
+
+          play_by_play <-
+            json_data$resultSets$rowSet[1] %>%
+            data.frame %>%
+            tbl_df
+
+          names(play_by_play) <-
+            headers
+
+          actual_names <-
+            headers %>%
+            get_header_names %>%
+            .$name.actual
+
+          names(play_by_play) <-
+            actual_names
+
+          play_by_play %<>%
+            separate(score, into = c('points.away', 'points.home'), sep = '\\-', remove = F) %>%
+            mutate(score.margin = ifelse(score.margin == "TIE", 0, score.margin))
+
+          play_by_play %<>%
+            mutate_each_(
+              funs(as.numeric),
+              vars = play_by_play %>%
+                dplyr::select(id.event:period, points.away:id.player.1,id.team.player.1,type.player.2:id.player.2,
+                              id.team.player.2,type.player.3:id.player.3, id.team.player.3
+                              ) %>% names
+            ) %>%
+            mutate(name.table = 'Play by Play',
+                   table.boxscore = t) %>%
+            dplyr::select(-play.neutral.description) %>%
+            fill(points.away) %>%
+            fill(points.home) %>%
+            dplyr::filter(!id.event == 0)
+          } else {
+          play_by_play <-
+            data_frame(
+              name.table = 'Play by Play',
+              table.boxscore = t,
+              id.game = game_id
+            )
+        }
+      }
+
+      data <-
+        play_by_play
+    }
+
+    if (t == "Player Tracking") {
+      if ('PlayerTrack' %in% tables_names) {
         if (json_data$resultSets$rowSet[1] %>%
             data.frame %>%
             tbl_df %>% nrow > 0) {
@@ -1297,21 +1594,20 @@ get_game_id_box_score_data <-
           player_data %<>%
             mutate_each_(
               funs(as.numeric),
-              vars = player_data %>% dplyr::select(id.team, id.player, min:pct.oreb.opponent) %>% names
+              vars = player_data %>% dplyr::select(id.team, id.player, min:pct.fgm.opponent.rim_defense) %>% names
             ) %>%
-            mutate(name.table = 'Player Stats',
+            mutate(name.table = 'Player Tracking',
                    table.boxscore = t)
         } else {
           player_data <-
             data_frame(
-              name.table = 'Player Stats',
+              name.table = 'Player Tracking',
               table.boxscore = t,
               id.game = game_id
             )
         }
       }
-
-      if ('sqlTeamsFourFactors' %in% tables_names & include_team == T) {
+      if ('PlayerTrackTeam' %in% tables_names & include_team == T) {
         if (json_data$resultSets$rowSet[2] %>%
             data.frame %>%
             tbl_df %>% nrow > 0) {
@@ -1333,7 +1629,7 @@ get_game_id_box_score_data <-
             actual_names
 
           team_data %<>%
-            mutate(team = city.team %>% paste(team)) %>%
+            mutate(team = city.team %>% paste(name.team)) %>%
             separate(min, c("minute", "second"), sep = '\\:') %>%
             mutate(
               minute = minute %>% as.numeric,
@@ -1341,27 +1637,26 @@ get_game_id_box_score_data <-
               min = minute + (second / 60)
             ) %>%
             dplyr::select(-c(minute, second, city.team)) %>%
-            dplyr::select(id.game:slug.team, min, everything())
+            dplyr::select(id.game:slug.team, team, min, everything())
 
           team_data %<>%
             mutate_each_(funs(as.numeric),
-                         vars = team_data %>% dplyr::select(id.team, min:pct.oreb.opponent) %>% names) %>%
-            mutate(name.table = 'Team Stats',
+                         vars = team_data %>% dplyr::select(id.team, min:pct.fgm.opponent.rim_defense) %>% names) %>%
+            mutate(name.table = 'Team Player Tracking',
                    table.boxscore = t)
         } else {
           team_data <-
             mutate(
               id.game = game_id,
-              name.table = 'Team Stats',
+              name.table = 'Team Player Tracking',
               table.boxscore = t
             )
         }
       }
-
       if (include_team == T) {
         team <-
           team_data %>%
-          dplyr::select(id.team, min:pct.oreb.opponent)
+          dplyr::select(id.team, min:pct.fgm.opponent.rim_defense)
 
         names(team)[2:length(names(team))] %<>%
           paste0('.team')
@@ -1376,15 +1671,15 @@ get_game_id_box_score_data <-
       }
     }
 
-    if (t == "Play by Play") {
-      if ('PlayByPlay' %in% tables_names) {
+    if (t == "Game Charts") {
+      if ('FanDuelPlayer' %in% tables_names) {
         if (json_data$resultSets$rowSet[1] %>%
             data.frame %>%
             tbl_df %>% nrow > 0) {
           headers <-
             json_data$resultSets$headers[1] %>%
             unlist
-          headers[!headers %in% headers_df$name.nba]
+
           player_data <-
             json_data$resultSets$rowSet[1] %>%
             data.frame %>%
@@ -1399,26 +1694,16 @@ get_game_id_box_score_data <-
             actual_names
 
           player_data %<>%
-            separate(min, c("minute", "second"), sep = '\\:') %>%
-            mutate(
-              minute = minute %>% as.numeric,
-              second = second %>% as.numeric,
-              min = minute + (second / 60)
-            ) %>%
-            dplyr::select(-c(minute, second, city.team)) %>%
-            dplyr::select(id.game:comment, min, everything())
-
-          player_data %<>%
             mutate_each_(
               funs(as.numeric),
-              vars = player_data %>% dplyr::select(id.team, id.player, min:pct.pts) %>% names
+              vars = player_data %>% dplyr::select(id.player,id.team, jersey, points.fanduel:plus.minus) %>% names
             ) %>%
-            mutate(name.table = 'Player Stats',
+            mutate(name.table = 'Fantasy',
                    table.boxscore = t)
         } else {
           player_data <-
             data_frame(
-              name.table = 'Player Stats',
+              name.table = 'Fantasy',
               table.boxscore = t,
               id.game = game_id
             )
@@ -1429,5 +1714,149 @@ get_game_id_box_score_data <-
         player_data
     }
 
+    if (t == "Win Probability") {
+      if ('WinProbPBP' %in% tables_names) {
+        if (json_data$resultSets$rowSet[1] %>%
+            data.frame %>%
+            tbl_df %>% nrow > 0) {
+          headers <-
+            json_data$resultSets$headers[1] %>%
+            unlist
+
+          headers.2 <-
+            json_data$resultSets$headers[2] %>%
+            unlist
+
+          wbp_data <-
+            json_data$resultSets$rowSet[1] %>%
+            data.frame %>%
+            tbl_df
+
+          game_data <-
+            json_data$resultSets$rowSet[2] %>%
+            data.frame %>%
+            tbl_df
+
+          actual_names <-
+            headers %>%
+            get_header_names %>%
+            .$name.actual
+
+          actual_names.2 <-
+            headers.2 %>%
+            get_header_names %>%
+            .$name.actual
+
+
+          names(wbp_data) <-
+            actual_names
+
+          names(game_data) <-
+            actual_names.2
+
+          wbp_data %<>%
+            mutate_each_(
+              funs(as.numeric),
+              vars = wbp_data %>% dplyr::select(id.event:home.g) %>% names
+            ) %>%
+            mutate(name.table = 'Win Probability',
+                   table.boxscore = t)
+          wbp_data %<>%
+            dplyr::select(-location) %>%
+            dplyr::filter(!id.event == 0) %>%
+            mutate(is.home.possesion = ifelse(is.home.possesion == "1", T, F)) %>%
+            fill(id.event) %>%
+            fill(is.home.possesion)
+          if (include_game_data == T){
+            wbp_data %<>%
+              left_join(game_data %>%
+                          mutate(date.game = date.game %>% lubridate::mdy() %>% as.Date) %>%
+                          mutate_each_(funs(as.numeric(.)),
+                                       game_data %>% dplyr::select(id.team.home, points.team.home, id.team.away, points.team.away) %>% names
+                          ))
+          }
+
+
+
+        } else {
+          wbp_data <-
+            data_frame(
+              name.table = 'Win Probability',
+              table.boxscore = t,
+              id.game = game_id
+            )
+        }
+      }
+
+      data <-
+        wbp_data
+    }
+
+    if ('id.position.start' %in% names(data)){
+      data %<>%
+        mutate(is.starter = ifelse(!id.position.start == '', T, F))
+    }
+
+    if (return_message == T) {
+      "You got " %>%
+        paste0(t %>% str_to_lower, ' for game ', game_id) %>%
+        message()
+    }
+
       return(data)
   }
+
+get_games_ids_box_score_tables <- function(game_id,
+         tables =
+           c(
+             "Summary",
+             "Traditional",
+             "Advanced",
+             "Misc",
+             "Scoring",
+             "Usage",
+             "Four Factors",
+             "Play by Play",
+             "Player Tracking",
+             "Game Charts",
+             "Win Probability"
+           ),
+         time_period = "All") {
+  g <-
+    game_id
+  p <-
+    time_period
+  all_data <-
+    data_frame()
+
+  for (t in 1:length(tables)) {
+
+    table <-
+      get_game_id_box_score_data(
+        game_id = g,
+        box_score_table = tables[t],
+        return_wide = T,
+        time_period = p
+      ) %>%
+      dplyr::select(-c(name.table, table.boxscore))
+
+    if(t == 1){
+      all_data %<>%
+        bind_rows(table)
+    } else {
+      table_names <-
+        names(table)[!names(table) %in% names(all_data)]
+
+      table_names <-
+        c('id.game', 'id.player',table_names)
+
+      all_data %<>%
+        left_join(table[,table_names])
+
+    }
+  }
+
+  return(all_data)
+
+}
+"0021300073" %>% get_games_ids_box_score_tables(tables = c("Usage", "Advanced", "Traditional")) %>% View()
