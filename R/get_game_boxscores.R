@@ -394,6 +394,8 @@ get_headers <- function() {
 }
 
 get_header_names <- function(headers){
+  headers_df <-
+    get_headers()
   actual_names <-
     1:length(headers) %>%
     purrr::map(
@@ -1859,4 +1861,4 @@ get_games_ids_box_score_tables <- function(game_id,
   return(all_data)
 
 }
-"0021300073" %>% get_games_ids_box_score_tables(tables = c("Usage", "Advanced", "Traditional")) %>% View()
+
