@@ -22,7 +22,26 @@ get_batch_player_gamelogs <-
         )
       return(fd_nba_name_df)
     }
-
+    get_header_names <- function(headers){
+      headers_df <-
+        get_headers()
+      actual_names <-
+        1:length(headers) %>%
+        purrr::map(
+          function(x)
+            data_frame(
+              name.actual =
+                headers_df %>%
+                mutate(name.nba = name.nba) %>%
+                dplyr::filter(name.nba == headers[x]) %>%
+                .$name.actual
+            )
+        ) %>%
+        bind_rows()
+      actual_headers <-
+        actual_names
+      return(actual_headers)
+    }
     get_headers <- function() {
       headers_df <-
         data_frame(
@@ -210,7 +229,8 @@ get_batch_player_gamelogs <-
             "LAST_GAME_HOME_TEAM_POINTS", "LAST_GAME_VISITOR_TEAM_ID", "LAST_GAME_VISITOR_TEAM_CITY",
             "LAST_GAME_VISITOR_TEAM_NAME", "LAST_GAME_VISITOR_TEAM_CITY1",
             "LAST_GAME_VISITOR_TEAM_POINTS", "HOME_TEAM_WINS", "HOME_TEAM_LOSSES",
-            "SERIES_LEADER", "VIDEO_AVAILABLE_FLAG", "PT_AVAILABLE", "PT_XYZ_AVAILABLE"
+            "SERIES_LEADER", "VIDEO_AVAILABLE_FLAG", "PT_AVAILABLE", "PT_XYZ_AVAILABLE",
+            "Player_ID"
 
           ),
           name.actual = c(
@@ -400,7 +420,8 @@ get_batch_player_gamelogs <-
             "id.team.away.last",
             "city.team.away.last", "name.team.away.last", "slug.team.away.last",
             "points.team.away.last","wins.team.home", "losses.team.home",
-            "team.series_leader", "is.video_available", "is.pt.available", "is.pt.xyz.available"
+            "team.series_leader", "is.video_available", "is.pt.available", "is.pt.xyz.available",
+            "id.player"
           ),
           id.row = 1:length(name.actual)
         )
@@ -535,11 +556,6 @@ get_batch_player_gamelogs <-
           height_ft_in[1] * 12 + height_ft_in[2]
         return(height_in)
       }
-
-    weight_in_lbs <- function(x){
-
-    }
-
 
     get_player_profile <- function(player,
                                    id.player = NULL,
@@ -690,18 +706,6 @@ get_batch_player_gamelogs <-
     }
 
 
-    #' Title
-    #'
-    #' @param id.player
-    #' @param player
-    #' @param season_type
-    #' @param year.season_start
-    #'
-    #' @return
-    #' @export
-    #'
-    #' @examples get_player_season_gamelog(player = "John Stockton", year.season_start = 1994, include_player_metadata = T)
-    #get_player_season_gamelog(id.player = 201945, season_type = "Pre Season", year.season_start = 2015)
     get_player_season_gamelog <- function(player,
                                            id.player = NULL,
                                            season_type = "Regular Season",
@@ -816,19 +820,12 @@ get_batch_player_gamelogs <-
           data.frame %>%
           tbl_df
 
+        headers <-
+          json_data$resultSets$headers %>% unlist
+
         actual_names <-
-          1:length(headers) %>%
-          purrr::map(
-            function(x)
-              data_frame(
-                name.actual =
-                  headers_df %>%
-                  mutate(name.nba = name.nba %>% str_to_lower) %>%
-                  dplyr::filter(name.nba == headers[x]) %>%
-                  .$name.actual
-              )
-          ) %>%
-          bind_rows()
+          headers %>%
+          get_header_names
 
         names(data) <-
           actual_names$name.actual

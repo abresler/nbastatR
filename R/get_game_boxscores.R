@@ -1807,7 +1807,7 @@ get_game_id_box_score_data <-
       return(data)
   }
 
-get_games_ids_box_score_tables <- function(game_id,
+get_games_ids_box_score_tables <- function(game_id, include_team = F,
          tables =
            c(
              "Summary",
@@ -1825,6 +1825,8 @@ get_games_ids_box_score_tables <- function(game_id,
          time_period = "All") {
   g <-
     game_id
+  it <-
+    include_team
   p <-
     time_period
   all_data <-
@@ -1837,7 +1839,10 @@ get_games_ids_box_score_tables <- function(game_id,
         game_id = g,
         box_score_table = tables[t],
         return_wide = T,
-        time_period = p
+        time_period = p,
+        include_team = it,
+        include_bench_starter = F,
+        include_game_data = F
       ) %>%
       dplyr::select(-c(name.table, table.boxscore))
 
