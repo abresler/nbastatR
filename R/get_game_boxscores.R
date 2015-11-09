@@ -392,7 +392,6 @@ get_headers <- function() {
     )
   return(headers_df)
 }
-
 get_header_names <- function(headers){
   headers_df <-
     get_headers()
