@@ -634,7 +634,7 @@ get_boxscore_url <-
   }
 get_game_id_box_score_data <-
   function(game_id,
-           box_score_table = "Traditional",
+           box_score_table = "Advanced",
            time_period = "All",
            include_team = T,
            include_bench_starter = F,
@@ -779,7 +779,7 @@ get_game_id_box_score_data <-
       if (return_wide == T){
         summary_wide <-
           all_summary_data %>%
-          gather(item, value, -c(is.home, date.game, id.game, is.final, year.season_start,lead.changes:jerseys.official, attendance, time.game)) %>%
+          gather(item, value, -c(is.home, date.game, id.game, is.final, year.season_start,times.tied:jerseys.official, attendance, time.game)) %>%
           mutate(item = item %>% as.character()) %>%
           mutate(item = ifelse(is.home == T, item %>% paste0('.home'), item %>% paste0('.away'))) %>%
           dplyr::select(-is.home) %>%
@@ -819,9 +819,18 @@ get_game_id_box_score_data <-
       data %<>%
         mutate(name.table = "Summary",
                table.boxscore = t)
+    } else{
+      data <-
+        data_frame(
+          id.game = game_id,
+          name.table = 'Summary',
+          table.boxscore = t
+        )
     }
 
-    if (t == "Traditional") {
+    if (t == "Traditional"&json_data$resultSets$rowSet[1] %>%
+        data.frame %>%
+        tbl_df %>% nrow > 0) {
       if ('PlayerStats' %in% tables_names) {
         if (json_data$resultSets$rowSet[1] %>%
             data.frame %>%
@@ -865,7 +874,8 @@ get_game_id_box_score_data <-
             data_frame(
               name.table = 'Player Stats',
               table.boxscore = t,
-              id.game = game_id
+              id.game = game_id,
+              id.team = NA
             )
         }
       }
@@ -909,10 +919,11 @@ get_game_id_box_score_data <-
                    table.boxscore = t)
         } else {
           team_data <-
-            mutate(
+            data_frame(
               id.game = game_id,
               name.table = 'Team Stats',
-              table.boxscore = t
+              table.boxscore = t,
+              id.team = NA
             )
         }
       }
@@ -958,7 +969,7 @@ get_game_id_box_score_data <-
                    table.boxscore = t)
         } else {
           sb_data <-
-            mutate(
+            data_frame(
               id.game = game_id,
               name.table = 'Starter Bench Stats',
               table.boxscore = t
@@ -991,9 +1002,18 @@ get_game_id_box_score_data <-
           player_data
       }
 
+    } else{
+      data <-
+        data_frame(
+          id.game = game_id,
+          name.table = 'Traditional',
+          table.boxscore = t
+        )
     }
 
-    if (t == "Advanced") {
+    if (t == "Advanced"&json_data$resultSets$rowSet[1] %>%
+        data.frame %>%
+        tbl_df %>% nrow > 0) {
       if ('PlayerStats' %in% tables_names) {
         if (json_data$resultSets$rowSet[1] %>%
             data.frame %>%
@@ -1081,7 +1101,7 @@ get_game_id_box_score_data <-
                    table.boxscore = t)
         } else {
           team_data <-
-            mutate(
+            data_frame(
               id.game = game_id,
               name.table = 'Team Stats',
               table.boxscore = t
@@ -1089,7 +1109,7 @@ get_game_id_box_score_data <-
         }
       }
 
-      if (include_team == T) {
+      if (include_team == T & player_data %>% nrow() > 1) {
         team <-
           team_data %>%
           dplyr::select(id.team, min:pie)
@@ -1105,9 +1125,18 @@ get_game_id_box_score_data <-
         data <-
           player_data
       }
+    } else{
+      data <-
+        data_frame(
+          id.game = game_id,
+          name.table = 'Advanced',
+          table.boxscore = t
+        )
     }
 
-    if (t == "Misc") {
+    if (t == "Misc"&json_data$resultSets$rowSet[1] %>%
+        data.frame %>%
+        tbl_df %>% nrow > 0) {
       if ('PlayerStats' %in% tables_names) {
         if (json_data$resultSets$rowSet[1] %>%
             data.frame %>%
@@ -1220,9 +1249,18 @@ get_game_id_box_score_data <-
         data <-
           player_data
       }
+    } else{
+      data <-
+        data_frame(
+          id.game = game_id,
+          name.table = 'Misc',
+          table.boxscore = t
+        )
     }
 
-    if (t == "Scoring") {
+    if (t == "Scoring"&json_data$resultSets$rowSet[1] %>%
+        data.frame %>%
+        tbl_df %>% nrow > 0) {
       if ('sqlPlayersScoring' %in% tables_names) {
         if (json_data$resultSets$rowSet[1] %>%
             data.frame %>%
@@ -1334,9 +1372,18 @@ get_game_id_box_score_data <-
         data <-
           player_data
       }
+    } else{
+      data <-
+        data_frame(
+          id.game = game_id,
+          name.table = 'Scoring',
+          table.boxscore = t
+        )
     }
 
-    if (t == "Usage") {
+    if (t == "Usage"&json_data$resultSets$rowSet[1] %>%
+        data.frame %>%
+        tbl_df %>% nrow > 0) {
       if ('sqlPlayersUsage' %in% tables_names) {
         if (json_data$resultSets$rowSet[1] %>%
             data.frame %>%
@@ -1387,9 +1434,18 @@ get_game_id_box_score_data <-
 
         data <-
           player_data
+    } else{
+      data <-
+        data_frame(
+          id.game = game_id,
+          name.table = 'Usage',
+          table.boxscore = t
+        )
     }
 
-    if (t == "Four Factors") {
+    if (t == "Four Factors"&json_data$resultSets$rowSet[1] %>%
+        data.frame %>%
+        tbl_df %>% nrow > 0) {
       if ('sqlPlayersFourFactors' %in% tables_names) {
         if (json_data$resultSets$rowSet[1] %>%
             data.frame %>%
@@ -1501,9 +1557,18 @@ get_game_id_box_score_data <-
         data <-
           player_data
       }
+    } else{
+      data <-
+        data_frame(
+          id.game = game_id,
+          name.table = 'Four Factors',
+          table.boxscore = t
+        )
     }
 
-    if (t == "Play by Play") {
+    if (t == "Play by Play"&json_data$resultSets$rowSet[1] %>%
+        data.frame %>%
+        tbl_df %>% nrow > 0) {
       if ('PlayByPlay' %in% tables_names) {
         if (json_data$resultSets$rowSet[1] %>%
             data.frame %>%
@@ -1558,9 +1623,18 @@ get_game_id_box_score_data <-
 
       data <-
         play_by_play
+    } else{
+      data <-
+        data_frame(
+          id.game = game_id,
+          name.table = 'Play by Play',
+          table.boxscore = t
+        )
     }
 
-    if (t == "Player Tracking") {
+    if (t == "Player Tracking"&json_data$resultSets$rowSet[1] %>%
+        data.frame %>%
+        tbl_df %>% nrow > 0) {
       if ('PlayerTrack' %in% tables_names) {
         if (json_data$resultSets$rowSet[1] %>%
             data.frame %>%
@@ -1670,9 +1744,20 @@ get_game_id_box_score_data <-
         data <-
           player_data
       }
+    } else{
+      data <-
+        data_frame(
+          id.game = game_id,
+          name.table = 'Player Tracking',
+          table.boxscore = t
+        )
     }
 
-    if (t == "Game Charts") {
+    if (t == "Game Charts"&json_data$resultSets$rowSet[1] %>%
+        data.frame %>%
+        tbl_df %>% nrow > 0&json_data$resultSets$rowSet[1] %>%
+        data.frame %>%
+        tbl_df %>% nrow > 0) {
       if ('FanDuelPlayer' %in% tables_names) {
         if (json_data$resultSets$rowSet[1] %>%
             data.frame %>%
@@ -1713,9 +1798,18 @@ get_game_id_box_score_data <-
 
       data <-
         player_data
+    } else{
+      data <-
+        data_frame(
+          id.game = game_id,
+          name.table = 'Game Charts',
+          table.boxscore = t
+        )
     }
 
-    if (t == "Win Probability") {
+    if (t == "Win Probability"&json_data$resultSets$rowSet[1] %>%
+        data.frame %>%
+        tbl_df %>% nrow > 0) {
       if ('WinProbPBP' %in% tables_names) {
         if (json_data$resultSets$rowSet[1] %>%
             data.frame %>%
@@ -1791,6 +1885,13 @@ get_game_id_box_score_data <-
 
       data <-
         wbp_data
+    } else{
+      data <-
+        data_frame(
+          id.game = game_id,
+          name.table = 'Win Probability',
+          table.boxscore = t
+        )
     }
 
     if ('id.position.start' %in% names(data)){
@@ -1803,11 +1904,15 @@ get_game_id_box_score_data <-
         paste0(t %>% str_to_lower, ' for game ', game_id) %>%
         message()
     }
-
+    if(data %>% ncol() > 3){
       return(data)
+    }
   }
+get_game_id_box_score_data_safe <-
+  failwith(NULL, get_game_id_box_score_data)
 
-get_games_ids_box_score_tables <- function(game_id, include_team = F,
+get_games_ids_box_score_tables <-
+  function(game_id, include_team = F,
          tables =
            c(
              "Summary",
@@ -1833,9 +1938,8 @@ get_games_ids_box_score_tables <- function(game_id, include_team = F,
     data_frame()
 
   for (t in 1:length(tables)) {
-
     table <-
-      get_game_id_box_score_data(
+      get_game_id_box_score_data_safe(
         game_id = g,
         box_score_table = tables[t],
         return_wide = T,
@@ -1843,10 +1947,19 @@ get_games_ids_box_score_tables <- function(game_id, include_team = F,
         include_team = it,
         include_bench_starter = F,
         include_game_data = F
-      ) %>%
-      dplyr::select(-c(name.table, table.boxscore))
+      )
 
-    if(t == 1){
+      if('name.table' %in% names(table)){
+        table %<>%
+      dplyr::select(-c(name.table, table.boxscore))
+      }
+
+    if('table.boxscore' %in% names(table)){
+      table %<>%
+        dplyr::select(-c(table.boxscore))
+    }
+
+    if (t == 1){
       all_data %<>%
         bind_rows(table)
     } else {
