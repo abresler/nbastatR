@@ -914,10 +914,6 @@ get_nba_traditional_team_season_stat_table <-
         c('data', 'metadata')
 
     } else {
-      if (!college %>% is.na) {
-        data %<>%
-          mutate(college)
-      }
       if (!t %>% is.na) {
         data %<>%
           mutate(team.selected = t) %>%
