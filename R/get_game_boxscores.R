@@ -415,7 +415,6 @@ get_header_names <- function(headers){
 get_boxscore_url <-
   function(game_id,
            box_score_table,
-           time_period) {
     tables <-
       c(
         "Summary",
