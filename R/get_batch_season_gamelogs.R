@@ -3,7 +3,7 @@ get_batch_player_gamelogs <-
            season_type,
            return_ids = T,
            return_message = T) {
-    get_fd_name_df <- function(){
+    get_fd_name_df <- function() {
       fd_nba_name_df <-
         data_frame(
           name.fanduel = c("C.J. Watson", "J.J. Redick", "Louis Williams", "C.J. Miles",
@@ -12,17 +12,17 @@ get_batch_player_gamelogs <-
                            "Nene Hilario", "K.J. McDaniels", "P.J. Hairston", "J.J. Barea",
                            "Glenn Robinson", "T.J. Warren", "R.J. Hunter", "Joseph Young",
                            "Larry Nance", "T.J. McConnell", "Raulzinho Neto"),
-          name.nba = c("C.J. Watson", "J.J. Redick", "Lou Williams", "C.J. Miles",
-                       "Charles Hayes", "J.J. Hickson", "Brad Beal", "P.J. Tucker",
-                       "Ishmael Smith", "Luc Richard Mbah a Moute", "Maurice Harkless", "C.J. McCollum",
-                       "Nene Hilario", "K.J. McDaniels", "P.J. Hairston", "Jose Juan Barea",
-                       "Glenn Robinson III", "T.J. Warren", "RJ Hunter", "Joseph Young",
-                       "Larry Nance", "TJ McConnell", "Raul Neto"),
+          name.nba = c("CJ Watson", "JJ Redick", "Lou Williams", "CJ Miles",
+                       "Chuck Hayes", "JJ Hickson", "Bradley Beal", "PJ Tucker",
+                       "Ish Smith", "Luc Mbah a Moute", "Maurice Harkless", "CJ McCollum",
+                       "Nene Hilario", "KJ McDaniels", "PJ Hairston", "Jose Juan Barea",
+                       "Glenn Robinson", "TJ Warren", "RJ Hunter", "Joe Young",
+                       "Larry Nance Jr.", "TJ McConnell", "Raul Neto"),
           is.different_name = T
         )
       return(fd_nba_name_df)
     }
-    get_header_names <- function(headers){
+    get_header_names <- function(headers) {
       headers_df <-
         get_headers()
       actual_names <-
@@ -197,39 +197,141 @@ get_batch_player_gamelogs <-
             "START_POSITION",
             "COMMENT",
             "TO",
-            "STARTERS_BENCH", "AST_TOV", "FTA_RATE", "OPP_EFG_PCT", "OPP_FTA_RATE", "OPP_TOV_PCT", "OPP_OREB_PCT",
-            "EVENTNUM", "EVENTMSGTYPE", "EVENTMSGACTIONTYPE", "PERIOD",
-            "WCTIMESTRING", "PCTIMESTRING", "HOMEDESCRIPTION", "NEUTRALDESCRIPTION",
-            "VISITORDESCRIPTION", "SCORE", "SCOREMARGIN", "PERSON1TYPE",
-            "PLAYER1_ID", "PLAYER1_NAME", "PLAYER1_TEAM_ID", "PLAYER1_TEAM_CITY",
-            "PLAYER1_TEAM_NICKNAME", "PLAYER1_TEAM_ABBREVIATION", "PERSON2TYPE",
-            "PLAYER2_ID", "PLAYER2_NAME", "PLAYER2_TEAM_ID", "PLAYER2_TEAM_CITY",
-            "PLAYER2_TEAM_NICKNAME", "PLAYER2_TEAM_ABBREVIATION", "PERSON3TYPE",
-            "PLAYER3_ID", "PLAYER3_NAME", "PLAYER3_TEAM_ID", "PLAYER3_TEAM_CITY",
-            "PLAYER3_TEAM_NICKNAME", "PLAYER3_TEAM_ABBREVIATION",
-            "SPD", "DIST", "ORBC", "DRBC", "RBC", "TCHS", "SAST", "FTAST",
-            "PASS", "CFGM", "CFGA", "CFG_PCT", "UFGM", "UFGA", "UFG_PCT",
-            "DFGM", "DFGA", "DFG_PCT","TEAM_NICKNAME",'FAN_DUEL_PTS',
-            "JERSEY_NUM", "PLAYER_POSITION", "LOCATION",
-            "EVENT_NUM", "HOME_PCT", "VISITOR_PCT", "HOME_PTS", "VISITOR_PTS",
-            "HOME_SCORE_MARGIN", "SECONDS_REMAINING", "HOME_POSS_IND", "HOME_G",
-            "DESCRIPTION", "ISVISIBLE",
-            "HOME_TEAM_ID", "HOME_TEAM_ABR", "HOME_TEAM_PTS", "VISITOR_TEAM_ID",
-            "VISITOR_TEAM_ABR", "VISITOR_TEAM_PTS",
-            "GAME_DATE_EST", "GAME_SEQUENCE", "GAME_STATUS_ID", "GAME_STATUS_TEXT",
-            "GAMECODE", "SEASON", "LIVE_PERIOD", "LIVE_PC_TIME", "NATL_TV_BROADCASTER_ABBREVIATION",
-            "LIVE_PERIOD_TIME_BCAST", "WH_STATUS", "LARGEST_LEAD", "LEAD_CHANGES",
-            "TIMES_TIED", "ids.officials", "officials", "jerseys.official",
-            "id.team", "players.inactive", "id.players.inactive", "ATTENDANCE",
-            "GAME_TIME", "TEAM_CITY_NAME", "TEAM_WINS_LOSSES", "PTS_QTR1",
-            "PTS_QTR2", "PTS_QTR3", "PTS_QTR4", "PTS_OT1", "PTS_OT2", "PTS_OT3",
-            "PTS_OT4", "PTS_OT5", "PTS_OT6", "PTS_OT7", "PTS_OT8", "PTS_OT9",
-            "PTS_OT10", "LAST_GAME_ID", "LAST_GAME_DATE_EST", "LAST_GAME_HOME_TEAM_ID",
-            "LAST_GAME_HOME_TEAM_CITY", "LAST_GAME_HOME_TEAM_NAME", "LAST_GAME_HOME_TEAM_ABBREVIATION",
-            "LAST_GAME_HOME_TEAM_POINTS", "LAST_GAME_VISITOR_TEAM_ID", "LAST_GAME_VISITOR_TEAM_CITY",
-            "LAST_GAME_VISITOR_TEAM_NAME", "LAST_GAME_VISITOR_TEAM_CITY1",
-            "LAST_GAME_VISITOR_TEAM_POINTS", "HOME_TEAM_WINS", "HOME_TEAM_LOSSES",
-            "SERIES_LEADER", "VIDEO_AVAILABLE_FLAG", "PT_AVAILABLE", "PT_XYZ_AVAILABLE",
+            "STARTERS_BENCH",
+            "AST_TOV",
+            "FTA_RATE",
+            "OPP_EFG_PCT",
+            "OPP_FTA_RATE",
+            "OPP_TOV_PCT",
+            "OPP_OREB_PCT",
+            "EVENTNUM",
+            "EVENTMSGTYPE",
+            "EVENTMSGACTIONTYPE",
+            "PERIOD",
+            "WCTIMESTRING",
+            "PCTIMESTRING",
+            "HOMEDESCRIPTION",
+            "NEUTRALDESCRIPTION",
+            "VISITORDESCRIPTION",
+            "SCORE",
+            "SCOREMARGIN",
+            "PERSON1TYPE",
+            "PLAYER1_ID",
+            "PLAYER1_NAME",
+            "PLAYER1_TEAM_ID",
+            "PLAYER1_TEAM_CITY",
+            "PLAYER1_TEAM_NICKNAME",
+            "PLAYER1_TEAM_ABBREVIATION",
+            "PERSON2TYPE",
+            "PLAYER2_ID",
+            "PLAYER2_NAME",
+            "PLAYER2_TEAM_ID",
+            "PLAYER2_TEAM_CITY",
+            "PLAYER2_TEAM_NICKNAME",
+            "PLAYER2_TEAM_ABBREVIATION",
+            "PERSON3TYPE",
+            "PLAYER3_ID",
+            "PLAYER3_NAME",
+            "PLAYER3_TEAM_ID",
+            "PLAYER3_TEAM_CITY",
+            "PLAYER3_TEAM_NICKNAME",
+            "PLAYER3_TEAM_ABBREVIATION",
+            "SPD",
+            "DIST",
+            "ORBC",
+            "DRBC",
+            "RBC",
+            "TCHS",
+            "SAST",
+            "FTAST",
+            "PASS",
+            "CFGM",
+            "CFGA",
+            "CFG_PCT",
+            "UFGM",
+            "UFGA",
+            "UFG_PCT",
+            "DFGM",
+            "DFGA",
+            "DFG_PCT",
+            "TEAM_NICKNAME",
+            'FAN_DUEL_PTS',
+            "JERSEY_NUM",
+            "PLAYER_POSITION",
+            "LOCATION",
+            "EVENT_NUM",
+            "HOME_PCT",
+            "VISITOR_PCT",
+            "HOME_PTS",
+            "VISITOR_PTS",
+            "HOME_SCORE_MARGIN",
+            "SECONDS_REMAINING",
+            "HOME_POSS_IND",
+            "HOME_G",
+            "DESCRIPTION",
+            "ISVISIBLE",
+            "HOME_TEAM_ID",
+            "HOME_TEAM_ABR",
+            "HOME_TEAM_PTS",
+            "VISITOR_TEAM_ID",
+            "VISITOR_TEAM_ABR",
+            "VISITOR_TEAM_PTS",
+            "GAME_DATE_EST",
+            "GAME_SEQUENCE",
+            "GAME_STATUS_ID",
+            "GAME_STATUS_TEXT",
+            "GAMECODE",
+            "SEASON",
+            "LIVE_PERIOD",
+            "LIVE_PC_TIME",
+            "NATL_TV_BROADCASTER_ABBREVIATION",
+            "LIVE_PERIOD_TIME_BCAST",
+            "WH_STATUS",
+            "LARGEST_LEAD",
+            "LEAD_CHANGES",
+            "TIMES_TIED",
+            "ids.officials",
+            "officials",
+            "jerseys.official",
+            "id.team",
+            "players.inactive",
+            "id.players.inactive",
+            "ATTENDANCE",
+            "GAME_TIME",
+            "TEAM_CITY_NAME",
+            "TEAM_WINS_LOSSES",
+            "PTS_QTR1",
+            "PTS_QTR2",
+            "PTS_QTR3",
+            "PTS_QTR4",
+            "PTS_OT1",
+            "PTS_OT2",
+            "PTS_OT3",
+            "PTS_OT4",
+            "PTS_OT5",
+            "PTS_OT6",
+            "PTS_OT7",
+            "PTS_OT8",
+            "PTS_OT9",
+            "PTS_OT10",
+            "LAST_GAME_ID",
+            "LAST_GAME_DATE_EST",
+            "LAST_GAME_HOME_TEAM_ID",
+            "LAST_GAME_HOME_TEAM_CITY",
+            "LAST_GAME_HOME_TEAM_NAME",
+            "LAST_GAME_HOME_TEAM_ABBREVIATION",
+            "LAST_GAME_HOME_TEAM_POINTS",
+            "LAST_GAME_VISITOR_TEAM_ID",
+            "LAST_GAME_VISITOR_TEAM_CITY",
+            "LAST_GAME_VISITOR_TEAM_NAME",
+            "LAST_GAME_VISITOR_TEAM_CITY1",
+            "LAST_GAME_VISITOR_TEAM_POINTS",
+            "HOME_TEAM_WINS",
+            "HOME_TEAM_LOSSES",
+            "SERIES_LEADER",
+            "VIDEO_AVAILABLE_FLAG",
+            "PT_AVAILABLE",
+            "PT_XYZ_AVAILABLE",
             "Player_ID"
 
           ),
@@ -385,42 +487,141 @@ get_batch_player_gamelogs <-
             "id.position.start",
             "comment",
             "tov",
-            "starter_bench", "ratio.ast.to",
-            "rate.fta", "pct.efg.opponent", "rate.fta.opponent", "rate.tov.opponent", "pct.oreb.opponent",
-            "id.event", "id.type.type", "id.action.type", "period",
-            "time", "minute.quarter", "play.home.description", "play.neutral.description",
-            "play.visitor.description", "score", "score.margin", "type.player.1",
-            "id.player.1", "name.player.1", "id.team.player.1", "city.team.player.1",
-            "name.team.player.1", "slug.team.player.1", "type.player.2",
-            "id.player.2", "name.player.2", "id.team.player.2", "city.team.player.2",
-            "name.team.player.2", "slug.team.player.2","type.player.3",
-            "id.player.3", "name.player.3", "id.team.player.3", "city.team.player.3",
-            "name.team.player.3", "slug.team.player.3",
-            "avg.mph", "distance.miles", "oreb.chances", "dreb.chances", "reb.chances",
-            "touches", "ast.secondary", "ast.to.fta",
-            "passes", "fgm.contested", "fga.contested", "pct.fg.contested", "fgm.uncontested", "fga.uncontested", "pct.fg.uncontested",
-            "fgm.opponent.rim_defense", "fga.opponent.rim_defense", "pct.fgm.opponent.rim_defense",
-            "name.team",'points.fanduel',"jersey", "position", "location",
-            "id.event", "pct.win_prob.home", "pct.win_prob.away", "points.home", "points.away",
-            "score.margin.home", "quarter.seconds_remaining", "is.home.possesion", "home.g",
-            "play", "is.visible",
-            "id.team.home", "slug.team.home", "points.team.home", "id.team.away",
-            "slug.team.away", "points.team.away",
-            "date.game", "sequence.game", "id.stats.game", "text.status.game",
-            "slug.game", "year.season_start", "period.live", "time.live.pc", "network.tv",
-            "period.live.broadcast", "status.wh", "lead.largest", "lead.changes",
-            "times.tied", "ids.officials", "officials", "jerseys.official",
-            "id.team", "players.inactive", "id.players.inactive", "attendance",
-            "time.game", "city.team", "record.team", "points.q1",
-            "points.q2", "points.q3", "points.q4", "points.ot.1", "points.ot.2", "points.ot.3",
-            "points.ot.4", "points.ot.5", "points.ot.6", "points.ot.7", "points.ot.8", "points.ot.9",
-            "points.ot.10", "id.game.last", "date.game.last", "id.team.home.last",
-            "city.team.home.last", "name.team.home.last", "slug.team.home.last",
+            "starter_bench",
+            "ratio.ast.to",
+            "rate.fta",
+            "pct.efg.opponent",
+            "rate.fta.opponent",
+            "rate.tov.opponent",
+            "pct.oreb.opponent",
+            "id.event",
+            "id.type.type",
+            "id.action.type",
+            "period",
+            "time",
+            "minute.quarter",
+            "play.home.description",
+            "play.neutral.description",
+            "play.visitor.description",
+            "score",
+            "score.margin",
+            "type.player.1",
+            "id.player.1",
+            "name.player.1",
+            "id.team.player.1",
+            "city.team.player.1",
+            "name.team.player.1",
+            "slug.team.player.1",
+            "type.player.2",
+            "id.player.2",
+            "name.player.2",
+            "id.team.player.2",
+            "city.team.player.2",
+            "name.team.player.2",
+            "slug.team.player.2",
+            "type.player.3",
+            "id.player.3",
+            "name.player.3",
+            "id.team.player.3",
+            "city.team.player.3",
+            "name.team.player.3",
+            "slug.team.player.3",
+            "avg.mph",
+            "distance.miles",
+            "oreb.chances",
+            "dreb.chances",
+            "reb.chances",
+            "touches",
+            "ast.secondary",
+            "ast.to.fta",
+            "passes",
+            "fgm.contested",
+            "fga.contested",
+            "pct.fg.contested",
+            "fgm.uncontested",
+            "fga.uncontested",
+            "pct.fg.uncontested",
+            "fgm.opponent.rim_defense",
+            "fga.opponent.rim_defense",
+            "pct.fgm.opponent.rim_defense",
+            "name.team",
+            'points.fanduel',
+            "jersey",
+            "position",
+            "location",
+            "id.event",
+            "pct.win_prob.home",
+            "pct.win_prob.away",
+            "points.home",
+            "points.away",
+            "score.margin.home",
+            "quarter.seconds_remaining",
+            "is.home.possesion",
+            "home.g",
+            "play",
+            "is.visible",
+            "id.team.home",
+            "slug.team.home",
+            "points.team.home",
+            "id.team.away",
+            "slug.team.away",
+            "points.team.away",
+            "date.game",
+            "sequence.game",
+            "id.stats.game",
+            "text.status.game",
+            "slug.game",
+            "year.season_start",
+            "period.live",
+            "time.live.pc",
+            "network.tv",
+            "period.live.broadcast",
+            "status.wh",
+            "lead.largest",
+            "lead.changes",
+            "times.tied",
+            "ids.officials",
+            "officials",
+            "jerseys.official",
+            "id.team",
+            "players.inactive",
+            "id.players.inactive",
+            "attendance",
+            "time.game",
+            "city.team",
+            "record.team",
+            "points.q1",
+            "points.q2",
+            "points.q3",
+            "points.q4",
+            "points.ot.1",
+            "points.ot.2",
+            "points.ot.3",
+            "points.ot.4",
+            "points.ot.5",
+            "points.ot.6",
+            "points.ot.7",
+            "points.ot.8",
+            "points.ot.9",
+            "points.ot.10",
+            "id.game.last",
+            "date.game.last",
+            "id.team.home.last",
+            "city.team.home.last",
+            "name.team.home.last",
+            "slug.team.home.last",
             "points.team.home.last",
             "id.team.away.last",
-            "city.team.away.last", "name.team.away.last", "slug.team.away.last",
-            "points.team.away.last","wins.team.home", "losses.team.home",
-            "team.series_leader", "is.video_available", "is.pt.available", "is.pt.xyz.available",
+            "city.team.away.last",
+            "name.team.away.last",
+            "slug.team.away.last",
+            "points.team.away.last",
+            "wins.team.home",
+            "losses.team.home",
+            "team.series_leader",
+            "is.video_available",
+            "is.pt.available",
+            "is.pt.xyz.available",
             "id.player"
           ),
           id.row = 1:length(name.actual)
@@ -428,122 +629,127 @@ get_batch_player_gamelogs <-
       return(headers_df)
     }
 
-    get_nba_players_ids <- function(active_only = F, resolve_to_fanduel = T) {
-      packages <- #need all of these installed including some from github
-        c('dplyr',
-          'magrittr',
-          'jsonlite',
-          'tidyr',
-          'purrr',
-          'stringr',
-          'lubridate',
-          'tidyr')
-      options(warn = -1)
-      lapply(packages, library, character.only = T)
-      players.url <-
-        "http://stats.nba.com/stats/commonallplayers?IsOnlyCurrentSeason=0&LeagueID=00&Season=2015-16"
+    get_nba_players_ids <-
+      function(active_only = F,
+               resolve_to_fanduel = F) {
+        packages <- #need all of these installed including some from github
+          c(
+            'dplyr',
+            'magrittr',
+            'jsonlite',
+            'tidyr',
+            'purrr',
+            'stringr',
+            'lubridate',
+            'tidyr'
+          )
+        options(warn = -1)
+        lapply(packages, library, character.only = T)
+        players.url <-
+          "http://stats.nba.com/stats/commonallplayers?IsOnlyCurrentSeason=0&LeagueID=00&Season=2015-16"
 
-      json_data <-
-        players.url %>%
-        jsonlite::fromJSON(simplifyDataFrame = T)
+        json_data <-
+          players.url %>%
+          jsonlite::fromJSON(simplifyDataFrame = T)
 
-      data <-
-        json_data$resultSets$rowSet %>%
-        data.frame %>%
-        tbl_df
+        data <-
+          json_data$resultSets$rowSet %>%
+          data.frame %>%
+          tbl_df
 
-      headers <-
-        json_data$resultSets$headers %>%
-        unlist %>%
-        str_to_lower()
+        headers <-
+          json_data$resultSets$headers %>%
+          unlist %>%
+          str_to_lower()
 
-      headers_df <-
-        get_headers()
+        headers_df <-
+          get_headers()
 
-      actual_names <-
-        1:length(headers) %>%
-        purrr::map(
-          function(x)
-            data_frame(
-              name.actual =
-                headers_df %>%
-                mutate(name.nba = name.nba %>% str_to_lower) %>%
-                dplyr::filter(name.nba == headers[x]) %>%
-                .$name.actual
-            )
-        ) %>%
-        bind_rows()
+        actual_names <-
+          1:length(headers) %>%
+          purrr::map(
+            function(x)
+              data_frame(
+                name.actual =
+                  headers_df %>%
+                  mutate(name.nba = name.nba %>% str_to_lower) %>%
+                  dplyr::filter(name.nba == headers[x]) %>%
+                  .$name.actual
+              )
+          ) %>%
+          bind_rows()
 
-      names(data) <-
-        actual_names$name.actual
+        names(data) <-
+          actual_names$name.actual
 
-      names_df <-
-        data$name.last.display %>%
-        str_split_fixed(pattern = '\\,', 2) %>%
-        data.frame() %>%
-        tbl_df
+        names_df <-
+          data$name.last.display %>%
+          str_split_fixed(pattern = '\\,', 2) %>%
+          data.frame() %>%
+          tbl_df
 
-      names(names_df) <-
-        c('name.last', 'name.first')
+        names(names_df) <-
+          c('name.last', 'name.first')
 
-      names_df %<>%
-        mutate(player = name.first %>% str_trim %>% paste(name.last %>% str_trim)) %>%
-        dplyr::select(player)
-      data$name.player <-
-        names_df$player
-      data %<>%
-        mutate(
-          id.player = id.player %>% as.numeric,
-          is.active_player = ifelse(id.team == 0, FALSE, TRUE),
-          id.team = id.team %>% as.numeric
-        ) %>%
-        dplyr::select(-c(status.roster, name.last.display)) %>%
-        mutate_each(funs(extract_numeric), starts_with("year.")) %>%
-        mutate(
-          id.team = ifelse(id.team == 0, NA, id.team),
-          name.player = name.player %>% str_trim,
-          city.team = ifelse(city.team == '', NA, city.team),
-          code.team = ifelse(code.team == '', NA, code.team),
-          slug.team = ifelse(slug.team == '', NA, slug.team),
-          team = ifelse(city.team %>% is.na, NA, paste(city.team, team)),
-          seasons.played = year.to - year.from,
-          url.player = id.player %>% paste0('http://stats.nba.com/player/#!/', .),
-          image.player = id.player %>% paste0('http://stats.nba.com/media/players/132x132/',.,'.png')
-        ) %>%
-        dplyr::select(
-          name.player,
-          id.player,
-          team,
-          id.team,
-          is.active_player,
-          seasons.played,
-          year.from,
-          year.to,
-          everything()
-        )
-
-      if (active_only == T) {
-        data %<>%
-          dplyr::filter(is.active_player == T)
-      }
-
-      if (resolve_to_fanduel == T ){
-        fd_names <-
-          get_fd_name_df()
-
-        data %<>%
-          left_join(fd_names %>%
-                      dplyr::rename(name.player = name.nba))
+        names_df %<>%
+          mutate(player = name.first %>% str_trim %>% paste(name.last %>% str_trim)) %>%
+          dplyr::select(player)
+        data$name.player <-
+          names_df$player
         data %<>%
           mutate(
-            is.different_name = ifelse(is.different_name %>% is.na, F, T),
-            name.player = ifelse(is.different_name == T, name.fanduel, name.player)) %>%
-          dplyr::select(-c(is.different_name, name.fanduel)) %>%
-          arrange(name.player)
-      }
+            id.player = id.player %>% as.numeric,
+            is.active_player = ifelse(id.team == 0, FALSE, TRUE),
+            id.team = id.team %>% as.numeric
+          ) %>%
+          dplyr::select(-c(status.roster, name.last.display)) %>%
+          mutate_each(funs(extract_numeric), starts_with("year.")) %>%
+          mutate(
+            id.team = ifelse(id.team == 0, NA, id.team),
+            name.player = name.player %>% str_trim,
+            city.team = ifelse(city.team == '', NA, city.team),
+            code.team = ifelse(code.team == '', NA, code.team),
+            slug.team = ifelse(slug.team == '', NA, slug.team),
+            team = ifelse(city.team %>% is.na, NA, paste(city.team, team)),
+            seasons.played = year.to - year.from,
+            url.player = id.player %>% paste0('http://stats.nba.com/player/#!/', .),
+            image.player = id.player %>% paste0('http://stats.nba.com/media/players/132x132/', ., '.png')
+          ) %>%
+          dplyr::select(
+            name.player,
+            id.player,
+            team,
+            id.team,
+            is.active_player,
+            seasons.played,
+            year.from,
+            year.to,
+            everything()
+          )
 
-      return(data)
-    }
+        if (active_only == T) {
+          data %<>%
+            dplyr::filter(is.active_player == T)
+        }
+
+        if (resolve_to_fanduel == T) {
+          fd_names <-
+            get_fd_name_df()
+
+          data %<>%
+            left_join(fd_names %>%
+                        dplyr::rename(name.player = name.nba))
+          data %<>%
+            mutate(
+              is.different_name = ifelse(is.different_name %>% is.na, F, T),
+              name.player = ifelse(is.different_name == T, name.fanduel, name.player)
+            ) %>%
+            dplyr::select(-c(is.different_name, name.fanduel)) %>%
+            arrange(name.player)
+        }
+
+        return(data)
+      }
 
     height_in_inches <-
       function(height) {
@@ -562,15 +768,18 @@ get_batch_player_gamelogs <-
                                    include_headline_stat = T,
                                    return_message = T) {
       packages <- #need all of these installed including some from github
-        packages <- #need all of these installed including some from github
-        c('dplyr',
+        packages <-
+        #need all of these installed including some from github
+        c(
+          'dplyr',
           'magrittr',
           'jsonlite',
           'tidyr',
           'purrr',
           'stringr',
           'lubridate',
-          'tidyr')
+          'tidyr'
+        )
       options(warn = -1)
       lapply(packages, library, character.only = T)
       players <-
@@ -636,8 +845,20 @@ get_batch_player_gamelogs <-
         actual_names$name.actual
 
       data %<>%
-        separate(date.birth, into = c('date.birth', 'ignore'), sep = 'T') %>%
-        dplyr::select(-c(name.first, name.last, name.last.display, name.middle.display, gp.flag, ignore, status.roster)) %>%
+        separate(date.birth,
+                 into = c('date.birth', 'ignore'),
+                 sep = 'T') %>%
+        dplyr::select(
+          -c(
+            name.first,
+            name.last,
+            name.last.display,
+            name.middle.display,
+            gp.flag,
+            ignore,
+            status.roster
+          )
+        ) %>%
         mutate(
           is.rookie = ifelse(years.experience == "R", T, F),
           years.experience = years.experience %>% str_replace("R", 0) %>% as.numeric(),
@@ -652,7 +873,23 @@ get_batch_player_gamelogs <-
           bmi = (weight.lbs / height.inches ^ 2) * 703,
           has.d_league_data = has.d_league_data %>% str_detect("Y")
         ) %>%
-        dplyr::select(name.player, id.player, is.rookie, is.active_player, team, position, jersey, height, height.inches, weight.lbs, bmi, years.experience, year.from, year.to, everything())
+        dplyr::select(
+          name.player,
+          id.player,
+          is.rookie,
+          is.active_player,
+          team,
+          position,
+          jersey,
+          height,
+          height.inches,
+          weight.lbs,
+          bmi,
+          years.experience,
+          year.from,
+          year.to,
+          everything()
+        )
 
       if (include_headline_stat == T) {
         headers <-
@@ -683,7 +920,8 @@ get_batch_player_gamelogs <-
           actual_names$name.actual
 
         stat %<>%
-          mutate_each_(funs(extract_numeric), vars =
+          mutate_each_(funs(extract_numeric),
+                       vars =
                          stat %>%
                          dplyr::select(id.player, pts:pie) %>% names) %>%
           rename(id.season.recent = id.season)
@@ -707,21 +945,23 @@ get_batch_player_gamelogs <-
 
 
     get_player_season_gamelog <- function(player,
-                                           id.player = NULL,
-                                           season_type = "Regular Season",
-                                           year.season_start,
-                                           include_date_detail = T,
-                                           include_player_metadata = F,
-                                           return_message = T) {
+                                          id.player = NULL,
+                                          season_type = "Regular Season",
+                                          year.season_start,
+                                          include_date_detail = T,
+                                          include_player_metadata = F,
+                                          return_message = T) {
       packages <- #need all of these installed including some from github
-        c('dplyr',
+        c(
+          'dplyr',
           'magrittr',
           'jsonlite',
           'tidyr',
           'purrr',
           'stringr',
           'lubridate',
-          'tidyr')
+          'tidyr'
+        )
       options(warn = -1)
       lapply(packages, library, character.only = T)
 
@@ -874,9 +1114,14 @@ get_batch_player_gamelogs <-
 
         if (include_date_detail == T) {
           data %<>%
-            mutate(day.game = date.game %>% strftime('%A'),
-                   month.game = date.game %>% lubridate::month) %>%
-            dplyr::select(id.season:date.game, day.game, month.game, everything())
+            mutate(
+              day.game = date.game %>% strftime('%A'),
+              month.game = date.game %>% lubridate::month
+            ) %>%
+            dplyr::select(id.season:date.game,
+                          day.game,
+                          month.game,
+                          everything())
         }
 
         if (include_player_metadata == T) {
@@ -889,7 +1134,7 @@ get_batch_player_gamelogs <-
 
           fd_names <-
             get_fd_name_df()
-          if(profile$name.player %in% fd_names$name.nba == T){
+          if (profile$name.player %in% fd_names$name.nba == T) {
             np <- profile$name.player
             profile$name.player <-
               fd_names %>%
@@ -915,7 +1160,6 @@ get_batch_player_gamelogs <-
         }
         return(data)
       } else {
-
         "Sorry " %>%
           paste0(player, " has no data for ", season, " " , season_type) %>%
           message
@@ -938,18 +1182,23 @@ get_batch_player_gamelogs <-
 
     players_then <-
       players %>%
-      dplyr::filter(
-        year.season_start >= year.from & year.season_start <= year.to
-                    )
+      dplyr::filter(year.season_start >= year.from &
+                      year.season_start <= year.to)
 
     player_ids <-
       players_then$id.player
 
     all_data <-
       player_ids %>%
-      purrr::map(function(x)
-        get_player_season_gamelog(season_type = type.season, year.season_start = yst,
-                                  id.player = x, return_message = rm)) %>%
+      purrr::map(
+        function(x)
+          get_player_season_gamelog(
+            season_type = type.season,
+            year.season_start = yst,
+            id.player = x,
+            return_message = rm
+          )
+      ) %>%
       compact %>%
       bind_rows
 
@@ -989,14 +1238,15 @@ get_batch_player_gamelogs <-
         left_join(games_nos) %>%
         left_join(teams_games_nos) %>%
         left_join(player_games_nos) %>%
-        dplyr::select(id.season:type.season, number.game:number.game.player, everything())
+        dplyr::select(id.season:type.season,
+                      number.game:number.game.player,
+                      everything())
     }
 
-    if (return_message == T){
+    if (return_message == T) {
       "You got all game logs for the " %>%
         paste0(season, " ", season_type) %>%
         message
     }
     return(all_data)
   }
-

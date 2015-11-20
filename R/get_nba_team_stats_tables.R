@@ -266,29 +266,41 @@ get_nba_traditional_team_season_stat_table <-
            player_experience = NA,
            player_position = NA,
            is.rank = F,
-           is.plus_minus = F,
+           is.plus_minus = c(F,T),
            game_segment = NA,
-           conference = NA,
-           division = NA,
-           division_against = NA,
-           conference_against = NA,
+           conference = c(NA, "East", "West"),
+           division = c(NA,
+                        "Atlantic",
+                        "Central",
+                        "Northwest",
+                        "Pacific",
+                        "Southeast",
+                        "Southwest"),
+           division_against = c(NA,
+                                "Atlantic",
+                                "Central",
+                                "Northwest",
+                                "Pacific",
+                                "Southeast",
+                                "Southwest"),
+           conference_against = c(NA, "East", "West"),
            ahead_behind = NA,
            date_from = NA,
            date_to = NA,
            game_scope = NA,
            last_n_games = 0,
-           location = NA,
+           location = c(NA, "Home", "Road"),
            month = 0,
            season_segment = NA,
            opponent = NA,
            team = NA,
-           outcome = NA,
+           outcome = c(NA, "W", "L"),
            playoff_round = 0,
            shot_clock_range = NA,
            starter_bench = NA,
-           return_metadata = F,
-           include_measure_name = T,
-           return_message = T,
+           return_metadata = c(F,T),
+           include_measure_name = c(T,F),
+           return_message = c(T,F),
            ...) {
     if (year.season_start < 1996) {
       stop("Sorry data only goes back to the 1996-97 Season")
@@ -614,7 +626,8 @@ get_nba_traditional_team_season_stat_table <-
         "Per100Possessions",
         "Per100Plays"
       )
-
+      per_mode %<>%
+        str_replace('\\ ','')
       if (!per_mode %>% clean_to_stem %in% PerMode) {
         "Sorry per mode can only be " %>%
           paste0(per_mode %>% paste0(collapse = ', ')) %>%
@@ -1036,6 +1049,21 @@ get_nba_traditional_team_season_stat_table <-
         paste0(measure_type, " data for players in the ", id.season, " season") %>%
         message()
     }
+      data %<>%
+        left_join(data_frame(team = c("Atlanta Hawks", "Boston Celtics", "Brooklyn Nets", "Charlotte Hornets",
+                                      "Chicago Bulls", "Cleveland Cavaliers", "Dallas Mavericks", "Denver Nuggets",
+                                      "Detroit Pistons", "Golden State Warriors", "Houston Rockets",
+                                      "Indiana Pacers", "Los Angeles Clippers", "Los Angeles Lakers",
+                                      "Memphis Grizzlies", "Miami Heat", "Milwaukee Bucks", "Minnesota Timberwolves",
+                                      "New Orleans Pelicans", "New York Knicks", "Oklahoma City Thunder",
+                                      "Orlando Magic", "Philadelphia 76ers", "Phoenix Suns", "Portland Trail Blazers",
+                                      "Sacramento Kings", "San Antonio Spurs", "Toronto Raptors", "Utah Jazz",
+                                      "Washington Wizards"),
+                             slug.team = c("ATL", "BOS", "BKN", "CHA", "CHI", "CLE", "DAL", "DEN", "DET",
+                                           "GSW", "HOU", "IND", "LAC", "LAL", "MEM", "MIA", "MIL", "MIN",
+                                           "NOP", "NYK", "OKC", "ORL", "PHI", "PHO", "POR", "SAC", "SAS",
+                                           "TOR", "UTA", "WAS")
+        ))
     return(data)
     }
   }
@@ -1096,6 +1124,23 @@ get_all_team_traditional_stat_tables <-
 
       all_data %<>%
         left_join(df)
+    }
+    if(!'slug.team' %in% names(all_data)){
+    all_data %<>%
+      left_join(data_frame(team = c("Atlanta Hawks", "Boston Celtics", "Brooklyn Nets", "Charlotte Hornets",
+                                    "Chicago Bulls", "Cleveland Cavaliers", "Dallas Mavericks", "Denver Nuggets",
+                                    "Detroit Pistons", "Golden State Warriors", "Houston Rockets",
+                                    "Indiana Pacers", "Los Angeles Clippers", "Los Angeles Lakers",
+                                    "Memphis Grizzlies", "Miami Heat", "Milwaukee Bucks", "Minnesota Timberwolves",
+                                    "New Orleans Pelicans", "New York Knicks", "Oklahoma City Thunder",
+                                    "Orlando Magic", "Philadelphia 76ers", "Phoenix Suns", "Portland Trail Blazers",
+                                    "Sacramento Kings", "San Antonio Spurs", "Toronto Raptors", "Utah Jazz",
+                                    "Washington Wizards"),
+                           slug.team = c("ATL", "BOS", "BKN", "CHA", "CHI", "CLE", "DAL", "DEN", "DET",
+                                         "GSW", "HOU", "IND", "LAC", "LAL", "MEM", "MIA", "MIL", "MIN",
+                                         "NOP", "NYK", "OKC", "ORL", "PHI", "PHO", "POR", "SAC", "SAS",
+                                         "TOR", "UTA", "WAS")
+      ))
     }
     return(all_data)
 
