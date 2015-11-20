@@ -67,30 +67,124 @@ get_headers <- function() {
         "VIDEO_AVAILABLE",
         "GAME_DATE",
         "Game_ID",
-        "PERSON_ID", "FIRST_NAME", "LAST_NAME", "DISPLAY_FIRST_LAST",
-        "DISPLAY_LAST_COMMA_FIRST", "DISPLAY_FI_LAST", "BIRTHDATE", "SCHOOL",
-        "COUNTRY", "LAST_AFFILIATION", "HEIGHT", "WEIGHT", "SEASON_EXP",
-        "JERSEY", "POSITION", "ROSTERSTATUS", "TEAM_NAME", "TEAM_CODE",
-        "TEAM_CITY", "PLAYERCODE", "FROM_YEAR", "TO_YEAR", "DLEAGUE_FLAG",
-        "GAMES_PLAYED_FLAG", "PLAYER_NAME", "TimeFrame", "PIE",
-        "AGE", "W", "L", "W_PCT", "BLKA", "PFD", "DD2", "TD3", "CFID",
-        "CFPARAMS", "OFF_RATING", "DEF_RATING", "NET_RATING", "AST_PCT", "AST_TO",
-        "AST_RATIO", "OREB_PCT", "DREB_PCT", "REB_PCT", "TM_TOV_PCT",
-        "EFG_PCT", "TS_PCT", "USG_PCT", "PACE", "FGM_PG", "FGA_PG",
-        "PTS_OFF_TOV", "PTS_2ND_CHANCE", "PTS_FB", "PTS_PAINT", "OPP_PTS_OFF_TOV",
-        "OPP_PTS_2ND_CHANCE", "OPP_PTS_FB", "OPP_PTS_PAINT",
-        "PCT_FGA_2PT", "PCT_FGA_3PT", "PCT_PTS_2PT", "PCT_PTS_2PT_MR",
-        "PCT_PTS_3PT", "PCT_PTS_FB", "PCT_PTS_FT", "PCT_PTS_OFF_TOV",
-        "PCT_PTS_PAINT", "PCT_AST_2PM", "PCT_UAST_2PM", "PCT_AST_3PM",
-        "PCT_UAST_3PM", "PCT_AST_FGM", "PCT_UAST_FGM",
-        "PCT_FGM", "PCT_FGA", "PCT_FG3M", "PCT_FG3A", "PCT_FTM", "PCT_FTA",
-        "PCT_OREB", "PCT_DREB", "PCT_REB", "PCT_AST", "PCT_TOV", "PCT_STL",
-        "PCT_BLK", "PCT_BLKA", "PCT_PF", "PCT_PFD", "PCT_PTS",
-        "FTA_RATE", "OPP_EFG_PCT", "OPP_FTA_RATE", "OPP_TOV_PCT", "OPP_OREB_PCT",
-        "OPP_FGM", "OPP_FGA", "OPP_FG_PCT", "OPP_FG3M", "OPP_FG3A",
-        "OPP_FG3_PCT", "OPP_FTM", "OPP_FTA", "OPP_FT_PCT", "OPP_OREB",
-        "OPP_DREB", "OPP_REB", "OPP_AST", "OPP_TOV", "OPP_STL", "OPP_BLK",
-        "OPP_BLKA", "OPP_PF", "OPP_PFD", "OPP_PTS"
+        "PERSON_ID",
+        "FIRST_NAME",
+        "LAST_NAME",
+        "DISPLAY_FIRST_LAST",
+        "DISPLAY_LAST_COMMA_FIRST",
+        "DISPLAY_FI_LAST",
+        "BIRTHDATE",
+        "SCHOOL",
+        "COUNTRY",
+        "LAST_AFFILIATION",
+        "HEIGHT",
+        "WEIGHT",
+        "SEASON_EXP",
+        "JERSEY",
+        "POSITION",
+        "ROSTERSTATUS",
+        "TEAM_NAME",
+        "TEAM_CODE",
+        "TEAM_CITY",
+        "PLAYERCODE",
+        "FROM_YEAR",
+        "TO_YEAR",
+        "DLEAGUE_FLAG",
+        "GAMES_PLAYED_FLAG",
+        "PLAYER_NAME",
+        "TimeFrame",
+        "PIE",
+        "AGE",
+        "W",
+        "L",
+        "W_PCT",
+        "BLKA",
+        "PFD",
+        "DD2",
+        "TD3",
+        "CFID",
+        "CFPARAMS",
+        "OFF_RATING",
+        "DEF_RATING",
+        "NET_RATING",
+        "AST_PCT",
+        "AST_TO",
+        "AST_RATIO",
+        "OREB_PCT",
+        "DREB_PCT",
+        "REB_PCT",
+        "TM_TOV_PCT",
+        "EFG_PCT",
+        "TS_PCT",
+        "USG_PCT",
+        "PACE",
+        "FGM_PG",
+        "FGA_PG",
+        "PTS_OFF_TOV",
+        "PTS_2ND_CHANCE",
+        "PTS_FB",
+        "PTS_PAINT",
+        "OPP_PTS_OFF_TOV",
+        "OPP_PTS_2ND_CHANCE",
+        "OPP_PTS_FB",
+        "OPP_PTS_PAINT",
+        "PCT_FGA_2PT",
+        "PCT_FGA_3PT",
+        "PCT_PTS_2PT",
+        "PCT_PTS_2PT_MR",
+        "PCT_PTS_3PT",
+        "PCT_PTS_FB",
+        "PCT_PTS_FT",
+        "PCT_PTS_OFF_TOV",
+        "PCT_PTS_PAINT",
+        "PCT_AST_2PM",
+        "PCT_UAST_2PM",
+        "PCT_AST_3PM",
+        "PCT_UAST_3PM",
+        "PCT_AST_FGM",
+        "PCT_UAST_FGM",
+        "PCT_FGM",
+        "PCT_FGA",
+        "PCT_FG3M",
+        "PCT_FG3A",
+        "PCT_FTM",
+        "PCT_FTA",
+        "PCT_OREB",
+        "PCT_DREB",
+        "PCT_REB",
+        "PCT_AST",
+        "PCT_TOV",
+        "PCT_STL",
+        "PCT_BLK",
+        "PCT_BLKA",
+        "PCT_PF",
+        "PCT_PFD",
+        "PCT_PTS",
+        "FTA_RATE",
+        "OPP_EFG_PCT",
+        "OPP_FTA_RATE",
+        "OPP_TOV_PCT",
+        "OPP_OREB_PCT",
+        "OPP_FGM",
+        "OPP_FGA",
+        "OPP_FG_PCT",
+        "OPP_FG3M",
+        "OPP_FG3A",
+        "OPP_FG3_PCT",
+        "OPP_FTM",
+        "OPP_FTA",
+        "OPP_FT_PCT",
+        "OPP_OREB",
+        "OPP_DREB",
+        "OPP_REB",
+        "OPP_AST",
+        "OPP_TOV",
+        "OPP_STL",
+        "OPP_BLK",
+        "OPP_BLKA",
+        "OPP_PF",
+        "OPP_PFD",
+        "OPP_PTS"
       ),
       name.actual = c(
         "id.player",
@@ -147,30 +241,124 @@ get_headers <- function() {
         "is.video_available",
         "date.game",
         "id.game",
-        "id.player", "name.first", "name.last", "name.player",
-        "name.last.display", "name.middle.display", "date.birth", "school",
-        "country", "college.non_nba_team", "height", "weight.lbs", "years.experience",
-        "jersey", "position", "status.roster", "team", "code.team",
-        "city.team", "slug.player", "year.from", "year.to", "has.d_league_data",
-        "gp.flag", "name.player", "id.season", "pie",
-        "age", "wins", "losses", "pct.wins", "fga.blocked", "fouls.drawn", "double_doubles", "triple_doubles", "cfid",
-        "cfparms", "ortg", "drtg", "netrtg", "pct.ast", "ratio.ast.to",
-        "ratio.ast", "pct.oreb", "pct.dreb", "pct.reb", "ratio.to",
-        "pct.efg", "pct.ts", "pct.usg", "pace", "fgm.per_game", "fga.per_game",
-        "pts.off_to", "pts.2nd_chance", "pts.fastbreak", "pts.paint", "pts.off_to.opponent",
-        "pts.2nd_chance.opponent", "pts.fastbreak.opponent", "pts.paint.opponent",
-        "pct.fga2a", "pct.fga3a", "pct.pts.fg2m", "pct.pts.mid_range_2",
-        "pct.pts.fg3m", "pct.pts.fast_break", "pct.pts.ft", "pct.pts.off_tos",
-        "pct.paints.paint", "pct.fg2m.assisted", "pct.fg2m.unassisted", "pct.fg3m.assisted",
-        "pct.fg3m.unassisted", "pct.fgm.assisted", "pct.fgm.unassisted",
-        "pct.fgm", "pct.fga", "pct.fg3m", "pct.fg3a", "pct.ftm", "pct.fta",
-        "pct.oreb", "pct.dreb", "pct.reb", "pct.ast", "pct.tov", "pct.stl",
-        "pct.blk", "pct.blocked", "pct.fouls", "pct.fouls.drawn", "pct.pts",
-        "rate.fta", "pct.efg.opp", "rate.fta.opp", "pct.tov.opp", "pct.oreb.opp",
-        "fgm.opp", "fga.opp", "pct.fg.opp", "fg3m.opp", "fg3a.opp",
-        "pct.fg3.opp", "ftm.opp", "fta.opp", "pct.ft.opp", "oreb.opp",
-        "dreb.opp", "rep.opp", "ast.opp", "tov.opp", "stl.opp", "blk.opp",
-        "fga.blocked.opp", "fouls.opp", "fouls.drawn.opp", "pts.opp"
+        "id.player",
+        "name.first",
+        "name.last",
+        "name.player",
+        "name.last.display",
+        "name.middle.display",
+        "date.birth",
+        "school",
+        "country",
+        "college.non_nba_team",
+        "height",
+        "weight.lbs",
+        "years.experience",
+        "jersey",
+        "position",
+        "status.roster",
+        "team",
+        "code.team",
+        "city.team",
+        "slug.player",
+        "year.from",
+        "year.to",
+        "has.d_league_data",
+        "gp.flag",
+        "name.player",
+        "id.season",
+        "pie",
+        "age",
+        "wins",
+        "losses",
+        "pct.wins",
+        "fga.blocked",
+        "fouls.drawn",
+        "double_doubles",
+        "triple_doubles",
+        "cfid",
+        "cfparms",
+        "ortg",
+        "drtg",
+        "netrtg",
+        "pct.ast",
+        "ratio.ast.to",
+        "ratio.ast",
+        "pct.oreb",
+        "pct.dreb",
+        "pct.reb",
+        "ratio.to",
+        "pct.efg",
+        "pct.ts",
+        "pct.usg",
+        "pace",
+        "fgm.per_game",
+        "fga.per_game",
+        "pts.off_to",
+        "pts.2nd_chance",
+        "pts.fastbreak",
+        "pts.paint",
+        "pts.off_to.opponent",
+        "pts.2nd_chance.opponent",
+        "pts.fastbreak.opponent",
+        "pts.paint.opponent",
+        "pct.fga2a",
+        "pct.fga3a",
+        "pct.pts.fg2m",
+        "pct.pts.mid_range_2",
+        "pct.pts.fg3m",
+        "pct.pts.fast_break",
+        "pct.pts.ft",
+        "pct.pts.off_tos",
+        "pct.paints.paint",
+        "pct.fg2m.assisted",
+        "pct.fg2m.unassisted",
+        "pct.fg3m.assisted",
+        "pct.fg3m.unassisted",
+        "pct.fgm.assisted",
+        "pct.fgm.unassisted",
+        "pct.fgm",
+        "pct.fga",
+        "pct.fg3m",
+        "pct.fg3a",
+        "pct.ftm",
+        "pct.fta",
+        "pct.oreb",
+        "pct.dreb",
+        "pct.reb",
+        "pct.ast",
+        "pct.tov",
+        "pct.stl",
+        "pct.blk",
+        "pct.blocked",
+        "pct.fouls",
+        "pct.fouls.drawn",
+        "pct.pts",
+        "rate.fta",
+        "pct.efg.opp",
+        "rate.fta.opp",
+        "pct.tov.opp",
+        "pct.oreb.opp",
+        "fgm.opp",
+        "fga.opp",
+        "pct.fg.opp",
+        "fg3m.opp",
+        "fg3a.opp",
+        "pct.fg3.opp",
+        "ftm.opp",
+        "fta.opp",
+        "pct.ft.opp",
+        "oreb.opp",
+        "dreb.opp",
+        "rep.opp",
+        "ast.opp",
+        "tov.opp",
+        "stl.opp",
+        "blk.opp",
+        "fga.blocked.opp",
+        "fouls.opp",
+        "fouls.drawn.opp",
+        "pts.opp"
       ),
       id.row = 1:length(name.actual)
     )
@@ -185,77 +373,78 @@ clean_to_stem <- function(x) {
   return(x)
 
 }
-get_nba_franchise_data <- function(return_franchises = c('all', 'active', 'current'),
-                                   return_message = T){
-  team_history_url <-
-    'http://stats.nba.com/stats/franchisehistory?LeagueID=00'
+get_nba_franchise_data <-
+  function(return_franchises = c('all', 'active', 'current'),
+           return_message = T) {
+    team_history_url <-
+      'http://stats.nba.com/stats/franchisehistory?LeagueID=00'
 
-  team_data <-
-    team_history_url %>%
-    fromJSON(simplifyDataFrame = T, flatten = )
+    team_data <-
+      team_history_url %>%
+      fromJSON(simplifyDataFrame = T, flatten =)
 
-  names_active <-
-    team_data$resultSets$headers[1] %>%
-    unlist %>%
-    str_to_lower
+    names_active <-
+      team_data$resultSets$headers[1] %>%
+      unlist %>%
+      str_to_lower
 
-  names_defunct <-
-    team_data$resultSets$headers[2] %>%
-    unlist %>%
-    str_to_lower
+    names_defunct <-
+      team_data$resultSets$headers[2] %>%
+      unlist %>%
+      str_to_lower
 
-  active_data <-
-    team_data$resultSets$rowSet[1] %>%
-    data.frame %>%
-    tbl_df()
+    active_data <-
+      team_data$resultSets$rowSet[1] %>%
+      data.frame %>%
+      tbl_df()
 
-  names(active_data) <-
-    names_active
+    names(active_data) <-
+      names_active
 
-  active_data %<>%
-    mutate(is.active = T)
+    active_data %<>%
+      mutate(is.active = T)
 
-  defunct_data <-
-    team_data$resultSets$rowSet[2] %>%
-    data.frame %>%
-    tbl_df()
+    defunct_data <-
+      team_data$resultSets$rowSet[2] %>%
+      data.frame %>%
+      tbl_df()
 
-  names(defunct_data) <-
-    names_defunct
+    names(defunct_data) <-
+      names_defunct
 
-  defunct_data %<>%
-    mutate(is.active = F)
+    defunct_data %<>%
+      mutate(is.active = F)
 
-  data <-
-    active_data %>%
-    bind_rows(defunct_data)
+    data <-
+      active_data %>%
+      bind_rows(defunct_data)
 
-  num_cols <-
-    data %>%
-    dplyr::select(-c(contains("team")), -is.active) %>%
-    names
+    num_cols <-
+      data %>%
+      dplyr::select(-c(contains("team")), -is.active) %>%
+      names
 
-  data %<>%
-    mutate_each_(funs(as.numeric), vars = num_cols)
-
-  if(return_franchises == 'current') {
     data %<>%
-      mutate(id.row = 1:nrow(.)) %>%
-      group_by(team_id) %>%
-      dplyr::filter(id.row == min(id.row), is.active == T) %>%
-      dplyr::select(-id.row)
-  }
+      mutate_each_(funs(as.numeric), vars = num_cols)
 
-  if (return_franchises == 'active') {
-    data %<>%
-      dplyr::filter( is.active == T)
+    if (return_franchises == 'current') {
+      data %<>%
+        mutate(id.row = 1:nrow(.)) %>%
+        group_by(team_id) %>%
+        dplyr::filter(id.row == min(id.row), is.active == T) %>%
+        dplyr::select(-id.row)
+    }
+
+    if (return_franchises == 'active') {
+      data %<>%
+        dplyr::filter(is.active == T)
+    }
+    if (return_message == T) {
+      "You got NBA franchise data" %>%
+        message
+    }
+    return(data)
   }
-  if(return_message == T){
-    "You got NBA franchise data" %>%
-      message
-  }
-  return(data)
-}
 get_nba_traditional_team_season_stat_table <-
   function(year.season_start = 2015,
            season_type = "Regular Season",
@@ -266,7 +455,7 @@ get_nba_traditional_team_season_stat_table <-
            player_experience = NA,
            player_position = NA,
            is.rank = F,
-           is.plus_minus = c(F,T),
+           is.plus_minus = c(F, T),
            game_segment = NA,
            conference = c(NA, "East", "West"),
            division = c(NA,
@@ -298,9 +487,9 @@ get_nba_traditional_team_season_stat_table <-
            playoff_round = 0,
            shot_clock_range = NA,
            starter_bench = NA,
-           return_metadata = c(F,T),
-           include_measure_name = c(T,F),
-           return_message = c(T,F),
+           return_metadata = c(F, T),
+           include_measure_name = c(T, F),
+           return_message = c(T, F),
            ...) {
     if (year.season_start < 1996) {
       stop("Sorry data only goes back to the 1996-97 Season")
@@ -448,7 +637,12 @@ get_nba_traditional_team_season_stat_table <-
     }
 
     if (!measure_type %>% is.na) {
-      MeasureType = c("Base", "Advanced", "Misc", "Scoring", "Four Factors", "Opponent")
+      MeasureType = c("Base",
+                      "Advanced",
+                      "Misc",
+                      "Scoring",
+                      "Four Factors",
+                      "Opponent")
 
       if (!measure_type %in% MeasureType) {
         "Sorry measure type can only be " %>%
@@ -627,7 +821,7 @@ get_nba_traditional_team_season_stat_table <-
         "Per100Plays"
       )
       per_mode %<>%
-        str_replace('\\ ','')
+        str_replace('\\ ', '')
       if (!per_mode %>% clean_to_stem %in% PerMode) {
         "Sorry per mode can only be " %>%
           paste0(per_mode %>% paste0(collapse = ', ')) %>%
@@ -881,7 +1075,7 @@ get_nba_traditional_team_season_stat_table <-
       ) %>%
       dplyr::select(id.season:per_mode, everything())
 
-    if (include_measure_name == F){
+    if (include_measure_name == F) {
       data %<>%
         dplyr::select(-measure_type)
     }
@@ -1027,7 +1221,7 @@ get_nba_traditional_team_season_stat_table <-
           dplyr::select(id.season, player_position, everything())
       }
 
-      if (playoff_round > 0 ) {
+      if (playoff_round > 0) {
         data %<>%
           mutate(playoff_round) %>%
           dplyr::select(id.season, playoff_round, everything())
@@ -1044,28 +1238,83 @@ get_nba_traditional_team_season_stat_table <-
           dplyr::select(id.season, starter_bench, everything())
       }
 
-    if(return_message == T) {
-      "You got " %>%
-        paste0(measure_type, " data for players in the ", id.season, " season") %>%
-        message()
-    }
+      if (return_message == T) {
+        "You got " %>%
+          paste0(measure_type,
+                 " data for players in the ",
+                 id.season,
+                 " season") %>%
+          message()
+      }
       data %<>%
-        left_join(data_frame(team = c("Atlanta Hawks", "Boston Celtics", "Brooklyn Nets", "Charlotte Hornets",
-                                      "Chicago Bulls", "Cleveland Cavaliers", "Dallas Mavericks", "Denver Nuggets",
-                                      "Detroit Pistons", "Golden State Warriors", "Houston Rockets",
-                                      "Indiana Pacers", "Los Angeles Clippers", "Los Angeles Lakers",
-                                      "Memphis Grizzlies", "Miami Heat", "Milwaukee Bucks", "Minnesota Timberwolves",
-                                      "New Orleans Pelicans", "New York Knicks", "Oklahoma City Thunder",
-                                      "Orlando Magic", "Philadelphia 76ers", "Phoenix Suns", "Portland Trail Blazers",
-                                      "Sacramento Kings", "San Antonio Spurs", "Toronto Raptors", "Utah Jazz",
-                                      "Washington Wizards"),
-                             slug.team = c("ATL", "BOS", "BKN", "CHA", "CHI", "CLE", "DAL", "DEN", "DET",
-                                           "GSW", "HOU", "IND", "LAC", "LAL", "MEM", "MIA", "MIL", "MIN",
-                                           "NOP", "NYK", "OKC", "ORL", "PHI", "PHO", "POR", "SAC", "SAS",
-                                           "TOR", "UTA", "WAS")
+        left_join(data_frame(
+          team = c(
+            "Atlanta Hawks",
+            "Boston Celtics",
+            "Brooklyn Nets",
+            "Charlotte Hornets",
+            "Chicago Bulls",
+            "Cleveland Cavaliers",
+            "Dallas Mavericks",
+            "Denver Nuggets",
+            "Detroit Pistons",
+            "Golden State Warriors",
+            "Houston Rockets",
+            "Indiana Pacers",
+            "Los Angeles Clippers",
+            "Los Angeles Lakers",
+            "Memphis Grizzlies",
+            "Miami Heat",
+            "Milwaukee Bucks",
+            "Minnesota Timberwolves",
+            "New Orleans Pelicans",
+            "New York Knicks",
+            "Oklahoma City Thunder",
+            "Orlando Magic",
+            "Philadelphia 76ers",
+            "Phoenix Suns",
+            "Portland Trail Blazers",
+            "Sacramento Kings",
+            "San Antonio Spurs",
+            "Toronto Raptors",
+            "Utah Jazz",
+            "Washington Wizards"
+          ),
+          slug.team = c(
+            "ATL",
+            "BOS",
+            "BKN",
+            "CHA",
+            "CHI",
+            "CLE",
+            "DAL",
+            "DEN",
+            "DET",
+            "GSW",
+            "HOU",
+            "IND",
+            "LAC",
+            "LAL",
+            "MEM",
+            "MIA",
+            "MIL",
+            "MIN",
+            "NOP",
+            "NYK",
+            "OKC",
+            "ORL",
+            "PHI",
+            "PHO",
+            "POR",
+            "SAC",
+            "SAS",
+            "TOR",
+            "UTA",
+            "WAS"
+          )
         )) %>%
         dplyr::select(team, slug.team, everything())
-    return(data)
+      return(data)
     }
   }
 
@@ -1073,7 +1322,6 @@ get_all_team_traditional_stat_tables <-
   function(year.season_start = 2015,
            season_type = "Regular Season",
            per_mode = "PerGame") {
-
     ys <-
       year.season_start
 
@@ -1084,7 +1332,12 @@ get_all_team_traditional_stat_tables <-
       per_mode
 
     measures <-
-      c("Base", "Advanced", "Scoring", "Misc", "Four Factors", "Opponent")
+      c("Base",
+        "Advanced",
+        "Scoring",
+        "Misc",
+        "Four Factors",
+        "Opponent")
 
     all_data <-
       get_nba_traditional_team_season_stat_table(
@@ -1095,10 +1348,30 @@ get_all_team_traditional_stat_tables <-
         year.season_start = ys
       )
     exclude <-
-      c("age", "blk", "date.data", "fga", "fga.blocked", "fgm", "fouls",
-        "fouls.drawn", "gp", "id.season", "is.pace_adjusted",
-        "is.rank", "losses", "min", "name.player", 'team', "per_mode",
-        "season_type", "slug.team", "wins","pct.wins", "pct.fg")
+      c(
+        "age",
+        "blk",
+        "date.data",
+        "fga",
+        "fga.blocked",
+        "fgm",
+        "fouls",
+        "fouls.drawn",
+        "gp",
+        "id.season",
+        "is.pace_adjusted",
+        "is.rank",
+        "losses",
+        "min",
+        "name.player",
+        'team',
+        "per_mode",
+        "season_type",
+        "slug.team",
+        "wins",
+        "pct.wins",
+        "pct.fg"
+      )
     for (m in measures[2:length(measures)]) {
       df <-
         get_nba_traditional_team_season_stat_table(
@@ -1110,15 +1383,15 @@ get_all_team_traditional_stat_tables <-
         )
 
       df <-
-        df[,!names(df) %in% exclude]
+        df[, !names(df) %in% exclude]
       names(df)[names(df) %in% names(all_data)]
 
-      if (m == "Four Factors"){
+      if (m == "Four Factors") {
         df %<>%
           dplyr::select(-c(pct.efg, pct.oreb, ratio.to))
       }
 
-      if (m == "Opponent"){
+      if (m == "Opponent") {
         df %<>%
           dplyr::select(-c(plus.minus))
       }
@@ -1126,22 +1399,74 @@ get_all_team_traditional_stat_tables <-
       all_data %<>%
         left_join(df)
     }
-    if(!'slug.team' %in% names(all_data)){
-    all_data %<>%
-      left_join(data_frame(team = c("Atlanta Hawks", "Boston Celtics", "Brooklyn Nets", "Charlotte Hornets",
-                                    "Chicago Bulls", "Cleveland Cavaliers", "Dallas Mavericks", "Denver Nuggets",
-                                    "Detroit Pistons", "Golden State Warriors", "Houston Rockets",
-                                    "Indiana Pacers", "Los Angeles Clippers", "Los Angeles Lakers",
-                                    "Memphis Grizzlies", "Miami Heat", "Milwaukee Bucks", "Minnesota Timberwolves",
-                                    "New Orleans Pelicans", "New York Knicks", "Oklahoma City Thunder",
-                                    "Orlando Magic", "Philadelphia 76ers", "Phoenix Suns", "Portland Trail Blazers",
-                                    "Sacramento Kings", "San Antonio Spurs", "Toronto Raptors", "Utah Jazz",
-                                    "Washington Wizards"),
-                           slug.team = c("ATL", "BOS", "BKN", "CHA", "CHI", "CLE", "DAL", "DEN", "DET",
-                                         "GSW", "HOU", "IND", "LAC", "LAL", "MEM", "MIA", "MIL", "MIN",
-                                         "NOP", "NYK", "OKC", "ORL", "PHI", "PHO", "POR", "SAC", "SAS",
-                                         "TOR", "UTA", "WAS")
-      )) %>%
+    if (!'slug.team' %in% names(all_data)) {
+      all_data %<>%
+        left_join(data_frame(
+          team = c(
+            "Atlanta Hawks",
+            "Boston Celtics",
+            "Brooklyn Nets",
+            "Charlotte Hornets",
+            "Chicago Bulls",
+            "Cleveland Cavaliers",
+            "Dallas Mavericks",
+            "Denver Nuggets",
+            "Detroit Pistons",
+            "Golden State Warriors",
+            "Houston Rockets",
+            "Indiana Pacers",
+            "Los Angeles Clippers",
+            "Los Angeles Lakers",
+            "Memphis Grizzlies",
+            "Miami Heat",
+            "Milwaukee Bucks",
+            "Minnesota Timberwolves",
+            "New Orleans Pelicans",
+            "New York Knicks",
+            "Oklahoma City Thunder",
+            "Orlando Magic",
+            "Philadelphia 76ers",
+            "Phoenix Suns",
+            "Portland Trail Blazers",
+            "Sacramento Kings",
+            "San Antonio Spurs",
+            "Toronto Raptors",
+            "Utah Jazz",
+            "Washington Wizards"
+          ),
+          slug.team = c(
+            "ATL",
+            "BOS",
+            "BKN",
+            "CHA",
+            "CHI",
+            "CLE",
+            "DAL",
+            "DEN",
+            "DET",
+            "GSW",
+            "HOU",
+            "IND",
+            "LAC",
+            "LAL",
+            "MEM",
+            "MIA",
+            "MIL",
+            "MIN",
+            "NOP",
+            "NYK",
+            "OKC",
+            "ORL",
+            "PHI",
+            "PHO",
+            "POR",
+            "SAC",
+            "SAS",
+            "TOR",
+            "UTA",
+            "WAS"
+          )
+        )) %>%
         dplyr::select(team, slug.team, everything())
     }
     return(all_data)
