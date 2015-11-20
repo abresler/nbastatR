@@ -1063,7 +1063,8 @@ get_nba_traditional_team_season_stat_table <-
                                            "GSW", "HOU", "IND", "LAC", "LAL", "MEM", "MIA", "MIL", "MIN",
                                            "NOP", "NYK", "OKC", "ORL", "PHI", "PHO", "POR", "SAC", "SAS",
                                            "TOR", "UTA", "WAS")
-        ))
+        )) %>%
+        dplyr::select(team, slug.team, everything())
     return(data)
     }
   }
@@ -1140,7 +1141,8 @@ get_all_team_traditional_stat_tables <-
                                          "GSW", "HOU", "IND", "LAC", "LAL", "MEM", "MIA", "MIL", "MIN",
                                          "NOP", "NYK", "OKC", "ORL", "PHI", "PHO", "POR", "SAC", "SAS",
                                          "TOR", "UTA", "WAS")
-      ))
+      )) %>%
+        dplyr::select(team, slug.team, everything())
     }
     return(all_data)
 
