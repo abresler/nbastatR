@@ -9,6 +9,77 @@ packages <- #need all of these installed including some from github
     'tidyr')
 options(warn = -1)
 lapply(packages, library, character.only = T)
+get_teams_ids <-
+  function(){
+    data <-
+      data_frame(
+      team = c(
+        "Atlanta Hawks",
+        "Boston Celtics",
+        "Brooklyn Nets",
+        "Charlotte Hornets",
+        "Chicago Bulls",
+        "Cleveland Cavaliers",
+        "Dallas Mavericks",
+        "Denver Nuggets",
+        "Detroit Pistons",
+        "Golden State Warriors",
+        "Houston Rockets",
+        "Indiana Pacers",
+        "Los Angeles Clippers",
+        "Los Angeles Lakers",
+        "Memphis Grizzlies",
+        "Miami Heat",
+        "Milwaukee Bucks",
+        "Minnesota Timberwolves",
+        "New Orleans Pelicans",
+        "New York Knicks",
+        "Oklahoma City Thunder",
+        "Orlando Magic",
+        "Philadelphia 76ers",
+        "Phoenix Suns",
+        "Portland Trail Blazers",
+        "Sacramento Kings",
+        "San Antonio Spurs",
+        "Toronto Raptors",
+        "Utah Jazz",
+        "Washington Wizards"
+      ),
+      slug.team = c(
+        "ATL",
+        "BOS",
+        "BKN",
+        "CHA",
+        "CHI",
+        "CLE",
+        "DAL",
+        "DEN",
+        "DET",
+        "GSW",
+        "HOU",
+        "IND",
+        "LAC",
+        "LAL",
+        "MEM",
+        "MIA",
+        "MIL",
+        "MIN",
+        "NOP",
+        "NYK",
+        "OKC",
+        "ORL",
+        "PHI",
+        "PHO",
+        "POR",
+        "SAC",
+        "SAS",
+        "TOR",
+        "UTA",
+        "WAS"
+      )
+    )
+    return(data)
+  }
 get_headers <- function() {
   headers_df <-
     data_frame(
@@ -1246,74 +1317,6 @@ get_nba_traditional_team_season_stat_table <-
                  " season") %>%
           message()
       }
-      data %<>%
-        left_join(data_frame(
-          team = c(
-            "Atlanta Hawks",
-            "Boston Celtics",
-            "Brooklyn Nets",
-            "Charlotte Hornets",
-            "Chicago Bulls",
-            "Cleveland Cavaliers",
-            "Dallas Mavericks",
-            "Denver Nuggets",
-            "Detroit Pistons",
-            "Golden State Warriors",
-            "Houston Rockets",
-            "Indiana Pacers",
-            "Los Angeles Clippers",
-            "Los Angeles Lakers",
-            "Memphis Grizzlies",
-            "Miami Heat",
-            "Milwaukee Bucks",
-            "Minnesota Timberwolves",
-            "New Orleans Pelicans",
-            "New York Knicks",
-            "Oklahoma City Thunder",
-            "Orlando Magic",
-            "Philadelphia 76ers",
-            "Phoenix Suns",
-            "Portland Trail Blazers",
-            "Sacramento Kings",
-            "San Antonio Spurs",
-            "Toronto Raptors",
-            "Utah Jazz",
-            "Washington Wizards"
-          ),
-          slug.team = c(
-            "ATL",
-            "BOS",
-            "BKN",
-            "CHA",
-            "CHI",
-            "CLE",
-            "DAL",
-            "DEN",
-            "DET",
-            "GSW",
-            "HOU",
-            "IND",
-            "LAC",
-            "LAL",
-            "MEM",
-            "MIA",
-            "MIL",
-            "MIN",
-            "NOP",
-            "NYK",
-            "OKC",
-            "ORL",
-            "PHI",
-            "PHO",
-            "POR",
-            "SAC",
-            "SAS",
-            "TOR",
-            "UTA",
-            "WAS"
-          )
-        )) %>%
-        dplyr::select(team, slug.team, everything())
       return(data)
     }
   }
