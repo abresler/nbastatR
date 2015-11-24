@@ -1402,76 +1402,12 @@ get_all_team_traditional_stat_tables <-
       all_data %<>%
         left_join(df)
     }
-    if (!'slug.team' %in% names(all_data)) {
+
+      teams_ids <-
+        get_teams_ids()
       all_data %<>%
-        left_join(data_frame(
-          team = c(
-            "Atlanta Hawks",
-            "Boston Celtics",
-            "Brooklyn Nets",
-            "Charlotte Hornets",
-            "Chicago Bulls",
-            "Cleveland Cavaliers",
-            "Dallas Mavericks",
-            "Denver Nuggets",
-            "Detroit Pistons",
-            "Golden State Warriors",
-            "Houston Rockets",
-            "Indiana Pacers",
-            "Los Angeles Clippers",
-            "Los Angeles Lakers",
-            "Memphis Grizzlies",
-            "Miami Heat",
-            "Milwaukee Bucks",
-            "Minnesota Timberwolves",
-            "New Orleans Pelicans",
-            "New York Knicks",
-            "Oklahoma City Thunder",
-            "Orlando Magic",
-            "Philadelphia 76ers",
-            "Phoenix Suns",
-            "Portland Trail Blazers",
-            "Sacramento Kings",
-            "San Antonio Spurs",
-            "Toronto Raptors",
-            "Utah Jazz",
-            "Washington Wizards"
-          ),
-          slug.team = c(
-            "ATL",
-            "BOS",
-            "BKN",
-            "CHA",
-            "CHI",
-            "CLE",
-            "DAL",
-            "DEN",
-            "DET",
-            "GSW",
-            "HOU",
-            "IND",
-            "LAC",
-            "LAL",
-            "MEM",
-            "MIA",
-            "MIL",
-            "MIN",
-            "NOP",
-            "NYK",
-            "OKC",
-            "ORL",
-            "PHI",
-            "PHO",
-            "POR",
-            "SAC",
-            "SAS",
-            "TOR",
-            "UTA",
-            "WAS"
-          )
-        )) %>%
+        left_join(teams_ids) %>%
         dplyr::select(team, slug.team, everything())
-    }
     return(all_data)
 
   }
