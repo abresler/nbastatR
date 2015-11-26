@@ -799,7 +799,8 @@ get_days_games <-
                       id.game,
                       game,
                       both.back_to_back,
-                      everything())
+                      everything()) %>%
+        arrange(id.game)
 
       both_b2b <-
         t %>%
@@ -847,11 +848,16 @@ get_days_games <-
         left_join(all_games) %>%
         left_join(matchups)
 
-      data <-
-        list(t)
+      t %<>%
+        dplyr::select(date.game = date, id.game, slug.home_team, slug.away_team, sequence.game) %>%
+        gather(team_location, slug.team, -c(date.game, id.game, sequence.game)) %>%
+        mutate(is.home_team = ifelse(team_location == 'slug.home_team', T, F)) %>%
+        dplyr::select(-team_location) %>%
+        arrange(sequence.game)
 
-      names(data) <-
-        'teams_today'
+      data <-
+        t
+
 
     }
     return(data)
