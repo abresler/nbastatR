@@ -663,7 +663,7 @@ get_team_ids_to_fanduel <-
 get_days_games <-
   function(is.today = F,
            date = NA,
-           include_back_to_back = T) {
+           include_back_to_back = F) {
     packages <- #need all of these installed including some from github
       c('dplyr',
         'magrittr',
