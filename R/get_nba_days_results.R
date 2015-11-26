@@ -851,7 +851,7 @@ get_days_games <-
         list(t)
 
       names(data) <-
-        'todays_teams'
+        'teams_today'
 
     }
     return(data)
