@@ -1346,6 +1346,17 @@ get_all_player_traditional_stat_tables <-
   function(year.season_start = 2015,
            season_type = "Regular Season",
            per_mode = "PerGame") {
+    packages <- #need all of these installed including some from github
+      c('dplyr',
+        'magrittr',
+        'jsonlite',
+        'tidyr',
+        'purrr',
+        'stringr',
+        'lubridate',
+        'tidyr')
+    options(warn = -1)
+    lapply(packages, library, character.only = T)
     ys <-
       year.season_start
 
