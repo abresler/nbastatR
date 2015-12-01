@@ -102,11 +102,12 @@ get_nba_player_injuries <- function(filter_returning_today = T){
     dplyr::select(team, name.player, is.gtd, everything())
 
   injury_data %<>%
-    separate(injury.timeline, into = c('remove','date.return'),sep = 'targeting',
+    separate(injury.timeline, into = c('remove','date.return'),sep = 'target',
              remove = F) %>%
     dplyr::select(-remove) %>%
-    mutate(date.return = date.return %>% gsub('\\.','',.),
-           date.return = ifelse(!date.return %>% is.na & date.return %>% nchar <= 7,
+    mutate(date.return = date.return %>% gsub('\\ing','',.),
+           date.return = date.return %>% gsub('\\.','',.) %>% str_trim(),
+           date.return = ifelse(!date.return %>% is.na & date.return %>% nchar < 7,
                                 yes = date.return %>%
                                   paste0(", ",
                                          Sys.Date() %>% year()
@@ -117,7 +118,9 @@ get_nba_player_injuries <- function(filter_returning_today = T){
   if (filter_returning_today == T){
   active_players <-
     injury_data %>%
-    dplyr::filter(date.return == Sys.Date() %>% as.character()) %>%
+    dplyr::filter(date.return == Sys.Date() %>% as.character() |
+                    date.return == Sys.Date() %>% weekdays() %>% str_to_lower
+                    ) %>%
       .$name.player
 
   injury_data %<>%
