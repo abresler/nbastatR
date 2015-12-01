@@ -1,3 +1,4 @@
+options(warn = -1)
 packages <- #need all of these installed including some from github
   c('dplyr',
     'magrittr',
@@ -7,7 +8,6 @@ packages <- #need all of these installed including some from github
     'stringr',
     'lubridate',
     'tidyr')
-options(warn = -1)
 lapply(packages, library, character.only = T)
 get_teams_ids <-
   function(){
@@ -558,7 +558,7 @@ get_nba_traditional_team_season_stat_table <-
            playoff_round = 0,
            shot_clock_range = NA,
            starter_bench = NA,
-           return_metadata = c(F, T),
+           return_metadata = F,
            include_measure_name = c(T, F),
            return_message = c(T, F),
            ...) {
@@ -1406,8 +1406,8 @@ get_all_team_traditional_stat_tables <-
       teams_ids <-
         get_teams_ids()
       all_data %<>%
-        left_join(teams_ids) %>%
-        dplyr::select(team, slug.team, everything())
-    return(all_data)
+        dplyr::left_join(teams_ids)
+
+      return(all_data)
 
   }
