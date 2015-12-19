@@ -10,74 +10,74 @@ packages <- #need all of these installed including some from github
     'tidyr')
 lapply(packages, library, character.only = T)
 get_teams_ids <-
-  function(){
+  function() {
     data <-
       data_frame(
-      team = c(
-        "Atlanta Hawks",
-        "Boston Celtics",
-        "Brooklyn Nets",
-        "Charlotte Hornets",
-        "Chicago Bulls",
-        "Cleveland Cavaliers",
-        "Dallas Mavericks",
-        "Denver Nuggets",
-        "Detroit Pistons",
-        "Golden State Warriors",
-        "Houston Rockets",
-        "Indiana Pacers",
-        "Los Angeles Clippers",
-        "Los Angeles Lakers",
-        "Memphis Grizzlies",
-        "Miami Heat",
-        "Milwaukee Bucks",
-        "Minnesota Timberwolves",
-        "New Orleans Pelicans",
-        "New York Knicks",
-        "Oklahoma City Thunder",
-        "Orlando Magic",
-        "Philadelphia 76ers",
-        "Phoenix Suns",
-        "Portland Trail Blazers",
-        "Sacramento Kings",
-        "San Antonio Spurs",
-        "Toronto Raptors",
-        "Utah Jazz",
-        "Washington Wizards"
-      ),
-      slug.team = c(
-        "ATL",
-        "BOS",
-        "BKN",
-        "CHA",
-        "CHI",
-        "CLE",
-        "DAL",
-        "DEN",
-        "DET",
-        "GSW",
-        "HOU",
-        "IND",
-        "LAC",
-        "LAL",
-        "MEM",
-        "MIA",
-        "MIL",
-        "MIN",
-        "NOP",
-        "NYK",
-        "OKC",
-        "ORL",
-        "PHI",
-        "PHO",
-        "POR",
-        "SAC",
-        "SAS",
-        "TOR",
-        "UTA",
-        "WAS"
+        team = c(
+          "Atlanta Hawks",
+          "Boston Celtics",
+          "Brooklyn Nets",
+          "Charlotte Hornets",
+          "Chicago Bulls",
+          "Cleveland Cavaliers",
+          "Dallas Mavericks",
+          "Denver Nuggets",
+          "Detroit Pistons",
+          "Golden State Warriors",
+          "Houston Rockets",
+          "Indiana Pacers",
+          "Los Angeles Clippers",
+          "Los Angeles Lakers",
+          "Memphis Grizzlies",
+          "Miami Heat",
+          "Milwaukee Bucks",
+          "Minnesota Timberwolves",
+          "New Orleans Pelicans",
+          "New York Knicks",
+          "Oklahoma City Thunder",
+          "Orlando Magic",
+          "Philadelphia 76ers",
+          "Phoenix Suns",
+          "Portland Trail Blazers",
+          "Sacramento Kings",
+          "San Antonio Spurs",
+          "Toronto Raptors",
+          "Utah Jazz",
+          "Washington Wizards"
+        ),
+        slug.team = c(
+          "ATL",
+          "BOS",
+          "BKN",
+          "CHA",
+          "CHI",
+          "CLE",
+          "DAL",
+          "DEN",
+          "DET",
+          "GSW",
+          "HOU",
+          "IND",
+          "LAC",
+          "LAL",
+          "MEM",
+          "MIA",
+          "MIL",
+          "MIN",
+          "NOP",
+          "NYK",
+          "OKC",
+          "ORL",
+          "PHI",
+          "PHO",
+          "POR",
+          "SAC",
+          "SAS",
+          "TOR",
+          "UTA",
+          "WAS"
+        )
       )
-    )
     return(data)
   }
 get_headers <- function() {
@@ -452,7 +452,7 @@ get_nba_franchise_data <-
 
     team_data <-
       team_history_url %>%
-      fromJSON(simplifyDataFrame = T, flatten =)
+      fromJSON(simplifyDataFrame = T, flatten = )
 
     names_active <-
       team_data$resultSets$headers[1] %>%
@@ -1403,11 +1403,147 @@ get_all_team_traditional_stat_tables <-
         left_join(df)
     }
 
-      teams_ids <-
-        get_teams_ids()
-      all_data %<>%
-        dplyr::left_join(teams_ids)
+    teams_ids <-
+      get_teams_ids()
+    all_data %<>%
+      dplyr::left_join(teams_ids) %>%
+      dplyr::select(id.season:id.team, slug.team, everything())
 
-      return(all_data)
+    return(all_data)
 
   }
+
+get_column_types <- function() {
+  column_rank_df <-
+    data_frame(
+      name.column = c(
+        "id.team",
+        "gp",
+        "wins",
+        "losses",
+        "pct.wins",
+        "min",
+        "fgm",
+        "fga",
+        "pct.fg",
+        "fg3m",
+        "fg3a",
+        "pct.fg3",
+        "ftm",
+        "fta",
+        "pct.ft",
+        "oreb",
+        "dreb",
+        "reb",
+        "ast",
+        "tov",
+        "stl",
+        "blk",
+        "fga.blocked",
+        "fouls",
+        "fouls.drawn",
+        "pts",
+        "plus.minus",
+        "ortg",
+        "drtg",
+        "netrtg",
+        "pct.ast",
+        "ratio.ast.to",
+        "ratio.ast",
+        "pct.oreb",
+        "pct.dreb",
+        "pct.reb",
+        "ratio.to",
+        "pct.efg",
+        "pct.ts",
+        "pace",
+        "pie",
+        "pct.fga2a",
+        "pct.fga3a",
+        "pct.pts.fg2m",
+        "pct.pts.mid_range_2",
+        "pct.pts.fg3m",
+        "pct.pts.fast_break",
+        "pct.pts.ft",
+        "pct.pts.off_tos",
+        "pct.paints.paint",
+        "pct.fg2m.assisted",
+        "pct.fg2m.unassisted",
+        "pct.fg3m.assisted",
+        "pct.fg3m.unassisted",
+        "pct.fgm.assisted",
+        "pct.fgm.unassisted",
+        "pts.off_to",
+        "pts.2nd_chance",
+        "pts.fastbreak",
+        "pts.paint",
+        "pts.off_to.opponent",
+        "pts.2nd_chance.opponent",
+        "pts.fastbreak.opponent",
+        "pts.paint.opponent",
+        "rate.fta",
+        "pct.efg.opp",
+        "rate.fta.opp",
+        "pct.tov.opp",
+        "pct.oreb.opp",
+        "fgm.opp",
+        "fga.opp",
+        "pct.fg.opp",
+        "fg3m.opp",
+        "fg3a.opp",
+        "pct.fg3.opp",
+        "ftm.opp",
+        "fta.opp",
+        "pct.ft.opp",
+        "oreb.opp",
+        "dreb.opp",
+        "rep.opp",
+        "ast.opp",
+        "tov.opp",
+        "stl.opp",
+        "blk.opp",
+        "fga.blocked.opp",
+        "fouls.opp",
+        "fouls.drawn.opp",
+        "pts.opp"
+      )
+    ) %>%
+    mutate(is.desc.rank = ifelse(name.column %like% '.opp', F, T))
+  return(column_rank_df)
+}
+
+get_team_ranks <- function(data, merge_data = T) {
+  column_rank_df <-
+    get_column_types()
+
+  desc_columns <-
+    column_rank_df %>%
+    dplyr::filter(is.desc.rank == T) %>%
+    dplyr::filter(!name.column == 'id.team') %>%
+    .$name.column
+
+  asc_columns <-
+    column_rank_df %>%
+    dplyr::filter(is.desc.rank == F) %>%
+    dplyr::filter(!name.column == 'id.team') %>%
+    .$name.column
+
+  ranks_df <-
+    data %>%
+    mutate_each_(funs(dense_rank(desc(.))), vars = desc_columns) %>%
+    mutate_each_(funs(dense_rank(.)), vars = asc_columns)
+
+  names(ranks_df)[7:length(names(ranks_df))] %<>%
+    paste0('.rank')
+
+  if (merge_data == T) {
+    data %<>%
+      left_join(ranks_df) %>%
+      mutate(date.data = Sys.Date())
+  } else {
+    data <-
+      ranks_df %>%
+      mutate(date.data = Sys.Date())
+  }
+  return(data)
+}

@@ -11,6 +11,7 @@ packages <- #need all of these installed including some from github
     'lubridate',
     'tidyr')
 options(warn = -1)
+lapply(packages, library, character.only = T)
 get_player_names <- function(){
   data <-
     data_frame(
