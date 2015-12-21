@@ -1,4 +1,15 @@
-#2000-01 to 2015-16
+packages <- #need all of these installed including some from github
+  c('dplyr',
+    'magrittr',
+    'jsonlite',
+    'tidyr',
+    'purrr',
+    'stringr',
+    'lubridate',
+    'tidyr')
+options(warn = -1)
+lapply(packages, library, character.only = T)
+
 get_headers <- function() {
   headers_df <-
     data_frame(
