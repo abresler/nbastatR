@@ -1138,3 +1138,71 @@ get_player_season_gamelog <- function(player,
       message
   }
 }
+
+get_player_advanced_season_gamelogs <-
+  function(player = "Andrea Bargnani",
+           years.season_start = 2013:2015,
+           season_type = "Regular Season",
+           tables = c("Traditional",
+                      "Usage",
+                      "Advanced",
+                      "Scoring")) {
+    st <-
+      season_type
+    p <-
+      player
+    yst <-
+      years.season_start
+    t <-
+      tables
+
+    if (yst %>% length > 1){
+      logs <-
+        yst %>%
+        unique() %>%
+        purrr::map(function(x)
+          nbastatR::get_player_season_gamelog(player = p,
+                                              year.season_start = x)
+        ) %>%
+        compact %>%
+        bind_rows
+
+    } else {
+      logs <-
+        nbastatR::get_player_season_gamelog(player = p,
+                                            year.season_start = yst)
+    }
+
+    logs %<>%
+      mutate(fg2a = fga - fg3a,
+             fg2m = fgm - fg3m)
+
+    games_ids <-
+      logs %>%
+      dplyr::select(id.game) %>%
+      distinct()
+
+    all_advanced_scores <-
+      games_ids$id.game %>%
+      unique() %>%
+      purrr::map(function(x)
+        nbastatR::get_games_ids_box_score_tables(game_id = x,
+                                                 tables = t)) %>%
+      compact %>%
+      bind_rows
+
+
+
+    data <-
+      all_advanced_scores %>%
+      left_join(logs %>%
+                  dplyr::select(id.season,
+                                id.game,
+                                date.game,
+                                type.season:slug.opponent)) %>%
+      dplyr::select(-comment) %>%
+      dplyr::filter(name.player %in% p) %>%
+
+
+    return(data)
+  }

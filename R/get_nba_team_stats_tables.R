@@ -452,7 +452,7 @@ get_nba_franchise_data <-
 
     team_data <-
       team_history_url %>%
-      fromJSON(simplifyDataFrame = T, flatten = )
+      fromJSON(simplifyDataFrame = T, flatten =)
 
     names_active <-
       team_data$resultSets$headers[1] %>%

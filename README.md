@@ -17,4 +17,7 @@ plot_nba_team_season_bokeh_shotchart(team = "Nets", year_roster = 2016,
                                           season_type = c('Pre Season'))
 plot_nba_player_bokeh_shotchart(player = "Brook Lopez", plot_hex = F, vs_conference = 'East',
                                           year_season_end = 2015)
+
+get_year_draft_combine(combine_year = 2009, return_message = T)
+get_all_draft_combines(combine_years = 2000:2015)
 ```
