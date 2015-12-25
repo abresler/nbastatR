@@ -397,8 +397,6 @@ get_headers <- function() {
     )
   return(headers_df)
 }
-
-
 get_shot_pct <- function(x) {
   shots <-
     x %>%

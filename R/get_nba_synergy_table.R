@@ -109,7 +109,6 @@ get_synergy_headers <- function() {
   return(data)
 
 }
-
 get_nba_synergy_stats <-
   function(table_name = "Transition",
            include_defense = T,
@@ -296,7 +295,7 @@ get_nba_synergy_stats <-
     }
 
     if (return_message == T) {
-      "Congrats you pulled in Synergy Data for " %>%
+      "Congrats you pulled in Synergy data for " %>%
         paste0(table_name %>% str_to_lower, " for ", type_table, "s") %>%
         message
     }

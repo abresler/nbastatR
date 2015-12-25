@@ -24,7 +24,7 @@ get_player_names <- function(){
 }
 
 
-get_nba_player_injuries <- function(filter_returning_today = T){
+get_nba_player_injuries <- function(filter_returning_today = T) {
   url <-
     'http://www.rotoworld.com/teams/injuries/nba/all/'
 

@@ -1324,7 +1324,15 @@ get_nba_traditional_team_season_stat_table <-
 get_all_team_traditional_stat_tables <-
   function(year.season_start = 2015,
            season_type = "Regular Season",
-           per_mode = "PerGame") {
+           measures =
+             c("Base",
+               "Advanced",
+               "Scoring",
+               "Misc",
+               "Four Factors",
+               "Opponent"),
+           per_mode = "PerGame",
+           merge_ids = T) {
     ys <-
       year.season_start
 
@@ -1333,14 +1341,6 @@ get_all_team_traditional_stat_tables <-
 
     pm <-
       per_mode
-
-    measures <-
-      c("Base",
-        "Advanced",
-        "Scoring",
-        "Misc",
-        "Four Factors",
-        "Opponent")
 
     all_data <-
       get_nba_traditional_team_season_stat_table(
@@ -1370,7 +1370,6 @@ get_all_team_traditional_stat_tables <-
         'team',
         "per_mode",
         "season_type",
-        "slug.team",
         "wins",
         "pct.wins",
         "pct.fg"
@@ -1403,11 +1402,15 @@ get_all_team_traditional_stat_tables <-
         left_join(df)
     }
 
-    teams_ids <-
+    if(merge_ids == T) {
+      teams_ids <-
       get_teams_ids()
+
     all_data %<>%
       dplyr::left_join(teams_ids) %>%
       dplyr::select(id.season:id.team, slug.team, everything())
+
+    }
 
     return(all_data)
 

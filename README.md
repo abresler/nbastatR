@@ -19,5 +19,17 @@ plot_nba_player_bokeh_shotchart(player = "Brook Lopez", plot_hex = F, vs_confere
                                           year_season_end = 2015)
 
 get_year_draft_combine(combine_year = 2009, return_message = T)
-get_all_draft_combines(combine_years = 2000:2015)
+get_all_draft_combines(combine_years = 2000:2015) #draft combines
+get_all_draft_data(draft_years = 1960:2015) # drafts
+get_nba_player_injuries(filter_returning_today = T)
+get_nba_synergy_stats(table_name = "Isolation",
+                      include_defense = T,
+                      include_offense = T,
+                      type_table = 'player') # Player isolations
+get_nba_synergy_stats(table_name = "Transition",
+           include_defense = T,
+           include_offense = T,
+           type_table = "team",
+           return_message = T)
+  
 ```
