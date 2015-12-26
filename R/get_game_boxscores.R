@@ -1893,6 +1893,11 @@ get_game_id_box_score_data <-
         paste0(t %>% str_to_lower, ' for game ', game_id) %>%
         message()
     }
+
+    if('id.game' %in% names(data)) {
+      data %<>%
+        mutate(id.game = id.game %>% as.numeric)
+    }
     if(data %>% ncol() > 3){
       return(data)
     }

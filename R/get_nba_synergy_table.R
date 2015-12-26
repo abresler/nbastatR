@@ -425,3 +425,16 @@ get_all_player_synergy_stats <-
   }
 
 
+
+# get_all_team_tables -----------------------------------------------------
+
+function(){
+
+}
+
+
+# get_all_player_tables ---------------------------------------------------
+
+function(){
+
+}
