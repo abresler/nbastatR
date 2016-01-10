@@ -33,3 +33,16 @@ get_nba_synergy_stats(table_name = "Transition",
            return_message = T)
   
 ```
+
+## Salary Cap Data
+
+```{r}
+hoopshype_salaries <- 
+  get_all_hoopshype_team_salaries(assume_player_opt_out = T, assume_team_doesnt_exercise = T)
+
+hoopshype_salaries %>% 
+  dplyr::filter(id.season == "2015-16" & is.final_season == T) %>% 
+  mutate(value = value %>% formattable::currency(digits = 0)) %>% 
+  dplyr::select(name.player, team.current = team, type, salary.current = value)
+
+```
