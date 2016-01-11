@@ -286,8 +286,7 @@ get_team_salary_cap_table <-
       extract_numeric()
 
     year_1_salary <-
-      year_1_salary[1:(year_1_salary %>% length() - 1)] %>%
-      .[!is.na(.)]
+      year_1_salary[1:(year_1_salary %>% length() - 1)]
 
     year_1_salary_color <-
       page %>%
