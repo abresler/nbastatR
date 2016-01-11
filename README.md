@@ -42,15 +42,21 @@ all_salaries <-
 
 non_guaranteed_players <- 
   all_salaries %>% 
-  dplyr::filter(id.season %in% c("2016-17"),
+  dplyr::filter(id.season %in% c("2015-16", "2016-17"),
                 is.non.guaranteed == T)
 
-non_guaranteed_players <- 
-  unguaranteed_players %>% 
+non_guaranteed_players %>% 
+  View()
+
+team_2017_non_guaranteed_players <- 
+  non_guaranteed_players %>% 
   group_by(id.season, team) %>% 
   summarise(players = n(),
-            total.unguranteed_salary = sum(value, na.rm = T) %>% formattable::currency()
+            total.non_guaranteed.salary = sum(value, na.rm = T) %>% formattable::currency(digits = 0)
             ) %>% 
-  arrange(desc(total.unguranteed_salary))
+  ungroup() %>% 
+  arrange(desc(total.non_guaranteed.salary))
 
+team_2017_non_guaranteed_players %>% 
+  View()
 ```
