@@ -34,15 +34,23 @@ get_nba_synergy_stats(table_name = "Transition",
   
 ```
 
-## Salary Cap Data
+## Salary Cap Data Example
 
 ```{r}
-hoopshype_salaries <- 
-  get_all_hoopshype_team_salaries(assume_player_opt_out = T, assume_team_doesnt_exercise = T)
+all_salaries <- 
+  get_all_team_salaries()
 
-hoopshype_salaries %>% 
-  dplyr::filter(id.season == "2015-16" & is.final_season == T) %>% 
-  mutate(value = value %>% formattable::currency(digits = 0)) %>% 
-  dplyr::select(name.player, team.current = team, type, salary.current = value)
+non_guaranteed_players <- 
+  all_salaries %>% 
+  dplyr::filter(id.season %in% c("2016-17"),
+                is.non.guaranteed == T)
+
+non_guaranteed_players <- 
+  unguaranteed_players %>% 
+  group_by(id.season, team) %>% 
+  summarise(players = n(),
+            total.unguranteed_salary = sum(value, na.rm = T) %>% formattable::currency()
+            ) %>% 
+  arrange(desc(total.unguranteed_salary))
 
 ```
