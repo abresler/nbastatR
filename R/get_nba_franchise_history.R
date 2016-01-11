@@ -675,8 +675,6 @@ get_nba_teams_seasons_coaches <- function(team,
       'http://stats.nba.com/stats/commonteamroster?LeagueID=00&Season=' %>%
       paste0(id.season, '&TeamID=', team_id)
 
-
-
     json_data <-
       roster_url %>%
       fromJSON(simplifyDataFrame = T, flatten = F)
@@ -690,6 +688,12 @@ get_nba_teams_seasons_coaches <- function(team,
         json_data$resultSets$rowSet[2] %>%
         data.frame %>%
         tbl_df
+
+      if (data_coaches %>% nrow == 0)  {
+        "Sorry " %>%
+          paste0(team, " has no data for ", id.season) %>%
+          stop()
+        }
 
       names(data_coaches) <-
         names_coaches
@@ -713,8 +717,8 @@ get_nba_teams_seasons_coaches <- function(team,
         mutate(school = school %>% str_trim,
                type.school = type.school %>% str_trim) %>%
         left_join(teams_ids) %>%
-        dplyr::select(-season.year_end) %>%
-        dplyr::select(id.season, city.team, name.team, team,
+        dplyr::select(-c(season.year_end, name.team, city.team)) %>%
+        dplyr::select(id.season, team,
                       everything()
                       )
 
