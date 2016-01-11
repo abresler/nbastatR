@@ -415,9 +415,88 @@ get_header_names <- function(headers){
     actual_names
   return(actual_headers)
 }
+get_nba_franchise_data <- function(return_franchises = c('all', 'active', 'current'),
+                                   return_message = T) {
+  team_history_url <-
+    'http://stats.nba.com/stats/franchisehistory?LeagueID=00'
+
+  team_data <-
+    team_history_url %>%
+    fromJSON(simplifyDataFrame = T, flatten = )
+
+  names_active <-
+    team_data$resultSets$headers[1] %>%
+    unlist %>%
+    str_to_lower
+
+  names_defunct <-
+    team_data$resultSets$headers[2] %>%
+    unlist %>%
+    str_to_lower
+
+  active_data <-
+    team_data$resultSets$rowSet[1] %>%
+    data.frame %>%
+    tbl_df()
+
+  names(active_data) <-
+    names_active
+
+  active_data %<>%
+    mutate(is.active = T)
+
+  defunct_data <-
+    team_data$resultSets$rowSet[2] %>%
+    data.frame %>%
+    tbl_df()
+
+  names(defunct_data) <-
+    names_defunct
+
+  defunct_data %<>%
+    mutate(is.active = F)
+
+  data <-
+    active_data %>%
+    bind_rows(defunct_data)
+
+  num_cols <-
+    data %>%
+    dplyr::select(-c(contains("team")), -is.active) %>%
+    names
+
+  data %<>%
+    mutate_each_(funs(as.numeric), vars = num_cols)
+
+  if (return_franchises == 'current') {
+    data %<>%
+      mutate(id.row = 1:nrow(.)) %>%
+      group_by(team_id) %>%
+      dplyr::filter(id.row == min(id.row), is.active == T) %>%
+      dplyr::select(-id.row)
+
+    names(data) <-
+      c('id.league', 'id.team',
+        'city.team', 'name.team', 'year.start', 'year.end', 'years.active',
+        'games.team', 'wins.team', 'losses.team', 'pct.win', 'appearances.playoffs.team',
+        'titles.division', 'titles.conference', 'titles.nba', 'is.active')
+
+  }
+
+  if (return_franchises == 'active') {
+    data %<>%
+      dplyr::filter( is.active == T)
+  }
+
+  if(return_message == T){
+    "You got NBA franchise data" %>%
+      message
+  }
+  return(data)
+}
 get_nba_teams_seasons_roster <- function(team, year_season_end = 2016,
                                          include_coaches = F,
-                                         return_message = T) {
+                                         return_message = T)  {
 
   year_season_start <-
     year_season_end - 1
@@ -446,7 +525,7 @@ get_nba_teams_seasons_roster <- function(team, year_season_end = 2016,
       mutate(id.team = id.team %>% as.numeric)
     teams_ids <-
       teams %>%
-      select(id.team, city.team, name.team, team)
+      dplyr::select(id.team, city.team, name.team, team)
 
     team_id <-
       teams_ids %>%
@@ -455,7 +534,7 @@ get_nba_teams_seasons_roster <- function(team, year_season_end = 2016,
 
     if (year_season_end-1 < teams %>%
         dplyr::filter(id.team == team_id) %>%
-        .$start_year) {
+        .$year.start) {
 
       "Sorry " %>%
         paste0(year_season_end, ' is not a valid season for the ',
@@ -500,7 +579,7 @@ get_nba_teams_seasons_roster <- function(team, year_season_end = 2016,
       names_roster
 
     data_roster %<>%
-      rename(id.team = teamid,
+      dplyr::rename(id.team = teamid,
              id.player = player_id,
              name.player = player,
              number = num,
@@ -509,7 +588,7 @@ get_nba_teams_seasons_roster <- function(team, year_season_end = 2016,
              weight.lbs = weight,
              jersey = num
       ) %>%
-      select(-c(leagueid, season)) %>%
+      dplyr::select(-c(leagueid, season)) %>%
       mutate(is.rookie = ifelse(years.experience == "R", T, F),
              years.experience = years.experience %>% str_replace("R", 0) %>% as.numeric(),
              id.team = id.team %>% as.numeric,
@@ -521,7 +600,7 @@ get_nba_teams_seasons_roster <- function(team, year_season_end = 2016,
              id.season,
              season.year_end = year_season_end
       ) %>%
-      select(id.season,season.year_end, id.player, name.player, everything()) %>%
+      dplyr::select(id.season,season.year_end, id.player, name.player, everything()) %>%
       separate(position, sep = '\\-',into = c('id.position', 'id.position.secondary')) %>%
       left_join(teams_ids)
 
