@@ -7,6 +7,7 @@ packages <- #need all of these installed including some from github
     'httr',
     'rvest',
     'purrr',
+    'data.table',
     'stringr',
     'lubridate',
     'tidyr'
