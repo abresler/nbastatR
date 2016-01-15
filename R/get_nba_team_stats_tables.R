@@ -516,6 +516,7 @@ get_nba_franchise_data <-
     }
     return(data)
   }
+
 get_nba_traditional_team_season_stat_table <-
   function(year.season_start = 2015,
            season_type = "Regular Season",
