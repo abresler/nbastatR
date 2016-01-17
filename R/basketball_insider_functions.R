@@ -267,15 +267,25 @@ get_team_salary_cap_table <-
                into = c('name.player', 'status'),
                sep = '\\(') %>%
       mutate(
+        is.waived = name.player %>% str_detect("wavied"),
+        name.player = name.player %>% str_replace('waived', '') %>% str_trim,
         name.player = name.player %>% str_trim(),
         status = status %>% str_replace("\\)", ''),
         status = ifelse(status %>% is.na, "current roster", status),
         is.on_roster = ifelse(status == "current roster", T, F)
       ) %>%
       dplyr::select(team, name.player:status, is.on_roster, everything()) %>%
-      gather(id.season, value, -c(team, name.player, status, is.on_roster)) %>%
+      gather(id.season,
+             value,
+             -c(team, name.player, status, is.on_roster, is.waived)) %>%
       mutate(value = value %>% extract_numeric) %>%
-      dplyr::select(team, id.season, name.player, status, is.on_roster, value) %>%
+      dplyr::select(team,
+                    id.season,
+                    name.player,
+                    status,
+                    is.waived,
+                    is.on_roster,
+                    value) %>%
       dplyr::filter(!value %>% is.na())
 
 
@@ -371,8 +381,8 @@ get_team_salary_cap_table <-
       html_text() %>%
       extract_numeric()
 
-    if ( year_5_salary[1:(year_5_salary %>% length() - 1)] %>%
-        .[!is.na(.)] %>% length == 0 ) {
+    if (year_5_salary[1:(year_5_salary %>% length() - 1)] %>%
+        .[!is.na(.)] %>% length == 0) {
       year_5_salary <-
         NA
 
@@ -387,8 +397,8 @@ get_team_salary_cap_table <-
         gsub("[^A-Z a-z#0-9]", '', .)
 
       year_5_salary <-
-      year_5_salary[1:(year_5_salary %>% length() - 1)] %>%
-      .[!is.na(.)]
+        year_5_salary[1:(year_5_salary %>% length() - 1)] %>%
+        .[!is.na(.)]
     }
 
     year_5_df <-
@@ -408,6 +418,7 @@ get_team_salary_cap_table <-
       left_join(contract_color_df) %>%
       left_join(color_df) %>%
       mutate(
+        is.waived = ifelse(name.player %>% str_detect('waived'), T, F),
         is.non.guaranteed = ifelse(type == 'Non-Guaranteed', T, F),
         is.non.guaranteed = ifelse(is.non.guaranteed %>% is.na(), F, is.non.guaranteed),
         is.team_option = ifelse(type == 'Team Option', T, F),
@@ -523,5 +534,10 @@ get_all_team_salaries <-
       compact %>%
       bind_rows()
 
+    all_salaries %<>%
+      mutate(
+        is.waived = name.player %>% str_detect('waived'),
+        name.player = name.player %>% str_replace('waived', '') %>% str_trim
+      )
     return(all_salaries)
   }
