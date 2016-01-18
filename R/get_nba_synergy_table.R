@@ -122,7 +122,7 @@ get_nba_synergy_stats <-
         'jsonlite',
         'tidyr',
         'purrr',
-        'purrr',
+        'formattable',
         'stringr',
         'lubridate',
         'tidyr'
