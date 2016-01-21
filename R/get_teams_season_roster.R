@@ -32,8 +32,7 @@ get_nba_teams_seasons_roster <- function(team,
       "Pelicans", "Pistons", "Raptors", "Rockets", "Spurs", "Suns",
       "Thunder", "Timberwolves", "Trail Blazers", "Warriors", "Wizards"
     )
-  team %<>%
-    str_to_title()
+
   if(team %>% grep(teams,fixed = T) %>% length == 0 ){
     stop("Teams can only be " %>% paste0(paste0(teams,collapse = ', ')))
   } else{
@@ -49,8 +48,7 @@ get_nba_teams_seasons_roster <- function(team,
           sep = "-")
 
   t <-
-    team %>%
-    str_to_title()
+    team
 
   if (t %in%  c("76ers", "Bucks", "Bulls", "Cavaliers", "Celtics", "Clippers",
                 "Grizzlies", "Hawks", "Heat", "Hornets", "Jazz", "Kings", "Knicks",

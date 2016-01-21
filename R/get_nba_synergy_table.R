@@ -425,8 +425,7 @@ get_all_player_synergy_stats <-
             table_name = x,
             type_table = "player",
             include_defense = inc_d,
-            include_offense = inc_o,
-            return_message = T
+            include_offense = inc_o
           )
       ) %>%
       compact %>%
