@@ -396,6 +396,7 @@ get_all_team_synergy_stats <-
 get_all_player_synergy_stats <-
   function(include_defense = T,
            include_offense = T,
+           return_message = F,
            tidy_data = T) {
     inc_o <-
       include_offense
@@ -462,7 +463,7 @@ get_all_player_synergy_stats <-
 
     }
     if (return_message == T) {
-      "You got all team Synergy data" %>%
+      "You got all player Synergy data" %>%
         message()
     }
     return(all_data)
