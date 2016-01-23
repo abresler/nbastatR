@@ -688,8 +688,11 @@ get_nba_team_stat_table <-
            starter_bench = c(NA, "Starters", "Bench"),
            return_metadata = F,
            include_measure_name = c(T, F),
-           return_message = c(T, F),
+           return_message = F,
            ...) {
+    install_needed_packages(function_packages)
+    load_needed_packages(function_packages)
+    
     if (year.season_start < 1996) {
       stop("Sorry data only goes back to the 1996-97 Season")
     }
@@ -1108,7 +1111,7 @@ get_nba_team_stat_table <-
     if (!season_type[1] %>% is.na) {
       SeasonType = c('Regular Season', 'Pre Season', 'Playoffs', 'All Star')
 
-      if (!season_type %in% SeasonType) {
+      if (!season_type[1] %in% SeasonType) {
         "Sorry season season type can only be " %>%
           paste0(SeasonType %>% paste0(collapse = ', ')) %>%
           stop(call. = F)
