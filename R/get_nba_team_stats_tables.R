@@ -1096,7 +1096,7 @@ get_nba_team_stat_table <-
     if (!season_segment[1] %>% is.na) {
       SeasonSegment = c("Post All-Star", "Pre All-Star")
 
-      if (!season_segment %in% SeasonSegment) {
+      if (!season_segment[1] %in% SeasonSegment) {
         "Sorry season segment can only be " %>%
           paste0(SeasonSegment %>% paste0(collapse = ', ')) %>%
           stop(call. = F)
