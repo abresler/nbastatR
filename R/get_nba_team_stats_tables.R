@@ -1503,7 +1503,7 @@ get_all_teams_traditional_stat_tables <-
 
     for (m in measures[2:length(measures)]) {
       df <-
-        get_nba_traditional_team_season_stat_table(
+        get_nba_team_stat_table(
           season_type = st,
           measure_type = m,
           per_mode = pm,
