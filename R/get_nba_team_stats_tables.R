@@ -1149,7 +1149,7 @@ get_nba_team_stat_table <-
     if (!starter_bench[1] %>% is.na) {
       StarterBench = c("Starters", "Bench")
 
-      if (!starter_bench[1] %in% SeasonSegment) {
+      if (!starter_bench[1] %in% StarterBench) {
         "Sorry starter/bench can only be " %>%
           paste0(StarterBench %>% paste0(collapse = ', ')) %>%
           stop(call. = F)
