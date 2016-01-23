@@ -1215,7 +1215,7 @@ get_nba_team_stat_table <-
         '&ShotClockRange=',
         shot_clock_range_stem,
         '&StarterBench=',
-        starter_bench_range_stem,
+        starter_bench_stem,
         '&TeamID=',
         team_stem,
         '&VsConference=',
