@@ -1157,7 +1157,7 @@ get_nba_team_stat_table <-
       starter_bench_stem <-
         starter_bench[1] %>% clean_to_stem
     } else {
-      starter_bench_range_stem <-
+      starter_bench_stem <-
         ''
     }
 
