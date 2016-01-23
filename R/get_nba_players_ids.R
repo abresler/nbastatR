@@ -236,7 +236,7 @@ get_headers <- function() {
   return(headers_df)
 }
 
-get_nba_players_ids <- function(active_only = F, resolve_to_fanduel = T) {
+get_nba_players_ids <- function(active_only = F) {
 
   players.url <-
     "http://stats.nba.com/stats/commonallplayers?IsOnlyCurrentSeason=0&LeagueID=00&Season=2015-16"
@@ -247,7 +247,7 @@ get_nba_players_ids <- function(active_only = F, resolve_to_fanduel = T) {
 
   data <-
     json_data$resultSets$rowSet %>%
-    data.frame %>%
+    data.frame(stringsAsFactors = F) %>%
     tbl_df
 
   headers <-
@@ -287,6 +287,7 @@ get_nba_players_ids <- function(active_only = F, resolve_to_fanduel = T) {
   names_df %<>%
     mutate(player = name.first %>% str_trim %>% paste(name.last %>% str_trim)) %>%
     dplyr::select(player)
+
   data$name.player <-
     names_df$player
   data %<>%
@@ -322,21 +323,6 @@ get_nba_players_ids <- function(active_only = F, resolve_to_fanduel = T) {
   if (active_only == T) {
     data %<>%
       dplyr::filter(is.active_player == T)
-  }
-
-  if (resolve_to_fanduel == T ){
-    fd_names <-
-      get_fd_name_df()
-
-    data %<>%
-      left_join(fd_names %>%
-                  dplyr::rename(name.player = name.nba))
-    data %<>%
-      mutate(
-        is.different_name = ifelse(is.different_name %>% is.na, F, T),
-        name.player = ifelse(is.different_name == T, name.fanduel, name.player)) %>%
-      dplyr::select(-c(is.different_name, name.fanduel)) %>%
-      arrange(name.player)
   }
 
   return(data)

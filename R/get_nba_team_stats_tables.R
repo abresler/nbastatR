@@ -1,14 +1,145 @@
-options(warn = -1)
-packages <- #need all of these installed including some from github
+function_packages <-
   c('dplyr',
     'magrittr',
     'jsonlite',
     'tidyr',
-    'purrr',
     'stringr',
     'lubridate',
+    'stringr',
     'tidyr')
-lapply(packages, library, character.only = T)
+
+install_needed_packages <-
+  function(required_packages = function_packages) {
+    needed_packages <-
+      required_packages[!(required_packages %in% installed.packages()[, "Package"])]
+
+    if (length(needed_packages) > 0) {
+      if (!require("pacman"))
+        install.packages("pacman")
+      pacman::p_load(needed_packages)
+    }
+  }
+
+load_needed_packages <-
+  function(required_packages = function_packages) {
+    loaded_packages <-
+      gsub('package:', '', search())
+
+    package_to_load <-
+      required_packages[!required_packages %in% loaded_packages]
+    lapply(package_to_load, library, character.only = T)
+  }
+install_needed_packages(function_packages)
+load_needed_packages(function_packages)
+
+#' get_nba_franchise_data
+#'
+#' @param return_franchises
+#' @param return_message
+#'
+#' @return
+#' @export
+#'
+#' @examples
+get_nba_franchise_data <-
+  function(return_franchises = c('all', 'active', 'current'),
+           return_message = T) {
+    team_history_url <-
+      'http://stats.nba.com/stats/franchisehistory?LeagueID=00'
+
+    team_data <-
+      team_history_url %>%
+      fromJSON(simplifyDataFrame = T, flatten = T)
+
+    names_active <-
+      team_data$resultSets$headers[1] %>%
+      unlist %>%
+      str_to_lower
+
+    names_defunct <-
+      team_data$resultSets$headers[2] %>%
+      unlist %>%
+      str_to_lower
+
+    active_data <-
+      team_data$resultSets$rowSet[1] %>%
+      data.frame %>%
+      tbl_df()
+
+    names(active_data) <-
+      names_active
+
+    active_data %<>%
+      mutate(is.active = T)
+
+    defunct_data <-
+      team_data$resultSets$rowSet[2] %>%
+      data.frame %>%
+      tbl_df()
+
+    names(defunct_data) <-
+      names_defunct
+
+    defunct_data %<>%
+      mutate(is.active = F)
+
+    data <-
+      active_data %>%
+      bind_rows(defunct_data)
+
+    num_cols <-
+      data %>%
+      select(-c(contains("team")), -is.active) %>%
+      names
+
+    data %<>%
+      mutate_each_(funs(as.numeric), vars = num_cols)
+
+    names(data) <-
+      c(
+        "id.league",
+        "id.team",
+        "city.team",
+        "name.team",
+        "year.start.team",
+        "year.end.team",
+        "team.seasons",
+        "team.games",
+        "team.wins",
+        "team.losses",
+        "pct.wins",
+        "team.po_appearances",
+        "team.div_titles",
+        "team.conf_titles",
+        "team.league_titles",
+        "is.active"
+      )
+
+    data %<>%
+      mutate(team = city.team %>% paste(name.team),
+             id.team = id.team %>% as.numeric()) %>%
+      dplyr::select(-id.league) %>%
+      dplyr::select(id.team, team, everything())
+
+    if (return_franchises == 'current') {
+      data %<>%
+        mutate(id.row = 1:nrow(.)) %>%
+        group_by(id.team) %>%
+        dplyr::filter(id.row == min(id.row), is.active == T) %>%
+        select(-id.row)
+    }
+
+    if (return_franchises == 'active') {
+      data %<>%
+        dplyr::filter(is.active == T)
+    }
+    if (return_message == T) {
+      "You got NBA franchise data" %>%
+        message
+    }
+    return(data)
+  }
+
 get_teams_ids <-
   function() {
     data <-
@@ -80,6 +211,7 @@ get_teams_ids <-
       )
     return(data)
   }
+
 get_headers <- function() {
   headers_df <-
     data_frame(
@@ -435,6 +567,7 @@ get_headers <- function() {
     )
   return(headers_df)
 }
+
 clean_to_stem <- function(x) {
   x %<>%
     str_replace('\\ ', '\\+') %>%
@@ -444,91 +577,76 @@ clean_to_stem <- function(x) {
   return(x)
 
 }
-get_nba_franchise_data <-
-  function(return_franchises = c('all', 'active', 'current'),
-           return_message = T) {
-    team_history_url <-
-      'http://stats.nba.com/stats/franchisehistory?LeagueID=00'
 
-    team_data <-
-      team_history_url %>%
-      fromJSON(simplifyDataFrame = T, flatten =)
-
-    names_active <-
-      team_data$resultSets$headers[1] %>%
-      unlist %>%
-      str_to_lower
-
-    names_defunct <-
-      team_data$resultSets$headers[2] %>%
-      unlist %>%
-      str_to_lower
-
-    active_data <-
-      team_data$resultSets$rowSet[1] %>%
-      data.frame %>%
-      tbl_df()
-
-    names(active_data) <-
-      names_active
-
-    active_data %<>%
-      mutate(is.active = T)
-
-    defunct_data <-
-      team_data$resultSets$rowSet[2] %>%
-      data.frame %>%
-      tbl_df()
-
-    names(defunct_data) <-
-      names_defunct
-
-    defunct_data %<>%
-      mutate(is.active = F)
-
-    data <-
-      active_data %>%
-      bind_rows(defunct_data)
-
-    num_cols <-
-      data %>%
-      dplyr::select(-c(contains("team")), -is.active) %>%
-      names
-
-    data %<>%
-      mutate_each_(funs(as.numeric), vars = num_cols)
-
-    if (return_franchises == 'current') {
-      data %<>%
-        mutate(id.row = 1:nrow(.)) %>%
-        group_by(team_id) %>%
-        dplyr::filter(id.row == min(id.row), is.active == T) %>%
-        dplyr::select(-id.row)
-    }
-
-    if (return_franchises == 'active') {
-      data %<>%
-        dplyr::filter(is.active == T)
-    }
-    if (return_message == T) {
-      "You got NBA franchise data" %>%
-        message
-    }
-    return(data)
-  }
-
-get_nba_traditional_team_season_stat_table <-
+#' get_nba_team_stat_table
+#'
+#' @param year.season_start
+#' @param season_type
+#' @param measure_type
+#' @param per_mode
+#' @param is.pace_adjusted
+#' @param period
+#' @param player_experience
+#' @param player_position
+#' @param is.rank
+#' @param is.plus_minus
+#' @param game_segment
+#' @param conference
+#' @param division
+#' @param division_against
+#' @param conference_against
+#' @param ahead_behind
+#' @param date_from
+#' @param date_to
+#' @param game_scope
+#' @param last_n_games
+#' @param location
+#' @param month
+#' @param season_segment
+#' @param opponent
+#' @param team
+#' @param outcome
+#' @param playoff_round
+#' @param shot_clock_range
+#' @param starter_bench
+#' @param return_metadata
+#' @param include_measure_name
+#' @param return_message
+#' @param ...
+#'
+#' @return
+#' @export
+#'
+#' @examples
+get_nba_team_stat_table <-
   function(year.season_start = 2015,
-           season_type = "Regular Season",
-           measure_type = "Base",
-           per_mode = "Totals",
+           season_type = c('Regular Season', 'Pre Season', 'Playoffs', 'All Star'),
+           measure_type = c("Base",
+                            "Advanced",
+                            "Misc",
+                            "Scoring",
+                            "Four Factors",
+                            "Opponent"),
+           per_mode =  c(
+             "Totals",
+             "PerGame",
+             "MinutesPer",
+             "Per48",
+             "Per40",
+             "Per36",
+             "PerMinute",
+             "PerPossession",
+             "PerPlay",
+             "Per100Possessions",
+             "Per100Plays"
+           ),
            is.pace_adjusted = F,
            period = 0,
-           player_experience = NA,
-           player_position = NA,
+           player_experience =  c(NA, "Rookie", "Sophomore", "Veteran"),
+           player_position = c(NA, "F", "C", "G"),
            is.rank = F,
            is.plus_minus = c(F, T),
-           game_segment = NA,
+           game_segment = c(NA, "First Half", "Second Half", "Overtime"),
            conference = c(NA, "East", "West"),
            division = c(NA,
                         "Atlantic",
@@ -545,20 +663,29 @@ get_nba_traditional_team_season_stat_table <-
                                 "Southeast",
                                 "Southwest"),
            conference_against = c(NA, "East", "West"),
-           ahead_behind = NA,
+           ahead_behind = c(NA, 'Ahead', 'Behind'),
            date_from = NA,
            date_to = NA,
-           game_scope = NA,
+           game_scope =  c(NA, "Yesterday", "Last 10"),
            last_n_games = 0,
            location = c(NA, "Home", "Road"),
            month = 0,
-           season_segment = NA,
+           season_segment = c(NA, "Post All-Star", "Pre All-Star"),
            opponent = NA,
            team = NA,
            outcome = c(NA, "W", "L"),
            playoff_round = 0,
-           shot_clock_range = NA,
-           starter_bench = NA,
+           shot_clock_range = c(
+             NA,
+             "24-22",
+             "22-18 Very Early",
+             "18-15 Early",
+             "15-7 Average",
+             "7-4 Late",
+             "4-0 Very Late",
+             "ShotClock Off"
+           ),
+           starter_bench = c(NA, "Starters", "Bench"),
            return_metadata = F,
            include_measure_name = c(T, F),
            return_message = c(T, F),
@@ -574,26 +701,26 @@ get_nba_traditional_team_season_stat_table <-
       year.season_start %>%
       paste0("-", (year.season_start + 1) %>% substr(3, 4))
 
-    if (!ahead_behind %>% is.na) {
+    if (!ahead_behind[1] %>% is.na) {
       ahead_behind_stem <-
-        ahead_behind %>% clean_to_stem
+        ahead_behind[1] %>% clean_to_stem
     } else {
       ahead_head_stem <-
         ''
     }
 
-    if (!conference_against %>% is.na) {
-      if (!conference_against %in% c("East", "West")) {
+    if (!conference_against[1] %>% is.na) {
+      if (!conference_against[1] %in% c("East", "West")) {
         stop("Sorry conference against can only be East or West")
       }
       conference_against_stem <-
-        conference_against %>% clean_to_stem
+        conference_against[1] %>% clean_to_stem
     } else {
       conference_against_stem <-
         ''
     }
 
-    if (!conference %>% is.na) {
+    if (!conference[1] %>% is.na) {
       if (!conference %in% c("East", "West")) {
         stop("Sorry conference can only be East or West")
       }
@@ -620,7 +747,7 @@ get_nba_traditional_team_season_stat_table <-
         ''
     }
 
-    if (!division_against %>% is.na) {
+    if (!division_against[1] %>% is.na) {
       if (!division_against %in% c("Atlantic",
                                    "Central",
                                    "Northwest",
@@ -632,13 +759,13 @@ get_nba_traditional_team_season_stat_table <-
         )
       }
       division_against_stem <-
-        division_against %>% clean_to_stem
+        division_against[1] %>% clean_to_stem
     } else {
       division_against_stem <-
         ''
     }
 
-    if (!division %>% is.na) {
+    if (!division[1] %>% is.na) {
       if (!division %in% c("Atlantic",
                            "Central",
                            "Northwest",
@@ -650,37 +777,37 @@ get_nba_traditional_team_season_stat_table <-
         )
       }
       division_stem <-
-        division %>% clean_to_stem
+        division[1] %>% clean_to_stem
     } else {
       division_stem <-
         ''
     }
 
-    if (!game_scope %>% is.na) {
+    if (!game_scope[1] %>% is.na) {
       GameScope = c("Yesterday", "Last 10")
 
-      if (!game_scope %in% GameScope) {
+      if (!game_scope[1] %in% GameScope) {
         "Sorry game scope can only be " %>%
           paste0(GameScope %>% paste0(collapse = ', ')) %>%
           stop(call. = F)
       }
       game_scope_stem <-
-        game_scope %>% clean_to_stem
+        game_scope[1] %>% clean_to_stem
     } else {
       game_scope_stem <-
         ''
     }
 
-    if (!game_segment %>% is.na) {
+    if (!game_segment[1] %>% is.na) {
       GameSegment = c("First Half", "Second Half", "Overtime")
 
-      if (!game_segment %in% GameSegment) {
+      if (!game_segment[1] %in% GameSegment) {
         "Sorry game segment can only be " %>%
           paste0(GameSegment %>% paste0(collapse = ', ')) %>%
           stop(call. = F)
       }
       game_segment_stem <-
-        game_segment %>% clean_to_stem
+        game_segment[1] %>% clean_to_stem
     } else {
       game_segment_stem <-
         ''
@@ -697,18 +824,18 @@ get_nba_traditional_team_season_stat_table <-
         0
     }
 
-    if (!location %>% is.na) {
-      if (!location %in% c("Home", "Road")) {
+    if (!location[1] %>% is.na) {
+      if (!location[1] %in% c("Home", "Road")) {
         stop("Sorry location can only be Home or Road")
       }
       location_stem <-
-        location %>% clean_to_stem
+        location[1] %>% clean_to_stem
     } else {
       location_stem <-
         ''
     }
 
-    if (!measure_type %>% is.na) {
+    if (!measure_type[1] %>% is.na) {
       MeasureType = c("Base",
                       "Advanced",
                       "Misc",
@@ -716,13 +843,13 @@ get_nba_traditional_team_season_stat_table <-
                       "Four Factors",
                       "Opponent")
 
-      if (!measure_type %in% MeasureType) {
+      if (!measure_type[1] %in% MeasureType) {
         "Sorry measure type can only be " %>%
           paste0(measure_type %>% paste0(collapse = ', ')) %>%
           stop(call. = F)
       }
       measure_type_stem <-
-        measure_type %>% clean_to_stem
+        measure_type[1] %>% clean_to_stem
     } else {
       measure_type_stem <-
         'Base'
@@ -731,10 +858,8 @@ get_nba_traditional_team_season_stat_table <-
     if (opponent %>% length > 0 | team %>% length > 0) {
       teams_ids <-
         get_nba_franchise_data(return_franchises = 'current', return_message = F) %>%
-        dplyr::select(team_id, team_city, team_name) %>%
+        dplyr::select(id.team, team, year.start.team, year.end.team) %>%
         ungroup %>%
-        mutate(team = paste(team_city, team_name),
-               team_id = team_id %>% as.numeric()) %>%
         tbl_df
 
       nba_teams <-
@@ -848,16 +973,16 @@ get_nba_traditional_team_season_stat_table <-
         0
     }
 
-    if (!outcome %>% is.na) {
+    if (!outcome[1] %>% is.na) {
       Outcome = c("W", "L")
 
-      if (!outcome %in% Outcome) {
+      if (!outcome[1] %in% Outcome) {
         "Sorry outcome can only be " %>%
           paste0(Outcome %>% paste0(collapse = ', ')) %>%
           stop(call. = F)
       }
       outcome_stem <-
-        outcome %>% clean_to_stem
+        outcome[1] %>% clean_to_stem
     } else {
       outcome_stem <-
         ''
@@ -878,7 +1003,7 @@ get_nba_traditional_team_season_stat_table <-
         "N"
     }
 
-    if (!per_mode %>% is.na) {
+    if (!per_mode[1] %>% is.na) {
       PerMode = c(
         "Totals",
         "PerGame",
@@ -892,15 +1017,15 @@ get_nba_traditional_team_season_stat_table <-
         "Per100Possessions",
         "Per100Plays"
       )
-      per_mode %<>%
+      per_mode[1] %<>%
         str_replace('\\ ', '')
-      if (!per_mode %>% clean_to_stem %in% PerMode) {
+      if (!per_mode[1] %>% clean_to_stem %in% PerMode) {
         "Sorry per mode can only be " %>%
-          paste0(per_mode %>% paste0(collapse = ', ')) %>%
+          paste0(per_mode[1] %>% paste0(collapse = ', ')) %>%
           stop(call. = F)
       }
       per_mode_type_stem <-
-        per_mode %>% clean_to_stem
+        per_mode[1] %>% clean_to_stem
     } else {
       per_mode_stem <-
         'Totals'
@@ -919,7 +1044,7 @@ get_nba_traditional_team_season_stat_table <-
         period
     }
 
-    if (!player_experience %>% is.na) {
+    if (!player_experience[1] %>% is.na) {
       PlayerExperience = c("Rookie", "Sophomore", "Veteran")
 
       if (!player_experience %in% PlayerExperience) {
@@ -928,13 +1053,13 @@ get_nba_traditional_team_season_stat_table <-
           stop(call. = F)
       }
       player_experience_stem <-
-        player_experience %>% clean_to_stem
+        player_experience[1] %>% clean_to_stem
     } else {
       player_experience_stem <-
         ''
     }
 
-    if (!player_position %>% is.na) {
+    if (!player_position[1] %>% is.na) {
       PlayerPosition = c("F", "C", "G")
 
       if (!player_position %in% PlayerPosition) {
@@ -943,13 +1068,13 @@ get_nba_traditional_team_season_stat_table <-
           stop(call. = F)
       }
       player_position_stem <-
-        player_position %>% clean_to_stem
+        player_position[1] %>% clean_to_stem
     } else {
       player_position_stem <-
         ''
     }
 
-    if (is.plus_minus == T) {
+    if (is.plus_minus[1] == T) {
       plus_minus_stem <-
         "Y"
     } else {
@@ -957,7 +1082,7 @@ get_nba_traditional_team_season_stat_table <-
         "N"
     }
 
-    if (is.rank == T) {
+    if (is.rank[1] == T) {
       rank_stem <-
         "Y"
     } else {
@@ -965,7 +1090,7 @@ get_nba_traditional_team_season_stat_table <-
         "N"
     }
 
-    if (!season_segment %>% is.na) {
+    if (!season_segment[1] %>% is.na) {
       SeasonSegment = c("Post All-Star", "Pre All-Star")
 
       if (!season_segment %in% SeasonSegment) {
@@ -974,13 +1099,13 @@ get_nba_traditional_team_season_stat_table <-
           stop(call. = F)
       }
       season_segment_stem <-
-        season_segment %>% clean_to_stem
+        season_segment[1] %>% clean_to_stem
     } else {
       season_segment_stem <-
         ''
     }
 
-    if (!season_type %>% is.na) {
+    if (!season_type[1] %>% is.na) {
       SeasonType = c('Regular Season', 'Pre Season', 'Playoffs', 'All Star')
 
       if (!season_type %in% SeasonType) {
@@ -989,13 +1114,13 @@ get_nba_traditional_team_season_stat_table <-
           stop(call. = F)
       }
       season_type_stem <-
-        season_type %>% clean_to_stem
+        season_type[1] %>% clean_to_stem
     } else {
       season_type_stem <-
         'Regular+Season'
     }
 
-    if (!shot_clock_range %>% is.na) {
+    if (!shot_clock_range[1] %>% is.na) {
       ShotClockRange = c(
         "24-22",
         "22-18 Very Early",
@@ -1006,28 +1131,28 @@ get_nba_traditional_team_season_stat_table <-
         "ShotClock Off"
       )
 
-      if (!shot_clock_range %in% SeasonSegment) {
+      if (!shot_clock_range[1] %in% SeasonSegment) {
         "Sorry shot clock range can only be " %>%
           paste0(ShotClockRange %>% paste0(collapse = ', ')) %>%
           stop(call. = F)
       }
       shot_clock_range_stem <-
-        shot_clock_range %>% clean_to_stem
+        shot_clock_range[1] %>% clean_to_stem
     } else {
       shot_clock_range_stem <-
         ''
     }
 
-    if (!starter_bench %>% is.na) {
+    if (!starter_bench[1] %>% is.na) {
       StarterBench = c("Starters", "Bench")
 
-      if (!starter_bench %in% SeasonSegment) {
+      if (!starter_bench[1] %in% SeasonSegment) {
         "Sorry starter/bench can only be " %>%
           paste0(StarterBench %>% paste0(collapse = ', ')) %>%
           stop(call. = F)
       }
       starter_bench_stem <-
-        starter_bench %>% clean_to_stem
+        starter_bench[1] %>% clean_to_stem
     } else {
       starter_bench_range_stem <-
         ''
@@ -1138,52 +1263,51 @@ get_nba_traditional_team_season_stat_table <-
       mutate_each_(funs(extract_numeric(.)), vars = num_cols) %>%
       mutate(
         id.season,
-        measure_type,
-        season_type,
-        per_mode,
-        is.pace_adjusted,
-        is.rank,
+        measure_type = measure_type[1],
+        season_type = season_type[1],
+        per_mode = per_mode[1],
+        is.pace_adjusted = is.pace_adjusted[1],
+        is.rank = is.rank[1],
         date.data = Sys.Date()
       ) %>%
       dplyr::select(id.season:per_mode, everything())
 
-    if (include_measure_name == F) {
+    if (include_measure_name[1] == F) {
       data %<>%
         dplyr::select(-measure_type)
     }
 
-    if (return_metadata == T) {
+    if (return_metadata[1] == T) {
       metadata_df <-
         data_frame(
           id.season = id.season,
-          conference = conference,
-          conference_against,
+          conference = conference[1],
+          conference_against = conference_against[1],
           date_from,
           date_to,
-          division,
-          division_against,
-          game_scope,
-          game_segment,
-          height,
-          is.pace_adjusted,
-          is.plus_minus,
-          is.rank,
-          last_n_games,
-          location,
-          measure_type,
-          month,
+          division = division[1],
+          division_against = division_against[1] ,
+          game_scope = game_scope[1],
+          game_segment = game_segment[1],
+          is.pace_adjusted = is.pace_adjusted[1],
+          is.plus_minus = is.plus_minus[1],
+          is.rank = is.rank[1],
+          last_n_games = last_n_games[1],
+          location = location[1],
+          measure_type = measure_type[1],
+          month = month[1],
           team.selected = t,
-          opponent,
-          outcome,
-          per_mode,
-          period,
-          player_experience,
-          player_position,
-          playoff_round,
-          season_type,
-          season_segment,
-          shot_clock_range,
-          starter_bench
+          opponent = opponent[1],
+          outcome = outcome[1],
+          per_mode = per_mode[1],
+          period = period[1],
+          player_experience = player_experience[1],
+          player_position = player_position[1],
+          playoff_round = playoff_round[1],
+          season_type = season_type[1],
+          season_segment = season_segment[1],
+          shot_clock_range = shot_clock_range[1],
+          starter_bench = shot_clock_range[1]
         )
 
       data <-
@@ -1204,13 +1328,13 @@ get_nba_traditional_team_season_stat_table <-
           dplyr::select(id.season, opponent, everything())
       }
 
-      if (!conference %>% is.na) {
+      if (!conference[1] %>% is.na) {
         data %<>%
           mutate(conference) %>%
           dplyr::select(id.season, conference, everything())
       }
 
-      if (!conference_against %>% is.na) {
+      if (!conference_against[1] %>% is.na) {
         data %<>%
           mutate(conference_against) %>%
           dplyr::select(id.season, conference_against, everything())
@@ -1228,24 +1352,24 @@ get_nba_traditional_team_season_stat_table <-
           dplyr::select(id.season, date_to, everything())
       }
 
-      if (!division %>% is.na) {
+      if (!division[1] %>% is.na) {
         data %<>%
           mutate(division) %>%
           dplyr::select(id.season, division, everything())
       }
 
-      if (!division_against %>% is.na) {
+      if (!division_against[1] %>% is.na) {
         data %<>%
           mutate(division_against) %>%
           dplyr::select(id.season, division_against, everything())
       }
 
-      if (!game_scope %>% is.na) {
+      if (!game_scope[1] %>% is.na) {
         data %<>%
           mutate(game_scope)
       }
 
-      if (!game_segment %>% is.na) {
+      if (!game_segment[1] %>% is.na) {
         data %<>%
           mutate(game_segment) %>%
           dplyr::select(id.season, game_segment, everything())
@@ -1257,7 +1381,7 @@ get_nba_traditional_team_season_stat_table <-
           dplyr::select(id.season, last_n_games, everything())
       }
 
-      if (!location %>% is.na) {
+      if (!location[1] %>% is.na) {
         data %<>%
           mutate(location) %>%
           dplyr::select(id.season, location, everything())
@@ -1269,7 +1393,7 @@ get_nba_traditional_team_season_stat_table <-
           dplyr::select(id.season, month, everything())
       }
 
-      if (!outcome %>% is.na) {
+      if (!outcome[1] %>% is.na) {
         data %<>%
           mutate(outcome) %>%
           dplyr::select(id.season, outcome, everything())
@@ -1281,13 +1405,13 @@ get_nba_traditional_team_season_stat_table <-
           dplyr::select(id.season, period, everything())
       }
 
-      if (!player_experience %>% is.na) {
+      if (!player_experience[1] %>% is.na) {
         data %<>%
           mutate(player_experience) %>%
           dplyr::select(id.season, player_experience, everything())
       }
 
-      if (!player_position %>% is.na) {
+      if (!player_position[1] %>% is.na) {
         data %<>%
           mutate(last_n_games) %>%
           dplyr::select(id.season, player_position, everything())
@@ -1298,13 +1422,13 @@ get_nba_traditional_team_season_stat_table <-
           mutate(playoff_round) %>%
           dplyr::select(id.season, playoff_round, everything())
       }
-      if (!shot_clock_range %>% is.na) {
+      if (!shot_clock_range[1] %>% is.na) {
         data %<>%
           mutate(shot_clock_range) %>%
           dplyr::select(id.season, shot_clock_range, everything())
       }
 
-      if (!starter_bench %>% is.na) {
+      if (!starter_bench[1] %>% is.na) {
         data %<>%
           mutate(starter_bench) %>%
           dplyr::select(id.season, starter_bench, everything())
@@ -1313,7 +1437,7 @@ get_nba_traditional_team_season_stat_table <-
       if (return_message == T) {
         "You got " %>%
           paste0(measure_type,
-                 " data for players in the ",
+                 " team stat data for the ",
                  id.season,
                  " season") %>%
           message()
@@ -1322,7 +1446,7 @@ get_nba_traditional_team_season_stat_table <-
     }
   }
 
-get_all_team_traditional_stat_tables <-
+get_all_teams_traditional_stat_tables <-
   function(year.season_start = 2015,
            season_type = "Regular Season",
            measures =
@@ -1344,13 +1468,14 @@ get_all_team_traditional_stat_tables <-
       per_mode
 
     all_data <-
-      get_nba_traditional_team_season_stat_table(
+      get_nba_team_stat_table(
         season_type = st,
         measure_type = measures[1],
         per_mode = pm,
         include_measure_name = F,
         year.season_start = ys
       )
+
     exclude <-
       c(
         "age",
@@ -1375,6 +1500,7 @@ get_all_team_traditional_stat_tables <-
         "pct.wins",
         "pct.fg"
       )
+
     for (m in measures[2:length(measures)]) {
       df <-
         get_nba_traditional_team_season_stat_table(
@@ -1403,15 +1529,99 @@ get_all_team_traditional_stat_tables <-
         left_join(df)
     }
 
-    if(merge_ids == T) {
+    if (merge_ids == T) {
       teams_ids <-
-      get_teams_ids()
+        get_teams_ids()
 
-    all_data %<>%
-      dplyr::left_join(teams_ids) %>%
-      dplyr::select(id.season:id.team, slug.team, everything())
+      all_data %<>%
+        dplyr::left_join(teams_ids) %>%
+        dplyr::select(id.season:id.team, slug.team, everything())
 
     }
+
+    return(all_data)
+
+  }
+
+get_nba_team_stats_season_per_mode <-
+  function(year.season_start = 2015,
+           season_type = "Regular Season",
+           measure = "Advanced",
+           per_modes =  c(
+             "Totals",
+             "PerGame",
+             "MinutesPer",
+             "Per48",
+             "Per40",
+             "Per36",
+             "PerMinute",
+             "PerPossession",
+             "PerPlay",
+             "Per100Possessions",
+             "Per100Plays"
+           ),
+           merge_ids = T,....) {
+    ys <-
+      year.season_start
+
+    st <-
+      season_type
+
+    pm <-
+      per_mode
+
+    all_data <-
+      per_modes %>%
+      map(
+        function(x)
+          get_nba_team_stat_table(
+            year.season_start = ys,
+            season_type = st,
+            per_mode = x,
+            measure_type = measures
+          )
+      ) %>%
+      compact() %>%
+      bind_rows()
+    return(all_data)
+
+  }
+
+get_nba_team_stats_season_by_segment <-
+  function(year.season_start = 2015,
+           season_type = "Regular Season",
+           measure = "Base",
+           game_segments = c(NA, "First Half", "Second Half", "Overtime"),
+           per_mode = "Per100Possessions",
+           merge_ids = T,....) {
+    ys <-
+      year.season_start
+
+    st <-
+      season_type
+
+    pm <-
+      per_mode
+
+    all_data <-
+      game_segments %>%
+      map(
+        function(x)
+          get_nba_team_stat_table(
+            year.season_start = ys,
+            season_type = st,
+            per_mode = per_mode,
+            game_segment = x,
+            measure_type = measure
+          )
+      ) %>%
+      compact() %>%
+      bind_rows()
+
+    all_data %<>%
+      mutate(game_segment = ifelse(game_segment %>% is.na, 'All', game_segment)) %>%
+      dplyr::rename(segment.game = game_segment) %>%
+      dplyr::select(id.season, team, segment.game, everything())
 
     return(all_data)
 

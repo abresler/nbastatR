@@ -60,7 +60,7 @@ plot_nba_team_season_bokeh_shotchart <- function(team = "Nets",
     'formattable',
     #devtools::install_github(renkun-ken/formattable)
     'rbokeh',
-    #devtools::install_github(hafen/rbokeh)
+    #devtools::install_github(hafen/rbokeh@dev)
     'hexbin',
     'stringr',
     'tidyr'
