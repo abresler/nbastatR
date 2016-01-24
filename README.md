@@ -2,17 +2,18 @@
 NBA Stats API Wrapper for R, formal description coming soon!!
 
 This package is in it's extreme infancy but it should work if you have the necassary packages installed.  Formal vigentte's will come once the wrappers are complete but you please explore around.  Here is some sample code encompassing some of what nbastatR can do.
-
+## Installation
 ```{r}
 devtools::install_github("abresler/nbastatR")
-library("nbastatR")
+library("nbastatR") # note requires a bunch of other packages which are listed in the import
+```
+
+## Basic Functionality
+```{r}
 get_nba_days_scores("10/06/15")
 get_nba_franchise_data(return_franchises = c('all'))
 get_nba_players_ids(active_only = F)
 get_nba_teams_seasons_roster(team = 'Nets', include_coaches = F)
-get_year_draft_combine(combine_year = 2009, return_message = T)
-get_all_draft_combines(combine_years = 2000:2015) #draft combines
-get_all_draft_data(draft_years = 1960:2015) # drafts
 get_nba_player_injuries(filter_returning_today = T)
 get_nba_synergy_stats(table_name = "Isolation",
                       include_defense = T,
@@ -24,6 +25,13 @@ get_nba_synergy_stats(table_name = "Transition",
            type_table = "team",
            return_message = T)
   
+```
+
+## NBA Draft Functions
+``` {r}
+get_year_draft_combine(combine_year = 2009, return_message = T)
+get_all_draft_combines(combine_years = 2000:2015) #draft combines
+get_all_draft_data(draft_years = 1960:2015) # drafts
 ```
 
 ## Salary Cap Data Example
@@ -51,4 +59,13 @@ team_2017_non_guaranteed_players <-
 
 team_2017_non_guaranteed_players %>% 
   View()
+```
+
+## Coaching Data Examples
+
+```{r}
+get_bref_coach_transaction_df(coach = "David Blatt")
+get_bref_coach_bio_df("Steve Kerr")
+get_bref_coach_stat_df("Monty Williams")
+get_bref_coach_award_df("Gregg Popovich")
 ```
