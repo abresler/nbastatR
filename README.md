@@ -11,9 +11,11 @@ library("nbastatR") # note requires a bunch of other packages which are listed i
 ## Basic Functionality
 ```{r}
 get_nba_days_scores("10/06/15")
-get_nba_franchise_data(return_franchises = c('all'))
-get_nba_players_ids(active_only = F)
-get_nba_teams_seasons_roster(team = 'Nets', include_coaches = F)
+get_nba_franchise_data(return_franchises = "all")
+get_nba_team_stat_table(year.season_start = 2015,
+                        period = 4,
+                        division_against = "Atlantic",
+                        outcome = "W")
 get_nba_player_injuries(filter_returning_today = T)
 get_nba_synergy_stats(table_name = "Isolation",
                       include_defense = T,
@@ -22,7 +24,7 @@ get_nba_synergy_stats(table_name = "Isolation",
 get_nba_synergy_stats(table_name = "Transition",
            include_defense = T,
            include_offense = T,
-           type_table = "team",
+           type_table = "team", #team transition
            return_message = T)
   
 ```
