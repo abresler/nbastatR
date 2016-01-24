@@ -457,7 +457,7 @@ clean_to_stem <- function(x) {
 }
 
 
-get_nba_traditional_player_season_stat_table <-
+get_nba_player_season_stat_table <-
   function(year.season_start = 2015,
            season_type = c('Regular Season', 'Pre Season', 'Playoffs', 'All Star'),
            measure_type = c("Base",
