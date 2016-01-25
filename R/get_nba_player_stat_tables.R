@@ -1494,7 +1494,7 @@ get_all_player_traditional_stat_tables <-
       c("Base", "Advanced", "Usage", "Scoring", "Misc")
 
     all_data <-
-      get_nba_traditional_player_season_stat_table(
+      get_nba_player_season_stat_table(
         season_type = st,
         measure_type = measures[1],
         per_mode = pm,
@@ -1529,7 +1529,7 @@ get_all_player_traditional_stat_tables <-
       )
     for (m in measures[2:length(measures)]) {
       df <-
-        get_nba_traditional_player_season_stat_table(
+        get_nba_player_season_stat_table(
           season_type = st,
           measure_type = m,
           per_mode = pm,
