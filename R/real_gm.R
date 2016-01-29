@@ -322,7 +322,7 @@ get_agent_metadata_df <-
     if(!'agent_name' %>% exists()) {
       stop("Please enter an agent")
     }
-    load_packages(function_packages)
+    load_needed_packagess(function_packages)
     install_needed_packages(function_packages)
     if(!'all_agent_df' %>% exists){
       all_agent_df <-
@@ -354,7 +354,7 @@ get_agent_player_df <-
     if(!'agent_name' %>% exists()) {
       stop("Please enter an agent")
     }
-    load_packages(function_packages)
+    load_needed_packages(function_packages)
     install_needed_packages(function_packages)
     if(!'all_agent_df' %>% exists){
       all_agent_df <-
@@ -386,7 +386,7 @@ get_agent_player_data_df <-
     if(!'agent_name' %>% exists()) {
       stop("Please enter an agent")
     }
-    load_packages(function_packages)
+    load_needed_packages(function_packages)
     install_needed_packages(function_packages)
     if(!'all_agent_df' %>% exists){
       all_agent_df <-
