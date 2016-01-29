@@ -28,9 +28,10 @@ load_needed_packages <-
 
     package_to_load <-
       required_packages[!required_packages %in% loaded_packages]
-    lapply(package_to_load, library, character.only = T)
+    if (length(package_to_load) > 0) {
+      lapply(package_to_load, library, character.only = T)
+    }
   }
-
 height_in_inches <-
   function(height) {
     height_ft_in <-

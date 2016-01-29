@@ -27,7 +27,9 @@ load_needed_packages <-
 
     package_to_load <-
       required_packages[!required_packages %in% loaded_packages]
-    lapply(package_to_load, library, character.only = T)
+    if (length(package_to_load) > 0) {
+      lapply(package_to_load, library, character.only = T)
+    }
   }
 install_needed_packages(function_packages)
 load_needed_packages(function_packages)

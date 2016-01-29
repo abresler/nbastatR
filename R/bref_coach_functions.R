@@ -26,12 +26,11 @@ install_needed_packages <-
 load_needed_packages <-
   function(required_packages = function_packages) {
     loaded_packages <-
-      search() %>%
-      gsub('package:', '', .)
+      gsub('package:', '', search())
 
     package_to_load <-
       required_packages[!required_packages %in% loaded_packages]
-    if (package_to_load %>% length > 0) {
+    if (length(package_to_load) > 0) {
       lapply(package_to_load, library, character.only = T)
     }
   }

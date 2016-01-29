@@ -27,7 +27,9 @@ load_needed_packages <-
 
     package_to_load <-
       required_packages[!required_packages %in% loaded_packages]
-    lapply(package_to_load, library, character.only = T)
+    if (length(package_to_load) > 0) {
+      lapply(package_to_load, library, character.only = T)
+    }
   }
 install_needed_packages(function_packages)
 load_needed_packages(function_packages)
@@ -692,7 +694,7 @@ get_nba_team_stat_table <-
            ...) {
     install_needed_packages(function_packages)
     load_needed_packages(function_packages)
-    
+
     if (year.season_start < 1996) {
       stop("Sorry data only goes back to the 1996-97 Season")
     }

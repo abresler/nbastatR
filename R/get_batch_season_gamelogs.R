@@ -1097,8 +1097,7 @@ get_batch_player_gamelogs <-
           ) %>%
           arrange(date.game) %>%
           mutate(days.rest = date.game - dplyr::lag(date.game),
-                 days.rest = days.rest - 1
-                 ) %>%
+                 days.rest = days.rest - 1) %>%
           dplyr::select(-c(wl, code.season)) %>%
           dplyr::select(
             id.season,
