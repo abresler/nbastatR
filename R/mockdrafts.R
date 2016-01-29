@@ -813,13 +813,12 @@ height_in_inches <-
     return(height_in)
   }
 
-install_needed_packages(function_packages)
-load_needed_packages(function_packages)
 get_nba_draftnet_year_mock_draft <-
   function(draft_year = 2013,
            return_message = T) {
     load_needed_packages(function_packages)
     install_needed_packages(function_packages)
+    lapply(function_packages, library, character.only = T)
     if (!'draft_year' %>% exists()) {
       stop('Please enter a draft year')
     }
@@ -856,7 +855,7 @@ get_nba_draftnet_year_mock_draft <-
 
     page <-
       url %>%
-      read_html()
+      xml2::read_html()
 
     last_update <-
       page %>%
