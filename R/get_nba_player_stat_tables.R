@@ -46,6 +46,8 @@ load_needed_packages(function_packages)
 get_nba_franchise_data <-
   function(return_franchises = c('all', 'active', 'current'),
            return_message = T) {
+    install_needed_packages(function_packages)
+    load_needed_packages(function_packages)
     team_history_url <-
       'http://stats.nba.com/stats/franchisehistory?LeagueID=00'
 
@@ -578,6 +580,8 @@ get_nba_player_season_stat_table <-
     if (year.season_start < 1996) {
       stop("Sorry data only goes back to the 1996-97 Season")
     }
+    install_needed_packages(function_packages)
+    load_needed_packages(function_packages)
     base <-
       'http://stats.nba.com/stats/leaguedashplayerstats?'
     id.season <-
@@ -1472,7 +1476,7 @@ get_all_player_traditional_stat_tables <-
   function(year.season_start = 2015,
            season_type = "Regular Season",
            per_mode = "PerGame") {
-    packages <- #need all of these installed including some from github
+    function_packages <- #need all of these installed including some from github
       c('dplyr',
         'magrittr',
         'jsonlite',
@@ -1481,8 +1485,8 @@ get_all_player_traditional_stat_tables <-
         'stringr',
         'lubridate',
         'tidyr')
-    options(warn = -1)
-    lapply(packages, library, character.only = T)
+    install_needed_packages(function_packages)
+    load_needed_packages(function_packages)
     ys <-
       year.season_start
 

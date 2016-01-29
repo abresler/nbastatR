@@ -49,6 +49,8 @@ height_in_inches <-
 get_nba_franchise_data <-
   function(return_franchises = c('all', 'active', 'current'),
            return_message = T) {
+    install_needed_packages(function_packages)
+    load_needed_packages(function_packages)
     team_history_url <-
       'http://stats.nba.com/stats/franchisehistory?LeagueID=00'
 
@@ -149,6 +151,8 @@ get_nba_franchise_data <-
 get_nba_team_season_roster <- function(team = "Denver Nuggets",
                                        year_season_end = 1992,
                                        return_message = T) {
+  install_needed_packages(function_packages)
+  load_needed_packages(function_packages)
   if (!'team' %>% exists) {
     stop("Please enter a team")
   }

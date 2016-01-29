@@ -143,6 +143,7 @@ get_leagues_teams_df <- function() {
   return(team_df)
 }
 get_agents_urls <- function() {
+  load_needed_packages(function_packages)
   url <-
     'http://basketball.realgm.com/info/agent-relationships'
 
@@ -171,6 +172,7 @@ get_agents_urls <- function() {
 }
 
 parse_agent_metadata <- function(page) {
+  load_needed_packages(function_packages)
   agent <-
     page %>%
     html_nodes('.force-table tr:nth-child(1) td') %>%
@@ -192,6 +194,7 @@ parse_agent_metadata <- function(page) {
   return(agent_metadata_df)
 }
 parse_agent_player_table <- function(page) {
+  load_needed_packages(function_packages)
   player <-
     page %>%
     html_nodes('td:nth-child(1)') %>%

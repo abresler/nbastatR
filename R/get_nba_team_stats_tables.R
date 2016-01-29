@@ -1463,6 +1463,8 @@ get_all_teams_traditional_stat_tables <-
                "Opponent"),
            per_mode = "PerGame",
            merge_ids = T) {
+    install_needed_packages(function_packages)
+    load_needed_packages(function_packages)
     ys <-
       year.season_start
 

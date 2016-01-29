@@ -138,7 +138,7 @@ get_nba_synergy_stats <-
            include_offense = T,
            type_table = "team",
            return_message = T) {
-    packages <- #need all of these installed including some from github
+    function_packages <- #need all of these installed including some from github
       c(
         'dplyr',
         'magrittr',
@@ -151,9 +151,9 @@ get_nba_synergy_stats <-
         'tidyr'
       )
     options(warn = -1)
-    lapply(packages, library, character.only = T)
-    install_needed_packages(packages)
-    load_needed_packages(packages)
+    lapply(function_packages, library, character.only = T)
+    install_needed_packages(function_packages)
+    load_needed_packages(function_packages)
 
     if (!type_table %>% str_to_lower() %in% c("team", "player")) {
       stop("Sorry type of table can only be team or player", call. = F)
