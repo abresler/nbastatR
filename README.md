@@ -71,3 +71,13 @@ get_bref_coach_bio_df("Steve Kerr")
 get_bref_coach_stat_df("Monty Williams")
 get_bref_coach_award_df("Gregg Popovich")
 ```
+
+
+## Mock Draft
+```{r}
+draft_2016 <- 
+  get_nba_draftnet_year_mock_draft(draft_year = 2016)
+
+mocks_09_15 <- 
+  get_nba_draftnet_years_mock_draft(draft_years = 2009:2015)
+```
