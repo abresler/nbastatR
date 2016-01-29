@@ -813,6 +813,8 @@ height_in_inches <-
     return(height_in)
   }
 
+install_needed_packages(function_packages)
+load_needed_packages(function_packages)
 
 get_nba_draftnet_year_mock_draft <-
   function(draft_year = 2013,
