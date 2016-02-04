@@ -292,6 +292,7 @@ get_nba_team_season_roster_safe <-
 
 get_player_season_shot_data <- function(player = "Thaddeus Young",
                                         year_season_end = 2016,
+                                        return_df_only = F,
                                         use_shot_zone_side = F,
                                         season_type = "Regular Season",
                                         # Regular Season, Preseason, Playoffs, All Star
@@ -324,6 +325,7 @@ get_player_season_shot_data <- function(player = "Thaddeus Young",
       "Sorry NBA Shooting data exists only since the 1996-97 Season!!"
     stop(stop.message)
   }
+  load_needed_packages(function_packages)
   p <-
     player %>%
     str_to_lower() %>%
@@ -640,9 +642,14 @@ get_player_season_shot_data <- function(player = "Thaddeus Young",
         time.game = (12 * (period - 1) + minute) %>% paste0(' min ', second, ' sec')
       )
 
-    data <-
+    if (return_df_only == T) {
+      data <-
+        data.shots %>%
+        as_data_frame()
+      } else {
+        data <-
       list(parameter_df, data.shots)
-
+      }
     names(data) <-
       c('parameters', 'shots')
 
@@ -1670,3 +1677,5 @@ plot_nba_team_season_bokeh_shotchart <- function(team = "Brooklyn Nets",
   }
   return(p)
 }
+get_player_season_shot_data_safe <-
+  failwith(NULL, get_player_season_shot_data)
