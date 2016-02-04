@@ -555,7 +555,7 @@ get_headers <- function() {
         "pct.ft.opp",
         "oreb.opp",
         "dreb.opp",
-        "rep.opp",
+        "reb.opp",
         "ast.opp",
         "tov.opp",
         "stl.opp",
