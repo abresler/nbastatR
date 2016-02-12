@@ -1089,9 +1089,12 @@ get_day_nba_matchups <-
             F
           )
         ) %>%
+        mutate(slug.opponent = ifelse(slug.team == slug.team.home, slug.team.away, slug.team.home)) %>%
         dplyr::select(date.game,
                       id.game,
                       game,
+                      slug.team,
+                      slug.opponent,
                       both.b2b,
                       everything()) %>%
         arrange(id.game) %>%
