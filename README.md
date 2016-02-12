@@ -10,7 +10,9 @@ library("nbastatR") # note requires a bunch of other packages which are listed i
 
 ## Basic Functionality
 ```{r}
-get_nba_days_scores("10/06/15")
+get_day_nba_games("02/11/2016")
+get_day_nba_game_scores(date = "10/06/15")
+get_day_nba_game_team_leaders("02/08/16")
 get_nba_franchise_data(return_franchises = "all")
 get_nba_team_stat_table(year.season_start = 2015,
                         period = 4,

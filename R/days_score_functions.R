@@ -132,13 +132,16 @@ get_day_nba_games <- function(date, return_message = T) {
     stop("No games for " %>% paste0(date))
   }
   if(json_data$resultSets$rowSet[[1]] %>%
+     as.list %>%
      purrr::flatten() %>% length  > 0) {
   game_set <-
     json_data$resultSets$rowSet[[1]] %>%
+    as.list %>%
     purrr::flatten()
 
   games <-
     json_data$resultSets$rowSet[[1]] %>%
+    as.list %>%
     purrr::flatten() %>%
     length() %>%  {
       . / 14
@@ -287,7 +290,9 @@ get_days_nba_games <-
     return(all_games)
   }
 
-get_day_nba_game_scores <-  function(date, return_message = T, merge_data = T) {
+get_day_nba_game_scores <-  function(date,
+                                     return_message = T,
+                                     merge_data_team = T) {
   if (!'date' %>% exists()) {
     stop("Please enter a valid date")
   }
@@ -374,7 +379,7 @@ get_day_nba_game_scores <-  function(date, return_message = T, merge_data = T) {
     mutate(is.win = ifelse(slug.winner == slug.team, T, F)) %>%
     dplyr::select(id.season:id.game, is.win, everything())
 
-  if (merge_team_data == T) {
+  if (merge_data_team == T) {
     game_date <-
       date
     days_games_df <-
