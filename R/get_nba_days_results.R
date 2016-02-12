@@ -13,6 +13,8 @@ get_nba_days_scores <- function(date, return_message = T) {
     c('dplyr',
       'magrittr',
       'jsonlite',
+      'httr',
+      'curlconverter',
       'tidyr',
       'stringr',
       'lubridate')
@@ -53,12 +55,28 @@ get_nba_days_scores <- function(date, return_message = T) {
     base %>%
     paste0(date_stem)
 
+  header_code <-
+    " -H 'Pragma: no-cache' -H 'DNT: 1' -H 'Accept-Encoding: gzip, deflate, sdch' -H 'Accept-Language: en-US,en;q=0.8' -H 'User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/49.0.2623.39 Safari/537.36' -H 'Accept: application/json, text/plain, */*' -H 'Referer: http://stats.nba.com/scores/' -H 'Cookie: s_cc=true; s_fid=18F437D0DE57C7DA-0D8E18725712DB1E; s_sq=%5B%5BB%5D%5D' -H 'Connection: keep-alive' -H 'Cache-Control: no-cache' --compressed"
+
+  request_url <-
+    "curl '" %>%
+    paste0(url_games,"'", header_code)
+
+  show_req_headers <-
+    request_url %>%
+    make_req(quiet = TRUE)
+
+  res <-
+    show_req_headers()
+
   json_data <-
-    url_games %>%
-    fromJSON(simplifyDataFrame = T, flatten = T)
+    content(res, as = "parsed") %>%
+    toJSON() %>%
+    fromJSON(simplifyDataFrame = T)
 
   table_names <-
-    json_data$resultSets$name
+    json_data$resultSets$name %>%
+    unlist()
 
   if (json_data$resultSets$rowSet[1] %>% data.frame %>% nrow() > 0) {
     # Game Header
