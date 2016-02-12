@@ -1,4 +1,5 @@
-library(readr)
+function(){
+  library(readr)
 all_players <-
   'https://docs.google.com/spreadsheets/d/1IyJaUOA_aiSinn0IrhEqW2Ka7WEJDRZAz3q8PBjL3i0/export?format=csv&id=1IyJaUOA_aiSinn0IrhEqW2Ka7WEJDRZAz3q8PBjL3i0&gid=1774150094' %>%
   read_csv()
@@ -97,3 +98,4 @@ d_league <-
 nba  <-
   'https://docs.google.com/spreadsheets/d/1IyJaUOA_aiSinn0IrhEqW2Ka7WEJDRZAz3q8PBjL3i0/export?format=csv&id=1IyJaUOA_aiSinn0IrhEqW2Ka7WEJDRZAz3q8PBjL3i0&gid=1538599335' %>%
   read_csv(col_names = F)
+}
