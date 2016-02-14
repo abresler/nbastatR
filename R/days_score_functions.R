@@ -36,7 +36,6 @@ load_needed_packages <-
     }
   }
 
-
 get_nba_day_score_json_data <- function(game_date) {
   package_df <-
     data.frame(installed.packages())
