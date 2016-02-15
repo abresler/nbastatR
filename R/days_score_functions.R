@@ -101,17 +101,18 @@ get_nba_day_score_json_data <- function(game_date) {
     "curl '" %>%
     paste0(url_games, "'", header_code)
 
-  show_req_headers <-
+  nba_url <-
     request_url %>%
-    make_req(quiet = TRUE)
-
-  res <-
-    show_req_headers()
+    straighten() %>%
+    make_req(quiet = TRUE) %>%
+    suppressMessages()
 
   json_data <-
-    content(res, as = "parsed") %>%
+    nba_url[[1]]() %>%
+    content( as="parsed") %>%
     toJSON() %>%
     fromJSON(simplifyDataFrame = T)
+
   return(json_data)
 
 }
