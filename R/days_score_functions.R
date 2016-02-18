@@ -961,7 +961,7 @@ get_days_nba_game_team_leaders <-
 
 
 get_day_nba_matchups <-
-  function(is.today = F,
+  function(is.today = T,
            date = NA) {
     get_dates_teams <- function(data) {
       data %<>%
@@ -1006,16 +1006,21 @@ get_day_nba_matchups <-
         get_dates_teams() %>%
         arrange(id.game)
 
-      playing_tomorrow_df <-
-        get_day_nba_games_safe(date = tomorrow)
+      if(get_day_nba_games_safe(date = tomorrow) %>% length > 0) {
+        playing_tomorrow_df <-
+          get_day_nba_games_safe(date = tomorrow)
+        playing_tomorrow_df %<>%
+          get_dates_teams() %>%
+          arrange(id.game)
 
-      playing_tomorrow_df %<>%
-        get_dates_teams() %>%
-        arrange(id.game)
+      }
 
-      played_yesterday_df <-
-        get_day_nba_games_safe(date = yesterday) %>%
-        get_dates_teams
+
+      if (get_day_nba_games_safe(date = yesterday) %>% length > 0) {
+        played_yesterday_df <-
+          get_day_nba_games_safe(date = yesterday) %>%
+          get_dates_teams()
+      }
 
       if('playing_tomorrow_df' %>% exists) {
       todays_teams %<>%
