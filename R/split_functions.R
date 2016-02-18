@@ -225,7 +225,8 @@ get_headers <- function() {
         "GAME_RESULT",
         'SEASON_MONTH_NAME',
         'SEASON_SEGMENT',
-        'TEAM_DAYS_REST_RANGE'
+        'TEAM_DAYS_REST_RANGE',
+        'SCHOOL_TYPE'
       ),
       name.actual = c(
         "id.player",
@@ -406,7 +407,8 @@ get_headers <- function() {
         'outcome',
         'name.month',
         'season.segment',
-        'days.rest'
+        'days.rest',
+        'school.type'
       ),
       id.row = 1:length(name.actual)
     )
@@ -1117,7 +1119,7 @@ get_team_season_stat_splits <-
     if (playoff_round > 0) {
       data %<>%
         mutate(playoff.round = playoff_round) %>%
-        dplyr::select(id.season:per.mode,  playoff.roung, everything())
+        dplyr::select(id.season:per.mode,  playoff.round, everything())
     }
     if (!shot_clock_range[1] %>% is.na) {
       data %<>%

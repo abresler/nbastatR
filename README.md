@@ -31,6 +31,22 @@ get_nba_synergy_stats(table_name = "Transition",
   
 ```
 
+## NBA Stats Beta NLP API
+This function allows you to ask the NBA's new NLP API a question and it will return an answer in a data frame when possible.
+```{r}
+ask_nba_api_nlp_question(question = "BROOKLYN NETS WINS ALL TIME",
+                         return_similar_questions = T)
+
+ask_nba_api_nlp_question(question = "Most points ever scored in a game",
+                         return_similar_questions = T)
+
+ask_nba_api_nlp_question(question = "Rudy Gobert Free Throw Percentage All Time",
+                         return_similar_questions = T)
+
+ask_nba_api_nlp_question(question = "Derrick Rose points against LeBron James")
+
+```
+
 ## NBA Draft Functions
 ``` {r}
 get_year_draft_combine(combine_year = 2009, return_message = T)
