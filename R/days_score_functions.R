@@ -1017,13 +1017,33 @@ get_day_nba_matchups <-
         get_day_nba_games_safe(date = yesterday) %>%
         get_dates_teams
 
+      if('playing_tomorrow_df' %>% exists) {
       todays_teams %<>%
         mutate(
-          played.yesterday = todays_teams$slug.team %in% playing_tomorrow_df$slug.team,
-          playing.tomorrow = todays_teams$slug.team %in% played_yesterday_df$slug.team,
-          is.back_to_back = ifelse(played.yesterday == T |
-                                     playing.tomorrow == T, T, F)
+          playing.tomorrow = todays_teams$slug.team %in% playing_tomorrow_df$slug.team
         )
+      } else {
+        todays_teams %<>%
+          mutate(
+            playing.tomorrow = F
+          )
+      }
+
+      if('played_yesterday_df' %>% exists) {
+        todays_teams %<>%
+          mutate(
+            played.yesterday = todays_teams$slug.team %in% played_yesterday_df$slug.team
+          )
+      } else {
+        todays_teams %<>%
+          mutate(
+            played.yesterday = F
+          )
+      }
+
+          todays_teams %<>%
+            mutate(is.back_to_back = ifelse(played.yesterday == T |
+                                              playing.tomorrow == T, T, F))
 
       home_teams <-
         todays_teams %>%
