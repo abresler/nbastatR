@@ -1156,7 +1156,7 @@ get_days_nba_matchups <-
         paste0(dates %>% min(), " to ", dates %>% max) %>%
         message
     }
-    if(all_leaders %>% nrow() > 0){
-      return(all_leaders)
+    if(all_matchups %>% nrow() > 0){
+      return(all_matchups)
     }
   }
