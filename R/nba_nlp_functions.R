@@ -504,3 +504,26 @@ ask_nba_api_nlp_question <-
     return(answer_df)
 
   }
+ask_nba_api_nlp_question_safe <-
+  failwith(NULL, ask_nba_api_nlp_question)
+
+ask_nba_api_nlp_questions <- function(
+  questions = c(
+    "Wayne Ellington catch and shoot field goals",
+    "Joe Johnson catch and shoot field goals"
+  ),
+  similar = T,
+  message = T,
+  headers = F
+) {
+ all_questions <-
+  questions %>%
+    map(function(x) ask_nba_api_nlp_question_safe(question = x,
+                                             return_similar_questions = similar,
+                                             return_message = message,
+                                             resolve_headers = headers)
+      ) %>%
+    compact %>%
+    bind_rows()
+ return(all_questions)
+}

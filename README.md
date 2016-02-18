@@ -44,6 +44,11 @@ ask_nba_api_nlp_question(question = "Rudy Gobert Free Throw Percentage All Time"
                          return_similar_questions = T)
 
 ask_nba_api_nlp_question(question = "Derrick Rose points against LeBron James")
+questions <- 
+  c('Wayne Ellington catch and shoot field goals', 'Joe Johnson catch and shoot field goals')
+questions %>% 
+  ask_nba_api_nlp_questions()
+
 ```
 
 ## NBA Draft Functions
