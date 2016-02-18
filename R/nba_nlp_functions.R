@@ -6,6 +6,7 @@ function_packages <-
     'tidyr',
     'stringr',
     'lubridate',
+    'readr',
     'purrr',
     'stringr',
     'tidyr'
@@ -425,7 +426,6 @@ ask_nba_api_nlp_question <-
       str_replace_all("\\+", '%2B') %>%
       str_replace_all("\\?", '%3F')
 
-
     base <-
       'http://stats.nba.com/stats/textanalysis/?LeagueID=00&Question='
 
@@ -442,15 +442,19 @@ ask_nba_api_nlp_question <-
       data.frame %>%
       tbl_df
 
+    headers <-
+      json_data$resultSets[[1]]$headers %>% unlist %>%
+      str_replace_all('\\ ', '\\') %>%
+      str_replace_all('\\%', '\\') %>%
+      str_replace_all('__','_') %>%
+      str_to_lower()
+
     names(answer_df) <-
-      json_data$resultSets[[1]]$headers %>% unlist
+      headers
 
     if (resolve_headers == T) {
       headers_df <-
         get_headers()
-
-      headers <-
-        names(answer_df)
 
       actual_names <-
         1:length(headers) %>%
@@ -459,11 +463,12 @@ ask_nba_api_nlp_question <-
             data_frame(
               name.actual =
                 headers_df %>%
-                mutate(name.nba = name.nba) %>%
+                mutate(name.nba = name.nba %>% str_to_lower) %>%
                 dplyr::filter(name.nba == headers[x]) %>%
                 .$name.actual
             )
         ) %>%
+        compact %>%
         bind_rows()
       names(answer_df) <-
         actual_names$name.actual
@@ -472,6 +477,12 @@ ask_nba_api_nlp_question <-
     answer_df %<>%
       mutate(question) %>%
       dplyr::select(question, everything())
+
+    answer_df %<>%
+      mutate_each_(funs(parse_guess),
+                   names(answer_df)
+      )
+
 
     if (return_similar_questions == T) {
       "You answered this question:\n" %>%
