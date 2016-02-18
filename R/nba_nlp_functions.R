@@ -474,7 +474,7 @@ ask_nba_api_nlp_question <-
       dplyr::select(question, everything())
 
     if (return_similar_questions == T) {
-      "You answered this question\n" %>%
+      "You answered this question:\n" %>%
         paste0(question) %>%
         message()
     }
