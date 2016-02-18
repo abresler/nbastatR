@@ -442,6 +442,10 @@ ask_nba_api_nlp_question <-
       data.frame %>%
       tbl_df
 
+    if(answer_df %>% nrow == 0){
+      stop("Sorry " %>% paste0(question, " is not valid question"), call. = F)
+    }
+
     headers <-
       json_data$resultSets[[1]]$headers %>% unlist %>%
       str_replace_all('\\ ', '\\') %>%
