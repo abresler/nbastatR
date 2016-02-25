@@ -569,7 +569,7 @@ get_player_profile <-
            include_headline_stat = T,
            return_message = T) {
     function_packages <-
-      c("magrittr", "dplyr", "readr", "formattable", "tidyr", "purrr", 'jsonlite'm
+      c("magrittr", "dplyr", "readr", "formattable", "tidyr", "purrr", 'jsonlite',
         'lubridate', "stringr")
     install_needed_packages(function_packages)
     load_needed_packages(function_packages)
