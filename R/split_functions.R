@@ -1271,7 +1271,7 @@ get_teams_season_stat_splits <-
 
 
 get_nba_players_ids <- function(active_only = c(F, T)) {
-  if (Sys.Date() %>% lubridate::month >= 10) {
+  if (Sys.Date() %>% lubridate::month () >= 10) {
     year.season_start <-
       Sys.Date() %>%
       year
