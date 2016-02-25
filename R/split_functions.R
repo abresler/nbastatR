@@ -426,7 +426,7 @@ clean_to_stem <- function(x) {
 }
 
 function_packages <-
-  c("dplyr", "magrittr", "tidyr", "purrr", "stringr",
+  c("dplyr", "magrittr", "tidyr", "purrr", "stringr", 'lubridate',
     'jsonlite')
 
 
@@ -1270,8 +1270,15 @@ get_teams_season_stat_splits <-
 # players -----------------------------------------------------------------
 
 
-get_nba_players_ids <- function(active_only = c(F, T)) {
-  if (Sys.Date() %>% lubridate::month >= 10) {
+get_nba_players_ids <-
+  function(active_only = c(F, T)) {
+    function_packages <-
+      c("magrittr", "dplyr", "readr", "formattable", "tidyr", "purrr", 'jsonlite',
+      'lubridate', "stringr")
+    install_needed_packages(function_packages)
+    load_needed_packages(function_packages)
+
+  if (Sys.Date() %>% lubridate::month() >= 10) {
     year.season_start <-
       Sys.Date() %>%
       year

@@ -1,4 +1,27 @@
-packages <- #need all of these installed including some from github
+install_needed_packages <-
+  function(required_packages = function_packages) {
+    needed_packages <-
+      required_packages[!(required_packages %in% installed.packages()[, "Package"])]
+
+    if (length(needed_packages) > 0) {
+      if (!require("pacman"))
+        install.packages("pacman")
+      pacman::p_load(needed_packages)
+    }
+  }
+
+load_needed_packages <-
+  function(required_packages = function_packages) {
+    loaded_packages <-
+      gsub('package:', '', search())
+
+    package_to_load <-
+      required_packages[!required_packages %in% loaded_packages]
+    if (length(package_to_load) > 0) {
+      lapply(package_to_load, library, character.only = T)
+    }
+  }
+function_packages <- #need all of these installed including some from github
   c('dplyr',
     'magrittr',
     'jsonlite',
@@ -416,7 +439,12 @@ get_headers <-
   }
 
 get_nba_players_ids <- function(active_only = c(F, T)) {
-  if(Sys.Date() %>% lubridate::month >= 10){
+  function_packages <-
+    c("magrittr", "dplyr", "readr", "formattable", "tidyr", "purrr",
+      'lubridate', "stringr")
+  install_needed_packages(function_packages)
+  load_needed_packages(function_packages)
+  if(Sys.Date() %>% lubridate::month() >= 10){
     year.season_start <-
       Sys.Date() %>%
       year
@@ -540,6 +568,12 @@ get_player_profile <-
            id.player = NULL,
            include_headline_stat = T,
            return_message = T) {
+    function_packages <-
+      c("magrittr", "dplyr", "readr", "formattable", "tidyr", "purrr", 'jsonlite'm
+        'lubridate', "stringr")
+    install_needed_packages(function_packages)
+    load_needed_packages(function_packages)
+
     if (id.player %>% is.null()) {
       id.player <-
         players %>%
