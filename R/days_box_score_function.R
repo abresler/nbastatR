@@ -3065,7 +3065,7 @@ get_games_player_boxscore_table_df <-
 
     if (message == T) {
       "You got " %>%
-        paste0(all_team_scores$id.game %>% unique %>% length,
+        paste0(all_player_stats$id.game %>% unique %>% length,
                ' player game box score tables') %>%
         message()
     }
@@ -3100,7 +3100,7 @@ get_games_team_boxscore_table_dfs <-
 
     if (message == T) {
       "You got " %>%
-        paste0(all_team_scores$id.game %>% unique %>% length,
+        paste0(all_team_tables$id.game %>% unique %>% length,
                ' team game bosx score tables') %>%
         message()
     }
