@@ -14,13 +14,6 @@ all_nba_players <-
   get_nba_players_ids(league = "NBA",
                       active_only = F)
 
-all_nbdl_players <- 
-  get_nba_players_ids(league = "NBDL",
-                      active_only = F)
-
-profiles_2016_season <-
-  get_season_player_profiles()
-
 players_1998 <-
   get_nba_season_players(
     year.season_start = 1998,
@@ -31,6 +24,8 @@ players_1998 <-
 players_1998_2015 <- get_nba_seasons_players(years = 1998:2014,
                                              only_on_roster = T,
                                              message = F)
+profiles_2016_season <-
+  get_season_player_profiles()
 
 ```
 ## Other Functionality
