@@ -2732,7 +2732,6 @@ get_game_play_by_play_df <-
 get_game_box_score_game_chart_df <-
   function(game_id = 21500839,
            time_period = "All",
-           include_game_data = F,
            return_message = T) {
     t <-
       'Game Charts'
