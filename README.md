@@ -11,21 +11,25 @@ library("nbastatR") # note requires a bunch of other packages which are listed i
 ## Explore A Season with the NBA Stats API 
 ```{r}
 all_nba_players <- 
-  get_nba_players_ids(league = "NBA",
-                      active_only = F)
+	get_nba_players_ids(league = "NBA",
+											active_only = F)
 
 players_1998 <-
-  get_nba_season_players(
-    year.season_start = 1998,
-    include_only_rostered_players = F,
-    return_message = T
-  )
+	get_nba_season_players(
+		year.season_start = 1998,
+		include_only_rostered_players = F,
+		return_message = T
+	)
 
 players_1998_2015 <- get_nba_seasons_players(years = 1998:2014,
-                                             only_on_roster = T,
-                                             message = F)
-profiles_2016_season <-
-  get_season_player_profiles()
+																						 only_on_roster = T,
+																						 message = F)
+
+profiles_2015_season <-
+	get_season_player_profiles(year.season_start = 2014, include_headline_stats = T,
+														 only_rostered_players = T,
+														 message = T)
+
 
 ```
 ## Other Functionality
