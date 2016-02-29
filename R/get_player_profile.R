@@ -888,7 +888,7 @@ get_player_profile_safe <-
   failwith(NULL, get_player_profile)
 
 get_season_player_profiles <-
-  function(year.season_start = 2015,
+  function(year.season_start = 2014,
            include_headline_stats = T,
            only_rostered_players = T,
            message = T) {
@@ -905,9 +905,12 @@ get_season_player_profiles <-
     all_profiles <-
       player_ids %>%
       map({
-        function(x) get_player_profile_safe(player_id = x,include_headline_stat = include_headline_stats,
+        function(x)
+        	get_player_profile(player_id = x,include_headline_stat = include_headline_stats,
                                        return_message = message)
       }) %>%
       compact %>%
       bind_rows
+    
+    return(all_profiles)
   }
