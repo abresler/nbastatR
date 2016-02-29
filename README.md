@@ -1,14 +1,39 @@
 # nbastatR
-NBA Stats API Wrapper for R, formal description coming soon!!
+An interface for professional basketball data in R.  Data sources include, but are not limited to: NBA Stats API, Basketball Insiders, Basketball-Reference, HoopsHype, and RealGM.  Overtime additional data sources will be added.
 
-This package is in it's extreme infancy but it should work if you have the necassary packages installed.  Formal vigentte's will come once the wrappers are complete but you please explore around.  Here is some sample code encompassing some of what nbastatR can do.
+This package is in it's extreme infancy but it should work if you have the necassary packages installed.  Formal vigentte's will come once the wrappers are complete but you please explore around.  Here is some sample code encompassing some of what nbastatR can do.  Once the nbastats API is fully wrapped full documentation will come.
 ## Installation
 ```{r}
 devtools::install_github("abresler/nbastatR")
 library("nbastatR") # note requires a bunch of other packages which are listed in the import
 ```
 
-## Basic Functionality
+## Explore A Season with the NBA Stats API 
+```{r}
+all_nba_players <- 
+  get_nba_players_ids(league = "NBA",
+                      active_only = F)
+
+all_nbdl_players <- 
+  get_nba_players_ids(league = "NBDL",
+                      active_only = F)
+
+profiles_2016_season <-
+  get_season_player_profiles()
+
+players_1998 <-
+  get_nba_season_players(
+    year.season_start = 1998,
+    include_only_rostered_players = F,
+    return_message = T
+  )
+
+players_1998_2015 <- get_nba_seasons_players(years = 1998:2014,
+                                             only_on_roster = T,
+                                             message = F)
+
+```
+## Other Functionality
 ```{r}
 get_day_nba_games("02/11/2016")
 get_day_nba_game_scores(date = "10/06/15")

@@ -1,3 +1,28 @@
+install_needed_packages <-
+  function(required_packages = function_packages) {
+    needed_packages <-
+      required_packages[!(required_packages %in% installed.packages()[, "Package"])]
+
+    if (length(needed_packages) > 0) {
+      if (!require("pacman"))
+        install.packages("pacman")
+      pacman::p_load(needed_packages)
+    }
+  }
+
+load_needed_packages <-
+  function(required_packages = function_packages) {
+    loaded_packages <-
+      gsub('package:', '', search())
+
+    package_to_load <-
+      required_packages[!required_packages %in% loaded_packages]
+    if (length(package_to_load) > 0) {
+      lapply(package_to_load, library, character.only = T)
+    }
+  }
+
+
 get_batch_player_gamelogs <-
   function(year.season_start,
            season_type,
@@ -630,23 +655,40 @@ get_batch_player_gamelogs <-
     }
 
     get_nba_players_ids <-
-      function(active_only = F,
-               resolve_to_fanduel = F) {
-        packages <- #need all of these installed including some from github
-          c(
-            'dplyr',
+      function(league = "NBA",
+               active_only = F) {
+        function_packages <-
+          #need all of these installed including some from github
+          c('dplyr',
             'magrittr',
             'jsonlite',
             'tidyr',
-            'purrr',
             'stringr',
-            'lubridate',
-            'tidyr'
-          )
-        options(warn = -1)
-        lapply(packages, library, character.only = T)
+            'purrr',
+            'data.table',
+            'tidyr')
+        install_needed_packages(function_packages)
+        load_needed_packages(function_packages)
+        if (!'league' %>% exists) {
+          stop("Please enter either NBA or NBDL")
+        }
+
+        if (league == "NBA") {
+          id.stem <-
+            "00"
+        }
+
+        if (league == "NBDL") {
+          id.stem <-
+            "20"
+        }
+
+        base_url <-
+          'http://stats.nba.com/stats/commonallplayers?IsOnlyCurrentSeason=0&LeagueID='
+
         players.url <-
-          "http://stats.nba.com/stats/commonallplayers?IsOnlyCurrentSeason=0&LeagueID=00&Season=2015-16"
+          base_url %>%
+          paste0(id.stem, '&Season=2015-16')
 
         json_data <-
           players.url %>%
@@ -654,7 +696,7 @@ get_batch_player_gamelogs <-
 
         data <-
           json_data$resultSets$rowSet %>%
-          data.frame %>%
+          data.frame(stringsAsFactors = F) %>%
           tbl_df
 
         headers <-
@@ -694,19 +736,19 @@ get_batch_player_gamelogs <-
         names_df %<>%
           mutate(player = name.first %>% str_trim %>% paste(name.last %>% str_trim)) %>%
           dplyr::select(player)
+
         data$name.player <-
           names_df$player
         data %<>%
           mutate(
             id.player = id.player %>% as.numeric,
-            is.active_player = ifelse(id.team == 0, FALSE, TRUE),
+            is.on_roster = ifelse(id.team == 0, FALSE, TRUE),
             id.team = id.team %>% as.numeric
           ) %>%
           dplyr::select(-c(status.roster, name.last.display)) %>%
           mutate_each(funs(extract_numeric), starts_with("year.")) %>%
           mutate(
             id.team = ifelse(id.team == 0, NA, id.team),
-            name.player = name.player %>% str_trim,
             city.team = ifelse(city.team == '', NA, city.team),
             code.team = ifelse(code.team == '', NA, code.team),
             slug.team = ifelse(slug.team == '', NA, slug.team),
@@ -715,39 +757,33 @@ get_batch_player_gamelogs <-
             url.player = id.player %>% paste0('http://stats.nba.com/player/#!/', .),
             image.player = id.player %>% paste0('http://stats.nba.com/media/players/132x132/', ., '.png')
           ) %>%
+          mutate(league) %>%
           dplyr::select(
+            league,
             name.player,
             id.player,
             team,
             id.team,
-            is.active_player,
+            is.on_roster,
             seasons.played,
             year.from,
             year.to,
             everything()
           )
 
+        if ('is.nba_assigned' %in% (names(data))) {
+          data %<>%
+            mutate(is.nba_assigned = is.nba_assigned %>% as.logical())
+        }
+
         if (active_only == T) {
           data %<>%
-            dplyr::filter(is.active_player == T)
+            dplyr::filter(is.on_roster == T)
         }
-
-        if (resolve_to_fanduel == T) {
-          fd_names <-
-            get_fd_name_df()
-
+        if ('gp.flag' %in% names(data)) {
           data %<>%
-            left_join(fd_names %>%
-                        dplyr::rename(name.player = name.nba))
-          data %<>%
-            mutate(
-              is.different_name = ifelse(is.different_name %>% is.na, F, T),
-              name.player = ifelse(is.different_name == T, name.fanduel, name.player)
-            ) %>%
-            dplyr::select(-c(is.different_name, name.fanduel)) %>%
-            arrange(name.player)
+            dplyr::select(-gp.flag)
         }
-
         return(data)
       }
 
