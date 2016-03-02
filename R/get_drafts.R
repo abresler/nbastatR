@@ -1,5 +1,28 @@
-options(warn = -1)
-packages <- #need all of these installed including some from github
+install_needed_packages <-
+  function(required_packages = function_packages) {
+    needed_packages <-
+      required_packages[!(required_packages %in% installed.packages()[, "Package"])]
+
+    if (length(needed_packages) > 0) {
+      if (!require("pacman"))
+        install.packages("pacman")
+      pacman::p_load(needed_packages)
+    }
+  }
+
+load_needed_packages <-
+  function(required_packages = function_packages) {
+    loaded_packages <-
+      gsub('package:', '', search())
+
+    package_to_load <-
+      required_packages[!required_packages %in% loaded_packages]
+    if (length(package_to_load) > 0) {
+      lapply(package_to_load, library, character.only = T)
+    }
+  }
+function_packages <-
+  #need all of these installed including some from github
   c('dplyr',
     'magrittr',
     'jsonlite',
@@ -8,7 +31,7 @@ packages <- #need all of these installed including some from github
     'stringr',
     'lubridate',
     'tidyr')
-lapply(packages, library, character.only = T)
+options(warn = -1)
 get_organization_type_ids <- function() {
   data <-
     data_frame(
@@ -418,6 +441,9 @@ get_headers <- function() {
 get_year_draft_data <-
   function(draft_year = 2015,
            return_message = T) {
+    install_needed_packages(function_packages)
+    load_needed_packages(function_packages)
+
     base <-
       'http://stats.nba.com/stats/drafthistory?College=&LeagueID=00&OverallPick=&RoundNum=&RoundPick=&Season='
 
