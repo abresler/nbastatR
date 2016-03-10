@@ -53,6 +53,8 @@ get_nba_franchise_data <-
     install_needed_packages(function_packages)
     load_needed_packages(function_packages)
     
+    franchise <- 
+    	return_franchises[1]
  
     
     team_history_url <-
@@ -132,7 +134,7 @@ get_nba_franchise_data <-
       dplyr::select(-id.league) %>%
       dplyr::select(id.team, team, everything())
 
-    if (return_franchises[1] == 'current') {
+    if (franchise == 'current') {
       data %<>%
         mutate(id.row = 1:nrow(.)) %>%
         group_by(id.team) %>%
@@ -140,7 +142,7 @@ get_nba_franchise_data <-
         dplyr::select(-id.row)
     }
 
-    if (return_franchises[1] == 'active') {
+    if (franchise == 'active') {
       data %<>%
         dplyr::filter(is.active == T)
     }
