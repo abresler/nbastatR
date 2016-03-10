@@ -1,3 +1,4 @@
+options(stringsAsFactors = F)
 function_packages <-
   c('dplyr',
     'magrittr',
@@ -70,7 +71,7 @@ get_nba_franchise_data <-
 
     active_data <-
       team_data$resultSets$rowSet[1] %>%
-      data.frame(stringsAsFactors = F) %>%
+    	data.frame %>% 
       tbl_df()
 
     names(active_data) <-
@@ -81,7 +82,7 @@ get_nba_franchise_data <-
 
     defunct_data <-
       team_data$resultSets$rowSet[2] %>%
-      data.frame(stringsAsFactors = F) %>%
+    	data.frame %>% 
       tbl_df()
 
     names(defunct_data) <-
