@@ -2837,7 +2837,7 @@ get_game_player_box_score_usage_df_safe <-
   failwith(NULL, get_game_player_box_score_usage_df)
 
 get_game_player_boxscore_table_df <-
-  function(game_id = 21500837,
+  function(game_id = 21500881,
            time_period = "All",
            return_wide = T,
            return_message = T) {
