@@ -32,6 +32,8 @@ load_needed_packages <-
       lapply(package_to_load, library, character.only = T)
     }
   }
+load_needed_packages(function_packages)
+install_needed_packages(function_packages)
 height_in_inches <-
   function(height) {
     height_ft_in <-
@@ -90,7 +92,7 @@ get_nba_franchise_data <-
 
     data <-
       active_data %>%
-      bind_rows(defunct_data)
+      dplyr::bind_rows(defunct_data)
 
     num_cols <-
       data %>%
@@ -351,7 +353,7 @@ get_nba_players_ids <-
 							.$name.actual
 					)
 			) %>%
-			bind_rows()
+			dplyr::bind_rows()
 		
 		names(data) <-
 			actual_names$name.actual
@@ -1281,10 +1283,10 @@ get_team_season_shot_data <- function(team = "Brooklyn Nets",
       )
 
     all_params %<>%
-      bind_rows(data$parameters)
+      dplyr::bind_rows(data$parameters)
 
     all_shots %<>%
-      bind_rows(data$shots)
+      dplyr::bind_rows(data$shots)
   }
   all_shots %<>%
     left_join(roster_data %>%
