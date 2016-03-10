@@ -816,6 +816,17 @@ get_player_season_shot_data <- function(player = "Stephen Curry",
                                         #NA Post All-Star, Pre All-Star
                                         exclude_backcourt = T,
                                         return_message = T) {
+	options(stringsAsFactors = F)
+	function_packages <-
+		c('dplyr',
+			'magrittr',
+			'data.table',
+			'jsonlite',
+			'tidyr',
+			'stringr',
+			'lubridate',
+			'stringr',
+			'tidyr')
 
   if (year_season_end < 1997) {
     stop.message <-
@@ -840,9 +851,9 @@ get_player_season_shot_data <- function(player = "Stephen Curry",
     get_nba_players_ids()
 
   if (players %>% mutate(name.player = name.player %>% str_to_lower %>% str_replace_all('\\.', '')) %>% dplyr::filter(name.player == p) %>% .$id.player %>% length == 0) {
-    paste0(player,
+    stop(paste0(player,
            ' is not a valid player, try capitalizing or checking spelling') %>%
-      message
+      message)
   }
 
   id.player <-
@@ -1016,13 +1027,15 @@ get_player_season_shot_data <- function(player = "Stephen Curry",
 
   json_data <-
     shot_data_url %>%
-    jsonlite::fromJSON(simplifyDataFrame = T)
-
-  if (json_data$resultSets$rowSet %>%
-      .[1] %>%
-      data.frame(stringsAsFactors = F) %>%
-      tbl_df %>% nrow > 0) {
-    data.shots <-
+    jsonlite::fromJSON(simplifyDataFrame = T, flatten = T)
+  if(json_data$resultSets$rowSet %>%
+  	.[1] %>%
+  	data.frame(stringsAsFactors = F) %>%
+  	tbl_df %>% nrow == 0) {
+  	stop("Sorry no shot data for this player")
+  }
+  
+  data.shots <-
       json_data$resultSets$rowSet %>%
       .[1] %>%
       data.frame(stringsAsFactors = F) %>%
@@ -1081,7 +1094,7 @@ get_player_season_shot_data <- function(player = "Stephen Curry",
 
     shot_zone_detail <-
       data_frame(shot_side = sides) %>%
-      separate(
+      tidyr::separate(
         col = shot_side,
         into = c('shot_zone_basic', 'id.side'),
         sep = '\\, ',
@@ -1141,11 +1154,12 @@ get_player_season_shot_data <- function(player = "Stephen Curry",
         as_data_frame()
       } else {
         data <-
-      list(parameter_df, data.shots)
-      }
-    names(data) <-
-      c('parameters', 'shots')
-
+        	list(parameter_df, data.shots)
+        
+        names(data) <-
+        	c('parameters', 'shots')
+       }
+    
     if (return_message == T) {
       "Congrats, you got " %>%
         paste0(data.shots %>% nrow,
@@ -1156,12 +1170,6 @@ get_player_season_shot_data <- function(player = "Stephen Curry",
                ' season') %>% message
     }
     return(data)
-  } else{
-    'No shots for ' %>%
-      paste0(player, ' during the ', id.season,
-             ' season') %>%
-      message()
-  }
 }
 
 
