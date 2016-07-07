@@ -20,6 +20,8 @@ players_1998 <-
 		include_only_rostered_players = F,
 		return_message = T
 	)
+brooklyn_nets_2016_roster <- 
+  get_nba_team_season_roster(team = "Brooklyn Nets", year_season_end = 2016)
 
 players_1998_2015 <- get_nba_seasons_players(years = 1998:2014,
 																						 only_on_roster = T,
