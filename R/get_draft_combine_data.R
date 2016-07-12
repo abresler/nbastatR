@@ -10,6 +10,13 @@ packages <- #need all of these installed including some from github
 options(warn = -1)
 lapply(packages, library, character.only = T)
 
+
+#' get headers
+#'
+#' @return
+#' @import dplyr
+#'
+#' @examples
 get_headers <- function() {
   headers_df <-
     data_frame(
@@ -397,6 +404,15 @@ get_headers <- function() {
     )
   return(headers_df)
 }
+
+#' get shot pct
+#'
+#' @param x
+#'
+#' @return
+#' @import stringr
+#'
+#' @examples
 get_shot_pct <- function(x) {
   shots <-
     x %>%
@@ -410,10 +426,20 @@ get_shot_pct <- function(x) {
   return(shot.pct)
 
 }
+
+#' Get Year Draft Combines
+#'
+#' @param combine_year
+#' @param return_message
+#'
+#' @return
+#' @import dplyr stringr magrittr jsonlite purrr tidyr lubridate
+#' @export
+#' @examples
 get_year_draft_combine <-
   function(combine_year = 2014,
            return_message = T) {
-    if (year.season_start < 2000) {
+    if (combine_year < 2000) {
       stopifnot("Sorry data starts in the 2000-2001 season")
     }
     id.season <-
@@ -430,9 +456,9 @@ get_year_draft_combine <-
       url %>%
       fromJSON(simplifyDataFrame = T)
 
-    data <-
+    tbl_data <-
       json_data$resultSets$rowSet %>%
-      data.frame %>%
+      data.frame(stringsAsFactors = F) %>%
       tbl_df
 
     headers <-
@@ -458,10 +484,11 @@ get_year_draft_combine <-
       ) %>%
       bind_rows()
 
-    names(data) <-
+    names(tbl_data) <-
       actual_names$name.actual
+
     numeric_cols <-
-      data %>%
+      tbl_data %>%
       dplyr::select(-c(id.player, name.first, name.last)) %>%
       dplyr::select(
         -c(
@@ -470,13 +497,13 @@ get_year_draft_combine <-
           height.wo_shoes.ft.in,
           height.wt_shoes.ft.in,
           wingspan.ft.in,
-          standing_reach.ft.in,
-          contains(".shots")
+          standing_reach.ft.in
         )
       ) %>%
+      dplyr::select(-matches(".shots")) %>%
       names()
     combine_data <-
-      data %>%
+      tbl_data %>%
       dplyr::select(-c(id.player, name.first, name.last)) %>%
       mutate_each_(funs(as.numeric(.)),
                    vars = numeric_cols) %>%
@@ -486,7 +513,8 @@ get_year_draft_combine <-
         pct.body_fat = pct.body_fat / 100
       )
     if ('off_drib_college_break_right.shots' %in% names(combine_data))
-      combine_data %<>%
+      combine_data <-
+      combine_data %>%
       mutate_each_(
         funs(. %>% lapply(get_shot_pct) %>% unlist %>% as.character),
         vars =
@@ -500,7 +528,15 @@ get_year_draft_combine <-
     }
     return(combine_data)
   }
-get_all_draft_combines <- function(combine_years = 2000:2015) {
+#' get years draft combines
+#'
+#' @param combine_years
+#'
+#' @return
+#' @export
+#'
+#' @examples
+get_all_draft_combines <- function(combine_years = 2000:2016) {
   all_draft_combines <-
     combine_years %>%
     purrr::map(function(x)

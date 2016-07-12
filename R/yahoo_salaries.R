@@ -458,7 +458,7 @@ parse_yahoo_player_salary_data <-
         isUnguaranteed = ifelse(detailsSalary %>% str_detect('Protection: None'), T, F),
         hasPlayerOption = ifelse(detailsSalary %>% str_detect('Player Option'), T, F),
         hasTeamOption = ifelse(detailsSalary %>% str_detect('Team Option'), T, F),
-        hasETO = ifelse(detailsSalary %>% str_detect('Early Termination Option', T, F))
+        hasETO = ifelse(detailsSalary %>% str_detect('Early Termination Option'), T, F)
       ) %>%
       replace_na(list(
         isUnguaranteed = F,
@@ -493,7 +493,7 @@ parse_yahoo_player_salary_data <-
     if (return_wide) {
       players_tbl <-
         players_tbl %>%
-        spread(idSeason, amountSalary) %>% View
+        spread(idSeason, amountSalary)
     }
     return(players_tbl)
   }
