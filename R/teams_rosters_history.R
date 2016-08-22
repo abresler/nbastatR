@@ -1,39 +1,11 @@
-function_packages <-
-  c('dplyr',
-    'magrittr',
-    'jsonlite',
-    'tidyr',
-    'stringr',
-    'lubridate',
-    'stringr',
-    'tidyr')
-
-install_needed_packages <-
-  function(required_packages = function_packages) {
-    needed_packages <-
-      required_packages[!(required_packages %in% installed.packages()[, "Package"])]
-
-    if (length(needed_packages) > 0) {
-      if (!require("pacman"))
-        install.packages("pacman")
-      pacman::p_load(needed_packages)
-    }
-  }
-
-load_needed_packages <-
-  function(required_packages = function_packages) {
-    loaded_packages <-
-      gsub('package:', '', search())
-
-    package_to_load <-
-      required_packages[!required_packages %in% loaded_packages]
-    if (length(package_to_load) > 0) {
-      lapply(package_to_load, library, character.only = T)
-    }
-  }
-install_needed_packages(function_packages)
-load_needed_packages(function_packages)
-
+#' Get Height in Inches
+#'
+#' @param height
+#'
+#' @return
+#' @export
+#' @importFrom stringr str_split
+#' @examples
 height_in_inches <-
   function(height) {
     height_ft_in <-
@@ -46,11 +18,19 @@ height_in_inches <-
     return(height_in)
   }
 
+#' Get NBA Franchise Data
+#'
+#' @param return_franchises
+#' @param return_message
+#'
+#' @return
+#' @export
+#' @import purrr jsonlite dplyr tibble magrittr lubridate stringr tidyr
+#' @examples
+
 get_nba_franchise_data <-
   function(return_franchises = c('all', 'active', 'current'),
            return_message = T) {
-    install_needed_packages(function_packages)
-    load_needed_packages(function_packages)
     team_history_url <-
       'http://stats.nba.com/stats/franchisehistory?LeagueID=00'
 
@@ -70,24 +50,27 @@ get_nba_franchise_data <-
 
     active_data <-
       team_data$resultSets$rowSet[1] %>%
-      data.frame %>%
-      tbl_df()
+      data.frame(stringsAsFactors = F) %>%
+      as_data_frame()
+
 
     names(active_data) <-
       names_active
 
-    active_data %<>%
+    active_data <-
+      active_data %>%
       mutate(is.active = T)
 
     defunct_data <-
       team_data$resultSets$rowSet[2] %>%
-      data.frame %>%
-      tbl_df()
+      data.frame(stringsAsFactors = F) %>%
+      as_data_frame()
 
     names(defunct_data) <-
       names_defunct
 
-    defunct_data %<>%
+    defunct_data <-
+      defunct_data %>%
       mutate(is.active = F)
 
     data <-
@@ -96,11 +79,14 @@ get_nba_franchise_data <-
 
     num_cols <-
       data %>%
-      dplyr::select(-c(contains("team")), -is.active) %>%
+      dplyr::select(-is.active) %>%
+      dplyr::select(-matches("team")) %>%
       names
 
-    data %<>%
-      mutate_each_(funs(as.numeric), vars = num_cols)
+    data <-
+      data %>%
+      mutate_at(.cols = num_cols,
+                .funs = as.numeric)
 
     names(data) <-
       c(
@@ -122,7 +108,8 @@ get_nba_franchise_data <-
         "is.active"
       )
 
-    data %<>%
+    data <-
+      data %>%
       mutate(team = city.team %>% paste(name.team),
              id.team = id.team %>% as.numeric()) %>%
       dplyr::select(-id.league) %>%
@@ -148,11 +135,20 @@ get_nba_franchise_data <-
   }
 
 
+#' Get NBA Team's Season Roster
+#'
+#' @param team
+#' @param year_season_end
+#' @param return_message
+#'
+#' @return
+#' @export
+#'
+#' @examples
 get_nba_team_season_roster <- function(team = "Denver Nuggets",
                                        year_season_end = 1992,
                                        return_message = T) {
-  install_needed_packages(function_packages)
-  load_needed_packages(function_packages)
+
   if (!'team' %>% exists) {
     stop("Please enter a team")
   }
@@ -289,12 +285,12 @@ get_nba_team_season_roster <- function(team = "Denver Nuggets",
   return(data_roster)
 }
 
-get_nba_team_season_roster_safe <-
-  failwith(NULL, get_nba_team_season_roster)
 
 get_all_teams_season_rosters <-
   function(year_season_end = 1990,
            message = T) {
+    get_nba_team_season_roster_safe <-
+      failwith(NULL, get_nba_team_season_roster)
     teams <-
       get_nba_franchise_data(return_franchises = 'all')
 
@@ -372,6 +368,16 @@ get_all_teams_seasons_rosters <-
   }
 
 
+#' Get NBA Team Season Coaches
+#'
+#' @param team
+#' @param year_season_end
+#' @param return_message
+#'
+#' @return
+#' @export
+#' @import dplyr jsonlite stringr
+#' @examples
 get_nba_team_season_coaches <- function(team,
                                         year_season_end = 2016,
                                         return_message = T)  {
@@ -497,13 +503,21 @@ get_nba_team_season_coaches <- function(team,
   return(data_coaches)
 }
 
-get_nba_team_season_coach_safe <-
-  failwith(NULL, get_nba_team_season_coaches)
 
-
+#' Get All Teams Season Coaches
+#'
+#' @param year_season_end
+#' @param message
+#'
+#' @return
+#' @export
+#'
+#' @examples
 get_all_teams_season_coaches <-
   function(year_season_end = 2005,
            message = T) {
+    get_nba_team_season_coach_safe <-
+      failwith(NULL, get_nba_team_season_coaches)
     teams <-
       get_nba_franchise_data(return_franchises = 'all')
 
@@ -563,15 +577,20 @@ get_all_teams_season_coaches <-
     return(all_coaches)
   }
 
-get_all_teams_season_coaches_safe <-
-  failwith(NULL, get_all_teams_season_coaches)
-
-
-
-
+#' Get All Team Seasons Coaches
+#'
+#' @param seasons
+#' @param return_message
+#'
+#' @return
+#' @export
+#'
+#' @examples
 get_all_teams_seasons_coaches <-
   function(seasons = 2005:2006,
            return_message = T) {
+    get_all_teams_season_coaches_safe <-
+      failwith(NULL, get_all_teams_season_coaches)
     all_years <-
       seasons %>%
       map(

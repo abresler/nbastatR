@@ -1,23 +1,10 @@
-packages <- #need all of these installed including some from github
-  c('dplyr',
-    'magrittr',
-    'jsonlite',
-    'tidyr',
-    'purrr',
-    'stringr',
-    'lubridate',
-    'tidyr')
-options(warn = -1)
-lapply(packages, library, character.only = T)
-
-
-#' get headers
+#' get headers combine
 #'
 #' @return
 #' @import dplyr
 #'
 #' @examples
-get_headers <- function() {
+get_headers_combine <- function() {
   headers_df <-
     data_frame(
       name.nba = c(
@@ -442,12 +429,14 @@ get_year_draft_combine <-
     if (combine_year < 2000) {
       stopifnot("Sorry data starts in the 2000-2001 season")
     }
+
     id.season <-
       combine_year %>%
       paste0("-", (combine_year + 1) %>% substr(3, 4))
 
     base <-
       'http://stats.nba.com/stats/draftcombinestats?LeagueID=00&SeasonYear='
+
     url <-
       base %>%
       paste0(id.season)
@@ -462,11 +451,12 @@ get_year_draft_combine <-
       tbl_df
 
     headers <-
-      json_data$resultSets$headers %>% unlist %>%
+      json_data$resultSets$headers %>%
+      unlist %>%
       str_to_lower()
 
     headers_df <-
-      get_headers() %>%
+      get_headers_combine() %>%
       mutate(name.nba = name.nba %>% str_to_lower()) %>%
       distinct()
 
@@ -502,6 +492,7 @@ get_year_draft_combine <-
       ) %>%
       dplyr::select(-matches(".shots")) %>%
       names()
+
     combine_data <-
       tbl_data %>%
       dplyr::select(-c(id.player, name.first, name.last)) %>%
@@ -512,45 +503,52 @@ get_year_draft_combine <-
         name.player = name.player %>% str_replace_all('\\.', ''),
         pct.body_fat = pct.body_fat / 100
       )
-    if ('off_drib_college_break_right.shots' %in% names(combine_data))
+
+    if ('off_drib_college_break_right.shots' %in% names(combine_data)) {
+      shot_names <-
+        combine_data %>%
+        dplyr::select(matches(".shot")) %>%
+        names()
+
       combine_data <-
-      combine_data %>%
-      mutate_each_(
-        funs(. %>% lapply(get_shot_pct) %>% unlist %>% as.character),
-        vars =
-          combine_data %>%
-          dplyr::select(contains(".shot")) %>%
-          names()
-      )
+        combine_data %>%
+        mutate_each_(funs(. %>% lapply(get_shot_pct) %>% unlist %>% as.character),
+                     vars = shot_names) %>%
+        mutate_at(.cols = shot_names,
+                  .funs = as.numeric)
+    }
+
     if (return_message == T) {
       "You got draft combine data for the " %>%
         paste0(combine_year, " draft combine")
     }
     return(combine_data)
   }
+
 #' get years draft combines
 #'
 #' @param combine_years
 #'
 #' @return
 #' @export
-#'
+#' @import dplyr purrr
 #' @examples
-get_all_draft_combines <- function(combine_years = 2000:2016) {
-  all_draft_combines <-
-    combine_years %>%
-    purrr::map(function(x)
-      get_year_draft_combine(combine_year =  x,
-                             return_message = T)) %>%
-    compact %>%
-    bind_rows
+get_years_draft_combines <-
+  function(combine_years = 2000:2016) {
+    all_draft_combines <-
+      combine_years %>%
+      purrr::map(function(x)
+        get_year_draft_combine(combine_year =  x,
+                               return_message = T)) %>%
+      compact %>%
+      bind_rows
 
-  all_draft_combines %<>%
-    mutate_each_(funs(as.numeric(.)),
-                 vars =
-                   all_draft_combines %>%
-                   dplyr::select(contains(".shots")) %>% names)
+    all_draft_combines %<>%
+      mutate_each_(funs(as.numeric(.)),
+                   vars =
+                     all_draft_combines %>%
+                     dplyr::select(contains(".shots")) %>% names)
 
-  return(all_draft_combines)
+    return(all_draft_combines)
 
-}
+  }

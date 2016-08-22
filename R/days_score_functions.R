@@ -36,28 +36,23 @@ load_needed_packages <-
     }
   }
 
-get_nba_day_score_json_data <- function(game_date) {
+#' Get Days JSON Score data
+#'
+#' @param game_date
+#'
+#' @return
+#' @import dplyr magrittr jsonlite tidyr stringr purrr curlconverter lubridate
+#' @export
+#'
+#' @examples
+get_nba_day_score_json_data <-
+  function(game_date = "04-10-2016") {
   package_df <-
     data.frame(installed.packages())
 
   if ('curlconverter' %in% package_df$Package == F) {
     devtools::install_github('hrbrmstr/curlconverter')
   }
-  packages <-
-    #need all of these installed including some from github
-    c(
-      'dplyr',
-      'magrittr',
-      'jsonlite',
-      'httr',
-      'curlconverter',
-      'tidyr',
-      'stringr',
-      'lubridate'
-    )
-  options(warn = -1)
-  install_needed_packages(packages)
-  load_needed_packages(packages)
   if (!game_date %>% class == "character") {
     stop("Make sure you enter date as a character!!")
   }
@@ -117,17 +112,26 @@ get_nba_day_score_json_data <- function(game_date) {
 
 }
 
-get_nba_day_score_json_data_safe <-
-  failwith(NULL, get_nba_day_score_json_data)
 
-get_day_nba_games <- function(date, return_message = T) {
+#' Get Day NBA Game
+#'
+#' @param date
+#' @param return_message
+#'
+#' @return
+#' @export
+#'
+#' @examples
+get_day_nba_games <-
+  function(date, return_message = T) {
+  get_nba_day_score_json_data_safe <-
+    failwith(NULL, get_nba_day_score_json_data)
   if (!'date' %>% exists()) {
     stop("Please enter a valid date")
   }
   json_data <-
     get_nba_day_score_json_data_safe(game_date = date)
-  install_needed_packages(function_packages)
-  load_needed_packages(function_packages)
+
   if (json_data %>% length == 0) {
     stop("No games for " %>% paste0(date))
   }
@@ -269,6 +273,16 @@ get_day_nba_games <- function(date, return_message = T) {
 get_day_nba_games_safe <-
   failwith(NULL, get_day_nba_games)
 
+#' Get Days NBA Games
+#'
+#' @param dates
+#' @param message
+#'
+#' @return
+#' @export
+#'
+#' @examples
+#' get_days_nba_games(dates = c("03-10-2016", "02-10-2016"))
 get_days_nba_games <-
   function(dates, message = T) {
     if(!'dates' %>% exists()) {
@@ -290,59 +304,86 @@ get_days_nba_games <-
     return(all_games)
   }
 
+#' Title
+#'
+#' @param date
+#' @param return_message
+#' @param merge_data_team
+#'
+#' @return
+#' @export
+#'
+#' @examples
 get_day_nba_game_scores <-  function(date,
                                      return_message = T,
                                      merge_data_team = T) {
   if (!'date' %>% exists()) {
     stop("Please enter a valid date")
   }
+  get_nba_day_score_json_data_safe <-
+    failwith(NULL, get_nba_day_score_json_data)
   json_data <-
     get_nba_day_score_json_data_safe(game_date = date)
-  install_needed_packages(function_packages)
-  load_needed_packages(function_packages)
+
   if (json_data %>% length == 0) {
     stop("No games for " %>% paste0(date))
   }
+    score_items <-
+      c(
+        "date.game",
+        "sequence.game",
+        "id.game",
+        "id.team",
+        "slug.team",
+        "city.team",
+        "team.record",
+        "pts.qtr1",
+        "pts.qtr2",
+        "pts.qtr3",
+        "pts.qtr4",
+        "pts.ot1",
+        "pts.ot2",
+        "pts.ot3",
+        "pts.ot4",
+        "pts.ot5",
+        "pts.ot6",
+        "pts.ot7",
+        "pts.ot8",
+        "pts.ot9",
+        "pts.ot10",
+        "pts",
+        "pct.fg",
+        "pct.ft",
+        "pct.fg3",
+        "ast",
+        "reb",
+        "tov"
+      )
 
-  days.scores <-
-    json_data$resultSets$rowSet[[2]] %>%
-    data.frame() %>%
-    tbl_df
+    days_games <-
+      json_data$resultSets$rowSet[[2]] %>% map_if(is.list, as.character) %>% length %>% as.numeric
 
-  names(days.scores) <-
-    c(
-      "date.game",
-      "sequence.game",
-      "id.game",
-      "id.team",
-      "slug.team",
-      "city.team",
-      "team.record",
-      "pts.qtr1",
-      "pts.qtr2",
-      "pts.qtr3",
-      "pts.qtr4",
-      "pts.ot1",
-      "pts.ot2",
-      "pts.ot3",
-      "pts.ot4",
-      "pts.ot5",
-      "pts.ot6",
-      "pts.ot7",
-      "pts.ot8",
-      "pts.ot9",
-      "pts.ot10",
-      "pts",
-      "pct.fg",
-      "pct.ft",
-      "pct.fg3",
-      "ast",
-      "reb",
-      "tov"
-    )
+    days.scores <-
+      data_frame()
+    for (x in 1:days_games) {
+    ds.df <-
+      json_data$resultSets$rowSet[[2]] %>% map_if(is.list, as.character) %>%
+      .[[x]] %>% data.frame(value = ., stringsAsFactors = F) %>%
+      as_tibble() %>%
+      mutate(value = value %>% gsub(pattern = "\\list()", replacement = NA, .),
+             item = score_items) %>%
+      spread(item, value) %>%
+      dplyr::select(one_of(score_items))
 
-  days.scores %<>%
-    mutate(date.game = date.game %>% as.Date('%Y-%m-%d'))
+    days.scores <-
+      days.scores %>%
+      bind_rows(ds.df)
+    }
+
+    days.scores <-
+    days.scores %>%
+    mutate(date.game = date.game %>% as.Date('%Y-%m-%d'),
+           team.record = team.record %>% gsub('\\-', NA, ''))
 
   if (days.scores$date.game %>% unique %>% month < 7) {
     year.season.start <-
@@ -420,19 +461,29 @@ get_day_nba_game_scores <-  function(date,
 
 }
 
-get_day_nba_game_scores_safe <-
-  failwith(NULL, get_day_nba_game_scores)
-
+#' Get Days NBA Scores
+#'
+#' @param dates
+#' @param merge
+#' @param message
+#'
+#' @return
+#' @export
+#'
+#' @examples
 get_days_nba_scores <-
   function(dates, merge = T,
            message = T) {
+    get_day_nba_game_scores_safe <-
+      failwith(NULL, get_day_nba_game_scores)
+
     if(!'dates' %>% exists()) {
       stop("Please enter game dates")
     }
     all_scores <-
       dates %>%
       purrr::map(function(x)
-        get_day_nba_game_scores(date = x, return_message = F, merge_data =  merge)
+        get_day_nba_game_scores_safe(date = x, return_message = F, merge_data =  merge)
       ) %>%
       compact %>%
       bind_rows
@@ -445,6 +496,16 @@ get_days_nba_scores <-
     return(all_scores)
   }
 
+#' Get Day NBA Tams Last Meeting
+#'
+#' @param date
+#' @param merge_team_data
+#' @param return_message
+#'
+#' @return
+#' @export
+#'
+#' @examples
 get_day_nba_teams_last_meeting <- function(date,
                                            merge_team_data = T,
                                            return_message = T) {
@@ -454,8 +515,7 @@ get_day_nba_teams_last_meeting <- function(date,
 
   json_data <-
     get_nba_day_score_json_data_safe(game_date = date)
-  install_needed_packages(function_packages)
-  load_needed_packages(function_packages)
+
   if (json_data %>% length == 0) {
     stop("No games for " %>% paste0(date))
   }
@@ -555,9 +615,16 @@ get_day_nba_teams_last_meeting <- function(date,
 
 }
 
-get_day_nba_teams_last_meeting_safe <-
-  failwith(NULL, get_day_nba_teams_last_meeting)
-
+#' Get days NBA teams last meeting
+#'
+#' @param dates
+#' @param merge
+#' @param message
+#'
+#' @return
+#' @export
+#'
+#' @examples
 get_days_nba_teams_last_meeting <-
   function(dates,
            merge = T,
@@ -565,6 +632,8 @@ get_days_nba_teams_last_meeting <-
     if(!'dates' %>% exists()) {
       stop("Please enter game dates")
     }
+    get_day_nba_teams_last_meeting_safe <-
+      failwith(NULL, get_day_nba_teams_last_meeting)
     all_last_meeetings <-
       dates %>%
       purrr::map(function(x)
@@ -584,16 +653,25 @@ get_days_nba_teams_last_meeting <-
     }
   }
 
+#' Get Day NBA League Standings
+#'
+#' @param date
+#' @param return_message
+#'
+#' @return
+#' @export
+#'
+#' @examples
 get_day_nba_league_standings <- function(date,
                                        return_message = T) {
   if (!'date' %>% exists()) {
     stop("Please enter a valid date")
   }
+  get_nba_day_score_json_data_safe <-
+    failwith(NULL, get_nba_day_score_json_data)
 
   json_data <-
     get_nba_day_score_json_data_safe(game_date = date)
-  install_needed_packages(function_packages)
-  load_needed_packages(function_packages)
   if (json_data %>% length == 0) {
     stop("No games for " %>% paste0(date))
   }
@@ -707,6 +785,16 @@ get_days_nba_league_standings <-
     }
   }
 
+#' Get Day NBA Game Player Tracking Availibility
+#'
+#' @param date
+#' @param merge_team_data
+#' @param return_message
+#'
+#' @return
+#' @export
+#'
+#' @examples
 get_day_nba_game_player_tracking_availability <-
   function(date,
            merge_team_data = T,
@@ -714,11 +802,11 @@ get_day_nba_game_player_tracking_availability <-
     if (!'date' %>% exists()) {
       stop("Please enter a valid date")
     }
-
+    get_nba_day_score_json_data_safe <-
+      failwith(NULL, get_nba_day_score_json_data)
     json_data <-
       get_nba_day_score_json_data_safe(game_date = date)
-    install_needed_packages(function_packages)
-    load_needed_packages(function_packages)
+
     if (json_data %>% length == 0) {
       stop("No games for " %>% paste0(date))
     }
@@ -791,6 +879,16 @@ get_day_nba_game_player_tracking_availability <-
 get_day_nba_game_player_tracking_availability_safe <-
   failwith(NULL, get_day_nba_game_player_tracking_availability)
 
+#' Get Days NBA Player Tracking Availibility Data
+#'
+#' @param dates
+#' @param merge
+#' @param message
+#'
+#' @return
+#' @export
+#'
+#' @examples
 get_days_nba_game_player_tracking_availability <-
   function(dates,
            merge = T,
@@ -818,25 +916,34 @@ get_days_nba_game_player_tracking_availability <-
     }
   }
 
+#' Get Day NBA Game Team Leaders
+#'
+#' @param date
+#' @param merge_team_data
+#' @param return_message
+#'
+#' @return
+#' @export
+#'
+#' @examples
 get_day_nba_game_team_leaders <-
-  function(date,
+  function(date = "03-10-2016",
            merge_team_data = T,
            return_message = T)  {
     if (!'date' %>% exists()) {
       stop("Please enter a valid date")
     }
-
+    get_nba_day_score_json_data_safe <-
+      failwith(NULL, get_nba_day_score_json_data)
     json_data <-
       get_nba_day_score_json_data_safe(game_date = date)
-    install_needed_packages(function_packages)
-    load_needed_packages(function_packages)
     if (json_data %>% length == 0) {
       stop("No games for " %>% paste0(date))
     }
 
     team_leader_data <-
       json_data$resultSets$rowSet[[8]] %>%
-      data.frame() %>%
+      data.frame(stringsAsFactors = F) %>%
       tbl_df
 
     names(team_leader_data) <-
@@ -857,8 +964,9 @@ get_day_nba_game_team_leaders <-
         "ast"
       )
 
-    team_leader_data %<>%
-      mutate(date.game = date %>% as.Date('%m/%d/%Y'))
+    team_leader_data <-
+      team_leader_data %>%
+      mutate(date.game = date %>% lubridate::mdy %>% as.Date('%m/%d/%Y'))
 
     if (date %>% mdy %>% month < 7) {
       year.season.start <-
@@ -874,7 +982,7 @@ get_day_nba_game_team_leaders <-
 
     names_numeric_cols <-
       team_leader_data %>%
-      dplyr::select(c(id.team, pts, reb, ast, contains("id.player"))) %>% names
+      dplyr::select(c(id.team, pts, reb, ast, matches("id.player"))) %>% names
 
 
     team_leader_data %<>%
@@ -883,8 +991,8 @@ get_day_nba_game_team_leaders <-
       mutate(id.season) %>%
       dplyr::select(id.season, date.game, everything())
 
-
-    team_leader_data %<>%
+    team_leader_data <-
+      team_leader_data %>%
       mutate(date.game = date.game %>% as.Date('%m/%d/%Y'),
              id.season) %>%
       unite(team, city.team, name.team, sep = ' ') %>%
@@ -893,6 +1001,7 @@ get_day_nba_game_team_leaders <-
     if (merge_team_data == T) {
       game_date <-
         date
+
       days_games_df <-
         get_day_nba_games(date = game_date, return_message = F)
 
@@ -932,6 +1041,16 @@ get_day_nba_game_team_leaders <-
 get_day_nba_game_team_leaders_safe <-
   failwith(NULL, get_day_nba_game_team_leaders)
 
+#' Get Days NBA Game Team Leaders
+#'
+#' @param dates
+#' @param merge
+#' @param message
+#'
+#' @return
+#' @export
+#'
+#' @examples
 get_days_nba_game_team_leaders <-
   function(dates,
            merge = T,
@@ -960,9 +1079,19 @@ get_days_nba_game_team_leaders <-
   }
 
 
+#' Get Day NBA Matchups
+#'
+#' @param is.today
+#' @param date
+#'
+#' @return
+#' @export
+#'
+#' @examples
 get_day_nba_matchups <-
-  function(is.today = T,
-           date = NA) {
+  function(date = "03-10-2016",
+           is.today = F
+           ) {
     get_dates_teams <- function(data) {
       data %<>%
         dplyr::select(date.game, id.game, slug.team.home, slug.team.away) %>%
@@ -1137,8 +1266,19 @@ get_day_nba_matchups <-
 get_day_nba_matchups_safe <-
   failwith(NULL, get_day_nba_matchups)
 
+#' Get Days NBA Matchups
+#'
+#' @param dates
+#' @param is.today
+#' @param message
+#'
+#' @return
+#' @export
+#'
+#' @examples
 get_days_nba_matchups <-
   function(dates,
+           is.today = F,
            message = T)  {
     if(!'dates' %>% exists()) {
       stop("Please enter game dates")
@@ -1146,7 +1286,8 @@ get_days_nba_matchups <-
     all_matchups <-
       dates %>%
       purrr::map(function(x)
-        get_day_nba_matchups_safe(date = x)
+        get_day_nba_matchups_safe(date = x,
+                                  is.today = F)
       ) %>%
       compact %>%
       bind_rows

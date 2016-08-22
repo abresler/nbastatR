@@ -1,7 +1,7 @@
 #' get_yahoo_nba_team_data
 #'
 #' @return
-#' @import rvest xml2 httr stringr dplyr tidyr purrr formattable magrittr
+#' @import rvest xml2 httr stringr dplyr tidyr purrr formattable magrittr readr
 #'
 #' @examples
 get_yahoo_nba_team_data <-
@@ -361,6 +361,7 @@ get_yahoo_item_name_df <-
 #'
 #' @return
 #' @import rvest xml2 httr stringr dplyr tidyr purrr formattable magrittr
+#' @importFrom readr parse_numeric
 #' @examples
 parse_yahoo_team_salary_data <-
   function(page, return_wide = F) {
@@ -378,7 +379,7 @@ parse_yahoo_team_salary_data <-
     team_tbl <-
       team_tbl %>%
       gather(idSeason, value, -item) %>%
-      mutate(value = value %>% extract_numeric()) %>%
+      mutate(value = value %>% parse_numeric()) %>%
       suppressWarnings() %>%
       left_join(get_yahoo_item_name_df()) %>%
       dplyr::select(idSeason, nameItem, value) %>%
@@ -401,6 +402,7 @@ parse_yahoo_team_salary_data <-
 #'
 #' @return
 #' @import rvest httr stringr dplyr tidyr purrr formattable
+#' @importFrom readr parse_numeric
 #'
 #' @examples
 parse_yahoo_player_salary_data <-
@@ -437,7 +439,7 @@ parse_yahoo_player_salary_data <-
           detailsSalary
         )
       ) %>%
-      mutate_each_(funs(extract_numeric), c('yearCapHold', 'amountSalary')) %>%
+      mutate_each_(funs(parse_numeric), c('yearCapHold', 'amountSalary')) %>%
       mutate_each_(funs(gsub('\\-', NA, .)),
                    c(
                      'typeRoster',
