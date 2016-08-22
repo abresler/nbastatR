@@ -160,7 +160,7 @@ get_hoopshype_teams_summary_salary_table <-
       'http://hoopshype.com/salaries/'
     page <-
       url %>%
-      html()
+      read_html()
 
     table_df <-
       page %>%
@@ -268,7 +268,7 @@ get_hoopshype_team_salary_table <-
 
     page <-
       url %>%
-      html()
+      read_html()
 
     name.player <-
       page %>%

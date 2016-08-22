@@ -1,38 +1,3 @@
-install_needed_packages <-
-  function(required_packages = function_packages) {
-    needed_packages <-
-      required_packages[!(required_packages %in% installed.packages()[, "Package"])]
-
-    if (length(needed_packages) > 0) {
-      if (!require("pacman"))
-        install.packages("pacman")
-      pacman::p_load(needed_packages)
-    }
-  }
-
-load_needed_packages <-
-  function(required_packages = function_packages) {
-    loaded_packages <-
-      gsub('package:', '', search())
-
-    package_to_load <-
-      required_packages[!required_packages %in% loaded_packages]
-    if (length(package_to_load) > 0) {
-      lapply(package_to_load, library, character.only = T)
-    }
-  }
-function_packages <-
-  #need all of these installed including some from github
-  c('dplyr',
-    'magrittr',
-    'jsonlite',
-    'tidyr',
-    'purrr',
-    'stringr',
-    'lubridate',
-    'tidyr')
-options(warn = -1)
-
 get_fd_name_df <-
   function() {
     fd_nba_name_df <-
@@ -85,7 +50,7 @@ get_fd_name_df <-
 get_headers <-
   function() {
     headers_df <-
-      data_frame(
+      dplyr::data_frame(
         name.nba = c(
           "PLAYER_ID",
           "SEASON_ID",
@@ -439,21 +404,19 @@ get_headers <-
     return(headers_df)
   }
 
+
+#' Get NBA Player IDs
+#'
+#' @param league
+#' @param active_only
+#' @import dplyr magrittr jsonlite tidyr stringr readr
+#' @return
+#' @export
+#'
+#' @examples
 get_nba_players_ids <-
   function(league = "NBA",
            active_only = F) {
-    function_packages <-
-      #need all of these installed including some from github
-      c('dplyr',
-        'magrittr',
-        'jsonlite',
-        'tidyr',
-        'stringr',
-        'purrr',
-        'data.table',
-        'tidyr')
-    install_needed_packages(function_packages)
-    load_needed_packages(function_packages)
     if (!'league' %>% exists) {
       stop("Please enter either NBA or NBDL")
     }
@@ -524,14 +487,19 @@ get_nba_players_ids <-
 
     data$name.player <-
       names_df$player
-    data %<>%
+
+    data <-
+      data %>%
       mutate(
         id.player = id.player %>% as.numeric,
         is.on_roster = ifelse(id.team == 0, FALSE, TRUE),
         id.team = id.team %>% as.numeric
       ) %>%
-      dplyr::select(-c(status.roster, name.last.display)) %>%
-      mutate_each(funs(extract_numeric), starts_with("year.")) %>%
+      dplyr::select(-c(status.roster, name.last.display))
+
+    data <-
+      data %>%
+      mutate_each(funs(parse_numeric), matches("year.")) %>%
       mutate(
         id.team = ifelse(id.team == 0, NA, id.team),
         city.team = ifelse(city.team == '', NA, city.team),
@@ -572,6 +540,18 @@ get_nba_players_ids <-
     return(data)
   }
 
+
+
+#' Title
+#'
+#' @param year.season_start
+#' @param include_only_rostered_players
+#' @param return_message
+#'
+#' @return
+#' @export
+#'
+#' @examples
 get_nba_season_players <-
   function(year.season_start = 2012,
            include_only_rostered_players = F,
@@ -605,7 +585,8 @@ get_nba_season_players <-
       dplyr::filter(nba_year.to <= year.to) %>%
       dplyr::filter(nba_year.from >= year.from)
 
-    seasons_players %<>%
+    seasons_players <-
+      seasons_players %>%
       mutate(id.season,
              is.rookie = ifelse(year.from == nba_year.to, T, F)) %>%
       dplyr::select(league,
@@ -638,9 +619,17 @@ get_nba_season_players <-
     return(seasons_players)
   }
 
-get_nba_season_players_safe <-
-  failwith(NULL, get_nba_season_players)
 
+#' Get NBA Seasons Players
+#'
+#' @param years
+#' @param only_on_roster
+#' @param message
+#' @importFrom purrr map
+#' @return
+#' @export
+#'
+#' @examples
 get_nba_seasons_players <-
   function(years = 1960:2015,
            only_on_roster = F,
@@ -648,13 +637,15 @@ get_nba_seasons_players <-
     if (!'years' %>% exists) {
       stop("Please enter the years whose data you want")
     }
+    get_nba_season_players_safe <-
+      failwith(NULL, get_nba_season_players)
     all_rosters <-
       years %>%
       map({
         function(x)
-          get_nba_season_players(x,
-                                 include_only_rostered_players = only_on_roster,
-                                 return_message = message)
+          get_nba_season_players_safe(x,
+                                      include_only_rostered_players = only_on_roster,
+                                      return_message = message)
       }) %>%
       compact %>%
       bind_rows
@@ -666,7 +657,7 @@ height_in_inches <-
   function(height) {
     height_ft_in <-
       height %>%
-      str_split("-") %>%
+      stringr::str_split("-") %>%
       unlist %>%
       as.numeric()
     height_in <-
@@ -674,25 +665,22 @@ height_in_inches <-
     return(height_in)
   }
 
+#' Get Player Profile
+#'
+#' @param player
+#' @param player_id
+#' @param include_headline_stat
+#' @param return_message
+#' @import magrittr readr dplyr tidyr formattable jsonlite lubridate purrr stringr
+#' @return
+#' @export
+#'
+#' @examples
 get_player_profile <-
   function(player = "Brook Lopez",
            player_id = NA,
            include_headline_stat = T,
            return_message = T) {
-    function_packages <-
-      c(
-        "magrittr",
-        "dplyr",
-        "readr",
-        "formattable",
-        "tidyr",
-        "purrr",
-        'jsonlite',
-        'lubridate',
-        "stringr"
-      )
-    install_needed_packages(function_packages)
-    load_needed_packages(function_packages)
     players <-
       get_nba_players_ids()
 
@@ -884,9 +872,17 @@ get_player_profile <-
     return(data)
   }
 
-get_player_profile_safe <-
-  failwith(NULL, get_player_profile)
-
+#' Get Seaons Player Profiles
+#'
+#' @param year.season_start
+#' @param include_headline_stats
+#' @param only_rostered_players
+#' @param message
+#'
+#' @return
+#' @export
+#'
+#' @examples
 get_season_player_profiles <-
   function(year.season_start = 2014,
            include_headline_stats = T,
@@ -894,10 +890,14 @@ get_season_player_profiles <-
            message = T) {
     season <-
       year.season_start
+    get_player_profile_safe <-
+      failwith(NULL, get_player_profile)
     player_id_df <-
-      get_nba_season_players(year.season_start = season,
-                             include_only_rostered_players = only_rostered_players,
-                             return_message = message)
+      get_nba_season_players(
+        year.season_start = season,
+        include_only_rostered_players = only_rostered_players,
+        return_message = message
+      )
 
     player_ids <-
       player_id_df$id.player
@@ -906,11 +906,14 @@ get_season_player_profiles <-
       player_ids %>%
       map({
         function(x)
-        	get_player_profile(player_id = x,include_headline_stat = include_headline_stats,
-                                       return_message = message)
+          get_player_profile_safe(
+            player_id = x,
+            include_headline_stat = include_headline_stats,
+            return_message = message
+          )
       }) %>%
       compact %>%
       bind_rows
-    
+
     return(all_profiles)
   }
