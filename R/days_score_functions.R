@@ -757,15 +757,24 @@ get_day_nba_league_standings <- function(date,
 
 }
 
-get_day_nba_league_standings_safe <-
-  failwith(NULL, get_day_nba_league_standings)
 
+#' Get Days NBA League Standings
+#'
+#' @param dates
+#' @param message
+#'
+#' @return
+#' @export
+#'
+#' @examples
 get_days_nba_league_standings <-
   function(dates,
            message = T) {
     if(!'dates' %>% exists()) {
       stop("Please enter game dates")
     }
+    get_day_nba_league_standings_safe <-
+      failwith(NULL, get_day_nba_league_standings)
     all_standings <-
       dates %>%
       purrr::map(function(x)
@@ -1038,9 +1047,6 @@ get_day_nba_game_team_leaders <-
 
   }
 
-get_day_nba_game_team_leaders_safe <-
-  failwith(NULL, get_day_nba_game_team_leaders)
-
 #' Get Days NBA Game Team Leaders
 #'
 #' @param dates
@@ -1058,6 +1064,9 @@ get_days_nba_game_team_leaders <-
     if(!'dates' %>% exists()) {
       stop("Please enter game dates")
     }
+    get_day_nba_game_team_leaders_safe <-
+      failwith(NULL, get_day_nba_game_team_leaders)
+
     all_leaders <-
       dates %>%
       purrr::map(function(x)

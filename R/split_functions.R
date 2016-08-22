@@ -1,27 +1,12 @@
-install_needed_packages <-
-  function(required_packages = function_packages) {
-    needed_packages <-
-      required_packages[!(required_packages %in% installed.packages()[, "Package"])]
-
-    if (length(needed_packages) > 0) {
-      if (!require("pacman"))
-        install.packages("pacman")
-      pacman::p_load(needed_packages)
-    }
-  }
-
-load_needed_packages <-
-  function(required_packages = function_packages) {
-    loaded_packages <-
-      gsub('package:', '', search())
-
-    package_to_load <-
-      required_packages[!required_packages %in% loaded_packages]
-    if (length(package_to_load) > 0) {
-      lapply(package_to_load, library, character.only = T)
-    }
-  }
-
+#' Height in Inches
+#'
+#' @param height
+#'
+#' @return
+#' @export
+#' @importFrom stringr str_split
+#'
+#' @examples
 height_in_inches <-
   function(height) {
     function_packages <-
@@ -39,10 +24,15 @@ height_in_inches <-
   }
 
 
+#' Get Headers DF
+#'
+#' @return
+#' @export
+#' @import purrr magrittr dplyr tidyr stringr
+#' @examples
 get_headers <- function() {
   function_packages <-
     c("dplyr", "magrittr", "tidyr", "purrr", "stringr")
-  load_needed_packages(function_packages)
 
   headers_df <-
     data_frame(
@@ -415,8 +405,17 @@ get_headers <- function() {
   return(headers_df)
 }
 
+#' Clean to Stem
+#'
+#' @param x
+#'
+#' @return
+#' @export
+#' @importFrom stringr str_replace
+#' @examples
 clean_to_stem <- function(x) {
-  x %<>%
+  x <-
+    x %>%
     str_replace('\\ ', '\\+') %>%
     str_replace('\\/', '\\2F') %>%
     str_replace("\\'", '%27')
@@ -425,14 +424,15 @@ clean_to_stem <- function(x) {
 
 }
 
-function_packages <-
-  c("dplyr", "magrittr", "tidyr", "purrr", "stringr", 'lubridate',
-    'jsonlite')
-
-
 # teams -------------------------------------------------------------------
 
 
+#' Get Team ID DF
+#'
+#' @return
+#' @export
+#' @import dplyr
+#' @examples
 get_team_id_df <-
   function() {
     team_id_df <-
@@ -592,6 +592,37 @@ get_team_id_df <-
     return(team_id_df)
   }
 
+#' Get Team Season Stat Splits
+#'
+#' @param team
+#' @param year.season_start
+#' @param season_type
+#' @param measure_type
+#' @param per_mode
+#' @param is.plus_minus
+#' @param is.pace_adjusted
+#' @param period
+#' @param is.rank
+#' @param game_segment
+#' @param division_against
+#' @param conference_against
+#' @param date_from
+#' @param date_to
+#' @param last_n_games
+#' @param location
+#' @param month
+#' @param season_segment
+#' @param opponent
+#' @param outcome
+#' @param playoff_round
+#' @param shot_clock_range
+#' @param return_message
+#' @param ...
+#'
+#' @return
+#' @export
+#'
+#' @examples
 get_team_season_stat_splits <-
   function(team = "Brooklyn Nets",
            year.season_start = 2015,
@@ -649,8 +680,7 @@ get_team_season_stat_splits <-
            ),
            return_message = T,
            ...) {
-    install_needed_packages(function_packages)
-    load_needed_packages(function_packages)
+
     team_id_df <-
       get_team_id_df()
     t <-
@@ -1037,7 +1067,7 @@ get_team_season_stat_splits <-
 
     data %<>%
       mutate_each_(funs(as.numeric),
-                   vars = data %>% dplyr::select(-contains("group")) %>% names)
+                   vars = data %>% dplyr::select(-matches("group")) %>% names)
 
     data %<>%
       mutate(
@@ -1143,6 +1173,36 @@ get_team_season_stat_splits <-
     return(data)
   }
 
+#' Get Teams Seasons Stat Splits
+#'
+#' @param teams
+#' @param year.season_start
+#' @param season_type
+#' @param measure_type
+#' @param per_mode
+#' @param is.plus_minus
+#' @param is.pace_adjusted
+#' @param period
+#' @param is.rank
+#' @param game_segment
+#' @param division_against
+#' @param conference_against
+#' @param date_from
+#' @param date_to
+#' @param last_n_games
+#' @param location
+#' @param month
+#' @param season_segment
+#' @param opponent
+#' @param outcome
+#' @param playoff_round
+#' @param shot_clock_range
+#' @param message
+#'
+#' @return
+#' @export
+#'
+#' @examples
 get_teams_season_stat_splits <-
   function(teams = c(
     "Atlanta Hawks",
@@ -1269,21 +1329,19 @@ get_teams_season_stat_splits <-
 
 # players -----------------------------------------------------------------
 
+#' Get NBA Player IDs
+#'
+#' @param league
+#' @param active_only
+#' @import dplyr magrittr jsonlite tidyr stringr readr
+#' @return
+#' @export
+#'
+#' @examples
 get_nba_players_ids <-
   function(league = "NBA",
            active_only = F) {
-    function_packages <-
-      #need all of these installed including some from github
-      c('dplyr',
-        'magrittr',
-        'jsonlite',
-        'tidyr',
-        'stringr',
-        'purrr',
-        'data.table',
-        'tidyr')
-    install_needed_packages(function_packages)
-    load_needed_packages(function_packages)
+
     if (!'league' %>% exists) {
       stop("Please enter either NBA or NBDL")
     }
@@ -1354,14 +1412,19 @@ get_nba_players_ids <-
 
     data$name.player <-
       names_df$player
-    data %<>%
+
+    data <-
+      data %>%
       mutate(
         id.player = id.player %>% as.numeric,
         is.on_roster = ifelse(id.team == 0, FALSE, TRUE),
         id.team = id.team %>% as.numeric
       ) %>%
-      dplyr::select(-c(status.roster, name.last.display)) %>%
-      mutate_each(funs(extract_numeric), starts_with("year.")) %>%
+      dplyr::select(-c(status.roster, name.last.display))
+
+    data <-
+      data %>%
+      mutate_each(funs(parse_numeric), matches("year.")) %>%
       mutate(
         id.team = ifelse(id.team == 0, NA, id.team),
         city.team = ifelse(city.team == '', NA, city.team),
@@ -1403,6 +1466,36 @@ get_nba_players_ids <-
   }
 
 
+#' Get Player Season Stat Split
+#'
+#' @param player
+#' @param year.season_start
+#' @param season_type
+#' @param measure_type
+#' @param per_mode
+#' @param is.plus_minus
+#' @param is.pace_adjusted
+#' @param period
+#' @param is.rank
+#' @param game_segment
+#' @param division_against
+#' @param conference_against
+#' @param date_from
+#' @param date_to
+#' @param last_n_games
+#' @param location
+#' @param month
+#' @param season_segment
+#' @param opponent
+#' @param outcome
+#' @param playoff_round
+#' @param shot_clock_range
+#' @param return_message
+#' @importFrom readr parse_numeric
+#' @return
+#' @export
+#'
+#' @examples
 get_player_season_stat_split <-
   function(player = "Brook Lopez",
            year.season_start = 2015,
@@ -1465,21 +1558,9 @@ get_player_season_stat_split <-
     if ('curlconverter' %in% package_df$Package == F) {
       devtools::install_github('hrbrmstr/curlconverter')
     }
-    packages <-
-      #need all of these installed including some from github
-      c(
-        'dplyr',
-        'magrittr',
-        'jsonlite',
-        'httr',
-        'curlconverter',
-        'tidyr',
-        'stringr',
-        'lubridate'
-      )
+
     options(warn = -1)
-    install_needed_packages(packages)
-    load_needed_packages(packages)
+
 
     player_id_df <-
       get_nba_players_ids(league = "NBA")
@@ -1888,7 +1969,7 @@ get_player_season_stat_split <-
 
     data %<>%
       mutate_each_(funs(. %>% as.numeric %>% abs),
-                   vars = data %>% dplyr::select(-contains("group")) %>% names)
+                   vars = data %>% dplyr::select(-matches("group")) %>% names)
 
     data %<>%
       mutate(
@@ -1995,6 +2076,36 @@ get_player_season_stat_split <-
 
   }
 
+#' Get Players Seasons Stat Splits
+#'
+#' @param players
+#' @param year.season_start
+#' @param season_type
+#' @param measure_type
+#' @param per_mode
+#' @param is.plus_minus
+#' @param is.pace_adjusted
+#' @param period
+#' @param is.rank
+#' @param game_segment
+#' @param division_against
+#' @param conference_against
+#' @param date_from
+#' @param date_to
+#' @param last_n_games
+#' @param location
+#' @param month
+#' @param season_segment
+#' @param opponent
+#' @param outcome
+#' @param playoff_round
+#' @param shot_clock_range
+#' @param message
+#'
+#' @return
+#' @export
+#'
+#' @examples
 get_players_season_stat_splits <-
   function(players = c(
     "Brook Lopez",

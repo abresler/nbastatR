@@ -4,7 +4,7 @@
 \name{function_packages}
 \alias{function_packages}
 \title{Title}
-\format{An object of class \code{character} of length 7.}
+\format{An object of class \code{character} of length 12.}
 \usage{
 function_packages
 }
