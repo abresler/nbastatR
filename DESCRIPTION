@@ -1,7 +1,7 @@
 Package: nbastatR
 Type: Package
 Title: R's interface to NBA data
-Version: 0.1.104
+Version: 0.1.105
 Authors@R: c(person("Alex", "Bresler", email = "abresler@asbcllc.com", role = c("aut", "cre")))
 Description: R's resource to bring in NBA data from the myriad of repositories
     across the web.
@@ -27,6 +27,10 @@ Imports:
     httr,
     ggplot2,
     visNetwork,
+    data.tree,
+    networkD3,
+    curl,
     kohonen,
-    gmum.r
+    gmum.r,
+    curlconverter
 RoxygenNote: 6.0.1

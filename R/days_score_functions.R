@@ -98,8 +98,8 @@ get_nba_day_score_json_data <-
 
   nba_url <-
     request_url %>%
-    straighten() %>%
-    make_req(quiet = TRUE) %>%
+    curlconverter::straighten() %>%
+    curlconverter::make_req(quiet = TRUE) %>%
     suppressMessages()
 
   json_data <-

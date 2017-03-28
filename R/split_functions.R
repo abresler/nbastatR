@@ -1492,6 +1492,7 @@ get_nba_players_ids <-
 #' @param shot_clock_range
 #' @param return_message
 #' @importFrom readr parse_number
+#' @import jsonlite dplyr curlconverter purrr tidyr
 #' @return
 #' @export
 #'
@@ -1920,8 +1921,8 @@ get_player_season_stat_split <-
 
     nba_url <-
       request_url %>%
-      straighten() %>%
-      make_req(quiet = TRUE) %>%
+      curlconverter::straighten() %>%
+      curlconverter::make_req(quiet = TRUE) %>%
       suppressMessages()
 
     json_data <-
