@@ -13,4 +13,3 @@ get_day_nba_teams_last_meeting(date, merge_team_data = T,
 \description{
 Get Day NBA Tams Last Meeting
 }
-

@@ -12,4 +12,3 @@ get_years_draft_combines(combine_years = 2000:2016)
 \description{
 get years draft combines
 }
-

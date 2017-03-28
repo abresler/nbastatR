@@ -9,4 +9,3 @@ get_headers_combine()
 \description{
 get headers combine
 }
-

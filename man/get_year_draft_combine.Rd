@@ -12,4 +12,3 @@ get_year_draft_combine(combine_year = 2014, return_message = T)
 \description{
 Get Year Draft Combines
 }
-

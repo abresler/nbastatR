@@ -12,4 +12,3 @@ get_nba_day_score_json_data(game_date = "04-10-2016")
 \description{
 Get Days JSON Score data
 }
-

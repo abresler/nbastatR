@@ -12,4 +12,3 @@ get_days_nba_scores(dates, merge = T, message = T)
 \description{
 Get Days NBA Scores
 }
-

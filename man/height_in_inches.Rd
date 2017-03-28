@@ -2,6 +2,7 @@
 % Please edit documentation in R/split_functions.R, R/teams_rosters_history.R
 \name{height_in_inches}
 \alias{height_in_inches}
+\alias{height_in_inches}
 \title{Height in Inches}
 \usage{
 height_in_inches(height)
@@ -18,4 +19,3 @@ Height in Inches
 
 Get Height in Inches
 }
-

@@ -12,4 +12,3 @@ parse_yahoo_team_salary_data(page, return_wide = F)
 \description{
 parse_yahoo_team_salary_data
 }
-

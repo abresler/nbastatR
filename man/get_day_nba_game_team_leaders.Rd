@@ -13,4 +13,3 @@ get_day_nba_game_team_leaders(date = "03-10-2016", merge_team_data = T,
 \description{
 Get Day NBA Game Team Leaders
 }
-

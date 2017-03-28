@@ -12,4 +12,3 @@ get_days_nba_league_standings(dates, message = T)
 \description{
 Get Days NBA League Standings
 }
-

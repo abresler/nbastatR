@@ -10,4 +10,3 @@ get_nba_seasons_players(years = 1960:2015, only_on_roster = F,
 \description{
 Get NBA Seasons Players
 }
-

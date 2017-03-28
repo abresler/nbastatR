@@ -1424,7 +1424,7 @@ get_nba_players_ids <-
 
     data <-
       data %>%
-      mutate_each(funs(parse_numeric), matches("year.")) %>%
+      mutate_each(funs(parse_number), matches("year.")) %>%
       mutate(
         id.team = ifelse(id.team == 0, NA, id.team),
         city.team = ifelse(city.team == '', NA, city.team),
@@ -1491,7 +1491,7 @@ get_nba_players_ids <-
 #' @param playoff_round
 #' @param shot_clock_range
 #' @param return_message
-#' @importFrom readr parse_numeric
+#' @importFrom readr parse_number
 #' @return
 #' @export
 #'

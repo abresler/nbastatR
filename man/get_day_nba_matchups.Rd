@@ -12,4 +12,3 @@ get_day_nba_matchups(date = "03-10-2016", is.today = F)
 \description{
 Get Day NBA Matchups
 }
-

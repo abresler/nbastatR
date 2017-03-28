@@ -1,20 +1,3 @@
-packages <- #need all of these installed including some from github
-  c(
-    'dplyr',
-    'magrittr',
-    'jsonlite',
-    'tidyr',
-    'httr',
-    'rvest',
-    'purrr',
-    'data.table',
-    'stringr',
-    'lubridate',
-    'tidyr'
-  )
-options(warn = -1)
-lapply(packages, library, character.only = T)
-
 get_basketball_insider_team_ids <- function() {
   data <-
     data_frame(

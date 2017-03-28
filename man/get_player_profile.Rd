@@ -10,4 +10,3 @@ get_player_profile(player, id.player = NULL, include_headline_stat = T,
 \description{
 Get Player Profile
 }
-

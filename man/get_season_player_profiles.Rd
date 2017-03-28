@@ -13,4 +13,3 @@ get_season_player_profiles(year.season_start = 2014,
 \description{
 Get Seaons Player Profiles
 }
-

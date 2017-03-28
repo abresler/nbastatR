@@ -12,4 +12,3 @@ get_days_nba_matchups(dates, is.today = F, message = T)
 \description{
 Get Days NBA Matchups
 }
-

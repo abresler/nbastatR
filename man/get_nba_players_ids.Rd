@@ -2,6 +2,7 @@
 % Please edit documentation in R/get_player_profile.R, R/split_functions.R
 \name{get_nba_players_ids}
 \alias{get_nba_players_ids}
+\alias{get_nba_players_ids}
 \title{Get NBA Player IDs}
 \usage{
 get_nba_players_ids(league = "NBA", active_only = F)
@@ -13,4 +14,3 @@ Get NBA Player IDs
 
 Get NBA Player IDs
 }
-

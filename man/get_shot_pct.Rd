@@ -12,4 +12,3 @@ get_shot_pct(x)
 \description{
 get shot pct
 }
-

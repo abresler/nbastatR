@@ -13,4 +13,3 @@ get_days_nba_game_player_tracking_availability(dates, merge = T,
 \description{
 Get Days NBA Player Tracking Availibility Data
 }
-

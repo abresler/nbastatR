@@ -53,4 +53,3 @@ Gets NBA team Bokeh Shot Chart
 \examples{
 plot_nba_team_season_bokeh_shotchart(team = "Nets", plot_hex = F, quarter_range = c(3,4))
 }
-

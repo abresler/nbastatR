@@ -13,4 +13,3 @@ get_nba_season_players(year.season_start = 2012,
 \description{
 Title
 }
-

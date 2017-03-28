@@ -12,4 +12,3 @@ get_days_nba_game_team_leaders(dates, merge = T, message = T)
 \description{
 Get Days NBA Game Team Leaders
 }
-

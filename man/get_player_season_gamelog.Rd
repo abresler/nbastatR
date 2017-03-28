@@ -18,4 +18,3 @@ Title
 \examples{
 get_player_season_gamelog(player = "John Stockton", year.season_start = 1994, include_player_metadata = T)
 }
-

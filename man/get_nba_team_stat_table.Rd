@@ -33,4 +33,3 @@ get_nba_team_stat_table(year.season_start = 2015,
 \description{
 get_nba_team_stat_table
 }
-

@@ -12,4 +12,3 @@ parse_yahoo_player_salary_data(page, format_currency = T, return_wide = F)
 \description{
 parse_yahoo_player_salary_data
 }
-

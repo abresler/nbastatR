@@ -23,4 +23,3 @@ GET NBA PLAYER SHOT DETAIL DATA
 \examples{
 get_player_season_shot_data(player = "K.J. Mcdaniels", year_season_end = 2015)
 }
-

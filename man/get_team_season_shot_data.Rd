@@ -20,4 +20,3 @@ get_team_season_shot_data(team = "Brooklyn Nets", year_roster = 2016,
 \description{
 Get Teams Shot Data
 }
-

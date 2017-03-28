@@ -18,4 +18,3 @@
 \description{
 get_yahoo_team_salary_data
 }
-

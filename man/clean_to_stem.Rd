@@ -12,4 +12,3 @@ clean_to_stem(x)
 \description{
 Clean to Stem
 }
-

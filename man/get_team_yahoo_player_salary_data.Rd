@@ -17,4 +17,3 @@ get_team_yahoo_player_salary_data(team_name = c("New York Knicks"),
 \description{
 get_team_yahoo_player_salary_data
 }
-

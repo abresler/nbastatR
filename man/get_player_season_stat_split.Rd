@@ -24,4 +24,3 @@ get_player_season_stat_split(player = "Brook Lopez",
 \description{
 Get Player Season Stat Split
 }
-

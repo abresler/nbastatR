@@ -12,4 +12,3 @@ get_teams_yahoo_team_salary_data(team_names = c("Boston Celtics",
 \description{
 get_teams_yahoo_team_salary_data
 }
-

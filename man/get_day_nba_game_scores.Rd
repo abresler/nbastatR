@@ -12,4 +12,3 @@ get_day_nba_game_scores(date, return_message = T, merge_data_team = T)
 \description{
 Title
 }
-

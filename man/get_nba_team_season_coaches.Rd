@@ -13,4 +13,3 @@ get_nba_team_season_coaches(team, year_season_end = 2016,
 \description{
 Get NBA Team Season Coaches
 }
-

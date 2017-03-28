@@ -12,4 +12,3 @@ get_day_nba_games(date, return_message = T)
 \description{
 Get Day NBA Game
 }
-

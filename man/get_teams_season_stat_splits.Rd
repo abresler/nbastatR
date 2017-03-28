@@ -35,4 +35,3 @@ get_teams_season_stat_splits(teams = c("Atlanta Hawks", "Boston Celtics",
 \description{
 Get Teams Seasons Stat Splits
 }
-

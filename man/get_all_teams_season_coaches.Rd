@@ -12,4 +12,3 @@ get_all_teams_season_coaches(year_season_end = 2005, message = T)
 \description{
 Get All Teams Season Coaches
 }
-

@@ -25,4 +25,3 @@ Get's NBA player's season shot chart with specific parameters
 shot_areas = c('Paint', 'Mid-Range'), use_shot_zone_side = T, season_segment = 'Post All-Star',
 year_season_end = 2015, author = "Alex Bresler")
 }
-

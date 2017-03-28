@@ -12,4 +12,3 @@ get_days_nba_teams_last_meeting(dates, merge = T, message = T)
 \description{
 Get days NBA teams last meeting
 }
-

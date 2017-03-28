@@ -27,4 +27,3 @@ get_team_season_stat_splits(team = "Brooklyn Nets",
 \description{
 Get Team Season Stat Splits
 }
-

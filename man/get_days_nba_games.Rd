@@ -15,4 +15,3 @@ Get Days NBA Games
 \examples{
 get_days_nba_games(dates = c("03-10-2016", "02-10-2016"))
 }
-
