@@ -414,7 +414,8 @@ get_headers <- function() {
 }
 
 clean_to_stem <- function(x) {
-  x %<>%
+  x <-
+    x %>%
     str_replace('\\ ', '\\+') %>%
     str_replace('\\/', '\\2F') %>%
     str_replace("\\'", '%27')
