@@ -46,6 +46,38 @@ normalize_data <-
                           "totalsPTS", "pct3PRate", "pctFTRate", "pctORB", "pctDRB", "pctAST",
                           "pctSTL", "pctBLK", "pctTOV")
          ) {
+    if (scale_to_minute %>% is_null()){
+      scale_to_minute <- TRUE
+    }
+
+    if (data_columns %>% is_null()) {
+      data_columns <-
+        c(
+          "totalsFG3M",
+          "totalsFG3A",
+          "totalsFG2M",
+          "totalsFG2A",
+          "totalsFTM",
+          "totalsFTA",
+          "totalsORB",
+          "totalsDRB",
+          "totalsTRB",
+          "totalsAST",
+          "totalsSTL",
+          "totalsBLK",
+          "totalsTOV",
+          "totalsPF",
+          "totalsPTS",
+          "pct3PRate",
+          "pctFTRate",
+          "pctORB",
+          "pctDRB",
+          "pctAST",
+          "pctSTL",
+          "pctBLK",
+          "pctTOV"
+        )
+    }
 
     if (!purrr::is_null(minute_minimum)) {
     data <-
@@ -133,8 +165,10 @@ generate_som_model <-
            y_dim = NULL,
            topology = "hexagonal",
            seed = 998,
+           rlength = 1000,
            clusters = 10,
            include_neural_gas = TRUE,
+           include_neighbors = TRUE,
            override_max_nodes = TRUE,
            return_message = TRUE) {
     if (!class(data) == 'matrix') {
@@ -142,11 +176,20 @@ generate_som_model <-
         data %>%
         as.matrix()
     }
+    if (clusters %>% is_null()) {
+      clusters <- 10
+    }
+    if (include_neural_gas %>% is_null()) {
+      include_neural_gas <-
+        TRUE
+    }
+    if (include_neighbors %>% is_null()) {}
     if (!purrr::is_null(seed)) {
-    set.seed(908)
+      set.seed(908)
     }
     generate_topology <-
-      x_dim %>% purrr::is_null() & y_dim %>% purrr::is_null()
+      x_dim %>% purrr::is_null() &
+      y_dim %>% purrr::is_null()
 
     if (generate_topology) {
       df_topo <-
@@ -168,25 +211,29 @@ generate_som_model <-
       kohonen::somgrid(xdim = x_dim,
                        ydim = y_dim,
                        topo = topology)
+    if (rlength %>% purrr::is_null()) {
+      rlength <-
+        10000
+    }
 
     som_model <-
       data %>%
       kohonen::supersom(
         grid = som_grid,
-        rlen = 100,
+        rlen = rlength,
         alpha = c(.05, .01),
         keep.data = TRUE,
         mode = c("online", "batch", "pbatch"),
         cores = -1
-      )
+        )
 
-  som_cluster <-
-    som_model$codes %>%
-    data.frame(stringsAsFactors = FALSE) %>%
-    dist() %>%
-    hclust() %>%
-    cutree(clusters) %>%
-    as.numeric()
+    som_cluster <-
+      som_model$codes %>%
+      data.frame(stringsAsFactors = FALSE) %>%
+      dist() %>%
+      hclust() %>%
+      cutree(clusters) %>%
+      as.numeric()
 
   cluster_name <-
     som_cluster[som_model$unit.classif]
@@ -211,23 +258,42 @@ generate_som_model <-
       max_nodes <- 10000
     }
 
-    gng_names <-
+    gng_nba <-
       data %>%
       gmum.r::GNG(max.nodes = max_nodes, max.edge.age = 5000)
 
-    gng_clusters <- gng_names$getClustering()
+    gng_clusters <-
+      gng_nba$getClustering()
 
     som_df <-
       som_df %>%
       mutate(groupNeuralGas = gng_clusters) %>%
       dplyr::select(idPlayerSeason, clusterSOM, groupSOM, groupNeuralGas, everything())
 
-    rm(gng_names)
+    if (include_neighbors) {
+      df_neighbors <-
+        1:numberNodes(gng_nba) %>%
+        map_df(function(x){
+          countNeighbors <- length(node(gng_nba, x)$neighbours)
+          node_neighbors <- node(gng_nba, x)$neighbours %>% str_c(collapse = ', ')
+          data_frame(groupNeuralGas = x, countNeighbors, groupNeuralGasNeighbors = node_neighbors)
+        })
+      som_df <-
+        som_df %>%
+        left_join(df_neighbors) %>%
+        dplyr::select(idPlayerSeason:groupNeuralGas, countNeighbors, groupNeuralGasNeighbors, everything()) %>%
+        suppressMessages()
+    }
   }
 
   data <-
     data_frame(nameItem = c('SOM Model', 'Codebook'), dataItem = list(som_model, som_df))
 
+  if (include_neural_gas) {
+    data <-
+      data %>%
+      bind_rows(data_frame(nameItem = 'GNG Server', dataItem = list(gng_nba)))
+  }
   return(data)
   }
 
@@ -245,7 +311,9 @@ generate_som_model <-
 #' \item y_dim
 #' \item seed
 #' \item clusters
+#' \item rlength
 #' \item include_neural_gas
+#' \item include_neighbors
 #' \item override max_nodes
 #' }
 #' @param filter_na
@@ -284,13 +352,16 @@ generate_som <-
       "pctTOV"
     )
   ),
-  topology_parameters = list(x_dim = NULL,
-                              y_dim = NULL,
-                              topology = "hexagonal",
-                              seed = 998,
-                              clusters = 10,
-                              include_neural_gas = TRUE,
-                              override_max_nodes = TRUE),
+  topology_parameters = list(
+    x_dim = NULL,
+    y_dim = NULL,
+    topology = "hexagonal",
+    seed = 998,
+    clusters = 10,
+    rlength = 1000,
+    include_neural_gas = TRUE,
+    override_max_nodes = TRUE
+  ),
   filter_na = TRUE,
   assign_to_environment = TRUE,
   return_message = TRUE
@@ -312,6 +383,7 @@ generate_som <-
         topology = topology_parameters$topology,
         seed = topology_parameters$seed,
         clusters = topology_parameters$clusters,
+        rlength = topology_parameters$rlength,
         include_neural_gas = topology_parameters$include_neural_gas,
         override_max_nodes = topology_parameters$override_max_nodes
       )
@@ -319,8 +391,25 @@ generate_som <-
     df <-
       data %>%
       left_join(all_data$dataItem[[2]] %>%
-      dplyr::select(one_of(normalization_parameters$id_column, 'clusterSOM', 'groupSOM', 'groupNeuralGas'))) %>%
-      dplyr::select(idSeason:namePlayer, one_of(c('clusterSOM', 'groupSOM', 'groupNeuralGas')), everything()) %>%
+                  dplyr::select(
+                    one_of(
+                      normalization_parameters$id_column,
+                      'clusterSOM',
+                      'groupSOM',
+                      'groupNeuralGas',
+                      'groupNeuralGasNeighbors',
+                      'countNeighbors'
+                    )
+                  )) %>%
+      dplyr::select(idSeason:namePlayer, one_of(
+        c(
+          'clusterSOM',
+          'groupSOM',
+          'groupNeuralGas',
+          'groupNeuralGasNeighbors',
+          'countNeighbors'
+        )
+      ), everything()) %>%
       suppressMessages()
 
     if (filter_na) {
@@ -332,27 +421,44 @@ generate_som <-
     df_scaled <-
       all_data$dataItem[[2]] %>%
       left_join(data %>% dplyr::select(
-        one_of('idSeason','idPlayerSeason', 'namePlayer', 'slugTeamBREF', 'idPosition')
+        one_of(
+          'idSeason',
+          'idPlayerSeason',
+          'namePlayer',
+          'slugTeamBREF',
+          'idPosition'
+        )
       )) %>%
       dplyr::select(idSeason,
-             idPlayerSeason,
-             namePlayer,
-             slugTeamBREF,
-             idPosition,
-             everything()) %>%
+                    idPlayerSeason,
+                    namePlayer,
+                    slugTeamBREF,
+                    idPosition,
+                    everything()) %>%
       suppressMessages()
 
-    all_data <-
+    final_data <-
       data_frame(
         nameItem = c('dataPlayers', 'modelSOM', 'dataPlayersScaled'),
         dataItem = list(df, all_data$dataItem[[1]], df_scaled)
       )
 
+    if ("GNG Server" %in% all_data$nameItem) {
+      final_data <-
+        final_data %>%
+        bind_rows(
+          data_frame(
+            nameItem = c('serverGNG'),
+            dataItem = list(all_data$dataItem[[3]])
+          )
+        )
+    }
+
     if (assign_to_environment) {
-      1:nrow(all_data) %>%
-        purrr::walk(function(x){
+      1:nrow(final_data) %>%
+        purrr::walk(function(x) {
           table <-
-            all_data %>%
+            final_data %>%
             slice(x)
           assign(x = table$nameItem,
                  eval(table$dataItem[[1]]),
@@ -385,6 +491,7 @@ visualize_topology_network <-
   function(data,
            use_name_player_id_column = FALSE,
            group_node = 'SOM',
+           include_gng_neighbors = TRUE,
            title =  "NBA Player Topology: 2015-16 Season, 250 Minute Minimum -- Alex Bresler",
            subtitle = 'data normalized per minute, scaled to mean zero',
            footer = '') {

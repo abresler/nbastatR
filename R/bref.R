@@ -289,61 +289,28 @@ parse_player_season <-
         purrr::reduce(paste0) %>%
         message()
     }
+    gc()
+    closeAllConnections()
     return(df)
   }
 
-parse_player_urls <-
-  function(urls, return_message = TRUE) {
-    all_years <-
-      urls %>%
-      map_df(function(x) {
-        parse_player_page(url = x, return_message = return_message)
-      })
-
-    all_years %>%
-      mutate(isHallOfFamer = str_detect("\\*"))
-
-    return(all_years)
-  }
-
-
 # seasons -----------------------------------------------------------------
 
-parse_player_seasons_tables <-
-  function(urls , return_message = TRUE) {
-    df <-
-      data_frame()
-    success <- function(res) {
-      data <-
-        parse_player_season(url = res$url, return_message = return_message)
-
-      df <<-
-        df %>%
-        bind_rows(data)
-    }
-
-    failure <- function(msg) {
-      data_frame()
-    }
-    urls %>%
-      walk(function(x) {
-        curl_fetch_multi(url = x, success, failure)
-      })
-    multi_run()
-    df
-  }
 
 get_data_bref_player_seasons <-
-  function(years = 1990:2017,
+  function(years = 1980:2017,
            table = "advanced",
            only_totals = TRUE,
            return_message = TRUE) {
     urls <-
       generate_years_urls(table = table, years = years)
-
+    parse_player_season_safe <-
+      purrr::possibly(parse_player_season, data_frame())
     all_data <-
       urls %>%
-      parse_player_seasons_tables(return_message = return_message)
+      map_df(function(x){
+        parse_player_season_safe(url = x, return_message = return_message)
+      })
 
     all_data <-
       all_data %>%
@@ -361,6 +328,7 @@ get_data_bref_player_seasons <-
         filter(countGames == max(countGames)) %>%
         ungroup()
     }
+    gc()
     return(all_data)
   }
 
@@ -399,7 +367,10 @@ get_data_bref_players_seasons <-
           only_totals = only_totals,
           return_message = return_message
         )
-      }) %>%
+      })
+
+    all_data <-
+      all_data %>%
       purrr::reduce(left_join)
 
     if (nest_data) {
