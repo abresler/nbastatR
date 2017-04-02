@@ -11,8 +11,8 @@ generate_som(data, normalization_parameters = list(minute_minimum = 250,
   "totalsBLK", "totalsTOV", "totalsPF", "totalsPTS", "pct3PRate", "pctFTRate",
   "pctORB", "pctDRB", "pctAST", "pctSTL", "pctBLK", "pctTOV")),
   topology_parameters = list(x_dim = NULL, y_dim = NULL, topology =
-  "hexagonal", seed = 998, clusters = 10, include_neural_gas = TRUE,
-  override_max_nodes = TRUE), filter_na = TRUE,
+  "hexagonal", seed = 998, clusters = 10, rlength = 1000, include_neural_gas =
+  TRUE, override_max_nodes = TRUE), filter_na = TRUE,
   assign_to_environment = TRUE, return_message = TRUE)
 }
 \arguments{
@@ -30,7 +30,9 @@ generate_som(data, normalization_parameters = list(minute_minimum = 250,
 \item y_dim
 \item seed
 \item clusters
+\item rlength
 \item include_neural_gas
+\item include_neighbors
 \item override max_nodes
 }}
 

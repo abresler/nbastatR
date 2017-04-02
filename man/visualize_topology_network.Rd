@@ -5,7 +5,7 @@
 \title{Plot Topology Network}
 \usage{
 visualize_topology_network(data, use_name_player_id_column = FALSE,
-  group_node = "SOM",
+  group_node = "SOM", include_gng_neighbors = TRUE,
   title = "NBA Player Topology: 2015-16 Season, 250 Minute Minimum -- Alex Bresler",
   subtitle = "data normalized per minute, scaled to mean zero", footer = "")
 }
