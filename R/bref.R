@@ -1,4 +1,5 @@
-# dicitonary --------------------------------------------------------------
+# gdeltr2::load_needed_packages(c('formattable', 'dplyr', 'stringr', 'httr', 'rvest', 'purrr', 'tidyr', 'lubridate', 'curl', 'readr', 'stringi'))
+# dicitonaries --------------------------------------------------------------
 
 get_bref_name_df <- function() {
   data_frame(
@@ -140,7 +141,20 @@ get_bref_name_df <- function() {
   )
 }
 
-# parse_page --------------------------------------------------------------
+
+# parse_player_page -------------------------------------------------------
+
+
+parse_player_page <-
+  function(url = "http://www.basketball-reference.com/players/g/gillke01.html") {
+    page <-
+      url %>%
+      curl() %>%
+      read_html()
+  }
+
+
+# parse_page_season --------------------------------------------------------------
 
 generate_years_urls <-
   function(table = "per_game", years = 1951:2017) {

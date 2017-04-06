@@ -7,9 +7,9 @@
 generate_som(data, normalization_parameters = list(minute_minimum = 250,
   scale_to_minute = TRUE, id_column = "idPlayerSeason", data_columns =
   c("totalsFG3M", "totalsFG3A", "totalsFG2M", "totalsFG2A", "totalsFTM",
-  "totalsFTA", "totalsORB", "totalsDRB", "totalsTRB", "totalsAST", "totalsSTL",
-  "totalsBLK", "totalsTOV", "totalsPF", "totalsPTS", "pct3PRate", "pctFTRate",
-  "pctORB", "pctDRB", "pctAST", "pctSTL", "pctBLK", "pctTOV")),
+  "totalsFTA", "totalsORB", "totalsDRB", "totalsAST", "totalsSTL", "totalsBLK",
+  "totalsTOV", "totalsPF", "totalsPTS", "pct3PRate", "pctFTRate", "pctORB",
+  "pctDRB", "pctAST", "pctSTL", "pctBLK", "pctTOV")),
   topology_parameters = list(x_dim = NULL, y_dim = NULL, topology =
   "hexagonal", seed = 998, clusters = 10, rlength = 1000, include_neural_gas =
   TRUE, override_max_nodes = TRUE), filter_na = TRUE,

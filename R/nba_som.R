@@ -14,7 +14,6 @@ scale_per_minute <-
     "totalsFTA",
     "totalsORB",
     "totalsDRB",
-    "totalsTRB",
     "totalsAST",
     "totalsSTL",
     "totalsBLK",
@@ -41,7 +40,7 @@ normalize_data <-
          scale_to_minute = TRUE,
          id_column = 'idPlayerSeason',
          data_columns = c("totalsFG3M", "totalsFG3A", "totalsFG2M", "totalsFG2A",
-                          "totalsFTM", "totalsFTA", "totalsORB", "totalsDRB", "totalsTRB",
+                          "totalsFTM", "totalsFTA", "totalsORB", "totalsDRB",
                           "totalsAST", "totalsSTL", "totalsBLK", "totalsTOV", "totalsPF",
                           "totalsPTS", "pct3PRate", "pctFTRate", "pctORB", "pctDRB", "pctAST",
                           "pctSTL", "pctBLK", "pctTOV")
@@ -61,7 +60,6 @@ normalize_data <-
           "totalsFTA",
           "totalsORB",
           "totalsDRB",
-          "totalsTRB",
           "totalsAST",
           "totalsSTL",
           "totalsBLK",
@@ -178,6 +176,10 @@ generate_som_model <-
     }
     if (clusters %>% is_null()) {
       clusters <- 10
+    }
+
+    if (topology %>% is_null()) {
+      clusters <- "hexagonal"
     }
     if (include_neural_gas %>% is_null()) {
       include_neural_gas <-
@@ -335,7 +337,6 @@ generate_som <-
       "totalsFTA",
       "totalsORB",
       "totalsDRB",
-      "totalsTRB",
       "totalsAST",
       "totalsSTL",
       "totalsBLK",
