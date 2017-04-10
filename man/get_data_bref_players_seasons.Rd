@@ -5,8 +5,8 @@
 \title{Basketball Reference Player Season Tables}
 \usage{
 get_data_bref_players_seasons(tables = c("advanced", "totals"),
-  years = 2017, only_totals = TRUE, nest_data = FALSE,
-  return_message = TRUE)
+  include_all_nba = TRUE, years = 2017, only_totals = TRUE,
+  nest_data = FALSE, return_message = TRUE)
 }
 \arguments{
 \item{tables}{player table \itemize{
@@ -16,6 +16,8 @@ get_data_bref_players_seasons(tables = c("advanced", "totals"),
 \item \code{per_minute}: Per 36 minutes
 \item \code{per_poss}: Per Possesion
 }}
+
+\item{include_all_nba}{if \code{TRUE} include all_nba teams}
 
 \item{years}{vector of years 1951 to current season}
 

@@ -308,7 +308,7 @@ parse_player_season <-
     return(df)
   }
 
-# seasons -----------------------------------------------------------------
+# player seasons -----------------------------------------------------------------
 
 
 get_data_bref_player_seasons <-
@@ -356,6 +356,7 @@ get_data_bref_player_seasons <-
 #' \item \code{per_minute}: Per 36 minutes
 #' \item \code{per_poss}: Per Possesion
 #' }
+#' @param include_all_nba if \code{TRUE} include all_nba teams
 #' @param years vector of years 1951 to current season
 #' @param only_totals if \code{TRUE} returns only a player's total statistics
 #' @param nest_data if \code{TRUE} returns a nested data frame
@@ -367,6 +368,7 @@ get_data_bref_player_seasons <-
 #' @examples
 get_data_bref_players_seasons <-
   function(tables = c('advanced', 'totals'),
+           include_all_nba = TRUE,
            years = 2017,
            only_totals = TRUE,
            nest_data = FALSE,
@@ -387,6 +389,17 @@ get_data_bref_players_seasons <-
       all_data %>%
       purrr::reduce(left_join)
 
+    if (include_all_nba) {
+      df_all_nba <-
+        get_data_all_nba_teams(return_message = return_message)
+
+      all_data <-
+        all_data %>%
+        left_join(df_all_nba) %>%
+        suppressMessages() %>%
+        distinct()
+    }
+
     if (nest_data) {
       all_data <-
         all_data %>%
@@ -394,4 +407,116 @@ get_data_bref_players_seasons <-
     }
 
     return(all_data)
+  }
+
+
+
+
+# all_nba -----------------------------------------------------------------
+
+
+#' All NBA teams
+#'
+#' @param return_message
+#'
+#' @return
+#' @export
+#' @import httr rvest xml2 dplyr purrr stringr readr
+#' @examples
+get_data_all_nba_teams <-
+  function(return_message = TRUE) {
+    page <-
+      "http://www.basketball-reference.com/awards/all_league.html" %>%
+      read_html()
+
+    df <-
+      page %>%
+      html_table(fill = TRUE) %>%
+      .[[1]] %>%
+      data.frame(stringsAsFactors = F) %>%
+      tbl_df() %>%
+      dplyr::rename(idSeason = Season,
+                    idLeague = Lg,
+                    classAllNBA = Tm) %>%
+      filter(!idSeason == '') %>%
+      tidyr::gather(value, namePlayerPosition, -c(idSeason, idLeague, classAllNBA)) %>%
+      select(-value) %>%
+      tidyr::separate(idSeason, into = c('yearSeasonStart', 'remove'), sep = '\\-', remove = F) %>%
+      dplyr::select(-remove) %>%
+      mutate(
+        yearSeasonStart = yearSeasonStart %>% as.numeric(),
+        yearSeason = yearSeasonStart + 1,
+        numberAllNBATeam = classAllNBA %>% readr::parse_number(),
+        namePlayer =
+          ifelse(yearSeasonStart >= 1955,
+                 namePlayerPosition %>% substr(start = 1, stop = nchar(namePlayerPosition) - 2) %>% str_trim(),
+                 namePlayerPosition
+          ),
+        groupPosition = ifelse(yearSeasonStart >= 1955,
+                               namePlayerPosition %>% substr(
+          start = nchar(namePlayerPosition) - 1,
+          stop = nchar(namePlayerPosition)
+        ) %>% str_trim(), NA)
+      ) %>%
+      tidyr::separate(namePlayer, into = c('namePlayer', 'namePlayer2'), sep = '\\, ') %>%
+      select(idLeague,
+             idSeason,
+             yearSeason,
+             groupPosition,
+             numberAllNBATeam,
+             namePlayer) %>%
+      filter(idLeague == "NBA") %>%
+      arrange(desc(yearSeason), numberAllNBATeam) %>%
+      suppressMessages() %>%
+      suppressWarnings()
+
+    player_names <-
+      page %>%
+      html_nodes(css = 'td a') %>%
+      html_text()
+
+    slugs <-
+      page %>%
+      html_nodes(css = 'td a') %>%
+      html_attr(name = 'href')
+
+     df_people <-
+       1:length(slugs) %>%
+       map_df(function(x){
+         namePlayer <-
+           player_names[[x]]
+         urlPlayerBREF <-
+           str_c('http://www.basketball-reference.com', slugs[[x]],collapse = '')
+         is_player <-
+           slugs[[x]] %>% str_detect('/players/')
+
+         if (is_player) {
+             idPlayer <-
+           slugs[[x]] %>% str_replace_all('.html', '') %>% str_split('/players/') %>% flatten_chr() %>% .[[2]] %>% str_split('/') %>% flatten_chr() %>% .[[2]]
+       } else {
+        idPlayer <-
+          slugs[[x]] %>% str_replace_all('.html', '') %>% str_split('/leagues/') %>% flatten_chr() %>% .[[2]] %>% str_split('_') %>% flatten_chr() %>% .[[1]]
+       }
+         data_frame(idPlayer, namePlayer, urlPlayerBREF)
+       }) %>%
+       distinct()
+
+     df <-
+       df %>%
+       left_join(df_people) %>%
+       suppressMessages() %>%
+       mutate(idPlayerSeason = idPlayer %>% str_c(yearSeason, collapse = '_'),
+            isAllNBA = TRUE)
+
+     df <-
+       df %>%
+       mutate(isFirstTeamAllNBA = numberAllNBATeam == 1,
+              isSecondTeamAllNBA = numberAllNBATeam == 2,
+              isThirdTeamNBA = numberAllNBATeam == 3)
+
+     if (return_message) {
+       list("Returned All-NBA teams from ", df$yearSeason %>% min() %>% unique(), ' to ', df$yearSeason %>% max() %>% unique()) %>% purrr::reduce(paste0)
+     }
+
+     return(df)
   }
