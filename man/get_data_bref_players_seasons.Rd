@@ -4,11 +4,13 @@
 \alias{get_data_bref_players_seasons}
 \title{Basketball Reference Player Season Tables}
 \usage{
-get_data_bref_players_seasons(tables = c("advanced", "totals"),
-  include_all_nba = TRUE, years = 2017, only_totals = TRUE,
+get_data_bref_players_seasons(years = 2017, tables = c("advanced",
+  "totals"), include_all_nba = TRUE, only_totals = TRUE,
   nest_data = FALSE, return_message = TRUE)
 }
 \arguments{
+\item{years}{vector of years 1951 to current season}
+
 \item{tables}{player table \itemize{
 \item \code{totals}: Totals
 \item \code{'per_game'}: Per game
@@ -18,8 +20,6 @@ get_data_bref_players_seasons(tables = c("advanced", "totals"),
 }}
 
 \item{include_all_nba}{if \code{TRUE} include all_nba teams}
-
-\item{years}{vector of years 1951 to current season}
 
 \item{only_totals}{if \code{TRUE} returns only a player's total statistics}
 
