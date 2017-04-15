@@ -526,7 +526,6 @@ get_data_bref_players_seasons <-
         )
       })
 
-
     all_data <-
       all_data %>%
       purrr::reduce(left_join)
@@ -541,6 +540,7 @@ get_data_bref_players_seasons <-
         ),
         isHOFPlayer = ifelse(!isHOFPlayer %>% is.na(), TRUE, FALSE)
       ) %>%
+      mutate(groupPosition = ifelse(groupPosition == "-", substr(idPosition, 1, 1), groupPosition)) %>%
       dplyr::select(idSeason:namePlayer, groupPosition, everything())
 
     if (include_all_nba) {
