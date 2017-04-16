@@ -25,7 +25,7 @@ generate_som(data, normalization_parameters = list(minute_minimum = 250,
 \item data columns
 }}
 
-\item{topology_parameters}{a \code {list} containing \itemize{
+\item{topology_parameters}{a list containing \itemize{
 \item x_dim
 \item y_dim
 \item seed
@@ -35,6 +35,8 @@ generate_som(data, normalization_parameters = list(minute_minimum = 250,
 \item include_neighbors
 \item override max_nodes
 }}
+
+\item{assign_to_environment}{if \code{TRUE} assigns to environment}
 
 \item{return_message}{}
 }

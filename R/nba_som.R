@@ -308,7 +308,7 @@ generate_som_model <-
 #' \item id_column
 #' \item data columns
 #' }
-#' @param topology_parameters a \code {list} containing \itemize{
+#' @param topology_parameters a list containing \itemize{
 #' \item x_dim
 #' \item y_dim
 #' \item seed
@@ -319,7 +319,7 @@ generate_som_model <-
 #' \item override max_nodes
 #' }
 #' @param filter_na
-#' @param assign_to_environment
+#' @param assign_to_environment if \code{TRUE} assigns to environment
 #' @param return_message
 #'
 #' @return
