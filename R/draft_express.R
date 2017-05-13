@@ -179,6 +179,17 @@ parse_draft_pages <-
     df
   }
 
+parse_de_id <- function(x = "http://www.draftexpress.com/profile/Scottie-Pippen-3959/") {
+  numbers <-
+    x %>%
+    str_replace_all("http://www.draftexpress.com/profile/",'') %>%
+    str_split('\\-') %>%
+    flatten_chr() %>%
+    readr::parse_number() %>%
+    suppressWarnings()
+
+  numbers[length(numbers)]
+}
 
 #' Draft Express Measurements
 #'
@@ -224,10 +235,18 @@ get_data_draft_express_measurements <-
         select(yearDraft, namePlayer, isDrafted, numberDraftPick, everything()) %>%
         arrange(yearDraft)
     }
+    parse_de_id_safe <-
+      purrr::possibly(parse_de_id, 0)
 
     all_data <-
       all_data %>%
-      mutate(isFirstRoundPick = numberDraftPick <= 30,
+      mutate(idPlayerDE = urlPlayerDraftExpress %>% map_dbl(parse_de_id_safe)) %>%
+      dplyr::select(yearDraft, namePlayer, idPlayerDE, isDrafted, everything())
+
+    all_data <-
+      all_data %>%
+      mutate(namePlayer = namePlayr %>% str_replace_all('_ ', ' ') %>% str_trim(),
+             isFirstRoundPick = numberDraftPick <= 30,
              isSecondRoundPick = numberDraftPick > 30,
              isLotteryPick = numberDraftPick <= 14,
              isTop5Pick =  numberDraftPick <= 5,
