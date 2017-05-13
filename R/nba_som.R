@@ -111,7 +111,7 @@ find_topology <- function(data, return_message = TRUE) {
   dlen <- dim(data)[1]
   dim <- dim(data)[2]
   munits <-
-    ceiling(5 * dlen ^ 0.5) # Formula Heurística matlab
+    ceiling(5 * dlen ^ 0.5)
   ## Estimate
   A <- matrix(Inf, nrow = dim, ncol = dim)
   for (i in 1:dim) {
