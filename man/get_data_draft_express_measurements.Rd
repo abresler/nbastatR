@@ -4,10 +4,15 @@
 \alias{get_data_draft_express_measurements}
 \title{Draft Express Measurements}
 \usage{
-get_data_draft_express_measurements(return_message = TRUE)
+get_data_draft_express_measurements(years = 1987:2017,
+  return_unique_players = FALSE, return_message = TRUE)
 }
 \arguments{
+\item{return_unique_players}{if \code{TRUE} returns players last data}
+
 \item{return_message}{}
+
+\item{year}{draft years - if \code{NULL} all draft years}
 }
 \description{
 Draft Express Measurements

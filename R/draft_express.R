@@ -23,23 +23,43 @@ parse_to_inches <-
     portion_feet + inches + plus_inches
   }
 
-get_draft_urls <- function() {
+get_draft_urls <- function(year = NULL) {
+
+  if (year %>% purrr::is_null()) {
+    url <-
+      "http://www.draftexpress.com/nba-pre-draft-measurements/all/all/all"
+  } else {
+    url <-
+      glue::glue("http://www.draftexpress.com/nba-pre-draft-measurements/{year}/all/all/all")
+  }
 
   max_numbers <-
-    "http://www.draftexpress.com/nba-pre-draft-measurements/all/all/all" %>%
+    url %>%
+    as.character() %>%
     read_html() %>%
-    html_nodes('.dropdown , .pagination a') %>%
+    html_nodes('.pagination a') %>%
     html_text() %>%
-    readr::parse_number() %>% {
-      .[2:length(.)]
-    } %>%
-    max(na.rm = TRUE) %>%
-    suppressWarnings()
+    str_trim()
+
+
+  if (max_numbers %>% length() == 0) {
+    max_numbers <- 1
+  }
+
+  max_numbers <-
+    max_numbers %>% readr::parse_number() %>% suppressWarnings()
+
+
+  max_numbers <- max_numbers %>% max(na.rm = T) %>% .[[1]]
+  if (max_numbers > 50) {
+    max_numbers <- 1
+  }
+
   all_numbers <-
     1:max_numbers
 
   urls <-
-    glue::glue("http://www.draftexpress.com/nba-pre-draft-measurements/all/all/all/all/{all_numbers}")
+    glue::glue("{url}/{all_numbers}")
 
   urls
 }
@@ -192,7 +212,8 @@ parse_de_id <- function(x = "http://www.draftexpress.com/profile/Scottie-Pippen-
 }
 
 #' Draft Express Measurements
-#'
+#' @param year draft years - if \code{NULL} all draft years
+#' @param return_unique_players if \code{TRUE} returns players last data
 #' @param return_message
 #'
 #' @return
@@ -200,9 +221,24 @@ parse_de_id <- function(x = "http://www.draftexpress.com/profile/Scottie-Pippen-
 #' @import purrr glue dplyr curl rvest tidyr dplyr stringr readr
 #' @examples
 get_data_draft_express_measurements <-
-  function(return_message = TRUE) {
-    urls <-
-      get_draft_urls()
+  function(years = 1987:2017,
+           return_unique_players = FALSE,
+           return_message = TRUE) {
+    get_draft_urls_safe <-
+      purrr::possibly(get_draft_urls, NA)
+
+    if (years %>% purrr::is_null()){
+      urls <-
+      get_draft_urls(year = NULL)
+    } else {
+      urls <- years %>%
+        map_df(function(x){
+          urls <- get_draft_urls_safe(year = x )
+          data_frame(yearData = x, urlData = urls)
+        }) %>%
+        .$urlData
+    }
+
     parse_pages_data_safe <-
       purrr::possibly(parse_draft_pages, data_frame())
 
@@ -225,14 +261,22 @@ get_data_draft_express_measurements <-
         all_data %>%
         filter(yearDraft < max_year) %>%
         mutate(isDrafted = !numberDraftPick %>% is.na()) %>%
-        select(yearDraft, namePlayer, isDrafted, numberDraftPick, everything()) %>%
+        select(yearDraft,
+               namePlayer,
+               isDrafted,
+               numberDraftPick,
+               everything()) %>%
         bind_rows(all_data %>% filter(yearDraft == max_year)) %>%
         arrange(yearDraft)
     } else {
       all_data <-
         all_data %>%
         mutate(isDrafted = !numberDraftPick %>% is.na()) %>%
-        select(yearDraft, namePlayer, isDrafted, numberDraftPick, everything()) %>%
+        select(yearDraft,
+               namePlayer,
+               isDrafted,
+               numberDraftPick,
+               everything()) %>%
         arrange(yearDraft)
     }
     parse_de_id_safe <-
@@ -245,11 +289,23 @@ get_data_draft_express_measurements <-
 
     all_data <-
       all_data %>%
-      mutate(namePlayer = namePlayr %>% str_replace_all('_ ', ' ') %>% str_trim(),
-             isFirstRoundPick = numberDraftPick <= 30,
-             isSecondRoundPick = numberDraftPick > 30,
-             isLotteryPick = numberDraftPick <= 14,
-             isTop5Pick =  numberDraftPick <= 5,
-             isNumber1Pick =  numberDraftPick == 1)
+      mutate(
+        namePlayer = namePlayer %>% str_replace_all('_ ', ' ') %>% str_trim(),
+        isFirstRoundPick = numberDraftPick <= 30,
+        isSecondRoundPick = numberDraftPick > 30,
+        isLotteryPick = numberDraftPick <= 14,
+        isTop5Pick =  numberDraftPick <= 5,
+        isNumber1Pick =  numberDraftPick == 1
+      ) %>%
+      distinct()
+
+
+    if (return_unique_players) {
+      all_data <-
+        all_data %>%
+        group_by(idPlayerDE) %>%
+        filter(yearDraft == max(yearDraft))
+    }
+
     all_data
   }
