@@ -4,16 +4,61 @@
 \alias{get_data_draft_express_measurements}
 \title{Draft Express Measurements}
 \usage{
-get_data_draft_express_measurements(years = 1987:2017,
-  return_unique_players = FALSE, return_message = TRUE)
+get_data_draft_express_measurements(years = 1987:2017, sources = NULL,
+  positions = "all", return_unique_players = FALSE, return_message = TRUE)
 }
 \arguments{
+\item{sources}{sources to search \itemize{
+\item NULL - All Sources
+\item All - All sources
+\item Vince Carter Camp
+\item USA Pan Am Team
+\item USA Basketball
+\item UA All-American Camp
+\item Reebok Breakout
+\item Portsmouth
+\item Paul Pierce Camp
+\item PG Skills Acad
+\item Official Team
+\item Official College Team
+\item Nike Skills Academy
+\item Nike Elite 100
+\item Nike Basketball Academy
+\item Newspaper
+\item Nets Workout
+\item NBA Top 100 Camp
+\item NBA Pre-Draft Camp
+\item NBA Draft Combine
+\item LeBron James Camp
+\item Kevin Durant Camp
+\item Hoop Summit
+\item Eurocamp
+\item Elite 24
+\item Deron Williams Camp
+\item D-League Elite Camp
+\item Clippers Workout
+\item Biosteel All-Canadian Game
+\item Big Man Skills Acad
+\item Amare Stoudemire Camp
+}}
+
+\item{positions}{- positions to return \itemize{
+\item NULL - All positions
+\item All - All
+\item PG - Point Guards
+\item SG - Shooting Guards
+\item SF - Small Forwards
+\item PF - Power Forwards
+\item C - Centers
+}}
+
 \item{return_unique_players}{if \code{TRUE} returns players last data}
 
-\item{return_message}{}
-
-\item{year}{draft years - if \code{NULL} all draft years}
+\item{year}{draft years - if \code{NULL} or \code{ALL} all draft years}
 }
 \description{
 Draft Express Measurements
+}
+\references{
+\href{http://www.draftexpress.com/}{Draft Express}
 }
