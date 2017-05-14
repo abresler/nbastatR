@@ -515,7 +515,8 @@ get_data_draft_express_measurements <-
       all_data <-
         all_data %>%
         group_by(idPlayerDE) %>%
-        filter(yearDraft == max(yearDraft))
+        filter(yearDraft == max(yearDraft)) %>%
+        ungroup()
     }
 
     all_data
