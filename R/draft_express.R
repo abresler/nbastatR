@@ -1,7 +1,10 @@
 
+
 # http://www.draftexpress.com/nba-pre-draft-measurements
 parse_to_inches <-
   function(x) {
+    x <-
+      stringi::stri_trans_general(x, "Latin-ASCII")
     values <-
       x %>%
       str_split("'") %>%
@@ -10,14 +13,18 @@ parse_to_inches <-
     portion_feet <-
       values[[1]] %>% readr::parse_number() * 12
 
-    inches <- values[[2]] %>% readr::parse_number()
+    inches <-
+      values[[2]] %>% readr::parse_number()
+
 
     plus_inches <-
-      case_when(
-        values %>% str_detect("¾") ~ .75,
-        values %>% str_detect("¼") ~ .25,
-        values %>% str_detect("½") ~ .5,
-        TRUE ~ 0) %>%
+      values %>%
+      dplyr::case_when(
+        values %>% str_detect("3/4") ~ .75,
+        values %>% str_detect("1/4") ~ .25,
+        values %>% str_detect("1/2") ~ .5,
+        TRUE ~ 0
+      ) %>%
       max()
 
     portion_feet + inches + plus_inches
@@ -149,7 +156,7 @@ generate_base_de_urls <-
     if (position %>% purrr::is_null()) {
       position_slug <- 'all'
     } else {
-      positions <- c("ALL","C", "PF", "SF", "SG", "PG")
+      positions <- c("ALL", "C", "PF", "SF", "SG", "PG")
       position_options <- positions %>% str_c(collapse = '\n')
       if (!position %>% str_to_upper() %in% positions) {
         stop(glue::glue("Sorry sources can only be:\n{position_options}"))
@@ -191,15 +198,15 @@ generate_base_de_urls <-
 parse_page_data <-
   function(url = "http://www.draftexpress.com/nba-pre-draft-measurements/all/all/all/all/33",
            return_message = TRUE) {
-   if (return_message) {
-     glue::glue("Parsing {url}") %>%
-       message()
-   }
+    if (return_message) {
+      glue::glue("Parsing {url}") %>%
+        message()
+    }
     page <-
-     url %>%
-     read_html()
+      url %>%
+      read_html()
 
-   players <-
+    players <-
       page %>%
       html_nodes(css = '.key') %>%
       html_text() %>%
@@ -215,12 +222,12 @@ parse_page_data <-
 
     df_players <-
       data_frame(namePlayer = players,
-               urlPlayerDraftExpress = url_players) %>%
+                 urlPlayerDraftExpress = url_players) %>%
       mutate(idRow = 1:n())
 
     df_values <-
       2:18 %>%
-      map_df(function(x){
+      map_df(function(x) {
         attribute <-
           glue("td:nth-child({x})")
         values <-
@@ -234,13 +241,28 @@ parse_page_data <-
       })
 
     df_items <-
-      data_frame(idColumn = 2:18,
-               nameColumn = c('yearDraft', 'numberDraftPick',
-                              'heightNoShoesInches', 'heightShoesInches', 'wingspanInches',
-                              'standingreachInches', 'verticalMaxInches', 'verticalMaxReachInches',
-                              'verticalNoStepInches', 'verticalNoStepReachInches', 'weightLBS', 'pctBodyFat',
-                              'lengthHandInches', 'widthHandInches', 'countBenchReps',
-                              'speedAgility', 'speedSprint'))
+      data_frame(
+        idColumn = 2:18,
+        nameColumn = c(
+          'yearDraft',
+          'numberDraftPick',
+          'heightNoShoesInches',
+          'heightShoesInches',
+          'wingspanInches',
+          'standingreachInches',
+          'verticalMaxInches',
+          'verticalMaxReachInches',
+          'verticalNoStepInches',
+          'verticalNoStepReachInches',
+          'weightLBS',
+          'pctBodyFat',
+          'lengthHandInches',
+          'widthHandInches',
+          'countBenchReps',
+          'speedAgility',
+          'speedSprint'
+        )
+      )
 
     df_values <-
       df_values %>%
@@ -281,8 +303,9 @@ parse_page_data <-
           'lengthHandInches',
           'widthHandInches'
         ),
-        funs(readr::parse_number)) %>%
-        mutate(pctBodyFat = pctBodyFat /100)
+        funs(. %>% readr::parse_number())
+      ) %>%
+      mutate(pctBodyFat = pctBodyFat / 100)
 
     df_players %>%
       left_join(df_values %>% mutate(idRow = 1:n())) %>%
@@ -297,7 +320,7 @@ parse_draft_pages <-
            return_message = TRUE) {
     df <-
       data_frame()
-    success <- function(res){
+    success <- function(res) {
       parse_page_data_safe <-
         purrr::possibly(parse_page_data, data_frame())
       page_url <-
@@ -311,11 +334,11 @@ parse_draft_pages <-
         df %>%
         bind_rows(data)
     }
-    failure <- function(msg){
+    failure <- function(msg) {
       data_frame()
     }
     urls %>%
-      walk(function(x){
+      walk(function(x) {
         curl_fetch_multi(url = x, success, failure)
       })
     multi_run()
@@ -323,17 +346,18 @@ parse_draft_pages <-
     df
   }
 
-parse_de_id <- function(x = "http://www.draftexpress.com/profile/Scottie-Pippen-3959/") {
-  numbers <-
-    x %>%
-    str_replace_all("http://www.draftexpress.com/profile/",'') %>%
-    str_split('\\-') %>%
-    flatten_chr() %>%
-    readr::parse_number() %>%
-    suppressWarnings()
+parse_de_id <-
+  function(x = "http://www.draftexpress.com/profile/Scottie-Pippen-3959/") {
+    numbers <-
+      x %>%
+      str_replace_all("http://www.draftexpress.com/profile/", '') %>%
+      str_split('\\-') %>%
+      flatten_chr() %>%
+      readr::parse_number() %>%
+      suppressWarnings()
 
-  numbers[length(numbers)]
-}
+    numbers[length(numbers)]
+  }
 
 #' Draft Express Measurements
 #' @param year draft years - if \code{NULL} or \code{ALL} all draft years
@@ -385,7 +409,7 @@ parse_de_id <- function(x = "http://www.draftexpress.com/profile/Scottie-Pippen-
 #'
 #' @return
 #' @export
-#' @import purrr glue dplyr curl rvest tidyr dplyr stringr readr
+#' @import purrr glue dplyr curl rvest tidyr dplyr stringr readr stringi
 #' @examples
 get_data_draft_express_measurements <-
   function(years = 1987:2017,
@@ -393,7 +417,6 @@ get_data_draft_express_measurements <-
            positions = "all",
            return_unique_players = FALSE,
            return_message = TRUE) {
-
     if (sources %>% purrr::is_null()) {
       sources <- 'all'
     }
@@ -409,15 +432,17 @@ get_data_draft_express_measurements <-
       purrr::possibly(generate_base_de_urls, data_frame())
 
     df_options <-
-      expand.grid(yearData = years,
-                sourceData = sources,
-                idPosition = positions,
-                stringsAsFactors = FALSE) %>%
+      expand.grid(
+        yearData = years,
+        sourceData = sources,
+        idPosition = positions,
+        stringsAsFactors = FALSE
+      ) %>%
       tbl_df()
 
     df_search_urls <-
       1:nrow(df_options) %>%
-      map_df(function(x){
+      map_df(function(x) {
         year_search <-
           df_options$yearData[[x]]
         source_search <-
@@ -425,18 +450,21 @@ get_data_draft_express_measurements <-
         position_search <-
           df_options$idPosition[[x]]
         search_url <- generate_base_de_urls_safe(year = year_search,
-                                            source = source_search,
-                                            position = position_search)
-      data_frame(urlSearch = search_url,
-                 positionSearch = position_search,
-                 yearSearch = year_search,
-                 sourceSearch = source_search)
+                                                 source = source_search,
+                                                 position = position_search)
+        data_frame(
+          urlSearch = search_url,
+          positionSearch = position_search,
+          yearSearch = year_search,
+          sourceSearch = source_search
+        )
       })
 
     parse_pages_data_safe <-
       purrr::possibly(parse_draft_pages, data_frame())
 
-    urls <- df_search_urls$urlSearch
+    urls <-
+      df_search_urls$urlSearch
 
     all_data <-
       urls %>%
@@ -447,9 +475,11 @@ get_data_draft_express_measurements <-
 
     all_data <-
       all_data %>%
-      tidyr::separate(namePlayer, into = c('namePlayer', 'detailPlayer'), sep = '\\(') %>%
-      mutate(detailPlayer = detailPlayer %>% str_replace_all('\\)','')) %>%
-      mutate_if(is.character,str_trim) %>%
+      tidyr::separate(namePlayer,
+                      into = c('namePlayer', 'detailPlayer'),
+                      sep = '\\(') %>%
+      mutate(detailPlayer = detailPlayer %>% str_replace_all('\\)', '')) %>%
+      mutate_if(is.character, str_trim) %>%
       suppressWarnings()
 
     max_year <-

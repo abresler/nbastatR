@@ -35,4 +35,6 @@ dataPlayers %>%
   visualize_topology_network(title = "2016-2017 Season, 250 Minute Minimum, Scaled Per Minute Played and to Mean Zero -- @abresler",
                              group_node = 'GNG')
 
-serverGNG$
+df_gng %>%
+  select(-c(groupNeuralGas:groupNeuralGasNeighbors)) %>%
+  generate_tsne(use_distance = TRUE, theta = .1)
