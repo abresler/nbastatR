@@ -17,16 +17,20 @@ parse_to_inches <-
       values[[2]] %>% readr::parse_number()
 
 
-    plus_inches <-
-      values %>%
-      dplyr::case_when(
-        values %>% str_detect("3/4") ~ .75,
-        values %>% str_detect("1/4") ~ .25,
-        values %>% str_detect("1/2") ~ .5,
-        TRUE ~ 0
-      ) %>%
-      max()
+    if (values %>% str_detect("3/4|1/2|1/4") %>% sum(na.rm = T) > 0) {
+      if (values %>% str_detect("1/4") %>% sum(na.rm = T) > 0) {
+        plus_inches <- .25
+      }
+      if (values %>% str_detect("1/2")  %>% sum(na.rm = T) > 0) {
+        plus_inches <- .5
+      }
 
+      if (values %>% str_detect("3/4")  %>% sum(na.rm = T) > 0) {
+        plus_inches <- .75
+      }
+    } else {
+      plus_inches <- 0
+    }
     portion_feet + inches + plus_inches
   }
 
