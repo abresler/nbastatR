@@ -1,919 +1,351 @@
-get_fd_name_df <-
-  function() {
-    fd_nba_name_df <-
-      data_frame(
-        name.fanduel = c(
-          "Louis Amundson",
-          "Ishmael Smith",
-          "C.J. Wilcox",
-          "Glenn Robinson III",
-          "Joseph Young",
-          "Luc Richard Mbah a Moute",
-          "T.J. Warren",
-          "Nene Hilario",
-          "P.J. Tucker",
-          "J.J. Redick",
-          "C.J. Miles",
-          "C.J. McCollum",
-          "Brad Beal",
-          "Roy Devyn Marble",
-          "K.J. McDaniels",
-          "C.J. Watson",
-          "J.J. Hickson",
-          "Jose Juan Barea"
-        ),
-        name.nba =  c(
-          "Lou Amundson",
-          "Ish Smith",
-          "CJ Wilcox",
-          "Glenn Robinson",
-          "Joe Young",
-          "Luc Mbah a Moute",
-          "TJ Warren",
-          "Nene",
-          "PJ Tucker",
-          "JJ Redick",
-          "CJ Miles",
-          "CJ McCollum",
-          "Bradley Beal",
-          "Devyn Marble",
-          "KJ McDaniels",
-          "CJ Watson",
-          "JJ Hickson",
-          "Jose Juan Barea"
-        ),
-        is.different_name = T
-      )
-    return(fd_nba_name_df)
-  }
 
-get_headers <-
-  function() {
-    headers_df <-
-      dplyr::data_frame(
-        name.nba = c(
-          "PLAYER_ID",
-          "SEASON_ID",
-          "LEAGUE_ID",
-          "TEAM_ID",
-          "TEAM_ABBREVIATION",
-          "PLAYER_AGE",
-          "GP",
-          "GS",
-          "MIN",
-          "FGM",
-          "FGA",
-          "FG_PCT",
-          "FG3M",
-          "FG3A",
-          "FG3_PCT",
-          "FTM",
-          "FTA",
-          "FT_PCT",
-          "OREB",
-          "DREB",
-          "REB",
-          "AST",
-          "STL",
-          "BLK",
-          "TOV",
-          "PF",
-          "PTS",
-          "ORGANIZATION_ID",
-          "SCHOOL_NAME",
-          "RANK_MIN",
-          "RANK_FGM",
-          "RANK_FGA",
-          "RANK_FG_PCT",
-          "RANK_FG3M",
-          "RANK_FG3A",
-          "RANK_FG3_PCT",
-          "RANK_FTM",
-          "RANK_FTA",
-          "RANK_FT_PCT",
-          "RANK_OREB",
-          "RANK_DREB",
-          "RANK_REB",
-          "RANK_AST",
-          "RANK_STL",
-          "RANK_BLK",
-          "RANK_TOV",
-          "RANK_PTS",
-          "RANK_EFF",
-          "PLUS_MINUS",
-          "WL",
-          "MATCHUP",
-          "VIDEO_AVAILABLE",
-          "GAME_DATE",
-          "Game_ID",
-          "PERSON_ID",
-          "FIRST_NAME",
-          "LAST_NAME",
-          "DISPLAY_FIRST_LAST",
-          "DISPLAY_LAST_COMMA_FIRST",
-          "DISPLAY_FI_LAST",
-          "BIRTHDATE",
-          "SCHOOL",
-          "COUNTRY",
-          "LAST_AFFILIATION",
-          "HEIGHT",
-          "WEIGHT",
-          "SEASON_EXP",
-          "JERSEY",
-          "POSITION",
-          "ROSTERSTATUS",
-          "TEAM_NAME",
-          "TEAM_CODE",
-          "TEAM_CITY",
-          "PLAYERCODE",
-          "FROM_YEAR",
-          "TO_YEAR",
-          "DLEAGUE_FLAG",
-          "GAMES_PLAYED_FLAG",
-          "PLAYER_NAME",
-          "TimeFrame",
-          "PIE",
-          "AGE",
-          "W",
-          "L",
-          "W_PCT",
-          "BLKA",
-          "PFD",
-          "DD2",
-          "TD3",
-          "CFID",
-          "CFPARAMS",
-          "OFF_RATING",
-          "DEF_RATING",
-          "NET_RATING",
-          "AST_PCT",
-          "AST_TO",
-          "AST_RATIO",
-          "OREB_PCT",
-          "DREB_PCT",
-          "REB_PCT",
-          "TM_TOV_PCT",
-          "EFG_PCT",
-          "TS_PCT",
-          "USG_PCT",
-          "PACE",
-          "FGM_PG",
-          "FGA_PG",
-          "PTS_OFF_TOV",
-          "PTS_2ND_CHANCE",
-          "PTS_FB",
-          "PTS_PAINT",
-          "OPP_PTS_OFF_TOV",
-          "OPP_PTS_2ND_CHANCE",
-          "OPP_PTS_FB",
-          "OPP_PTS_PAINT",
-          "PCT_FGA_2PT",
-          "PCT_FGA_3PT",
-          "PCT_PTS_2PT",
-          "PCT_PTS_2PT_MR",
-          "PCT_PTS_3PT",
-          "PCT_PTS_FB",
-          "PCT_PTS_FT",
-          "PCT_PTS_OFF_TOV",
-          "PCT_PTS_PAINT",
-          "PCT_AST_2PM",
-          "PCT_UAST_2PM",
-          "PCT_AST_3PM",
-          "PCT_UAST_3PM",
-          "PCT_AST_FGM",
-          "PCT_UAST_FGM",
-          "PCT_FGM",
-          "PCT_FGA",
-          "PCT_FG3M",
-          "PCT_FG3A",
-          "PCT_FTM",
-          "PCT_FTA",
-          "PCT_OREB",
-          "PCT_DREB",
-          "PCT_REB",
-          "PCT_AST",
-          "PCT_TOV",
-          "PCT_STL",
-          "PCT_BLK",
-          "PCT_BLKA",
-          "PCT_PF",
-          "PCT_PFD",
-          "PCT_PTS",
-          "FTA_RATE",
-          "OPP_EFG_PCT",
-          "OPP_FTA_RATE",
-          "OPP_TOV_PCT",
-          "OPP_OREB_PCT",
-          "OPP_FGM",
-          "OPP_FGA",
-          "OPP_FG_PCT",
-          "OPP_FG3M",
-          "OPP_FG3A",
-          "OPP_FG3_PCT",
-          "OPP_FTM",
-          "OPP_FTA",
-          "OPP_FT_PCT",
-          "OPP_OREB",
-          "OPP_DREB",
-          "OPP_REB",
-          "OPP_AST",
-          "OPP_TOV",
-          "OPP_STL",
-          "OPP_BLK",
-          "OPP_BLKA",
-          "OPP_PF",
-          "OPP_PFD",
-          "OPP_PTS"
-        ),
-        name.actual = c(
-          "id.player",
-          "code.season",
-          "id.league",
-          "id.team",
-          "slug.team",
-          "age.player",
-          "gp",
-          "gs",
-          "min",
-          "fgm",
-          "fga",
-          "pct.fg",
-          "fg3m",
-          "fg3a",
-          "pct.fg3",
-          "ftm",
-          "fta",
-          "pct.ft",
-          "oreb",
-          "dreb",
-          "reb",
-          "ast",
-          "stl",
-          "blk",
-          "tov",
-          "fouls",
-          "pts",
-          "id.organization",
-          "name.school",
-          "rank.min",
-          "rank.fgm",
-          "rank.fga",
-          "rank.pct.fg",
-          "rank.fg3m",
-          "rank.fg3a",
-          "rank.pct.fg3",
-          "rank.ftm",
-          "rank.fta",
-          "rank.pct.ft",
-          "rank.oreb",
-          "rank.dreb",
-          "rank_reb",
-          "rank.ast",
-          "rank.stl",
-          "rank.blk",
-          "rank.tov",
-          "rank.pts",
-          "rank.eff",
-          "plus.minus",
-          "wl",
-          "matchup",
-          "is.video_available",
-          "date.game",
-          "id.game",
-          "id.player",
-          "name.first",
-          "name.last",
-          "name.player",
-          "name.last.display",
-          "name.middle.display",
-          "date.birth",
-          "school",
-          "country",
-          "college.non_nba_team",
-          "height",
-          "weight.lbs",
-          "years.experience",
-          "jersey",
-          "position",
-          "status.roster",
-          "team",
-          "code.team",
-          "city.team",
-          "slug.player",
-          "year.from",
-          "year.to",
-          "has.d_league_data",
-          "gp.flag",
-          "name.player",
-          "id.season",
-          "pie",
-          "age",
-          "wins",
-          "losses",
-          "pct.wins",
-          "fga.blocked",
-          "fouls.drawn",
-          "double_doubles",
-          "triple_doubles",
-          "cfid",
-          "cfparms",
-          "ortg",
-          "drtg",
-          "netrtg",
-          "pct.ast",
-          "ratio.ast.to",
-          "ratio.ast",
-          "pct.oreb",
-          "pct.dreb",
-          "pct.reb",
-          "ratio.to",
-          "pct.efg",
-          "pct.ts",
-          "pct.usg",
-          "pace",
-          "fgm.per_game",
-          "fga.per_game",
-          "pts.off_to",
-          "pts.2nd_chance",
-          "pts.fastbreak",
-          "pts.paint",
-          "pts.off_to.opponent",
-          "pts.2nd_chance.opponent",
-          "pts.fastbreak.opponent",
-          "pts.paint.opponent",
-          "pct.fga2a",
-          "pct.fga3a",
-          "pct.pts.fg2m",
-          "pct.pts.mid_range_2",
-          "pct.pts.fg3m",
-          "pct.pts.fast_break",
-          "pct.pts.ft",
-          "pct.pts.off_tos",
-          "pct.paints.paint",
-          "pct.fg2m.assisted",
-          "pct.fg2m.unassisted",
-          "pct.fg3m.assisted",
-          "pct.fg3m.unassisted",
-          "pct.fgm.assisted",
-          "pct.fgm.unassisted",
-          "pct.fgm",
-          "pct.fga",
-          "pct.fg3m",
-          "pct.fg3a",
-          "pct.ftm",
-          "pct.fta",
-          "pct.oreb",
-          "pct.dreb",
-          "pct.reb",
-          "pct.ast",
-          "pct.tov",
-          "pct.stl",
-          "pct.blk",
-          "pct.blocked",
-          "pct.fouls",
-          "pct.fouls.drawn",
-          "pct.pts",
-          "rate.fta",
-          "pct.efg.opp",
-          "rate.fta.opp",
-          "pct.tov.opp",
-          "pct.oreb.opp",
-          "fgm.opp",
-          "fga.opp",
-          "pct.fg.opp",
-          "fg3m.opp",
-          "fg3a.opp",
-          "pct.fg3.opp",
-          "ftm.opp",
-          "fta.opp",
-          "pct.ft.opp",
-          "oreb.opp",
-          "dreb.opp",
-          "rep.opp",
-          "ast.opp",
-          "tov.opp",
-          "stl.opp",
-          "blk.opp",
-          "fga.blocked.opp",
-          "fouls.opp",
-          "fouls.drawn.opp",
-          "pts.opp"
-        ),
-        id.row = 1:length(name.actual)
-      )
-    return(headers_df)
-  }
+# awards ------------------------------------------------------------------
 
 
-#' Get NBA Player IDs
-#'
-#' @param league
-#' @param active_only
-#' @import dplyr magrittr jsonlite tidyr stringr readr
-#' @return
-#' @export
-#'
-#' @examples
-get_nba_players_ids <-
-  function(league = "NBA",
-           active_only = F) {
-    if (!'league' %>% exists) {
-      stop("Please enter either NBA or NBDL")
-    }
+# get_player_award <-
+  function(player_id = 76003,
+           return_message = T){
+    url <- glue::glue("http://stats.nba.com/stats/playerawards/?playerId={player_id}") %>%
+      as.character()
 
-    if (league == "NBA") {
-      id.stem <-
-        "00"
-    }
-
-    if (league == "NBDL") {
-      id.stem <-
-        "20"
-    }
-
-    base_url <-
-      'http://stats.nba.com/stats/commonallplayers?IsOnlyCurrentSeason=0&LeagueID='
-
-    players.url <-
-      base_url %>%
-      paste0(id.stem, '&Season=2015-16')
-
-    json_data <-
-      players.url %>%
-      jsonlite::fromJSON(simplifyDataFrame = T)
+    json <-
+      url  %>%
+      curl_json_to_vector()
 
     data <-
-      json_data$resultSets$rowSet %>%
-      data.frame(stringsAsFactors = F) %>%
-      tbl_df
+      json$resultSets$rowSet[[1]] %>%
+      dplyr::as_data_frame()
 
-    headers <-
-      json_data$resultSets$headers %>%
-      unlist %>%
-      str_to_lower()
-
-    headers_df <-
-      get_headers()
-
-    actual_names <-
-      1:length(headers) %>%
-      purrr::map(
-        function(x)
-          data_frame(
-            name.actual =
-              headers_df %>%
-              mutate(name.nba = name.nba %>% str_to_lower) %>%
-              dplyr::filter(name.nba == headers[x]) %>%
-              .$name.actual
-          )
-      ) %>%
-      bind_rows()
-
-    names(data) <-
-      actual_names$name.actual
-
-    names_df <-
-      data$name.last.display %>%
-      str_split_fixed(pattern = '\\,', 2) %>%
-      data.frame() %>%
-      tbl_df
-
-    names(names_df) <-
-      c('name.last', 'name.first')
-
-    names_df %<>%
-      mutate(player = name.first %>% str_trim %>% paste(name.last %>% str_trim)) %>%
-      dplyr::select(player)
-
-    data$name.player <-
-      names_df$player
-
+    if (data %>% ncol() == 0) {
+      return(invisible())
+    }
     data <-
       data %>%
-      mutate(
-        id.player = id.player %>% as.numeric,
-        is.on_roster = ifelse(id.team == 0, FALSE, TRUE),
-        id.team = id.team %>% as.numeric
-      ) %>%
-      dplyr::select(-c(status.roster, name.last.display))
-
-    data <-
-      data %>%
-      mutate_each(funs(parse_number), matches("year.")) %>%
-      mutate(
-        id.team = ifelse(id.team == 0, NA, id.team),
-        city.team = ifelse(city.team == '', NA, city.team),
-        code.team = ifelse(code.team == '', NA, code.team),
-        slug.team = ifelse(slug.team == '', NA, slug.team),
-        team = ifelse(city.team %>% is.na, NA, paste(city.team, team)),
-        seasons.played = year.to - year.from,
-        url.player = id.player %>% paste0('http://stats.nba.com/player/#!/', .),
-        image.player = id.player %>% paste0('http://stats.nba.com/media/players/132x132/', ., '.png')
-      ) %>%
-      mutate(league) %>%
-      dplyr::select(
-        league,
-        name.player,
-        id.player,
-        team,
-        id.team,
-        is.on_roster,
-        seasons.played,
-        year.from,
-        year.to,
-        everything()
-      )
-
-    if ('is.nba_assigned' %in% (names(data))) {
-      data %<>%
-        mutate(is.nba_assigned = is.nba_assigned %>% as.logical())
-    }
-
-    if (active_only == T) {
-      data %<>%
-        dplyr::filter(is.on_roster == T)
-    }
-    if ('gp.flag' %in% names(data)) {
-      data %<>%
-        dplyr::select(-gp.flag)
-    }
-    return(data)
-  }
-
-
-
-#' Title
-#'
-#' @param year.season_start
-#' @param include_only_rostered_players
-#' @param return_message
-#'
-#' @return
-#' @export
-#'
-#' @examples
-get_nba_season_players <-
-  function(year.season_start = 2012,
-           include_only_rostered_players = F,
-           return_message = T) {
-    if (!'year.season_start' %>% exists()) {
-      stop("Please enter a start to the season")
-    }
-
-    if (year.season_start < 1945) {
-      stop("Sorry data starts in 1945")
-    }
-
-    id.season <-
-      year.season_start %>%
-      {
-        year.season_end  <- . + 1
-        paste0(year.season_start, "-", (year.season_end %>% substr(3, 4)))
-      }
-
-    all_players <-
-      get_nba_players_ids(league = "NBA", active_only = F)
-
-    nba_year.from <-
-      year.season_start
-
-    nba_year.to <-
-      year.season_start
-
-    seasons_players <-
-      all_players %>%
-      dplyr::filter(nba_year.to <= year.to) %>%
-      dplyr::filter(nba_year.from >= year.from)
-
-    seasons_players <-
-      seasons_players %>%
-      mutate(id.season,
-             is.rookie = ifelse(year.from == nba_year.to, T, F)) %>%
-      dplyr::select(league,
-                    id.season,
-                    id.team,
-                    team,
-                    id.player,
-                    name.player,
-                    is.rookie ,
-                    everything())
-
-    if (!nba_year.to == all_players$year.to %>% unique %>% max) {
-      seasons_players %<>%
-        mutate(is.final_season = ifelse(year.to == nba_year.to, T, F)) %>%
-        dplyr::select(league:is.rookie, is.final_season, everything())
-    }
-
-    if (include_only_rostered_players == T) {
-      seasons_players %<>%
-        dplyr::filter(is.on_roster == T) %>%
-        arrange(team, name.player)
-    }
-
-    if (return_message == T) {
-      "You got all NBA players for the " %>%
-        paste0(id.season, " Seasons") %>%
-        message()
-    }
-
-    return(seasons_players)
-  }
-
-
-#' Get NBA Seasons Players
-#'
-#' @param years
-#' @param only_on_roster
-#' @param message
-#' @importFrom purrr map
-#' @return
-#' @export
-#'
-#' @examples
-get_nba_seasons_players <-
-  function(years = 1960:2015,
-           only_on_roster = F,
-           message = T) {
-    if (!'years' %>% exists) {
-      stop("Please enter the years whose data you want")
-    }
-    get_nba_season_players_safe <-
-      failwith(NULL, get_nba_season_players)
-    all_rosters <-
-      years %>%
-      map({
-        function(x)
-          get_nba_season_players_safe(x,
-                                      include_only_rostered_players = only_on_roster,
-                                      return_message = message)
-      }) %>%
-      compact %>%
-      bind_rows
-    return(all_rosters)
-  }
-
-
-height_in_inches <-
-  function(height) {
-    height_ft_in <-
-      height %>%
-      stringr::str_split("-") %>%
-      unlist %>%
-      as.numeric()
-    height_in <-
-      height_ft_in[1] * 12 + height_ft_in[2]
-    return(height_in)
-  }
-
-#' Get Player Profile
-#'
-#' @param player
-#' @param player_id
-#' @param include_headline_stat
-#' @param return_message
-#' @import magrittr readr dplyr tidyr formattable jsonlite lubridate purrr stringr
-#' @return
-#' @export
-#'
-#' @examples
-get_player_profile <-
-  function(player = "Brook Lopez",
-           player_id = NA,
-           include_headline_stat = T,
-           return_message = T) {
-    players <-
-      get_nba_players_ids()
-
-    if (player_id %>% is.na()) {
-      if (!'player' %>% exists) {
-        stop("Please enter a player name")
-      }
-      id <-
-        players %>%
-        dplyr::filter(name.player == player) %>%
-        .$id.player
-    } else {
-      player <-
-        players %>%
-        dplyr::filter(id.player == player_id) %>%
-        .$name.player
-      id <-
-        player_id
-    }
-
-    active_player <-
-      players %>%
-      dplyr::filter(id.player == id) %>%
-      .$is.on_roster
-
-    ## Build URL
-    url_json <-
-      'http://stats.nba.com/stats/commonplayerinfo?LeagueID=00&PlayerID=' %>%
-      paste0(id)
-
-    json_data <-
-      url_json %>%
-      fromJSON(simplifyDataFrame = T, flatten = T)
-
-    headers_df <-
-      get_headers()
-
-    headers <-
-      json_data$resultSets$headers[1] %>%
-      unlist %>%
-      str_to_lower()
-
-    data <-
-      json_data$resultSets$rowSet[1] %>%
-      data.frame %>%
-      tbl_df
-
-    actual_names <-
-      1:length(headers) %>%
-      purrr::map(
-        function(x)
-          data_frame(
-            name.actual =
-              headers_df %>%
-              mutate(name.nba = name.nba %>% str_to_lower) %>%
-              dplyr::filter(name.nba == headers[x]) %>%
-              .$name.actual
-          )
-      ) %>%
-      bind_rows()
-
-    names(data) <-
-      actual_names$name.actual
-
-    data %<>%
-      separate(date.birth,
-               into = c('date.birth', 'ignore'),
-               sep = 'T')
-
-    data %<>%
-      unite(team, city.team, team, sep = ' ') %>%
-      dplyr::select(
-        -c(
-          name.first,
-          name.last,
-          name.last.display,
-          name.middle.display,
-          gp.flag,
-          ignore,
-          status.roster
+      purrr::set_names(
+        c(
+          "idPlayer",
+          "nameFirst",
+          "nameLast",
+          "nameTeam",
+          "nameAward",
+          "numberTeamAward",
+          "slugSeason",
+          "dateMonthAward",
+          "dateWeekAward",
+          "idTeam",
+          "typeItem",
+          "sponsorAward",
+          "slugAward",
+          "otherAward"
         )
       ) %>%
+      tidyr::unite(namePlayer, nameFirst, nameLast, sep = " ")
+
+    data <-
+      data %>%
+      mutate_at(c("idPlayer", "numberTeamAward", "idTeam"),
+                funs(. %>% as.numeric())) %>%
+      suppressWarnings() %>%
       mutate(
-        is.rookie = ifelse(years.experience == "R", T, F),
-        years.experience = years.experience %>% str_replace("R", 0) %>% as.numeric(),
-        id.team = id.team %>% as.numeric,
-        jersey = jersey %>% as.numeric,
-        height.inches = height %>% lapply(height_in_inches) %>% unlist,
-        weight.lbs = weight.lbs %>% as.numeric,
-        date.birth = date.birth %>% ymd %>% as.Date(),
-        id.player = id.player %>% as.numeric,
-        is.active_player = active_player,
-        bmi = (weight.lbs / height.inches ^ 2) * 703,
-        has.d_league_data = has.d_league_data %>% str_detect("Y")
+        dateMonthAward = lubridate::mdy(dateMonthAward),
+        dateWeekAward = readr::parse_datetime(dateWeekAward) %>% as.Date()
       ) %>%
-      dplyr::select(
-        name.player,
-        id.player,
-        is.rookie,
-        is.active_player,
-        team,
-        slug.team,
-        position,
-        jersey,
-        height,
-        height.inches,
-        weight.lbs,
-        bmi,
-        years.experience,
-        year.from,
-        year.to,
-        everything()
-      )
+      arrange(slugSeason) %>%
+      remove_na_columns()
 
-    if (include_headline_stat == T) {
-      headers <-
-        json_data$resultSets$headers[2] %>%
-        unlist %>%
-        str_to_lower()
+    if (return_message) {
+      glue::glue("Acquired {nrow(data)} awards for {data$namePlayer %>% unique()}") %>% message()
+    }
+    data
+  }
 
-      stat <-
-        json_data$resultSets$rowSet[2] %>%
-        data.frame %>%
-        tbl_df
 
-      actual_names <-
-        1:length(headers) %>%
-        purrr::map(
-          function(x)
-            data_frame(
-              name.actual =
-                headers_df %>%
-                mutate(name.nba = name.nba %>% str_to_lower) %>%
-                dplyr::filter(name.nba == headers[x]) %>%
-                .$name.actual
-            )
+get_players_roto_wire_news <-
+  function(players =  NULL,
+           player_ids = NULL,
+           nest_data = F,
+           return_message = TRUE) {
+    if (!'df_nba_player_dict' %>% exists()) {
+      df_nba_player_dict <-
+        get_nba_players()
+
+      assign(x = 'df_nba_player_dict', df_nba_player_dict, envir = .GlobalEnv)
+    }
+    ids <-
+      get_nba_players_ids(player_ids = player_ids,
+                          players = players)
+    get_player_award_safe <-
+      purrr::possibly(get_player_award, data_frame())
+
+    all_data <-
+      ids %>%
+      map_df(function(id) {
+        get_player_award_safe(player_id = id, return_message = return_message)
+      })
+
+    all_data <-
+      all_data %>%
+      arrange(datetimePublished)
+
+
+
+
+    all_data <-
+      all_data %>%
+      left_join(
+        df_nba_player_dict %>% dplyr::select(nameTeam, idPlayer, matches("url"))
+      ) %>%
+      suppressMessages()
+
+    if (nest_data) {
+      all_data <-
+        all_data %>%
+        nest(
+          -c(
+            idPlayer,
+            nameTeam,
+            namePlayer,
+            urlPlayerActionPhoto,
+            urlPlayerStats,
+            urlPlayerThumbnail,
+            urlPlayerHeadshot
+          ),
+          .key = 'dataRotoWireArticles'
         ) %>%
-        bind_rows()
-
-      names(stat) <-
-        actual_names$name.actual
-
-      stat %<>%
-        mutate_each_(funs(extract_numeric),
-                     vars =
-                       stat %>%
-                       dplyr::select(id.player, pts:pie) %>% names) %>%
-        rename(id.season.recent = id.season)
-
-      names(stat)[4:length(names(stat))] %<>%
-        paste0('.per_game.recent')
-
-      data <-
-        stat %>%
-        left_join(data)
-
-      data %<>%
-        dplyr::select(
-          id.season.recent,
-          name.player,
-          id.team,
-          code.team,
-          slug.player,
-          id.player,
-          is.rookie,
-          is.active_player,
-          team,
-          slug.team,
-          position,
-          jersey,
-          height,
-          height.inches,
-          weight.lbs,
-          bmi,
-          years.experience,
-          year.from,
-          year.to,
-          date.birth:has.d_league_data,
-          everything()
-        )
+        mutate(countArticles = dataRotoWireArticles %>% map_dbl(nrow))
     }
-
-
-    if (return_message == T) {
-      "Congrats, you got " %>%
-        paste0(player, "'s profile data") %>%
-        message()
-    }
-    return(data)
+    all_data
   }
 
-#' Get Seaons Player Profiles
+# bios --------------------------------------------------------------------
+
+
+get_player_bio <-
+  function(player_id = 101127,
+           return_message = T) {
+    url <-
+      glue::glue("http://data.nba.net/json/bios/player_{player_id}.json") %>%
+      as.character()
+
+    if (return_message) {
+      glue::glue("Acquiring {player_id} bios") %>% message()
+    }
+
+    json <-
+      url  %>%
+      curl() %>%
+      jsonlite::fromJSON(simplifyVector = T)
+
+    data <-
+      json$Bio %>% flatten_df()
+
+
+    data <-
+      data %>%
+      purrr::set_names(
+        c(
+          "idPlayer",
+          "typeResult",
+          "nameDisplay",
+          "htmlPlayerBio",
+          "nameCollge",
+          "nameHighSchool",
+          "nameTwitter",
+          "labelOther",
+          "textOther"
+        )
+      ) %>%
+      mutate(idPlayer = idPlayer %>% as.numeric()) %>%
+      mutate(textBio = htmlPlayerBio %>% map_chr(function(x) {
+        x %>% read_html() %>% html_text() %>% str_trim()
+      })) %>%
+      dplyr::select(-htmlPlayerBio) %>%
+      tidyr::separate(nameDisplay, into = c("nameLast", "nameFirst"), sep = "\\, ") %>%
+      tidyr::unite(namePlayer, nameFirst, nameLast, sep = " ") %>%
+      mutate_if(is.character,
+                funs(ifelse(. == "", NA_character_, .))) %>%
+      remove_na_columns() %>%
+      dplyr::select(idPlayer, namePlayer, everything())
+
+  }
+
+#' Get Player bios
 #'
-#' @param year.season_start
-#' @param include_headline_stats
-#' @param only_rostered_players
-#' @param message
+#' Seems to have ended after 2013-14 season
+#'
+#' @param players vector of players
+#' @param player_ids  vector of player ids
+#' @param return_message if \code{TRUE} returns a message
 #'
 #' @return
 #' @export
-#'
+#' @import dplyr curl purrr jsonlite tidyr readr
+#' @importFrom glue glue
 #' @examples
-get_season_player_profiles <-
-  function(year.season_start = 2014,
-           include_headline_stats = T,
-           only_rostered_players = T,
-           message = T) {
-    season <-
-      year.season_start
-    get_player_profile_safe <-
-      failwith(NULL, get_player_profile)
-    player_id_df <-
-      get_nba_season_players(
-        year.season_start = season,
-        include_only_rostered_players = only_rostered_players,
-        return_message = message
-      )
+get_players_bios <-
+  function(players = c("Carmelo Anthony", "Joe Johnson"),
+           player_ids = NULL,
+           return_message = TRUE) {
+    ids <-
+      get_nba_players_ids(player_ids = player_ids,
+                        players = players)
+    get_player_bio_safe <-
+      purrr::possibly(get_player_bio, data_frame())
+
+    all_data <-
+      ids %>%
+      map_df(function(id) {
+        get_player_bio_safe(player_id = id, return_message = return_message)
+      })
+
+    all_data
+
+  }
+
+
+# profiles ----------------------------------------------------------------
+
+
+get_player_profile <-
+  function(player_id = 1628378,
+           return_message = T) {
+    if (player_id %>% purrr::is_null()) {
+      stop("Pleas enter player id")
+    }
+    if (!'df_nba_player_dict' %>% exists()) {
+      df_nba_player_dict <-
+        get_nba_players()
+
+      assign(x = 'df_nba_player_dict', df_nba_player_dict, envir = .GlobalEnv)
+    }
+
+    player <-
+      df_nba_player_dict %>%
+      filter(idPlayer == player_id) %>%
+      pull(namePlayer)
+
+    if (return_message) {
+      glue::glue("Acquiring {player} NBA player profile") %>% message()
+    }
+
+    url_json <-
+      glue::glue('http://stats.nba.com/stats/commonplayerinfo?LeagueID=00&PlayerID={player_id}') %>%
+      as.character()
+    ## Build URL
+    json <-
+      curl(url_json) %>%
+      fromJSON(simplifyVector = T)
+
+    table_length <-
+      json$resultSets$rowSet %>% length()
+
+    all_data <-
+      1:table_length %>%
+      map_df(function(table_id) {
+        table_name <-
+          json$resultSets$name[table_id]
+
+      df_table <-
+          json %>%
+          nba_json_to_df(table_id = table_id) %>%
+          mutate(numberTable = table_id) %>%
+          select(numberTable, everything())
+
+        df_table <-
+          df_table %>%
+          suppressMessages() %>%
+          select(-numberTable)
+
+        if (!df_table %>% tibble::has_name("idPlayer")) {
+          df_table <-
+            df_table %>%
+            mutate(idPlayer = player_id)
+        }
+        df_table <-
+          df_table %>%
+          mutate(nameTable = table_name,
+                 namePlayer = player) %>%
+          select(nameTable, idPlayer, namePlayer, everything())
+
+
+        df_table <-
+          df_table %>%
+          dplyr::select(-one_of("idLeague")) %>%
+          dplyr::select(-matches("Group")) %>%
+          nest(-c(nameTable, idPlayer, namePlayer),
+               .key = 'dataTable') %>%
+          suppressWarnings()
+
+        df_table
+      }) %>%
+      mutate(urlNBAAPI = url_json)
+
+    all_data
+  }
+
+#' Get NBA players profiles
+#'
+#' @param player_ids Vector of player IDs
+#' @param players vector of player names
+#' @param return_message
+#' @param nest_data
+#'
+#' @return
+#' @export
+#' @import dplyr curl purrr jsonlite tidyr readr
+#' @importFrom glue glue
+#' @examples
+#' get_nba_players_profiles(player_ids = c(203500, 1628384), players = c("Michael Jordan", "Caris LeVert", "Jarrett Allen"), nest_data = FALSE, return_message = TRUE)
+get_nba_players_profiles <- function(player_ids = NULL,
+           players = NULL,
+           nest_data = F,
+           return_message = TRUE) {
+
+    if (player_ids %>% purrr::is_null() && players %>% purrr::is_null()) {
+      stop("Please enter players of player ids")
+    }
 
     player_ids <-
-      player_id_df$id.player
+      get_nba_players_ids(player_ids = player_ids, players = players)
 
-    all_profiles <-
+    all_data <-
       player_ids %>%
-      map({
-        function(x)
-          get_player_profile_safe(
-            player_id = x,
-            include_headline_stat = include_headline_stats,
-            return_message = message
-          )
-      }) %>%
-      compact %>%
-      bind_rows
+      map_df(function(player_id) {
+        get_player_profile(player_id = player_id)
+      })
+    tables <- all_data$nameTable %>% unique()
+    tables <- tables[!tables %in% "AvailableSeasons"]
 
-    return(all_profiles)
+    data <-
+      tables %>%
+      map(function(table) {
+        all_data %>%
+          filter(nameTable == table) %>%
+          select(-nameTable) %>%
+          tidyr::unnest()
+      })
+
+    all_data <-
+      data %>%
+      purrr::reduce(left_join) %>%
+      mutate(heightInches = heightInches %>% map_dbl(height_in_inches)) %>%
+      dplyr::select(one_of("idPlayer", "namePlayer", "datetimeBirth",
+                           "numberJersey", "idTeam", "teamName", "slugTeam", "cityTeam",
+                           "slugPlayer", "yearSeasonFirst", "yearSeasonLast", "yearDraft",
+                           "numberRound", "numberOverallPick", "slugSeason",
+                           "nameSchool",
+                           "nameOrganizationFrom", "heightInches", "weightLBS", "countSeasonsPlayed",
+                         "pts", "ast",
+                           "treb", "countAllStarGames", "ratioPIE",
+                           "urlNBAAPI", "nameFirst", "nameLast",
+                           "namePlayerLastFirst", "namePlayerAbbr"), everything()) %>%
+    suppressMessages()
+
+    if (nest_data) {
+      all_data <-
+        all_data %>%
+        nest(-c(idPlayer, namePlayer), .key = 'dataPlayerProfiles')
+    }
+
+    all_data
   }

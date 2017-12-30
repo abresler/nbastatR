@@ -1,7 +1,7 @@
 Package: nbastatR
 Type: Package
 Title: R's interface to NBA data
-Version: 0.1.10131
+Version: 0.1.11
 Authors@R: c(person("Alex", "Bresler", email = "abresler@asbcllc.com", role = c("aut", "cre")))
 Description: R's resource to bring in NBA data from the myriad of repositories
     across the web.
@@ -9,27 +9,13 @@ License: MIT + file LICENSE
 Depends:
     R (>= 3.2.0)
 LazyData: false
-Suggests:
-    testthat
 Imports:
     dplyr,
     jsonlite,
     purrr,
-    data.table,
     magrittr,
     stringr,
     tidyr,
     lubridate,
-    readr,
-    formattable,
-    hexbin,
-    tidyjson,
-    httr,
-    ggplot2,
-    visNetwork,
-    data.tree,
-    networkD3,
-    curl,
-    kohonen,
-    gmum.r  
-RoxygenNote: 6.0.1
+    readr
+RoxygenNote: 6.0.1.9000

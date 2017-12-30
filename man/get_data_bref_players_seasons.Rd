@@ -4,9 +4,10 @@
 \alias{get_data_bref_players_seasons}
 \title{Basketball Reference Player Season Tables}
 \usage{
-get_data_bref_players_seasons(years = 2017, tables = c("advanced",
+get_data_bref_players_seasons(years = 2016:2018, tables = c("advanced",
   "totals"), include_all_nba = TRUE, only_totals = TRUE,
-  nest_data = FALSE, return_message = TRUE)
+  nest_data = FALSE, assign_to_environment = TRUE, widen_data = TRUE,
+  join_data = TRUE, return_message = TRUE)
 }
 \arguments{
 \item{years}{vector of years 1951 to current season}

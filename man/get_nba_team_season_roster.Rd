@@ -4,12 +4,19 @@
 \alias{get_nba_team_season_roster}
 \title{Get NBA Team's Season Roster}
 \usage{
-get_nba_team_season_roster(team = "Denver Nuggets", year_season_end = 1992,
+get_nba_team_season_roster(team = "Denver Nuggets", season = 2015,
   return_message = T)
 }
 \arguments{
+\item{team}{team name}
+
+\item{season}{season vector}
+
 \item{return_message}{}
 }
 \description{
 Get NBA Team's Season Roster
+}
+\examples{
+get_nba_team_season_roster(team = "Denver Nuggets", season = 1991)
 }

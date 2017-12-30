@@ -2,36 +2,138 @@
 % Please edit documentation in R/split_functions.R
 \name{get_teams_season_stat_splits}
 \alias{get_teams_season_stat_splits}
-\title{Get Teams Seasons Stat Splits}
+\title{Get NBA Team data by split}
 \usage{
-get_teams_season_stat_splits(teams = c("Atlanta Hawks", "Boston Celtics",
-  "Brooklyn Nets", "Charlotte Hornets", "Chicago Bulls", "Cleveland Cavaliers",
-  "Dallas Mavericks", "Denver Nuggets", "Detroit Pistons",
-  "Golden State Warriors", "Houston Rockets", "Indiana Pacers",
-  "Los Angeles Clippers", "Los Angeles Lakers", "Memphis Grizzlies",
-  "Miami Heat", "Milwaukee Bucks", "Minnesota Timberwolves",
-  "New Orleans Pelicans", "New York Knicks", "Oklahoma City Thunder",
-  "Orlando Magic", "Philadelphia 76ers", "Phoenix Suns",
-  "Portland Trail Blazers",      "Sacramento Kings", "San Antonio Spurs",
-  "Toronto Raptors", "Utah Jazz", "Washington Wizards"),
-  year.season_start = 2015, season_type = c("Regular Season", "Pre Season",
-  "Playoffs", "All Star"), measure_type = c("Base", "Advanced", "Misc",
-  "Scoring", "Four Factors", "Opponent"), per_mode = c("Totals", "PerGame",
-  "MinutesPer", "Per48", "Per40", "Per36", "PerMinute", "PerPossession",
-  "PerPlay", "Per100Possessions", "Per100Plays"), is.plus_minus = c(F, T),
-  is.pace_adjusted = F, period = 0, is.rank = F, game_segment = c(NA,
-  "First Half", "Second Half", "Overtime"), division_against = c(NA,
-  "Atlantic", "Central", "Northwest", "Pacific", "Southeast", "Southwest"),
-  conference_against = c(NA, "East", "West"), date_from = NA,
-  date_to = NA, last_n_games = 0, location = c(NA, "Home", "Road"),
-  month = 0, season_segment = c(NA, "Post All-Star", "Pre All-Star"),
-  opponent = NA, outcome = c(NA, "W", "L"), playoff_round = 0,
-  shot_clock_range = c(NA, "24-22", "22-18 Very Early", "18-15 Early",
-  "15-7 Average", "7-4 Late", "4-0 Very Late", "ShotClock Off"), message = T)
+get_teams_season_stat_splits(teams = NULL, team_ids = NULL,
+  years_seasons_start = 2017, season_types = c("Regular Season"),
+  measures = "Base", modes = c("PerGame"), is_plus_minus = F,
+  is_pace_adjusted = F, periods = 0, is_rank = F, game_segments = NA,
+  divisions_against = NA, conferences_against = NA, date_from = NA,
+  date_to = NA, last_n_games = 0, locations = NA, months = 0,
+  season_segments = NA, opponents = NA, outcomes = NA,
+  playoff_rounds = 0, shot_clock_ranges = NA, return_message = TRUE,
+  assign_to_environment = TRUE, add_mode_names = T)
 }
 \arguments{
-\item{message}{}
+\item{teams}{vector of team names}
+
+\item{team_ids}{vector of team ids}
+
+\item{years_seasons_start}{vector of the start years}
+
+\item{season_types}{vector of season types options include \itemize{
+\item Regular Season
+\item Pre Season
+\item Playoffs
+\item All Star
+}}
+
+\item{measures}{vector of measure types options include \itemize{
+\item Base
+\item Advanced
+\item Misc
+\item Scoring
+\item Four Factors
+\item Opponent
+\item Usage
+}}
+
+\item{modes}{vector of modes options include \itemize{
+\item PerGame
+\item Totals
+\item MinutesPer
+\item Per48
+\item Per40
+\item Per36
+\item PerMinute
+\item PerPossession
+\item PerPlay
+\item Per100Possessions
+\item Per100Plays
+}}
+
+\item{is_plus_minus}{is plus minus \code{TRUE} or \code{FALSE}}
+
+\item{is_pace_adjusted}{is pace adjusted \code{TRUE} or \code{FALSE}}
+
+\item{periods}{vector of periods \code{0:12}}
+
+\item{is_rank}{is rank \code{TRUE} or \code{FALSE}}
+
+\item{game_segments}{vector of game segments options include \itemize{
+\item NA
+\item First Half
+\item Second Half
+\item Overtime
+}}
+
+\item{divisions_against}{vector of divisions against options include \itemize{
+\item NA
+\item Atlantic
+\item Central
+\item Northwest
+\item Pacific
+\item Southeast
+\item Southwest
+}}
+
+\item{conferences_against}{vector of conferences against options include  \itemize{
+\item NA
+\item East
+\item West
+}}
+
+\item{date_from}{vector of dates from}
+
+\item{date_to}{vector of dates to}
+
+\item{last_n_games}{vector of last_n games \code{0:82}}
+
+\item{locations}{vector of locations options include \itemize{
+\item NA
+\item Home
+\item Road
+}}
+
+\item{months}{vector of game months options include \code{0:12}}
+
+\item{season_segments}{vector of season segments, options include \itemize{
+\item NA
+\item Post All-Star
+\item Pre All-Star
+}}
+
+\item{opponents}{vector of opponent names
+if \code{NA} all teams}
+
+\item{outcomes}{vector of outcomes options include \itemize{
+\item NA
+\item Wins
+\item Losses
+}}
+
+\item{playoff_rounds}{vector of playoff rounds options include code{0:4}}
+
+\item{shot_clock_ranges}{vector of shot clock ranges options include \itemize{
+\item  NA,
+\item 24-22
+\item 22-18 Very Early
+\item 18-15 Early
+\item 15-7 Average
+\item 7-4 Late
+\item 4-0 Very Late
+\item ShotClock Off
+}}
+
+\item{return_message}{if \code{TRUE} add mode nanmes}
+
+\item{assign_to_environment}{if \code{TRUE} assigns data to environment}
+
+\item{add_mode_names}{if \code{TRUE} adds data to environment}
 }
 \description{
-Get Teams Seasons Stat Splits
+Get NBA Team data by split
+}
+\examples{
+get_teams_season_stat_splits(teams = c("Brooklyn Nets"), years_seasons_start = 2017, measures = c("Base", "Opponent"), modes = c("PerGame"), assign_to_environment = T, add_mode_names = T, return_message = TRUE)
 }

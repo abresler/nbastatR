@@ -1,7 +1,7 @@
 get_basketball_insider_team_ids <- function() {
   data <-
     data_frame(
-      team = c(
+      nameTeam = c(
         "Atlanta Hawks",
         "Boston Celtics",
         "Brooklyn Nets",
@@ -33,7 +33,7 @@ get_basketball_insider_team_ids <- function() {
         "Utah Jazz",
         "Washington Wizards"
       ),
-      slug.team = c(
+      slugTeamBI = c(
         "ATL",
         "BOS",
         "BKN",
@@ -67,7 +67,7 @@ get_basketball_insider_team_ids <- function() {
       )
     ) %>%
     left_join(data_frame(
-      id.bi = c(
+      idBI = c(
         1,
         2,
         3,
@@ -99,7 +99,7 @@ get_basketball_insider_team_ids <- function() {
         29,
         30
       ),
-      slug.team = c(
+      slugTeamBI = c(
         "BOS",
         "BKN",
         "NYK",
@@ -133,41 +133,56 @@ get_basketball_insider_team_ids <- function() {
       )
     )) %>%
     mutate(
-      url.bi.salary = paste0(
+      urlSalaryBI = paste0(
         'http://hw-files.com/tools/salaries/salaries_widget_new.php?team_id=',
-        id.bi
+        idBI
       )
-    )
+    ) %>%
+    suppressMessages()
   return(data)
 }
 
-get_team_salary_cap_table <-
+#' Get NBA team salaries
+#'
+#' @param team_name
+#' @param team_slug
+#' @param assume_player_opt_out
+#' @param assume_team_doesnt_exercise
+#' @param spread_data
+#' @param return_message
+#'
+#' @return
+#' @export
+#' @import dplyr rvest stringr purrr tidyr readr
+#' @examples
+get_nba_team_salaries <-
   function(team_name = "Brooklyn Nets",
            team_slug = NA,
            assume_player_opt_out = T,
            assume_team_doesnt_exercise = T,
+           spread_data = FALSE,
            return_message = T) {
     team_name_df <-
       get_basketball_insider_team_ids()
 
     teams <-
-      team_name_df$team %>%
+      team_name_df$nameTeam %>%
       str_to_lower()
 
-    if (!team_name %>% is.na &
+    if (!team_name %>% is.na() &
         (!team_name %>% str_to_lower() %in% teams)) {
       team_message <-
-        paste0(team_name_df$team, collapse = '\n')
+        paste0(team_name_df$nameTeam, collapse = '\n')
 
       "Team can only be:\n" %>%
         paste0(team_message) %>%
         stop()
     }
 
-    if (!team_slug %>% is.na &
-        (team_slug %>% str_to_lower() %in% team_name_df$slug.team)) {
+    if (!team_slug %>% is.na() &
+        (team_slug %>% str_to_lower() %in% team_name_df$slugTeamBI)) {
       team_message <-
-        paste0(team_name_df$slug.team, collapse = '\n')
+        paste0(team_name_df$slugTeamBI, collapse = '\n')
 
       "Team slugs can only be:\n" %>%
         paste0(team_message) %>%
@@ -177,18 +192,18 @@ get_team_salary_cap_table <-
     if (team_slug %>% is.na()) {
       url <-
         team_name_df %>%
-        dplyr::filter(team == team_name) %>%
-        .$url.bi.salary
+        dplyr::filter(nameTeam == team_name) %>%
+        .$urlSalaryBI
     } else {
       url <-
         team_name_df %>%
-        dplyr::filter(slug.team == team_slug) %>%
-        .$url.bi.salary
+        dplyr::filter(slugTeamBI == team_slug) %>%
+        .$urlSalaryBI
 
       team_name <-
         team_name_df %>%
-        dplyr::filter(slug.team == team_slug) %>%
-        .$team
+        dplyr::filter(slugTeamBI == team_slug) %>%
+        .$nameTeam
     }
 
     types <-
@@ -212,21 +227,20 @@ get_team_salary_cap_table <-
 
     color_df <-
       data_frame(color = colors,
-                 type = types)
+                 typeContractDetail = types)
 
     page <-
       url %>%
-      html()
+      read_html()
 
     salary_table <-
       page %>%
       html_table(header = F) %>%
-      data.frame %>%
-      tbl_df
+      purrr::flatten_df()
 
     names_salary_table <-
       c(
-        'name.player',
+        'namePlayer',
         salary_table %>%
           slice(1) %>%
           gather(item, value) %>%
@@ -236,47 +250,56 @@ get_team_salary_cap_table <-
 
     names(salary_table) <-
       names_salary_table
-    salary_table %<>%
+    salary_table <-
+      salary_table  %>%
       slice(-1)
 
-    salary_table %<>%
-      dplyr::filter(!name.player %like% 'Total') %>%
-      mutate(team = team_name) %>%
-      dplyr::select(team, everything())
+    salary_table <-
+      salary_table %>%
+      dplyr::filter(!namePlayer %>% str_detect("Total")) %>%
+      mutate(nameTeam = team_name) %>%
+      dplyr::select(nameTeam, everything())
 
     salary_data <-
       salary_table %>%
-      separate(name.player,
-               into = c('name.player', 'status'),
+      separate(namePlayer,
+               into = c('namePlayer', 'statusPlayer'),
                sep = '\\(') %>%
       mutate(
-        is.waived = name.player %>% str_detect("wavied"),
-        name.player = name.player %>% str_replace('waived', '') %>% str_trim,
-        name.player = name.player %>% str_trim(),
-        status = status %>% str_replace("\\)", ''),
-        status = ifelse(status %>% is.na, "current roster", status),
-        is.on_roster = ifelse(status == "current roster", T, F)
+        isWaived = namePlayer %>% str_detect("wavied"),
+        namePlayer = namePlayer %>% str_replace('waived', '') %>% str_trim(),
+        namePlayer = namePlayer %>% str_trim(),
+        statusPlayer = statusPlayer %>% str_replace("\\)", ''),
+        statusPlayer = ifelse(statusPlayer %>% is.na, "current roster", statusPlayer),
+        isOnRoster = ifelse(statusPlayer == "current roster", T, F)
       ) %>%
-      dplyr::select(team, name.player:status, is.on_roster, everything()) %>%
-      gather(id.season,
+      dplyr::select(nameTeam, namePlayer:statusPlayer, isOnRoster, everything()) %>%
+      gather(slugSeason,
              value,
-             -c(team, name.player, status, is.on_roster, is.waived)) %>%
-      mutate(value = value %>% extract_numeric) %>%
-      dplyr::select(team,
-                    id.season,
-                    name.player,
-                    status,
-                    is.waived,
-                    is.on_roster,
+             -c(nameTeam, namePlayer, statusPlayer, isOnRoster, isWaived)) %>%
+      mutate(value = value %>% parse_number()) %>%
+      dplyr::select(nameTeam,
+                    slugSeason,
+                    namePlayer,
+                    statusPlayer,
+                    isWaived,
+                    isOnRoster,
                     value) %>%
-      dplyr::filter(!value %>% is.na())
+      dplyr::filter(!value %>% is.na()) %>%
+      suppressWarnings()
+
+
+    salary_data <-
+      salary_data %>%  mutate_if(is.character,
+                funs(. %>% str_replace_all("\\\\", "") %>% str_trim()))
 
 
     year_1_salary <-
       page %>%
       html_nodes('tbody td:nth-child(2)') %>%
       html_text() %>%
-      extract_numeric()
+      parse_number() %>%
+      suppressWarnings()
 
     year_1_salary <-
       year_1_salary[1:(year_1_salary %>% length() - 1)]
@@ -289,15 +312,16 @@ get_team_salary_cap_table <-
       gsub("[^A-Z a-z#0-9]", '', .)
 
     year_1_df <-
-      data_frame(id.season = names_salary_table[2],
+      data_frame(slugSeason = names_salary_table[2],
                  color = year_1_salary_color,
-                 value = year_1_salary)
+                 value = year_1_salary[1:length(year_1_salary_color)])
 
     year_2_salary <-
       page %>%
       html_nodes('tbody td:nth-child(3)') %>%
       html_text() %>%
-      extract_numeric()
+      parse_number() %>%
+      suppressWarnings()
 
     year_2_salary <-
       year_2_salary[1:(year_2_salary %>% length() - 1)] %>%
@@ -311,15 +335,16 @@ get_team_salary_cap_table <-
       gsub("[^A-Z a-z#0-9]", '', .)
 
     year_2_df <-
-      data_frame(id.season = names_salary_table[3],
+      data_frame(slugSeason = names_salary_table[3],
                  color = year_2_salary_color,
-                 value = year_2_salary)
+                 value = year_2_salary[1:length(year_2_salary_color)])
 
     year_3_salary <-
       page %>%
       html_nodes('tbody td:nth-child(4)') %>%
       html_text() %>%
-      extract_numeric()
+      parse_number() %>%
+      suppressWarnings()
 
     year_3_salary <-
       year_3_salary[1:(year_3_salary %>% length() - 1)] %>%
@@ -333,15 +358,17 @@ get_team_salary_cap_table <-
       gsub("[^A-Z a-z#0-9]", '', .)
 
     year_3_df <-
-      data_frame(id.season = names_salary_table[4],
+      data_frame(slugSeason = names_salary_table[4],
                  color = year_3_salary_color,
-                 value = year_3_salary)
+                 value = year_3_salary[1:length(year_3_salary_color)])
 
     year_4_salary <-
       page %>%
       html_nodes('tbody td:nth-child(5)') %>%
       html_text() %>%
-      extract_numeric()
+      parse_number() %>%
+      suppressWarnings()
+
     year_4_salary <-
       year_4_salary[1:(year_4_salary %>% length() - 1)] %>%
       .[!is.na(.)]
@@ -354,15 +381,16 @@ get_team_salary_cap_table <-
       gsub("[^A-Z a-z#0-9]", '', .)
 
     year_4_df <-
-      data_frame(id.season = names_salary_table[5],
+      data_frame(slugSeason = names_salary_table[5],
                  color = year_4_salary_color,
-                 value = year_4_salary)
+                 value = year_4_salary[1:length(year_4_salary_color)])
 
     year_5_salary <-
       page %>%
       html_nodes('tbody td:nth-child(6)') %>%
       html_text() %>%
-      extract_numeric()
+      parse_number() %>%
+      suppressWarnings()
 
     if (year_5_salary[1:(year_5_salary %>% length() - 1)] %>%
         .[!is.na(.)] %>% length == 0) {
@@ -385,9 +413,9 @@ get_team_salary_cap_table <-
     }
 
     year_5_df <-
-      data_frame(id.season = names_salary_table[6],
+      data_frame(slugSeason = names_salary_table[6],
                  color = year_5_salary_color,
-                 value = year_5_salary)
+                 value = year_5_salary[1:length(year_5_salary_color)])
 
     contract_color_df <-
       year_1_df %>%
@@ -401,28 +429,29 @@ get_team_salary_cap_table <-
       left_join(contract_color_df) %>%
       left_join(color_df) %>%
       mutate(
-        is.waived = ifelse(name.player %>% str_detect('waived'), T, F),
-        is.non.guaranteed = ifelse(type == 'Non-Guaranteed', T, F),
-        is.non.guaranteed = ifelse(is.non.guaranteed %>% is.na(), F, is.non.guaranteed),
-        is.team_option = ifelse(type == 'Team Option', T, F),
-        is.team_option = ifelse(is.team_option %>% is.na(), F, is.team_option),
-        is.player_option = ifelse(type == 'Player Option', T, F),
-        is.player_option = ifelse(is.player_option %>% is.na(), F, is.player_option)
+        isWaived = ifelse(namePlayer %>% str_detect('waived'), T, F),
+        isNonGuaranted = ifelse(typeContractDetail == 'Non-Guaranteed', T, F),
+        isNonGuaranted = ifelse(isNonGuaranted %>% is.na(), F, isNonGuaranted),
+        isTeamOption = ifelse(typeContractDetail == 'Team Option', T, F),
+        isTeamOption = ifelse(isTeamOption %>% is.na(), F, isTeamOption),
+        isPlayerOption = ifelse(typeContractDetail == 'Player Option', T, F),
+        isPlayerOption = ifelse(isPlayerOption %>% is.na(), F, isPlayerOption)
       ) %>%
       dplyr::select(
-        id.season,
-        team:is.on_roster,
-        is.non.guaranteed,
-        is.team_option,
-        is.player_option,
-        type,
+        slugSeason,
+        nameTeam:isOnRoster,
+        isNonGuaranted,
+        isTeamOption,
+        isPlayerOption,
+        typeContractDetail,
         value
-      )
+      ) %>%
+      suppressMessages()
 
     if (assume_player_opt_out == T) {
       player_final_seasons <-
         all_data %>%
-        dplyr::filter(is.player_option  == F)
+        dplyr::filter(isPlayerOption  == F)
     }  else {
       player_final_seasons <-
         all_data
@@ -432,38 +461,64 @@ get_team_salary_cap_table <-
     if (assume_team_doesnt_exercise == T) {
       player_final_seasons <-
         player_final_seasons %>%
-        dplyr::filter(is.team_option == F)
+        dplyr::filter(isTeamOption == F)
     }
     player_final_seasons %<>%
-      group_by(name.player) %>%
-      dplyr::select(name.player, id.season, is.on_roster) %>%
-      dplyr::filter(id.season == max(id.season)) %>%
+      group_by(namePlayer) %>%
+      dplyr::select(namePlayer, slugSeason, isOnRoster) %>%
+      dplyr::filter(slugSeason == max(slugSeason)) %>%
       mutate(
-        is.final_season = T,
-        is.final_season = ifelse(is.on_roster == F, NA, is.on_roster)
+        isFinalSeason = T,
+        isFinalSeason = ifelse(isOnRoster == F, NA, isOnRoster)
       ) %>%
       distinct()
 
-    all_data %<>%
+    all_data <-
+      all_data %>%
       left_join(player_final_seasons) %>%
-      dplyr::select(id.season:status, is.final_season, everything())
+      dplyr::select(slugSeason:statusPlayer, isFinalSeason, everything()) %>%
+      suppressMessages()
 
-    all_data %<>%
-      mutate(name.player = name.player %>% gsub("[^A-Z a-z # ' 0-9]", '', .)) %>%
+    all_data <-
+      all_data %>%
+      mutate(namePlayer = namePlayer %>% gsub("[^A-Z a-z # ' 0-9]", '', .)) %>%
       distinct()
 
-    if (return_message == T) {
-      "You got salary data for " %>%
+    if (return_message) {
+      "You got salary data for the " %>%
         paste0(team_name) %>%
         message()
     }
-    return(all_data)
 
+    all_data <-
+      all_data %>%
+      group_by(namePlayer, slugSeason) %>%
+      slice(1) %>%
+      ungroup()
+
+    if (spread_data) {
+      all_data <-
+      all_data %>%
+      select(nameTeam, namePlayer, slugSeason, value) %>%
+      spread(slugSeason, value)
+    }
+    all_data
   }
 
-get_all_team_salaries <-
+#' Get All NBA Teams Salaries
+#'
+#' @param assume_player_opt_out
+#' @param assume_team_doesnt_exercise
+#'
+#' @return
+#' @export
+#' @import dplyr rvest stringr purrr tidyr readr
+#' @examples
+get_all_nba_teams_salaries <-
   function(assume_player_opt_out = T,
-           assume_team_doesnt_exercise = T) {
+           assume_team_doesnt_exercise = T,
+           spread_data = F,
+           return_message = T) {
     apo <-
       assume_player_opt_out
 
@@ -503,24 +558,27 @@ get_all_team_salaries <-
         "Washington Wizards"
       )
 
+    get_nba_team_salaries_safe <-
+      purrr::possibly(get_nba_team_salaries, data_frame())
+
     all_salaries <-
       all_teams %>%
-      purrr::map(
+      purrr::map_df(
         function(x)
-          get_team_salary_cap_table(
+          get_nba_team_salaries_safe(
             team_name = x,
             assume_player_opt_out = apo,
             assume_team_doesnt_exercise = atde,
-            return_message = F
+            spread_data = spread_data,
+            return_message = return_message
           )
-      ) %>%
-      compact %>%
-      bind_rows()
-
-    all_salaries %<>%
-      mutate(
-        is.waived = name.player %>% str_detect('waived'),
-        name.player = name.player %>% str_replace('waived', '') %>% str_trim
       )
-    return(all_salaries)
+
+    all_salaries <-
+      all_salaries %>%
+      mutate(
+        isWaived = namePlayer %>% str_detect('waived'),
+        namePlayer = namePlayer %>% str_replace('waived', '') %>% str_trim()
+      )
+    all_salaries
   }

@@ -1,22 +1,11 @@
-#http://www.rotoworld.com/teams/injuries/nba/all/
-packages <- #need all of these installed including some from github
-  c('dplyr',
-    'magrittr',
-    'jsonlite',
-    'tidyr',
-    'purrr',
-    'stringr',
-    'rvest',
-    'httr',
-    'lubridate',
-    'tidyr')
-options(warn = -1)
-lapply(packages, library, character.only = T)
 get_player_names <- function(){
   data <-
     data_frame(
-    name.player = c("J.J. Barea", "Amare Stoudemire", "C.J. Watson", "Nene Hilario"),
-    name.nba = c("Jose Juan Barea", "Amar'e Stoudemire", "CJ Watson", "Nene")
+    namePlayer = c("J.J. Barea", "Amare Stoudemire", "C.J. Watson", "Nene Hilario", "Wes Johnson", "A.J. Hammons",
+                   "C.J. Wilcox"),
+    nameNBA = c("Jose Juan Barea", "Amar'e Stoudemire", "CJ Watson", "Nene",
+                "Wesley Johnson", "AJ Hammons",
+                "CJ Wilcox")
 
   )
   return(data)
@@ -24,7 +13,17 @@ get_player_names <- function(){
 }
 
 
-get_nba_player_injuries <- function(filter_returning_today = T) {
+#' NBA Injuries
+#'
+#' @param filter_returning_today if \code{TRUE} filter players returning today
+#'
+#' @return
+#' @export
+#' @import lubridate dplyr curl stringr purrr tidyr rvest xml2
+#' @examples
+#' get_nba_player_injuries()
+get_nba_player_injuries <-
+  function(filter_returning_today = T) {
   url <-
     'http://www.rotoworld.com/teams/injuries/nba/all/'
 
@@ -42,14 +41,14 @@ get_nba_player_injuries <- function(filter_returning_today = T) {
     html_nodes('td:nth-child(2) span') %>%
     html_text()
 
-  injury.timeline <-
+  injuryTimeline <-
     page %>%
     html_nodes('td:nth-child(2) .impact') %>%
     html_text() %>%
-    str_to_lower %>%
+    str_to_lower() %>%
     str_trim()
 
-  date.information <-
+  dateInformation <-
     page %>%
     html_nodes('td:nth-child(2) .date') %>%
     html_text() %>%
@@ -59,7 +58,7 @@ get_nba_player_injuries <- function(filter_returning_today = T) {
     mdy() %>%
     as.Date()
 
-  date.injury <-
+  dateInjury <-
     page %>%
     html_nodes('tr+ tr td:nth-child(5)') %>%
     html_text() %>%
@@ -69,65 +68,87 @@ get_nba_player_injuries <- function(filter_returning_today = T) {
     mdy() %>%
     as.Date()
 
-  injury.detail <-
+  injuryDetail <-
     page %>%
     html_nodes('.report') %>%
-    html_text
+    html_text()
 
   injury_data <-
-    data_frame(date.information,
-               name.player = players,
-               date.injury,
+    data_frame(dateInformation,
+               namePlayer = players,
+               dateInjury,
                injury,
-               injury.timeline,
-               injury.detail)
+               injuryTimeline,
+               injuryDetail)
 
   player_ids <-
-    nbastatR::get_nba_players_ids()
+    get_nba_players()
+
   player_missing_df <-
     get_player_names()
-  injury_data %<>%
+
+
+
+  injury_data <-
+    injury_data %>%
     left_join(player_missing_df) %>%
-    mutate(name.player = ifelse(name.nba %>% is.na, name.player, name.nba)) %>%
-    dplyr::select(-name.nba) %>%
+    mutate(namePlayer = ifelse(nameNBA %>% is.na(), namePlayer, nameNBA)) %>%
+    dplyr::select(-nameNBA) %>%
+    suppressMessages()
+
+  injury_data <-
+    injury_data %>%
     left_join(
       player_ids %>%
-        dplyr::select(name.player, team)
+        dplyr::select(
+          namePlayer,
+          slugTeam,
+          urlPlayerHeadshot,
+          idPlayer,
+          urlPlayerActionPhoto
+        )
     ) %>%
-    dplyr::filter(!is.na(team)) %>%
-    dplyr::select(team, name.player, everything()) %>%
-    arrange(team)
+    dplyr::filter(!is.na(slugTeam)) %>%
+    dplyr::select(slugTeam, namePlayer, everything()) %>%
+    arrange(slugTeam) %>%
+    suppressMessages()
 
-  injury_data %<>%
-    mutate(is.gtd = ifelse(injury.timeline == 'day-to-day', T, F)) %>%
-    dplyr::select(team, name.player, is.gtd, everything())
+  injury_data <-
+    injury_data %>%
+    mutate(isGTD = ifelse(injuryTimeline == 'day-to-day', T, F)) %>%
+    dplyr::select(slugTeam, namePlayer, isGTD, everything())
 
-  injury_data %<>%
-    separate(injury.timeline, into = c('remove','date.return'),sep = 'target',
+  injury_data <-
+    injury_data %>%
+    separate(injuryTimeline, into = c('remove','dateReturn'),sep = 'target',
              remove = F) %>%
     dplyr::select(-remove) %>%
-    mutate(date.return = date.return %>% gsub('\\ing','',.),
-           date.return = date.return %>% gsub('\\.','',.) %>% str_trim(),
-           date.return = ifelse(!date.return %>% is.na & date.return %>% nchar < 7,
-                                yes = date.return %>%
+    mutate(dateReturn = dateReturn %>% gsub('\\ing','',.),
+           dateReturn = dateReturn %>% gsub('\\.','',.) %>% str_trim(),
+           dateReturn = ifelse(!dateReturn %>% is.na() & dateReturn %>% nchar < 7,
+                                yes = dateReturn %>%
                                   paste0(", ",
                                          Sys.Date() %>% year()
                                   ) %>%
                                   mdy() %>%
-                                  as.Date() %>% as.character, date.return)
-           )
-  if (filter_returning_today == T){
-  active_players <-
-    injury_data %>%
-    dplyr::filter(date.return == Sys.Date() %>% as.character() |
-                    date.return == Sys.Date() %>% weekdays() %>% str_to_lower
-                    ) %>%
-      .$name.player
+                                  as.Date() %>% as.character, dateReturn)
+           ) %>%
+    suppressWarnings()
 
-  injury_data %<>%
-    dplyr::filter(!name.player %in% active_players)
+  if (filter_returning_today){
+    active_players <-
+      injury_data %>%
+      dplyr::filter(
+        dateReturn == Sys.Date() %>% as.character() |
+          dateReturn == Sys.Date() %>% weekdays() %>% str_to_lower()
+      ) %>%
+      .$namePlayer
+    if (active_players %>% length() >0 ) {
+      injury_data <-
+        injury_data %>%
+        dplyr::filter(!name.player %in% active_players)
+    }
+
   }
-
-  return(injury_data)
-
+  injury_data
 }

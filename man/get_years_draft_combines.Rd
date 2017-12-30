@@ -2,13 +2,20 @@
 % Please edit documentation in R/get_draft_combine_data.R
 \name{get_years_draft_combines}
 \alias{get_years_draft_combines}
-\title{get years draft combines}
+\title{Get Years NBA Draft Combines}
 \usage{
-get_years_draft_combines(combine_years = 2000:2016)
+get_years_draft_combines(years = NULL, return_message = T, nest_data = F)
 }
 \arguments{
-\item{combine_years}{}
+\item{years}{vector of draft years}
+
+\item{return_message}{if \code{TRUE} return message}
+
+\item{nest_data}{if \code{TRUE} returns nested data_frame}
 }
 \description{
-get years draft combines
+Get Years NBA Draft Combines
+}
+\examples{
+get_years_draft_combines(c(2001:2017), nest_data = T)
 }

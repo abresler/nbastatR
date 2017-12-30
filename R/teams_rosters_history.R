@@ -1,52 +1,34 @@
-#' Get Height in Inches
+#' Get NBA franchise history
 #'
-#' @param height
+#' @param return_message if \code{TRUE} returns message
+#' @param only_active if \code{TRUE} only active teams
 #'
-#' @return
+#' @return a \code{data_frame()}
 #' @export
-#' @importFrom stringr str_split
+#' @import dplyr stringr curl purrr jsonlite
 #' @examples
-height_in_inches <-
-  function(height) {
-    height_ft_in <-
-      height %>%
-      str_split("-") %>%
-      unlist %>%
-      as.numeric()
-    height_in <-
-      height_ft_in[1] * 12 + height_ft_in[2]
-    return(height_in)
-  }
-
-#' Get NBA Franchise Data
-#'
-#' @param return_franchises
-#' @param return_message
-#'
-#' @return
-#' @export
-#' @import purrr jsonlite dplyr tibble magrittr lubridate stringr tidyr
-#' @examples
-
-get_nba_franchise_data <-
-  function(return_franchises = c('all', 'active', 'current'),
-           return_message = T) {
+#' get_nba_franchise_history()
+get_nba_franchise_history <-
+  function(return_message = T,
+           only_active = F) {
     team_history_url <-
       'http://stats.nba.com/stats/franchisehistory?LeagueID=00'
 
     team_data <-
       team_history_url %>%
+      curl() %>%
+      readr::read_lines() %>%
       fromJSON(simplifyDataFrame = T, flatten = T)
 
     names_active <-
       team_data$resultSets$headers[1] %>%
-      unlist %>%
-      str_to_lower
+      unlist() %>%
+      str_to_lower()
 
     names_defunct <-
       team_data$resultSets$headers[2] %>%
-      unlist %>%
-      str_to_lower
+      unlist() %>%
+      str_to_lower()
 
     active_data <-
       team_data$resultSets$rowSet[1] %>%
@@ -59,7 +41,7 @@ get_nba_franchise_data <-
 
     active_data <-
       active_data %>%
-      mutate(is.active = T)
+      mutate(isActive = T)
 
     defunct_data <-
       team_data$resultSets$rowSet[2] %>%
@@ -71,7 +53,7 @@ get_nba_franchise_data <-
 
     defunct_data <-
       defunct_data %>%
-      mutate(is.active = F)
+      mutate(isActive = F)
 
     data <-
       active_data %>%
@@ -79,525 +61,399 @@ get_nba_franchise_data <-
 
     num_cols <-
       data %>%
-      dplyr::select(-is.active) %>%
+      dplyr::select(-isActive) %>%
       dplyr::select(-matches("team")) %>%
-      names
+      names()
 
     data <-
       data %>%
-      mutate_at(.cols = num_cols,
+      mutate_at(.vars = num_cols,
                 .funs = as.numeric)
 
     names(data) <-
       c(
-        "id.league",
-        "id.team",
-        "city.team",
-        "name.team",
-        "year.start.team",
-        "year.end.team",
-        "team.seasons",
-        "team.games",
-        "team.wins",
-        "team.losses",
-        "pct.wins",
-        "team.po_appearances",
-        "team.div_titles",
-        "team.conf_titles",
-        "team.league_titles",
-        "is.active"
+        "idLeague",
+        "idTeam",
+        "cityTeam",
+        "teamName",
+        "yearStart",
+        "yearEnd",
+        "countTeamSeasons",
+        "countTeamGames",
+        "countTeamWins",
+        "countTeamLosses",
+        "pctWins",
+        "countPlayoffQualified",
+        "countDivisionTitles",
+        "countConferenceTitles",
+        "countLeagueTitles",
+        "isActive"
       )
 
     data <-
       data %>%
-      mutate(team = city.team %>% paste(name.team),
-             id.team = id.team %>% as.numeric()) %>%
-      dplyr::select(-id.league) %>%
-      dplyr::select(id.team, team, everything())
+      mutate(idTeam = idTeam %>% as.numeric()) %>%
+      tidyr::unite(nameTeam, cityTeam, teamName, sep = " ", remove = F) %>%
+      dplyr::select(idLeague, idTeam, nameTeam, everything()) %>%
+      mutate(nameTeam = nameTeam %>% str_replace_all("LA Clippers", "Los Angeles Clippers"))
 
-    if (return_franchises == 'current') {
-      data %<>%
-        mutate(id.row = 1:nrow(.)) %>%
-        group_by(id.team) %>%
-        dplyr::filter(id.row == min(id.row), is.active == T) %>%
-        dplyr::select(-id.row)
+    if (only_active) {
+      current_year <- data$yearEnd %>% max(na.rm = T)
+      data <-
+        data %>%
+        filter(isActive) %>%
+        filter(yearEnd == current_year) %>%
+        group_by(idTeam) %>%
+        filter(yearStart == min(yearStart)) %>%
+        mutate(idRow = 1:n()) %>%
+        filter(idRow == min(idRow)) %>%
+        ungroup()
     }
 
-    if (return_franchises == 'active') {
-      data %<>%
-        dplyr::filter(is.active == T)
-    }
-    if (return_message == T) {
+
+    if (return_message) {
       "You got NBA franchise data" %>%
-        message
+        message()
     }
-    return(data)
+   data
   }
 
 
 #' Get NBA Team's Season Roster
 #'
-#' @param team
-#' @param year_season_end
+#' @param team team name
+#' @param season season vector
 #' @param return_message
 #'
 #' @return
 #' @export
-#'
+#' @import dplyr purrr stringr readr tidyr jsonlite curl lubridate
+#' @importFrom glue glue
 #' @examples
-get_nba_team_season_roster <- function(team = "Denver Nuggets",
-                                       year_season_end = 1992,
-                                       return_message = T) {
+#' get_nba_team_season_roster(team = "Denver Nuggets", season = 1991)
 
-  if (!'team' %>% exists) {
-    stop("Please enter a team")
-  }
+get_nba_team_season_roster <-
+  function(team = "Denver Nuggets",
+           season = 2015,
+           return_message = T) {
+    if (!'team' %>% exists()) {
+      stop("Please enter a team")
+    }
 
-  year_season_start <-
-    year_season_end - 1
+    season_start <-
+      season - 1
 
-  id.season <-
-    year_season_start %>%
-    paste(year_season_end %>% substr(start = 3, stop = 4),
-          sep = "-")
+    slugSeason <-
+      season_start %>%
+      paste(season %>% substr(start = 3, stop = 4),
+            sep = "-")
+    if (!'df_dict_team_history' %>% exists()) {
+      df_dict_team_history <-
+        get_nba_franchise_history(only_active = T)
+      assign('df_dict_team_history', df_dict_team_history, envir = .GlobalEnv)
+    }
 
-  teams <-
-    get_nba_franchise_data(return_franchises = 'all', return_message = F)
-
-  teams_ids <-
-    teams %>%
-    dplyr::select(id.team, city.team, name.team, team, year.start.team)
-
-  t <-
-    team
-
-  team_id <-
-    teams_ids %>%
-    dplyr::filter(team == t) %>%
-    .$id.team %>%
-    unique()
-
-  if (team_id %>% length > 1) {
     team_id <-
-      team_id[1]
-  }
+      df_dict_team_history %>%
+      filter(nameTeam %>% str_detect(team)) %>%
+      pull(idTeam) %>%
+      unique()
 
-  if (year_season_end - 1 <
-      teams %>%
-      dplyr::filter(id.team == team_id) %>%
-      dplyr::filter(year.start.team == min(year.start.team)) %>%
-      .$year.start.team %>% unique()) {
-    "Sorry " %>%
-      paste0(
-        year_season_end,
-        ' is not a valid season for the ',
-        teams_ids %>%
-          dplyr::filter(id.team == team_id) %>%
-          .$team
+    json_url <-
+      glue::glue('http://stats.nba.com/stats/commonteamroster?LeagueID=00&Season={slugSeason}&TeamID={team_id}') %>% as.character()
+
+
+    json_data <-
+      json_url %>%
+      curl::curl() %>%
+      readr::read_lines() %>%
+      fromJSON(simplifyDataFrame = T, flatten = T)
+
+    names_roster <-
+      json_data$resultSets$headers[1] %>%
+      unlist() %>%
+      str_to_lower()
+
+    data_roster <-
+      json_data$resultSets$rowSet[1] %>%
+      data.frame(stringsAsFactors = F) %>%
+      tbl_df()
+    actual_names <- c(
+      "idTeam",
+      "yearSeason",
+      "idLeague",
+      "namePlayer",
+      "numberJerseySeason",
+      "groupPosition",
+      "heightInches",
+      "weightLBS",
+      "dateBirth",
+      "agePlayerSeason",
+      "countSeasons",
+      "nameSchool",
+      "idPlayer"
+    )[1:length(names(data_roster))]
+
+     data_roster <-
+      data_roster %>%
+      purrr::set_names(
+        actual_names
       ) %>%
-      message()
+      mutate(slugSeason,
+             nameTeam = team) %>%
+      dplyr::select(slugSeason, yearSeason, nameTeam, everything())
 
+
+    data_roster <-
+      data_roster %>%
+      mutate_at(
+        c(
+          "idTeam",
+          "yearSeason",
+          "idLeague",
+          "weightLBS",
+          "agePlayerSeason",
+          "countSeasons",
+          "idPlayer"
+        ),
+        funs(. %>% readr::parse_number())
+      ) %>%
+      mutate(
+        dateBirth = lubridate::mdy(dateBirth),
+        heightInches = heightInches %>% map_dbl(height_in_inches),
+        countSeasons = ifelse(countSeasons %>% is.na(), 0, countSeasons),
+        isRookie = ifelse(countSeasons == 0, TRUE, FALSE)
+      ) %>%
+      dplyr::select(-one_of(c("idLeague"))) %>%
+      suppressMessages() %>%
+      suppressWarnings()
+
+      if (return_message) {
+        glue::glue("You got the {team}'s roster for the {slugSeason}") %>% message()
+      }
+    data_roster
   }
 
-  roster_url <-
-    'http://stats.nba.com/stats/commonteamroster?LeagueID=00&Season=' %>%
-    paste0(id.season, '&TeamID=', team_id)
 
-  json_data <-
-    roster_url %>%
-    fromJSON(simplifyDataFrame = T, flatten = T)
-
-  names_roster <-
-    json_data$resultSets$headers[1] %>%
-    unlist %>%
-    str_to_lower
-
-  data_roster <-
-    json_data$resultSets$rowSet[1] %>%
-    data.frame(stringsAsFactors = F) %>%
-    tbl_df
-
-  names(data_roster) <-
-    names_roster
-
-  data_roster %<>%
-    rename(
-      id.team = teamid,
-      id.player = player_id,
-      name.player = player,
-      number = num,
-      date.birth = birth_date,
-      years.experience = exp,
-      weight.lbs = weight,
-      number.jersey = num
-    ) %>%
-    dplyr::select(-c(leagueid, season)) %>%
-    mutate(
-      is.rookie = ifelse(years.experience == "R", T, F),
-      years.experience = years.experience %>% str_replace("R", 0) %>% as.numeric(),
-      id.team = id.team %>% as.numeric,
-      number.jersey = number.jersey %>% as.numeric,
-      height.inches = height %>% lapply(height_in_inches) %>% unlist,
-      weight.lbs = weight.lbs %>% as.numeric,
-      date.birth = date.birth %>% as.Date('%b %d, %Y'),
-      id.player = id.player %>% as.numeric,
-      id.season,
-      season.year_end = year_season_end
-    ) %>%
-    dplyr::select(id.season,
-                  season.year_end,
-                  id.player,
-                  name.player,
-                  everything()) %>%
-    separate(
-      position,
-      sep = '\\-',
-      into = c('id.position', 'id.position.secondary')
-    ) %>%
-    left_join(
-      teams_ids %>%
-        group_by(id.team) %>%
-        dplyr::filter(team == t) %>%
-        dplyr::filter(year.start.team == min(year.start.team)) %>%
-        ungroup
-    ) %>%
-    suppressMessages() %>%
-    dplyr::select(-c(city.team, name.team, season.year_end, year.start.team)) %>%
-    dplyr::select(
-      id.season,
-      id.team,
-      team,
-      id.position,
-      id.position.secondary,
-      is.rookie,
-      name.player,
-      weight.lbs,
-      height.inches,
-      everything()
-    ) %>%
-    suppressWarnings()
-
-  if (return_message == T) {
-    "You got the NBA roster for the " %>%
-      paste0(t, " for the ", id.season, ' season.') %>%
-      message()
-  }
-  return(data_roster)
-}
-
-
-get_all_teams_season_rosters <-
-  function(year_season_end = 1990,
-           message = T) {
+get_season_teams_rosters <-
+  function(season = 1994,
+           return_message = T) {
+    if (!'df_dict_team_history' %>% exists()) {
+      df_dict_team_history <-
+        get_nba_franchise_history(only_active = T)
+      assign('df_dict_team_history', df_dict_team_history, envir = .GlobalEnv)
+    }
     get_nba_team_season_roster_safe <-
-      failwith(NULL, get_nba_team_season_roster)
-    teams <-
-      get_nba_franchise_data(return_franchises = 'all')
+      purrr::possibly(get_nba_team_season_roster, data_frame())
 
-    if (year_season_end > teams$year.start.team %>% max) {
-      max_year <-
-        teams$year.end.team %>% max
-      teams_names <-
-        teams %>%
-        mutate(is.active = ifelse(year.end.team == max_year, T, F)) %>%
-        dplyr::filter(is.active == T) %>%
-        group_by(id.team) %>%
-        dplyr::filter(year.end.team == max(year.end.team)) %>%
-        dplyr::select(team) %>%
-        distinct() %>%
-        .$team
-    } else {
-      teams_ids <-
-        teams %>%
-        left_join(teams %>%
-                    count(id.team) %>%
-                    dplyr::rename(count.teams = n))
+    all_data <-
+      df_dict_team_history$nameTeam %>%
+      map_df(function(team) {
+        get_nba_team_season_roster_safe(team = team,
+                                        season = season,
+                                        return_message = return_message)
+      })
 
-      one_teams <-
-        teams_ids %>% dplyr::filter(count.teams == 1)
+    all_data <-
+      all_data %>%
+      mutate(nameTeam = nameTeam %>% str_replace_all("LA Clippers", "Los Angeles Clippers"))
 
-      teams_names <-
-        teams_ids %>%
-        dplyr::filter(count.teams > 1) %>%
-        dplyr::filter(year_season_end >= year.start.team,
-                      year_season_end < year.end.team) %>%
-        group_by(id.team) %>%
-        dplyr::filter(year.end.team == min(year.end.team)) %>%
-        bind_rows(one_teams) %>%
-        dplyr::filter(is.active == T) %>%
-        dplyr::filter(year_season_end >= year.start.team) %>%
-        arrange(team) %>%
-        .$team %>%
-        unique
+    all_data
 
-    }
-    yse <-
-      year_season_end
-
-    all_rosters <-
-      teams_names %>%
-      map(
-        function(x)
-          get_nba_team_season_roster_safe(
-            team = x,
-            year_season_end = yse,
-            return_message = message
-          )
-      ) %>%
-      compact %>%
-      bind_rows()
-
-    return(all_rosters)
   }
 
-get_all_teams_season_rosters_safe <-
-  failwith(NULL, get_all_teams_season_rosters)
-
-get_all_teams_seasons_rosters <-
-  function(seasons = 2005:2006,
-           return_message = T) {
-    all_years <-
-      seasons %>%
-      map(
-        function(x)
-          get_all_teams_season_rosters_safe(year_season_end = x, message = return_message)
-      ) %>%
-      compact %>%
-      bind_rows()
-    return(all_years)
-  }
-
-
-#' Get NBA Team Season Coaches
+#' Get Teams Seasons Rosters
 #'
-#' @param team
-#' @param year_season_end
-#' @param return_message
+#' @param seasons vector of seasons
+#' @param nest_data if \code{TRUE} returns nested data frame
+#' @param return_message if \code{TRUE} returns a message
+#'
+#' @return a \code{data_frame}
+#' @export
+#' @import dplyr purrr stringr readr tidyr jsonlite curl lubridate
+#' @importFrom glue glue
+#' @examples
+#' get_seasons_teams_rosters(2010:2018, nest_data = T, return_message = T)
+get_seasons_teams_rosters <-
+  function(seasons = 1990:2018,
+           nest_data = F,
+           return_message = T) {
+    all_data <-
+      seasons %>%
+      map_df(function(season) {
+        get_season_teams_rosters(season = season)
+      })
+
+    if (nest_data) {
+      all_data <-
+        all_data %>%
+        nest(-c(slugSeason, nameTeam, idTeam), .key = 'dataRoster') %>%
+        mutate(countPlayers = dataRoster %>% map_dbl(nrow))
+    }
+
+    all_data
+  }
+
+
+#' Get Team's Season Coaching Staff
+#'
+#' @param team name of the team
+#' @param season season
+#' @param return_message if \code{TRUE} returns a message
 #'
 #' @return
 #' @export
-#' @import dplyr jsonlite stringr
+#' @import dplyr purrr stringr readr tidyr jsonlite curl lubridate
+#' @importFrom glue glue
 #' @examples
-get_nba_team_season_coaches <- function(team,
-                                        year_season_end = 2016,
-                                        return_message = T)  {
-  if (!'team' %>% exists) {
-    stop("Please enter a team")
-  }
+#' get_team_coaches("Brooklyn Nets", 2016)
 
-  year_season_start <-
-    year_season_end - 1
+get_team_coaches <-
+  function(team = "Denver Nuggets",
+           season = 2015,
+           return_message = T) {
+    if (!'team' %>% exists()) {
+      stop("Please enter a team")
+    }
 
-  id.season <-
-    year_season_start %>%
-    paste(year_season_end %>% substr(start = 3, stop = 4),
-          sep = "-")
+    season_start <-
+      season - 1
 
-  teams <-
-    get_nba_franchise_data(return_franchises = 'all', return_message = F)
+    slugSeason <-
+      season_start %>%
+      paste(season %>% substr(start = 3, stop = 4),
+            sep = "-")
+    if (!'df_dict_team_history' %>% exists()) {
+      df_dict_team_history <-
+        get_nba_franchise_history(only_active = T)
+      assign('df_dict_team_history', df_dict_team_history, envir = .GlobalEnv)
+    }
 
-  teams_ids <-
-    teams %>%
-    dplyr::select(id.team, city.team, name.team, team, year.start.team)
-
-  t <-
-    team
-
-  team_id <-
-    teams_ids %>%
-    dplyr::filter(team == t) %>%
-    .$id.team %>%
-    unique()
-
-  if (team_id %>% length > 1) {
     team_id <-
-      team_id[1]
-  }
+      df_dict_team_history %>%
+      filter(nameTeam %>% str_detect(team)) %>%
+      pull(idTeam) %>%
+      unique()
 
-  if (year_season_end - 1 <
-      teams %>%
-      dplyr::filter(id.team == team_id) %>%
-      dplyr::filter(year.start.team == min(year.start.team)) %>%
-      .$year.start.team %>% unique()) {
-    "Sorry " %>%
-      paste0(
-        year_season_end,
-        ' is not a valid season for the ',
-        teams_ids %>%
-          dplyr::filter(id.team == team_id) %>%
-          .$team
-      ) %>%
-      message()
-
-  }
-
-  roster_url <-
-    'http://stats.nba.com/stats/commonteamroster?LeagueID=00&Season=' %>%
-    paste0(id.season, '&TeamID=', team_id)
-
-  json_data <-
-    roster_url %>%
-    fromJSON(simplifyDataFrame = T, flatten = T)
-
-  names_coaches <-
-    json_data$resultSets$headers[2] %>%
-    unlist %>%
-    str_to_lower()
-
-  data_coaches <-
-    json_data$resultSets$rowSet[2] %>%
-    data.frame(stringsAsFactors = F) %>%
-    tbl_df
-
-  if (data_coaches %>% nrow == 0)  {
-    "Sorry " %>%
-      paste0(team, " has no data for ", id.season) %>%
-      stop()
-  }
-
-  names(data_coaches) <-
-    names_coaches
-
-  data_coaches %<>%
-    dplyr::select(-c(season, first_name, last_name, sort_sequence, coach_code)) %>%
-    dplyr::rename(
-      id.team = team_id,
-      id.coach = coach_id,
-      name.coach = coach_name,
-      type.coach = coach_type,
-      id.coach_type = is_assistant
-    ) %>%
-    mutate(
-      is.head_coach = ifelse(id.coach_type == "1", T, F),
-      id.team = id.team %>% as.numeric,
-      id.coach_type = id.coach_type %>% as.numeric,
-      id.season,
-      season.year_end = year_season_end,
-      is.coach = T
-    ) %>%
-    dplyr::select(id.season, season.year_end, everything()) %>%
-    separate(school,
-             into = c('type.school', 'school'),
-             sep = '\\-') %>%
-    mutate(school = school %>% str_trim,
-           type.school = type.school %>% str_trim) %>%
-    left_join(
-      teams_ids %>%
-        group_by(id.team) %>%
-        dplyr::filter(team == t) %>%
-        dplyr::filter(year.start.team == min(year.start.team)) %>%
-        ungroup
-    ) %>% suppressMessages() %>%
-    dplyr::select(-c(season.year_end, name.team, city.team, year.start.team)) %>%
-    dplyr::select(id.season, team,
-                  everything())
+    json_url <-
+      glue::glue('http://stats.nba.com/stats/commonteamroster?LeagueID=00&Season={slugSeason}&TeamID={team_id}') %>% as.character()
 
 
-  if (return_message == T) {
-    "You got the " %>%
-      paste0(id.season,
-             ' coaching data for the ',
-             data_coaches$team %>% unique) %>%
-      message()
-  }
-  return(data_coaches)
-}
+    json_data <-
+      json_url %>%
+      curl::curl() %>%
+      readr::read_lines() %>%
+      fromJSON(simplifyDataFrame = T, flatten = T)
 
+    names_roster <-
+      json_data$resultSets$headers[2] %>%
+      unlist() %>%
+      str_to_lower()
 
-#' Get All Teams Season Coaches
-#'
-#' @param year_season_end
-#' @param message
-#'
-#' @return
-#' @export
-#'
-#' @examples
-get_all_teams_season_coaches <-
-  function(year_season_end = 2005,
-           message = T) {
-    get_nba_team_season_coach_safe <-
-      failwith(NULL, get_nba_team_season_coaches)
-    teams <-
-      get_nba_franchise_data(return_franchises = 'all')
+    data_roster <-
+      json_data$resultSets$rowSet[2] %>%
+      data.frame(stringsAsFactors = F) %>%
+      tbl_df()
 
-    if (year_season_end > teams$year.start.team %>% max) {
-      max_year <-
-        teams$year.end.team %>% max
-      teams_names <-
-        teams %>%
-        mutate(is.active = ifelse(year.end.team == max_year, T, F)) %>%
-        dplyr::filter(is.active == T) %>%
-        group_by(id.team) %>%
-        dplyr::filter(year.end.team == max(year.end.team)) %>%
-        dplyr::select(team) %>%
-        distinct() %>%
-        .$team
-    } else {
-      teams_ids <-
-        teams %>%
-        left_join(teams %>%
-                    count(id.team) %>%
-                    dplyr::rename(count.teams = n))
-
-      one_teams <-
-        teams_ids %>% dplyr::filter(count.teams == 1)
-
-      teams_names <-
-        teams_ids %>%
-        dplyr::filter(count.teams > 1) %>%
-        dplyr::filter(year_season_end >= year.start.team,
-                      year_season_end < year.end.team) %>%
-        group_by(id.team) %>%
-        dplyr::filter(year.end.team == min(year.end.team)) %>%
-        bind_rows(one_teams) %>%
-        dplyr::filter(is.active == T) %>%
-        dplyr::filter(year_season_end >= year.start.team) %>%
-        arrange(team) %>%
-        .$team %>%
-        unique
-
+    if (data_roster %>% nrow() == 0) {
+      return(invisible())
     }
-    yse <-
-      year_season_end
 
-    all_coaches <-
-      teams_names %>%
-      map(
-        function(x)
-          get_nba_team_season_coach_safe(
-            team = x,
-            year_season_end = yse,
-            return_message = message
-          )
+    actual_names <- c(
+      c("idTeam", "yearSeason", "idCoach", "nameFirst", "nameLast",
+        "nameCoach", "slugCoach", "numberCoachType", "typeCoach", "schoolCoach",
+        "remove")
+
+    )[1:length(names(data_roster))]
+
+    data_roster <-
+      data_roster %>%
+      purrr::set_names(
+        actual_names
       ) %>%
-      compact %>%
-      bind_rows()
+      mutate(slugSeason,
+             nameTeam = team) %>%
+      dplyr::select(slugSeason, yearSeason, nameTeam, everything()) %>%
+      select(-one_of(c("nameFirst", "nameLast", "remove"))) %>%
+      suppressWarnings()
 
-    return(all_coaches)
+
+    data_roster <-
+      data_roster %>%
+      mutate_at(
+        c(
+          "idTeam",
+          "yearSeason"
+        ),
+        funs(. %>% readr::parse_number())
+      ) %>%
+      tidyr::separate(schoolCoach, into = c("typeSchoolCoach", "nameSchoolCoach"), sep = "\\ - ") %>%
+      suppressMessages() %>%
+      suppressWarnings()
+
+    if (return_message) {
+      glue::glue("You got the {team}'s coaches for the {slugSeason}") %>% message()
+    }
+    data_roster
   }
 
-#' Get All Team Seasons Coaches
+get_season_teams_coaches <-
+  function(season = 2010,
+           return_message = T) {
+    if (!'df_dict_team_history' %>% exists()) {
+      df_dict_team_history <-
+        get_nba_franchise_history(only_active = T)
+      assign('df_dict_team_history', df_dict_team_history, envir = .GlobalEnv)
+    }
+    get_team_coaches_safe <-
+      purrr::possibly(get_team_coaches, data_frame())
+
+    all_data <-
+      df_dict_team_history$nameTeam %>%
+      map_df(function(team) {
+        get_team_coaches_safe(team = team,
+                                        season = season,
+                                        return_message = return_message)
+      })
+
+    all_data <-
+      all_data %>%
+      mutate(nameTeam = nameTeam %>% str_replace_all("LA Clippers", "Los Angeles Clippers"))
+
+    all_data
+
+  }
+
+
+#' Get Seaons Coaching Staffs
 #'
-#' @param seasons
-#' @param return_message
+#' @param seasons vector of seasons
+#' @param nest_data if \code{TRUE} nests data
+#' @param return_message if \code{TRUE} returns a message
 #'
 #' @return
 #' @export
-#'
+#' @import dplyr purrr stringr readr tidyr jsonlite curl lubridate
+#' @importFrom glue glue
 #' @examples
-get_all_teams_seasons_coaches <-
-  function(seasons = 2005:2006,
+#' get_seasons_teams_coaches(1990:1992)
+
+get_seasons_teams_coaches <-
+  function(seasons = 1990:2018,
+           nest_data = F,
            return_message = T) {
-    get_all_teams_season_coaches_safe <-
-      failwith(NULL, get_all_teams_season_coaches)
-    all_years <-
+    all_data <-
       seasons %>%
-      map(
-        function(x)
-          get_all_teams_season_coaches_safe(year_season_end = x, message = return_message)
-      ) %>%
-      compact %>%
-      bind_rows()
-    return(all_years)
+      map_df(function(season) {
+        get_season_teams_coaches(season = season)
+      })
+
+    if (nest_data) {
+      all_data <-
+        all_data %>%
+        nest(-c(slugSeason, nameTeam, idTeam), .key = 'dataCoaches') %>%
+        mutate(countCoaches = dataRoster %>% map_dbl(nrow))
+    }
+
+    all_data
   }

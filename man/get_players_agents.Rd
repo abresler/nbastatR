@@ -2,13 +2,16 @@
 % Please edit documentation in R/real_gm.R
 \name{get_players_agents}
 \alias{get_players_agents}
-\title{get players agents}
+\title{Get NBA Players Agents}
 \usage{
-get_players_agents(return_message = F)
+get_players_agents(nest_data = F, return_message = T)
 }
 \arguments{
-\item{return_message}{}
+\item{return_message}{if \code{TRUE} retruns player url}
 }
 \description{
-get players agents
+Get NBA Players Agents
+}
+\examples{
+get_players_agents()
 }
