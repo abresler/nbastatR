@@ -3,7 +3,7 @@ An interface for professional basketball data in R.  Data sources include, but a
 
 
 ## Installation
-```{r}
+```r
 devtools::install_github("abresler/nbastatR")
 library("nbastatR") # note requires a bunch of other packages which are listed in the import
 ```
@@ -14,7 +14,7 @@ library("nbastatR") # note requires a bunch of other packages which are listed i
 
 
 ## Other Functionality
-```{r}
+```r
 get_nba_franchise_data(return_franchises = "all")
 get_nba_team_stat_table(year.season_start = 2015,
                         period = 4,
@@ -25,7 +25,7 @@ get_nba_player_injuries(filter_returning_today = T)
 ```
 
 ## NBA Draft Functions
-``` {r}
+```r
 get_year_draft_combine(combine_year = 2009, return_message = T)
 get_all_draft_combines(combine_years = 2000:2015) #draft combines
 get(draft_years = 1960:2015) # drafts
@@ -33,7 +33,7 @@ get(draft_years = 1960:2015) # drafts
 
 ## Salary Cap Data Example
 
-```{r}
+```r
 all_salaries <- 
   get_all_team_salaries()
 
@@ -60,7 +60,7 @@ team_2017_non_guaranteed_players %>%
 
 
 ## Mock Draft
-```{r}
+```r
 draft_2016 <- 
   get_nba_draftnet_year_mock_draft(draft_year = 2016)
 
