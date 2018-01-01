@@ -1,14 +1,17 @@
 
 get_nba_season_players <-
-  function(year_season_start = 2012,
+  function(season = NULL,
            return_message = T) {
-    if (!'year_season_start' %>% exists()) {
-      stop("Please enter a start to the season")
+    if (season %>% purrr::is_null()) {
+      stop("Please enter as season")
     }
 
-    if (year_season_start < 1945) {
+    if (season < 1945) {
       stop("Sorry data starts in 1945")
     }
+
+    year_season_start <-
+      season - 1
 
     slugSeason <-
       year_season_start %>%
@@ -33,8 +36,9 @@ get_nba_season_players <-
 
     seasons_players <-
       seasons_players %>%
-      mutate(slugSeason) %>%
-      dplyr::select(slugSeason,
+      mutate(slugSeason,
+             yearSeason = season) %>%
+      dplyr::select(slugSeason, slugSeason,
                     everything())
 
     seasons_players
@@ -51,7 +55,7 @@ get_nba_season_players <-
 
 #' Get Season's Players
 #'
-#' @param years_start vector of years start
+#' @param seasons numeric vector of seasons
 #' @param nest_data  if \code{TRUE} returns a nested data_frame
 #' @param return_message  if \code{TRUE} return message
 #'
@@ -62,17 +66,17 @@ get_nba_season_players <-
 #' @examples
 #' get_nba_seasons_players(2010:2017, nest_data = T, return_message = T)
 
-get_nba_seasons_players <-
-  function(years_start = 1960:2017,
+get_seasons_players <-
+  function(seasons = 1960:2018,
            nest_data = F,
            return_message = T) {
     get_nba_season_players_safe <-
       purrr::possibly(get_nba_season_players, data_frame())
 
     all_data <-
-      years_start %>%
+      seasons %>%
       map_df(function(year_season_start){
-        get_nba_season_players_safe(year_season_start = year_season_start,
+        get_nba_season_players_safe(season = year_season_start,
                                return_message = return_message)
       })
 

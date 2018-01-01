@@ -4,16 +4,21 @@
 \alias{get_players_bios}
 \title{Get Player bios}
 \usage{
-get_players_bios(players = c("Carmelo Anthony", "Joe Johnson"),
-  player_ids = NULL, return_message = TRUE)
+get_players_bios(players = NULL, player_ids = NULL, nest_data = F,
+  return_message = TRUE)
 }
 \arguments{
 \item{players}{vector of players}
 
 \item{player_ids}{vector of player ids}
 
+\item{nest_data}{if \code{TRUE} returns nested data_frame}
+
 \item{return_message}{if \code{TRUE} returns a message}
 }
 \description{
 Seems to have ended after 2013-14 season
+}
+\examples{
+get_players_bios(players = c("Carmelo Anthony", "Joe Johnson"))
 }

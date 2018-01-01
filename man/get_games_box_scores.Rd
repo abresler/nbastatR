@@ -2,12 +2,12 @@
 % Please edit documentation in R/box_scores.R
 \name{get_games_box_scores}
 \alias{get_games_box_scores}
-\title{Get boxscores by Game ID}
+\title{Get games box scores}
 \usage{
-get_games_box_scores(game_ids = c(21700002, 21700003),
-  box_score_types = c("traditional", "advanced", "scoring", "misc", "usage",
-  "four factors", "hustle", "tracking"), result_types = c("player", "team"),
-  assign_to_environment = TRUE, return_message = TRUE)
+get_games_box_scores(game_ids = NULL, box_score_types = c("traditional",
+  "advanced", "scoring", "misc", "usage", "four factors", "hustle", "tracking"),
+  result_types = c("player", "team"), assign_to_environment = TRUE,
+  return_message = TRUE)
 }
 \arguments{
 \item{game_ids}{vector of game ids}
@@ -36,8 +36,8 @@ starting with data}
 a \code{data_frame}
 }
 \description{
-Get boxscores by Game ID
+Acquires specified box score type by game ID
 }
 \examples{
-get_games_play_by_play(game_ids = c(21700002, 21700003), box_score_types = c("traditional", "advanced", "scoring","misc", "usage", "four factors", "tracking"), result_types = c("player", "team"), nest_data = FALSE, assign_to_environment = TRUE, return_message = TRUE)
+get_games_box_scores(game_ids = c(21700002, 21700003), box_score_types = c("traditional", "advanced", "scoring", "misc", "usage", "four factors", "tracking"), result_types = c("player", "team"), assign_to_environment = TRUE, return_message = TRUE)
 }

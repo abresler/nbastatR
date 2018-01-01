@@ -88,12 +88,23 @@ get_season_gamelog <-
         dplyr::select(typeSeason:teamName, numberGameTeamSeason, numberGamePlayerSeason, everything())
     }
 
+
+
+    data <-
+      data %>%
+      mutate(yearSeason = season,
+             typeResult = result_type) %>%
+      mutate(urlTeamSeasonLogo = generate_team_season_logo(season = yearSeason, slug_team = slugTeam)) %>%
+      dplyr::select(typeResult, typeSeason, yearSeason, everything()) %>%
+      nest(-c(typeResult, slugSeason, yearSeason), .key = 'dataTables')
+
     closeAllConnections()
     data
   }
 
 
-#' Get NBA game logs for specified parameters
+#' NBA game logs
+#' NBA game logs for specified parameers
 #'
 #' @param seasons vector of seasons where season is year ending
 #' @param result_types vector of result types \itemize{
@@ -107,6 +118,7 @@ get_season_gamelog <-
 #' \item All Star
 #' }
 #' @param nest_data if \code{TRUE} nests data
+#' @param assign_to_environment assigns individual table to environment
 #' @param ...
 #'
 #' @return
@@ -114,15 +126,17 @@ get_season_gamelog <-
 #' @import dplyr jsonlite purrr stringr lubridate magrittr tidyr tibble httr
 #' @importFrom  glue glue
 #' @examples
-#' get_nba_seasons_gamelogs(seasons = 2017:2018, result_types = "team")
-get_nba_seasons_gamelogs <-
+#' get_game_logs(seasons = 2017:2018, result_types = c("team", "player"))
+get_game_logs <-
   function(seasons = 2017:2018,
            result_types  = "player",
            season_types = "Regular Season",
            nest_data = F,
+           assign_to_environment = TRUE,
            return_message = TRUE,
            ...) {
-    if (result_types %>% length() == 2) {
+    result_length <- result_types %>% length()
+    if (result_length == 2) {
       result_types <-  c("player", "team")
     }
 
@@ -139,83 +153,84 @@ get_nba_seasons_gamelogs <-
     get_season_gamelog_safe <-
       purrr::possibly(get_season_gamelog, data_frame())
 
-    if (length(result_types) == 2) {
-      all_data <-
-        1:nrow(input_df) %>%
-        purrr::map(function(x) {
-          df_row <-
-            input_df %>% slice(x)
-          data_row <-
-            df_row %$%
-            get_season_gamelog_safe(season = season,
-                                    result_type = result,
-                                    season_type = season_type,
-                                    return_message = return_message)
+    all_data <-
+      1:nrow(input_df) %>%
+      purrr::map_df(function(x) {
+        df_row <-
+          input_df %>% slice(x)
+        data_row <-
+          df_row %$%
+          get_season_gamelog_safe(season = season,
+                                  result_type = result,
+                                  season_type = season_type,
+                                  return_message = return_message)
+        data_row
+      })
 
-          if (df_row$result == "team") {
-            data_row <-
-              data_row %>%
-              dplyr::select(-one_of('hasVideo'))
-          }
-
-          data_row
-        })
-
-
+    if (result_length == 1) {
       all_data <-
         all_data %>%
-        purrr::reduce(left_join) %>%
-        suppressMessages()
-    } else {
-      all_data <-
-        1:nrow(input_df) %>%
-        purrr::map(function(x) {
-          df_row <-
-            input_df %>% slice(x)
-          data_row <-
-            df_row %$%
-            get_season_gamelog_safe(season = season,
-                                    result_type = result,
-                                    season_type = season_type,
-                                    return_message = return_message)
+        select(-typeResult) %>%
+        unnest()
 
-          if (df_row$result == "team") {
-            data_row <-
-              data_row %>%
-              dplyr::select(-one_of('hasVideo'))
-          }
-
-          data_row
-        })
-
-
-      all_data <-
-        all_data %>%
-        purrr::reduce(bind_rows) %>%
-        suppressMessages() %>%
-        arrange(slugSeason, idGame)
+      return(all_data)
     }
 
-    col_order <- c("typeSeason", "slugSeason", "idSeason","idTeam", "slugMatchup","idGame", "outcomeGame", "locationGame","teamName","slugTeam",  "slugOpponent", "slugTeamWinner", "slugTeamLoser" ,  "dateGame","numberGameTeamSeason","idPlayer", "namePlayer","numberGamePlayerSeason",
+    if (assign_to_environment) {
+      results <-
+        all_data$typeResult %>% unique()
 
-                   "minutes", "fgm",
-                   "fga", "pctFG", "fg3m", "fg3a", "pctFG3", "ftm", "fta", "pctFT",
-                   "oreb", "dreb", "reb", "ast", "stl", "blk", "tov", "pf", "pts",
-                   "plusminus", "hasVideo", "fg2m", "fg2a", "pctFG2")
+      results %>%
+        walk(function(result){
+          df_table <-
+            all_data %>%
+            filter(typeResult == result) %>%
+            select(-typeResult) %>%
+            unnest()
 
-    all_data <-
-      all_data %>%
-      dplyr::select(one_of(col_order), everything()) %>%
-      suppressWarnings()
+          col_order <- c("typeSeason","yearSeason" ,"slugSeason", "idSeason","idTeam", "slugMatchup","idGame", "outcomeGame", "locationGame","teamName","slugTeam",  "slugOpponent", "slugTeamWinner", "slugTeamLoser" ,  "dateGame","numberGameTeamSeason","idPlayer", "namePlayer","numberGamePlayerSeason",
 
-    if (nest_data) {
-      all_data <-
-        all_data %>%
-        nest(-c(typeSeason, slugSeason, idSeason), .key = "dataGameLogs")
+                         "minutes", "fgm",
+                         "fga", "pctFG", "fg3m", "fg3a", "pctFG3", "ftm", "fta", "pctFT",
+                         "oreb", "dreb", "reb", "ast", "stl", "blk", "tov", "pf", "pts",
+                         "plusminus", "hasVideo", "fg2m", "fg2a", "pctFG2")
+
+          df_table <-
+            df_table %>%
+            dplyr::select(one_of(col_order), everything()) %>%
+            suppressWarnings()
+
+
+
+          if (nest_data) {
+            df_table <-
+              df_table %>%
+              nest(-c(typeSeason, slugSeason, yearSeason), .key = "dataGameLogs")
+          }
+
+          if (df_table %>% tibble::has_name("idPlayer")) {
+            if (!'df_nba_player_dict' %>% exists()) {
+              df_nba_player_dict <-
+                get_nba_players()
+
+              assign(x = 'df_nba_player_dict', df_nba_player_dict, envir = .GlobalEnv)
+            }
+
+            df_table <-
+              df_table %>%
+              left_join(df_nba_player_dict %>% select(idPlayer, matches("url"))) %>%
+              suppressMessages()
+
+          }
+
+          table_name <- glue::glue("dataGameLogs{str_to_title(result)}") %>% as.character()
+
+          assign(x = table_name, df_table, envir = .GlobalEnv)
+
+        })
     }
     all_data
   }
-
 
 
 # schedule ----------------------------------------------------------------
@@ -229,7 +244,8 @@ get_season_schedule <-
       get_season_gamelog(season = season,
                          result_type = "team",
                          season_type = season_type,
-                         return_message = return_message)
+                         return_message = return_message) %>%
+      unnest()
     data %>%
       select(one_of(
         c(
@@ -247,7 +263,8 @@ get_season_schedule <-
       mutate(idRow = 1:n()) %>%
       filter(idRow == min(idRow)) %>%
       ungroup() %>%
-      select(-idRow)
+      select(-idRow) %>%
+      suppressWarnings()
 
   }
 
@@ -262,7 +279,8 @@ get_season_schedule <-
 #' @import dplyr jsonlite purrr stringr lubridate magrittr tidyr tibble httr
 #' @importFrom  glue glue
 #' @examples
-get_nba_seasons_schedule <-
+#' get_seasons_schedule(seasons = c(2012, 2018))
+get_seasons_schedule <-
   function(seasons = 2018,
            season_types = "Regular Season",
            nest_data = FALSE,
@@ -294,12 +312,11 @@ get_nba_seasons_schedule <-
       arrange(dateGame, idGame) %>%
       group_by(dateGame) %>%
       mutate(numberGameDay = 1:n()) %>%
-      ungroup() %>%
-      select(typeSeason:idSeason, numberGameDay, idGame, everything())
+      ungroup()
     if (nest_data) {
       all_data <-
         all_data %>%
-        nest(-c(typeSeason, slugSeason, idSeason), .key = "dataSchedule")
+        nest(-c(typeSeason, slugSeason), .key = "dataSchedule")
     }
     all_data
   }
@@ -368,6 +385,16 @@ get_seasons_players <-
 
 
 
+#' Get Seasons teams
+#'
+#' @param return_message
+#' @param ...
+#'
+#' @return
+#' @export
+#'
+#' @examples
+#' get_seasons_teams()
 get_seasons_teams <-
   function(return_message = TRUE,
            ...) {
@@ -412,7 +439,10 @@ get_seasons_teams <-
     data <-
       json %>%
       nba_json_to_df(table_id = table_id) %>%
-      mutate(isActive = ifelse(slugTeam %>% is.na(), F, T))
+      mutate(isActive = ifelse(slugTeam %>% is.na(), F, T)) %>%
+      dplyr::select(-one_of("idLeague")) %>%
+      select(isActive, slugTeam, idTeam, everything()) %>%
+      arrange(slugTeam)
 
     closeAllConnections()
     data
@@ -507,13 +537,22 @@ get_season_roster <-
     df_rosters <-
       df_rosters %>%
       left_join(df_teams) %>%
-      dplyr::select(slugSeason, slugTeam, idPlayer, namePlayer, everything()) %>%
+      mutate(yearSeason = season) %>%
+      dplyr::select(yearSeason,
+                    slugSeason,
+                    slugTeam,
+                    idPlayer,
+                    namePlayer,
+                    everything()) %>%
+      mutate(urlTeamSeasonLogo = generate_team_season_logo(season = yearSeason, slug_team = slugTeam)) %>%
       suppressMessages()
     df_rosters
   }
 
 
-#' Get Seasons Rosters
+#' Get seasons rosters
+#'
+#' Returns rosters for each team of a specified season
 #'
 #' @param seasons vector of seasons
 #' @param return_message if \code{TRUE} returns a message
@@ -524,7 +563,7 @@ get_season_roster <-
 #' @import dplyr jsonlite purrr stringr lubridate magrittr tidyr tibble httr
 #' @importFrom glue glue
 #' @examples
-#' get_seasons_rosters(200)
+#' get_seasons_rosters(2018)
 
 get_seasons_rosters <-
   function(seasons = 2000:2018, return_message = TRUE, nest_data = F) {
@@ -536,6 +575,19 @@ get_seasons_rosters <-
       map_df(function(season){
         get_season_roster_safe(season = season, return_message = return_message)
       })
+
+    if (!'df_nba_player_dict' %>% exists()) {
+      df_nba_player_dict <-
+        get_nba_players()
+
+      assign(x = 'df_nba_player_dict', df_nba_player_dict, envir = .GlobalEnv)
+    }
+
+    all_data <-
+      all_data %>%
+      left_join(df_nba_player_dict %>% select(idPlayer, matches("url"))) %>%
+      suppressMessages() %>%
+      m
 
     if (nest_data) {
       all_data <-

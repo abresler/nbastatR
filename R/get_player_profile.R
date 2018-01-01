@@ -1,11 +1,13 @@
 
+
 # awards ------------------------------------------------------------------
 
 
-# get_player_award <-
+get_player_award <-
   function(player_id = 76003,
-           return_message = T){
-    url <- glue::glue("http://stats.nba.com/stats/playerawards/?playerId={player_id}") %>%
+           return_message = T) {
+    url <-
+      glue::glue("http://stats.nba.com/stats/playerawards/?playerId={player_id}") %>%
       as.character()
 
     json <-
@@ -60,7 +62,19 @@
   }
 
 
-get_players_roto_wire_news <-
+#' NBA players awatds
+#'
+#' @param players
+#' @param player_ids
+#' @param nest_data
+#' @param return_message
+#'
+#' @return
+#' @export
+#'
+#' @examples
+#' get_players_awards(players = c( "Charles Oakley", "Gary Melchionni"), player_ids = c(893, 76375), return_message = T, nest_data = F)
+get_players_awards <-
   function(players =  NULL,
            player_ids = NULL,
            nest_data = F,
@@ -82,20 +96,25 @@ get_players_roto_wire_news <-
       map_df(function(id) {
         get_player_award_safe(player_id = id, return_message = return_message)
       })
-
+    if (all_data %>% tibble::has_name("datetimePublished")) {
     all_data <-
       all_data %>%
       arrange(datetimePublished)
-
-
-
+    }
 
     all_data <-
       all_data %>%
-      left_join(
-        df_nba_player_dict %>% dplyr::select(nameTeam, idPlayer, matches("url"))
-      ) %>%
+      left_join(df_nba_player_dict %>% dplyr::select(idPlayer, matches("url"))) %>%
       suppressMessages()
+
+    all_data <-
+      all_data %>%
+      mutate(nameAwardFull = ifelse(
+        numberTeamAward %>% is.na(),
+        nameAward,
+        str_c(nameAward, numberTeamAward, sep =  " ")
+      )) %>%
+      dplyr::select(idPlayer:nameAward, nameAwardFull, everything())
 
     if (nest_data) {
       all_data <-
@@ -110,9 +129,9 @@ get_players_roto_wire_news <-
             urlPlayerThumbnail,
             urlPlayerHeadshot
           ),
-          .key = 'dataRotoWireArticles'
+          .key = 'dataPlayerAwards'
         ) %>%
-        mutate(countArticles = dataRotoWireArticles %>% map_dbl(nrow))
+        mutate(countAwards = dataPlayerAwards %>% map_dbl(nrow))
     }
     all_data
   }
@@ -127,9 +146,6 @@ get_player_bio <-
       glue::glue("http://data.nba.net/json/bios/player_{player_id}.json") %>%
       as.character()
 
-    if (return_message) {
-      glue::glue("Acquiring {player_id} bios") %>% message()
-    }
 
     json <-
       url  %>%
@@ -160,12 +176,21 @@ get_player_bio <-
         x %>% read_html() %>% html_text() %>% str_trim()
       })) %>%
       dplyr::select(-htmlPlayerBio) %>%
-      tidyr::separate(nameDisplay, into = c("nameLast", "nameFirst"), sep = "\\, ") %>%
+      tidyr::separate(nameDisplay,
+                      into = c("nameLast", "nameFirst"),
+                      sep = "\\, ") %>%
       tidyr::unite(namePlayer, nameFirst, nameLast, sep = " ") %>%
       mutate_if(is.character,
                 funs(ifelse(. == "", NA_character_, .))) %>%
       remove_na_columns() %>%
       dplyr::select(idPlayer, namePlayer, everything())
+
+    if (return_message) {
+      glue::glue("Acquired {data$namePlayer} 2013-14 bio") %>% message()
+    }
+
+
+    data
 
   }
 
@@ -176,19 +201,22 @@ get_player_bio <-
 #' @param players vector of players
 #' @param player_ids  vector of player ids
 #' @param return_message if \code{TRUE} returns a message
+#' @param nest_data if \code{TRUE} returns nested data_frame
 #'
 #' @return
 #' @export
 #' @import dplyr curl purrr jsonlite tidyr readr
 #' @importFrom glue glue
 #' @examples
+#' get_players_bios(players = c("Carmelo Anthony", "Joe Johnson"))
 get_players_bios <-
-  function(players = c("Carmelo Anthony", "Joe Johnson"),
+  function(players = NULL,
            player_ids = NULL,
+           nest_data = F,
            return_message = TRUE) {
     ids <-
       get_nba_players_ids(player_ids = player_ids,
-                        players = players)
+                          players = players)
     get_player_bio_safe <-
       purrr::possibly(get_player_bio, data_frame())
 
@@ -197,6 +225,12 @@ get_players_bios <-
       map_df(function(id) {
         get_player_bio_safe(player_id = id, return_message = return_message)
       })
+
+    if (nest_data) {
+      all_data <-
+        all_data %>%
+        nest(-c(idPlayer, namePlayer, typeResult), .key = 'dataBio')
+    }
 
     all_data
 
@@ -229,7 +263,9 @@ get_player_profile <-
     }
 
     url_json <-
-      glue::glue('http://stats.nba.com/stats/commonplayerinfo?LeagueID=00&PlayerID={player_id}') %>%
+      glue::glue(
+        'http://stats.nba.com/stats/commonplayerinfo?LeagueID=00&PlayerID={player_id}'
+      ) %>%
       as.character()
     ## Build URL
     json <-
@@ -245,7 +281,7 @@ get_player_profile <-
         table_name <-
           json$resultSets$name[table_id]
 
-      df_table <-
+        df_table <-
           json %>%
           nba_json_to_df(table_id = table_id) %>%
           mutate(numberTable = table_id) %>%
@@ -285,67 +321,94 @@ get_player_profile <-
 
 #' Get NBA players profiles
 #'
-#' @param player_ids Vector of player IDs
-#' @param players vector of player names
-#' @param return_message
-#' @param nest_data
+#' Acquires NBA player profile information
+#'
+#' @param player_ids numeric vector of player IDs
+#' @param players character vector of player names
+#' @param return_message if \code{TRUE} returns a message
+#' @param nest_data if \code{TRUE}
 #'
 #' @return
 #' @export
 #' @import dplyr curl purrr jsonlite tidyr readr
 #' @importFrom glue glue
 #' @examples
-#' get_nba_players_profiles(player_ids = c(203500, 1628384), players = c("Michael Jordan", "Caris LeVert", "Jarrett Allen"), nest_data = FALSE, return_message = TRUE)
-get_nba_players_profiles <- function(player_ids = NULL,
-           players = NULL,
-           nest_data = F,
-           return_message = TRUE) {
+#' get_players_profiles(player_ids = c(203500, 1628384), players = c("Michael Jordan", "Caris LeVert", "Jarrett Allen"), nest_data = FALSE, return_message = TRUE)
+get_players_profiles <- function(players = NULL,
+                                     player_ids = NULL,
+                                     nest_data = F,
+                                     return_message = TRUE) {
+  if (player_ids %>% purrr::is_null() &&
+      players %>% purrr::is_null()) {
+    stop("Please enter players of player ids")
+  }
 
-    if (player_ids %>% purrr::is_null() && players %>% purrr::is_null()) {
-      stop("Please enter players of player ids")
-    }
+  player_ids <-
+    get_nba_players_ids(player_ids = player_ids, players = players)
 
-    player_ids <-
-      get_nba_players_ids(player_ids = player_ids, players = players)
+  all_data <-
+    player_ids %>%
+    map_df(function(player_id) {
+      get_player_profile(player_id = player_id)
+    })
+  tables <- all_data$nameTable %>% unique()
+  tables <- tables[!tables %in% "AvailableSeasons"]
 
-    all_data <-
-      player_ids %>%
-      map_df(function(player_id) {
-        get_player_profile(player_id = player_id)
-      })
-    tables <- all_data$nameTable %>% unique()
-    tables <- tables[!tables %in% "AvailableSeasons"]
+  data <-
+    tables %>%
+    map(function(table) {
+      all_data %>%
+        filter(nameTable == table) %>%
+        select(-nameTable) %>%
+        tidyr::unnest()
+    })
 
-    data <-
-      tables %>%
-      map(function(table) {
-        all_data %>%
-          filter(nameTable == table) %>%
-          select(-nameTable) %>%
-          tidyr::unnest()
-      })
-
-    all_data <-
-      data %>%
-      purrr::reduce(left_join) %>%
-      mutate(heightInches = heightInches %>% map_dbl(height_in_inches)) %>%
-      dplyr::select(one_of("idPlayer", "namePlayer", "datetimeBirth",
-                           "numberJersey", "idTeam", "teamName", "slugTeam", "cityTeam",
-                           "slugPlayer", "yearSeasonFirst", "yearSeasonLast", "yearDraft",
-                           "numberRound", "numberOverallPick", "slugSeason",
-                           "nameSchool",
-                           "nameOrganizationFrom", "heightInches", "weightLBS", "countSeasonsPlayed",
-                         "pts", "ast",
-                           "treb", "countAllStarGames", "ratioPIE",
-                           "urlNBAAPI", "nameFirst", "nameLast",
-                           "namePlayerLastFirst", "namePlayerAbbr"), everything()) %>%
+  all_data <-
+    data %>%
+    purrr::reduce(left_join) %>%
+    mutate(heightInches = heightInches %>% map_dbl(height_in_inches)) %>%
+    dplyr::select(
+      one_of(
+        "idPlayer",
+        "namePlayer",
+        "datetimeBirth",
+        "numberJersey",
+        "idTeam",
+        "teamName",
+        "slugTeam",
+        "cityTeam",
+        "slugPlayer",
+        "yearSeasonFirst",
+        "yearSeasonLast",
+        "yearDraft",
+        "numberRound",
+        "numberOverallPick",
+        "slugSeason",
+        "nameSchool",
+        "nameOrganizationFrom",
+        "heightInches",
+        "weightLBS",
+        "countSeasonsPlayed",
+        "pts",
+        "ast",
+        "treb",
+        "countAllStarGames",
+        "ratioPIE",
+        "urlNBAAPI",
+        "nameFirst",
+        "nameLast",
+        "namePlayerLastFirst",
+        "namePlayerAbbr"
+      ),
+      everything()
+    ) %>%
     suppressMessages()
 
-    if (nest_data) {
-      all_data <-
-        all_data %>%
-        nest(-c(idPlayer, namePlayer), .key = 'dataPlayerProfiles')
-    }
-
-    all_data
+  if (nest_data) {
+    all_data <-
+      all_data %>%
+      nest(-c(idPlayer, namePlayer), .key = 'dataPlayerProfiles')
   }
+
+  all_data
+}

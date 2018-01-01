@@ -2,7 +2,7 @@
 % Please edit documentation in R/nba_game_logs.R
 \name{get_seasons_rosters}
 \alias{get_seasons_rosters}
-\title{Get Seasons Rosters}
+\title{Get seasons rosters}
 \usage{
 get_seasons_rosters(seasons = 2000:2018, return_message = TRUE,
   nest_data = F)
@@ -15,8 +15,8 @@ get_seasons_rosters(seasons = 2000:2018, return_message = TRUE,
 \item{nest_data}{if \code{TRUE} nests data}
 }
 \description{
-Get Seasons Rosters
+Returns rosters for each team of a specified season
 }
 \examples{
-get_seasons_rosters(200)
+get_seasons_rosters(2018)
 }

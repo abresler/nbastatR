@@ -510,7 +510,7 @@ height_in_inches <-
     height_ft_in <-
       height %>%
       stringr::str_split("-") %>%
-      unlist() %>%
+      flatten_chr() %>%
       as.numeric()
     height_in <-
       height_ft_in[1] * 12 + height_ft_in[2]

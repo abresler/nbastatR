@@ -28,11 +28,14 @@ munge_seasons <-
 
 #' Basketball Reference Player Dictionary
 #'
+#' Returns baketball refences player dictionary
+#'
 #' @return
 #' @export
 #' @import dplyr purrr readr stringr
 #' @importFrom glue glue
 #' @examples
+#' get_bref_player_dictionary()
 get_bref_player_dictionary <-
   function() {
     data <-
@@ -75,13 +78,14 @@ get_bref_player_dictionary <-
     data
   }
 
-#' Get BREF Coach Dictionary
+#' Basketball Reference Coach Dictionary
 #'
 #' @return
 #' @export
 #' @import dplyr purrr readr stringr
 #' @importFrom glue glue
 #' @examples
+#' get_bref_coach_dictionary()
 get_bref_coach_dictionary <-
   function() {
     data <-
@@ -126,11 +130,14 @@ get_bref_coach_dictionary <-
 
 #' BREF Team Dictionary
 #'
+#' Basketball Reference Team Dictionary
+#'
 #' @return
 #' @export
 #' @import dplyr purrr readr stringr
 #' @importFrom glue glue
 #' @examples
+#' get_bref_team_dictionary()
 get_bref_team_dictionary <-
   function() {
     data <-
@@ -404,7 +411,7 @@ assign.bref.teams <-
           return(invisible())
         }
 
-        if (!"dataPlayersNBA" %>% exists()) {
+        if (!"dataNBAPlayers" %>% exists()) {
           nbastatR::get_nba_stats_api_items()
         }
         df_teams <-
@@ -521,7 +528,8 @@ assign.bref.teams <-
 
       df_tables_joined <-
         df_standings %>%
-        left_join(df_tables_joined)
+        left_join(df_tables_joined) %>%
+        suppressMessages()
 
       if (assign_to_environment) {
         table <- "dataBREFTeamJoined"
@@ -689,7 +697,7 @@ assign.bref.players <-
       dplyr::select(idSeason:namePlayer, groupPosition, everything())
 
     df_all_nba <-
-        get_data_all_nba_teams(return_message = F) %>%
+        get_bref_all_nba_teams(return_message = F) %>%
         dplyr::rename(namePlayerBREF = namePlayer)
 
       all_data <-
@@ -790,15 +798,16 @@ get_bref_players <-
 # all_nba -----------------------------------------------------------------
 
 
-#' All NBA teams
+#' Returns All NBA Teams
 #'
-#' @param return_message
+#' @param return_message if \code{TRUE} returns a message
 #'
 #' @return
 #' @export
 #' @import httr rvest xml2 dplyr purrr stringr readr
 #' @examples
-get_data_all_nba_teams <-
+#' get_bref_all_nba_teams()
+get_bref_all_nba_teams <-
   function(return_message = TRUE) {
     page <-
       "http://www.basketball-reference.com/awards/all_league.html" %>%
@@ -944,7 +953,7 @@ parse_page <-
 # parse_page_season --------------------------------------------------------------
 
 generate_years_urls <-
-  function(table = "per_game", years = 1951:2017) {
+  function(table = "per_game", seasons = 1951:2017) {
     tables <-
       c('per_game', 'advanced', 'totals', 'per_minute', 'per_poss')
 
@@ -954,7 +963,7 @@ generate_years_urls <-
 
     urls <-
       list('http://www.basketball-reference.com/leagues/NBA_',
-           years,
+           seasons,
            '_',
            table,
            '.html') %>%
@@ -1104,12 +1113,12 @@ parse_player_season <-
 
 
 get_data_bref_player_seasons <-
-  function(years = 1980:2017,
+  function(seasons = 1980:2017,
            table = "advanced",
            only_totals = TRUE,
            return_message = TRUE) {
     urls <-
-      generate_years_urls(table = table, years = years)
+      generate_years_urls(table = table, seasons = seasons)
     parse_player_season_safe <-
       purrr::possibly(parse_player_season, data_frame())
     all_data <-
@@ -1153,7 +1162,7 @@ get_data_bref_player_seasons <-
 #' \item \code{per_poss}: Per Possesion
 #' }
 #' @param include_all_nba if \code{TRUE} include all_nba teams
-#' @param years vector of years 1951 to current season
+#' @param seasons vector of years 1951 to current season
 #' @param only_totals if \code{TRUE} returns only a player's total statistics
 #' @param nest_data if \code{TRUE} returns a nested data frame
 #' @param return_message  if \code{TRUE} returns a message
@@ -1162,8 +1171,9 @@ get_data_bref_player_seasons <-
 #' @export
 #' @import curl dplyr tidyr httr xml2 rvest tidyr stringr purrr readr
 #' @examples
-get_data_bref_players_seasons <-
-  function(years = 2016:2018,
+#' get_bref_players_seasons(seasons = 2018)
+get_bref_players_seasons <-
+  function(seasons = 2016:2018,
            tables = c('advanced', 'totals'),
            include_all_nba = TRUE,
            only_totals = TRUE,
@@ -1181,7 +1191,7 @@ get_data_bref_players_seasons <-
       purrr::map_df(function(x) {
         get_data_bref_player_seasons(
           table = x,
-          years = years,
+          seasons = seasons,
           only_totals = only_totals,
           return_message = return_message
         )
@@ -1651,8 +1661,8 @@ parse_season_url <-
   }
 
 generate_season_urls <-
-  function(years = 1950:2018) {
-    data_frame(yearSeasonEnd = years,
+  function(seasons = 1950:2018) {
+    data_frame(yearSeasonEnd = seasons,
                yearSeasonStart = yearSeasonEnd - 1,
                idSeason = glue::glue("{yearSeasonStart}-{substr(yearSeasonEnd, 3, 4)}"),
                urlSeasonBREF = glue::glue("https://www.basketball-reference.com/leagues/NBA_{yearSeasonEnd}.html")
@@ -1697,11 +1707,11 @@ parse.bref_season_urls <-
     df
 }
 
-#' BREF Team Season Data
+#' Basketball Reference Team Season Data
 #'
 #' Get team table data by seasons
 #'
-#' @param years vector of years from 1950 to current year
+#' @param seasons vector of years from 1950 to current
 #' @param return_message if \code{TRUE} returns message
 #' @param assign_to_environment  if \code{TRUE} assigns data
 #' @param widen_data if \code{TRUE} returns a merged widend data
@@ -1710,8 +1720,9 @@ parse.bref_season_urls <-
 #' @export
 #' @import purrr dplyr curl stringr tidyr readr glue rvest
 #' @examples
-get_data_bref_teams_seasons <-
-  function(years = 1950:2018,
+#' get_bref_teams_seasons(seasons = 2017:2018)
+get_bref_teams_seasons <-
+  function(seasons = 1950:2018,
            return_message = TRUE,
            assign_to_environment = TRUE,
            nest_data = FALSE,
@@ -1719,7 +1730,7 @@ get_data_bref_teams_seasons <-
            widen_data = TRUE) {
 
     df_urls <-
-      generate_season_urls(years = years) %>%
+      generate_season_urls(seasons = seasons) %>%
       mutate(urlSeasonBREF = as.character(urlSeasonBREF))
 
     parse_season_url.safe <-
@@ -1752,15 +1763,16 @@ get_data_bref_teams_seasons <-
 
 # all star games ----------------------------------------------------------
 
-#' NBA All Sta Game Scores
+#' NBA All Star Game Scores
 #'
-#' @param include_aba
+#' @param include_aba if \code{TRUE} includes ABA
 #' @param return_message
 #'
 #' @return
 #' @export
 #' @import dplyr purrr stringr rvest readr
 #' @examples
+#' get_nba_all_star_game_scores()
 get_nba_all_star_game_scores <-
   function(include_aba = T,
            return_message = T) {
@@ -1830,87 +1842,75 @@ get_nba_all_star_game_scores <-
 
     voting_df <-
       data_frame(
-        url.season.all_star_game.league.voting.bref,
-        year_league = url.season.all_star_game.league.voting.bref %>% str_replace('http://www.basketball-reference.com/allstar/', '') %>% str_replace('_voting.html', '')
+        urlASGVotingBREF = url.season.all_star_game.league.voting.bref,
+        season = url.season.all_star_game.league.voting.bref %>% str_replace('http://www.basketball-reference.com/allstar/', '') %>% str_replace('_voting.html', '')
       ) %>%
-      separate(year_league,
-               into = c('id.league', 'year.season_end'),
+      separate(season,
+               into = c('slugLeague', 'yearSeason'),
                sep = '\\_') %>%
-      mutate(year.season_end = year.season_end %>% as.numeric,
-             has.all_star.voting = T) %>%
-      dplyr::select(id.league,
-                    year.season_end,
-                    has.all_star.voting,
+      mutate(yearSeason = yearSeason %>% as.numeric(),
+             hasASGVoting = T) %>%
+      dplyr::select(slugLeague,
+                    yearSeason,
+                    hasASGVoting,
                     everything())
 
     all_star_data <-
-      data_frame(id.league,
-                 id.season,
-                 year.season_end,
-                 date.game,
-                 location,
-                 name.mvp = mvps,
-                 scores_raw) %>%
-      mutate(
-        url.season.all_star_game.league.bref = 'http://www.basketball-reference.com/allstar/' %>% paste0(id.league, "_", year.season_end, '.html')
+      data_frame(
+        slugLeague = id.league,
+        slugSeason = id.season,
+        yearSeason = year.season_end,
+        dateGame = date.game,
+        locationGame = location,
+        namePlayerMVP = mvps,
+        rawScores = scores_raw
       ) %>%
-      separate(location,
-               into = c('venue', 'city', 'state'),
-               sep = '\\, ') %>%
+      mutate(urlASGSeason = 'http://www.basketball-reference.com/allstar/' %>% paste0(id.league, "_", year.season_end, '.html')) %>%
+      separate(
+        locationGame,
+        into = c('nameVenue', 'cityVenue', 'stateVenue'),
+        sep = '\\, '
+      ) %>%
       mutate(
-        has.overtime = scores_raw %>% str_detect("OT"),
-        scores_raw =
-          scores_raw %>% str_replace_all("(OT)", '') %>% str_replace_all("(2OT)", '') %>%
+        hasOverTime = rawScores %>% str_detect("OT"),
+        rawScores =
+          rawScores %>% str_replace_all("(OT)", '') %>% str_replace_all("(2OT)", '') %>%
           gsub('\\(2)', '', .) %>% str_replace('\\(', '') %>% str_replace('\\)', '')
-      ) %>%
-      separate(scores_raw,
-               into = c('team.winner', 'team.loser'),
+      )
+
+    all_star_data <-
+      all_star_data %>%
+      separate(rawScores,
+               into = c('teamWinner', 'teamLoser'),
                sep = '\\, ') %>%
       mutate(
-        score.winner = team.winner %>% parse_number,
-        score.loser = team.loser %>% parse_number(),
-        team.winner = team.winner %>% str_replace_all("[[:digit:]]", "") %>% str_trim,
-        team.loser = team.loser %>% str_replace_all("[[:digit:]]", "") %>% str_trim
+        ptsWinner = teamWinner %>% parse_number,
+        ptsLoser = teamLoser %>% parse_number(),
+        teamWinner = teamWinner %>% str_replace_all("[[:digit:]]", "") %>% str_trim(),
+        teamLoser = teamLoser %>% str_replace_all("[[:digit:]]", "") %>% str_trim()
       ) %>%
       left_join(voting_df) %>%
-      dplyr::select(
-        id.league:state,
-        has.overtime,
-        has.all_star.voting,
-        name.mvp,
-        team.winner,
-        score.winner,
-        team.loser,
-        score.loser,
-        everything()
-      ) %>%
-      arrange(desc(year.season_end)) %>%
+     arrange(desc(yearSeason)) %>%
       suppressMessages() %>%
       suppressWarnings()
 
 
-    if (include_aba == F) {
+    if (!include_aba) {
       all_star_data <-
         all_star_data %>%
-        dplyr::filter(id.league == "NBA")
+        dplyr::filter(slugLeague == "NBA")
     }
 
-    all_star_data <-
-      all_star_data %>%
-      purrr::set_names(c(c("slugLeague", "idSeason", "yearSeason", "dateGame", "namePlayerMVP",
-                           "nameVenue", "cityVenue", "stateVenue", "hasOvertime", "hasAllStarVoting",
-                           "teamWinner", "ptsWinner", "teamLoser", "ptsLoser", "urlASGBREF",
-                           "urlASGVotingBREF")
-      ))
 
-    if (return_message == T) {
+
+    if (return_message) {
       "You got data for all " %>%
         paste0(all_star_data %>% nrow(), " all star games.") %>%
         message()
     }
 
-    all_data <-
-      all_data %>%
+    all_star_data <-
+      all_star_data %>%
       mutate_if(is.character,
                 funs(. %>% str_trim()))
 

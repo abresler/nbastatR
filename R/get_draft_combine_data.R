@@ -1,4 +1,5 @@
 
+
 parse_out_set <-
   function(data, set_column = "setSpot15CornerLeftCollege") {
     df_set <-
@@ -8,7 +9,7 @@ parse_out_set <-
 
     all_data <-
       df_set %>% pull() %>%
-      map_df(function(x){
+      map_df(function(x) {
         if (x %>% is.na()) {
           return(data_frame(UQ(set_column) := x))
         }
@@ -19,9 +20,15 @@ parse_out_set <-
             glue::glue("{set_column}Atempted"),
             glue::glue("{set_column}Pct")
           )
-        values <- x %>% str_split("\\-") %>% flatten_chr() %>% as.numeric()
+        values <-
+          x %>% str_split("\\-") %>% flatten_chr() %>% as.numeric()
 
-        data_frame(X1 = x, X2 =values[1], X3 = values[2], X4 = X2/X3) %>%
+        data_frame(
+          X1 = x,
+          X2 = values[1],
+          X3 = values[2],
+          X4 = X2 / X3
+        ) %>%
           purrr::set_names(c(names_set))
       })
 
@@ -61,6 +68,7 @@ get_year_draft_combine <-
     if (return_message) {
       glue::glue("Acquiring {combine_year} NBA Draft Combine Data") %>% message()
     }
+    slugSeason <- generate_season_slug(season = combine_year)
     url <-
       glue::glue(
         "http://stats.nba.com/stats/draftcombinestats?LeagueID=00&SeasonYear={slugSeason}"
@@ -83,57 +91,60 @@ get_year_draft_combine <-
     headers <-
       json$resultSets$headers %>% flatten_chr()
 
-   actual_names <-  headers %>% resolve_nba_names()
+    actual_names <-  headers %>% resolve_nba_names()
 
-   data <-
-     data %>%
+    data <-
+      data %>%
       purrr::set_names(actual_names)
 
-   num_names <- actual_names[actual_names %>% str_detect("pct|Inches|^id[A-Z]|time|weight|reps")]
+    num_names <-
+      actual_names[actual_names %>% str_detect("pct|Inches|^id[A-Z]|time|weight|reps")]
 
-   data <-
-     data %>%
-     mutate_at(num_names,
-               funs(. %>% readr::parse_number())) %>%
-     dplyr::rename(slugPosition = groupPosition)
+    data <-
+      data %>%
+      mutate_at(num_names,
+                funs(. %>% readr::parse_number())) %>%
+      dplyr::rename(slugPosition = groupPosition)
 
-   if (actual_names[actual_names %>% str_detect("set")] %>% length() > 0 ) {
-   data <-
-     actual_names[actual_names %>% str_detect("set")] %>%
-     map(function(set){
-       parse_out_set(data = data, set_column = set)
-     }) %>%
-     suppressMessages()
+    if (actual_names[actual_names %>% str_detect("set")] %>% length() > 0) {
+      data <-
+        actual_names[actual_names %>% str_detect("set")] %>%
+        map(function(set) {
+          parse_out_set(data = data, set_column = set)
+        }) %>%
+        suppressMessages()
 
-   data <-
-    data %>%
-     purrr::reduce(left_join) %>%
-    suppressMessages()
-   }
+      data <-
+        data %>%
+        purrr::reduce(left_join) %>%
+        suppressMessages()
+    }
 
-   data <-
-     data %>%
-     mutate(yearCombine = combine_year) %>%
-     select(yearCombine, everything()) %>%
-     remove_na_columns()
+    data <-
+      data %>%
+      mutate(yearCombine = combine_year) %>%
+      select(syearCombine, everything()) %>%
+      remove_na_columns()
 
-   data
+    data
   }
 
-#' Get Years NBA Draft Combines
+#' Get NBA Draft Combine data
+#'
+#' Aquires NBA draft combine data
 #'
 #' @param years vector of draft years
 #' @param return_message if \code{TRUE} return message
 #' @param nest_data if \code{TRUE} returns nested data_frame
 #'
-#' @return
+#' @return a \code{data_frame()}
 #' @export
-#' @impor dplyr stringr curl jsonlite lubridate purrr tidyr
+#' @import dplyr stringr curl jsonlite lubridate purrr tidyr rlang
 #' @importFrom glue glue
 #' @examples
-#' get_years_draft_combines(c(2001:2017), nest_data = T)
+#' get_years_draft_combines(years = c(2001:2018), nest_data = T)
 get_years_draft_combines <-
-  function(years =NULL,
+  function(years = NULL,
            return_message = T,
            nest_data = F) {
     if (years %>% purrr::is_null()) {

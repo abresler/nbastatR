@@ -95,7 +95,9 @@ get_box_score_type <-
     data
   }
 
-#' Get boxscores by Game ID
+#' Get games box scores
+#'
+#' Acquires specified box score type by game ID
 #'
 #' @param game_ids vector of game ids
 #' @param box_score_types vector of box score types options include \itemize{
@@ -120,9 +122,9 @@ get_box_score_type <-
 #' @import dplyr curl stringr lubridate readr magrittr tidyr httr purrr jsonlite
 #' @importFrom glue glue
 #' @examples
-#' get_games_play_by_play(game_ids = c(21700002, 21700003), box_score_types = c("traditional", "advanced", "scoring","misc", "usage", "four factors", "tracking"), result_types = c("player", "team"), nest_data = FALSE, assign_to_environment = TRUE, return_message = TRUE)
+#' get_games_box_scores(game_ids = c(21700002, 21700003), box_score_types = c("traditional", "advanced", "scoring", "misc", "usage", "four factors", "tracking"), result_types = c("player", "team"), assign_to_environment = TRUE, return_message = TRUE)
 get_games_box_scores <-
-  function(game_ids = c(21700002, 21700003),
+  function(game_ids = NULL,
            box_score_types = c("traditional", "advanced", "scoring","misc", "usage", "four factors",
                                "hustle", "tracking"),
            result_types = c("player", "team"),
@@ -158,13 +160,6 @@ get_games_box_scores <-
         )
     })
 
-    if (nest_data) {
-      all_data <-
-        all_data %>%
-        nest(-c(idGame), .key = 'dataPlayByPlay')
-    }
-
-
     if (assign_to_environment) {
       results <-
         all_data$typeResult %>%
@@ -186,7 +181,7 @@ get_games_box_scores <-
               select(-typeBoxScore)
 
             table_name <-
-              glue::glue('data{str_to_title(result)}{str_to_title(type)}BoxScore') %>% as.character()
+              glue::glue('data{str_replace_all(type, " ", "")}BoxScore{str_to_title(result)}') %>% as.character()
 
             assign(x = table_name, df_table, envir = .GlobalEnv)
           })

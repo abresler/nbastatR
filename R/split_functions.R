@@ -54,7 +54,7 @@ generate_split_url <-
   function(type = "team",
            query_type = "splits",
            id = 1610612751,
-           year_season_start = 2017,
+           season = 2018,
            season_type =  "Regular Season",
            measure = "Base",
            mode = "PerGame",
@@ -75,6 +75,9 @@ generate_split_url <-
            outcome = NA,
            playoff_round = 0,
            shot_clock_range = NA) {
+
+    year_season_start <-
+      season - 1
 
     if (!'df_nba_team_dict' %>% exists()) {
       df_nba_team_dict <- get_nba_teams()
@@ -382,7 +385,7 @@ generate_split_url <-
 # teams -------------------------------------------------------------------
 get_nba_team_season_split <-
   function(team_id = 1610612751,
-           year_season_start = 2017,
+           season = 2018,
            season_type =  "Regular Season",
            measure = "Advanced",
            mode = "PerGame",
@@ -435,7 +438,7 @@ get_nba_team_season_split <-
         type = "team",
         query_type = "splits",
         id = team_id,
-        year_season_start = year_season_start,
+        season = season,
         season_type =  season_type,
         measure = measure,
         mode = mode,
@@ -525,7 +528,7 @@ get_nba_team_season_split <-
 #'
 #' @param team_ids vector of team ids
 #' @param teams vector of team names
-#' @param years_seasons_start vector of the start years
+#' @param seasons vector of the start years
 #' @param season_types vector of season types options include \itemize{
 #' \item Regular Season
 #' \item Pre Season
@@ -619,12 +622,12 @@ get_nba_team_season_split <-
 #' @importFrom glue glue
 #' @import jsonlite dplyr purrr tibble stringr tidyr magrittr curl readr
 #' @examples
-#' get_teams_season_stat_splits(teams = c("Brooklyn Nets"), years_seasons_start = 2017, measures = c("Base", "Opponent"), modes = c("PerGame"), assign_to_environment = T, add_mode_names = T, return_message = TRUE)
+#' get_teams_season_stat_splits(teams = c("Brooklyn Nets"), season = 2018, measures = c("Base", "Opponent"), modes = c("PerGame"), assign_to_environment = T, add_mode_names = T, return_message = TRUE)
 
 get_teams_season_stat_splits <-
   function(teams = NULL,
            team_ids = NULL,
-           years_seasons_start = 2017,
+           season = 2018,
            season_types = c("Regular Season"),
            # c('Regular Season', 'Pre Season', 'Playoffs', 'All Star'),
            measures = "Base",
@@ -669,7 +672,7 @@ get_teams_season_stat_splits <-
     input_df <-
       expand.grid(
         team_id = ids,
-        year_season_start = years_seasons_start,
+        season = seasons,
         season_type =  season_types,
         measure = measures,
         mode = modes,
@@ -741,7 +744,7 @@ get_teams_season_stat_splits <-
 
 get_nba_player_season_split <-
   function(player_id = 201960,
-           year_season_start = 2017,
+           season = 2018,
            season_type =  "Regular Season",
            measure = "Advanced",
            mode = "PerGame",
@@ -789,8 +792,7 @@ get_nba_player_season_split <-
       filter(idPlayer %in% player_id)
 
     slugSeason <-
-      year_season_start %>%
-      paste0("-", (year_season_start + 1) %>% substr(3, 4))
+      season %>% generate_season_slug()
 
     if (return_message) {
       glue::glue("Acquiring {df_player$namePlayer} {mode[1]} {measure} split tables for the {slugSeason} season") %>% message()
@@ -801,7 +803,7 @@ get_nba_player_season_split <-
         query_type = 'split',
         type = "player",
         id = player_id,
-        year_season_start = year_season_start,
+        season = season,
         season_type =  season_type,
         measure = measure,
         mode = mode,
@@ -853,12 +855,21 @@ get_nba_player_season_split <-
           ) %>%
           mutate(numberTable = table_id) %>%
           select(numberTable, everything())
+        data <-
+          json$resultSets$rowSet[[table_id]] %>% as_data_frame()
+
+        actual_names <-
+          json$resultSets$headers[[table_id]] %>% resolve_nba_names()
+
+        if (data %>% nrow() == 0) {
+          return(invisible())
+        }
 
         df_table <-
-          json %>%
-          nba_json_to_df(table_id = table_id) %>%
+          data %>%
+          purrr::set_names(actual_names) %>%
           mutate(numberTable = table_id) %>%
-          select(numberTable, everything())
+          mutate(idPlayer = player_id)
 
         df_table <-
           df_table %>%
@@ -871,6 +882,7 @@ get_nba_player_season_split <-
         df_table <-
           df_table %>%
           mutate(nameTable = table_name) %>%
+          mutate(modeSearch = mode) %>%
           select(nameTable, modeSearch, everything())
 
 
@@ -893,7 +905,7 @@ get_nba_player_season_split <-
 #'
 #' @param player_ids vector of player ids
 #' @param players  vector of player names
-#' @param years_seasons_start vector of the start years
+#' @param seasons vector of the start years
 #' @param season_types vector of season types options include \itemize{
 #' \item Regular Season
 #' \item Pre Season
@@ -989,7 +1001,7 @@ get_nba_player_season_split <-
 get_players_season_stat_splits <-
   function(players =  NULL,
            player_ids = NULL,
-           years_seasons_start = c(2017),
+           seasons =  2018,
            season_types = c("Regular Season"),
            measures = c("Base"),
            modes = c("PerGame"),
@@ -1015,7 +1027,7 @@ get_players_season_stat_splits <-
            add_mode_names = T
   ) {
 
-    if (years_seasons_start %>% purrr::is_null()) {
+    if (seasons %>% purrr::is_null()) {
       "Please enter seasons"
     }
 
@@ -1026,7 +1038,7 @@ get_players_season_stat_splits <-
     input_df <-
       expand.grid(
         player_id = ids,
-        year_season_start = years_seasons_start,
+        season = seasons,
         season_type =  season_types,
         measure = measures,
         mode = modes,
@@ -1050,37 +1062,37 @@ get_players_season_stat_splits <-
         stringsAsFactors = F
       ) %>%
       dplyr::as_data_frame()
-
+    get_nba_player_season_split_safe <-
+      purrr::possibly(get_nba_player_season_split, data_frame())
     all_data <-
       1:nrow(input_df) %>%
       map_df(function(x) {
         df_row <-
           input_df %>% slice(x)
 
-        df_row %$%
-          get_nba_player_season_split(
-            player_id = player_id,
-            year_season_start = year_season_start,
-            season_type = season_type,
-            measure = measure,
-            mode = mode,
-            is_plus_minus = is_plus_minus,
-            is_pace_adjusted = is_pace_adjusted,
-            period = period,
-            is_rank = is_rank,
-            game_segment = game_segment,
-            division_against = division_against,
-            conference_against = conference_against,
-            date_from = date_from,
-            date_to = date_to,
-            last_n_games = last_n_games,
-            location = location,
-            month = month ,
-            season_segment = season_segment,
-            opponent = opponent,
-            outcome = outcome ,
-            playoff_round = playoff_round,
-            shot_clock_range = shot_clock_range,
+        get_nba_player_season_split(
+            player_id = df_row$player_id,
+            season =  df_row$season,
+            season_type =  df_row$season_type,
+            measure =  df_row$measure,
+            mode =  df_row$mode,
+            is_plus_minus =  df_row$is_plus_minus,
+            is_pace_adjusted =  df_row$is_pace_adjusted,
+            period =  df_row$period,
+            is_rank =  df_row$is_rank,
+            game_segment =  df_row$game_segment,
+            division_against =  df_row$division_against,
+            conference_against =  df_row$conference_against,
+            date_from =  df_row$date_from,
+            date_to =  df_row$date_to,
+            last_n_games =  df_row$last_n_games,
+            location =  df_row$location,
+            month = df_row$month ,
+            season_segment =  df_row$season_segment,
+            opponent =  df_row$opponent,
+            outcome =  df_row$outcome ,
+            playoff_round =  df_row$playoff_round,
+            shot_clock_range =  df_row$shot_clock_range,
             return_message = return_message
           )
       })

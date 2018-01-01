@@ -536,7 +536,54 @@ dictionary_nba_names <-
                    "lastUpdate", "UpdateId", "RotoId", "FirstName", "LastName",
                    "Position", "Team", "TeamCode", "Date", "Priority", "Headline",
                    "Injured", "Injured_Status", "Injury_Location", "Injury_Type",
-                   "Injury_Detail", "Injury_Side"
+                   "Injury_Detail", "Injury_Side",
+                   "YEAR", "WINS", "LOSSES", "WIN_PCT", "CONF_RANK", "DIV_RANK",
+                   "PO_WINS", "PO_LOSSES", "CONF_COUNT", "DIV_COUNT", "NBA_FINALS_APPEARANCE",
+                   "PlayerIDSID", "PlayerFirstName", "PlayerLastName", "PlayerNumber",
+                   "P", "TeamIDSID", "TeamName", "TeamNameAbbreviation", "TeamShortName",
+                   "Poss", "Time", "Points", "PPP", "WorsePPP", "BetterPPP", "PossG",
+                   "FGAG", "FGMG", "FGmG", "FGm", "FG", "aFG", "FT", "SF", "PlusOne",
+                   "Score", "name", "season", "seasonType",
+                   "SeasonID", "TeamCity", "Conference", "ConferenceRecord", "PlayoffRank",
+                   "ClinchIndicator", "Division", "DivisionRecord", "DivisionRank",
+                   "WinPCT", "LeagueRank", "Record", "HOME", "ROAD", "L10", "Last10Home",
+                   "Last10Road", "OT", "ThreePTSOrLess", "TenPTSOrMore", "LongHomeStreak",
+                   "strLongHomeStreak", "LongRoadStreak", "strLongRoadStreak", "LongWinStreak",
+                   "LongLossStreak", "CurrentHomeStreak", "strCurrentHomeStreak",
+                   "CurrentRoadStreak", "strCurrentRoadStreak", "CurrentStreak",
+                   "strCurrentStreak", "ConferenceGamesBack", "DivisionGamesBack",
+                   "ClinchedConferenceTitle", "ClinchedDivisionTitle", "ClinchedPlayoffBirth",
+                   "EliminatedConference", "EliminatedDivision", "AheadAtHalf",
+                   "BehindAtHalf", "TiedAtHalf", "AheadAtThird", "BehindAtThird",
+                   "TiedAtThird", "Score100PTS", "OppScore100PTS", "OppOver500",
+                   "LeadInFGPCT", "LeadInReb", "FewerTurnovers", "PointsPG", "OppPointsPG",
+                   "DiffPointsPG", "vsEast", "vsAtlantic", "vsCentral", "vsWest",
+                   "vsPacific", "vsMidwest", "Jan", "Feb", "Mar", "Apr", "May",
+                   "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec",
+                   "vsNorthwest", "vsSoutheast", "vsSouthwest",
+                   "CONFERENCE", "HIGH_SEED_RANK", "HIGH_SEED_TEAM", "HIGH_SEED_TEAM_ID",
+                   "LOW_SEED_RANK", "LOW_SEED_TEAM", "LOW_SEED_TEAM_ID", "HIGH_SEED_SERIES_W",
+                   "HIGH_SEED_SERIES_L", "HIGH_SEED_SERIES_REMAINING_G", "HIGH_SEED_SERIES_REMAINING_HOME_G",
+                   "HIGH_SEED_SERIES_REMAINING_AWAY_G",
+                   "REMAINING_G", "REMAINING_HOME_G", "REMAINING_AWAY_G",
+                   "PCT", "DIV", "CONF", "AWAY", "GB", "GR_OVER_500", "GR_OVER_500_HOME",
+                   "GR_OVER_500_AWAY", "GR_UNDER_500", "GR_UNDER_500_HOME", "GR_UNDER_500_AWAY",
+                   "RANKING_CRITERIA", "CLINCHED_PLAYOFFS", "CLINCHED_CONFERENCE",
+                   "CLINCHED_DIVISION", "ELIMINATED_PLAYOFFS", "SOSA_REMAINING",
+                   "NICKNAME", "YEARFOUNDED", "CITY", "ARENA", "ARENACAPACITY",
+                   "OWNER", "GENERALMANAGER", "HEADCOACH", "DLEAGUEAFFILIATION",
+                   "YEARACTIVETILL", "ACCOUNTTYPE", "WEBSITE_LINK", "YEARAWARDED",
+                   "OPPOSITETEAM", "PLAYERID", "SEASONSWITHTEAM",
+                   "HOME_TV_BROADCASTER_ABBREVIATION", "AWAY_TV_BROADCASTER_ABBREVIATION",
+                   "ARENA_NAME",
+                   "STANDINGSDATE", "G", "HOME_RECORD", "ROAD_RECORD",
+                   "PTS_PLAYER_ID", "PTS_PLAYER_NAME", "REB_PLAYER_ID", "REB_PLAYER_NAME",
+                   "AST_PLAYER_ID", "AST_PLAYER_NAME",
+                   "teamId", "win", "loss", "winPct", "winPctV2", "lossPct", "lossPctV2",
+                   "gamesBehind", "divGamesBehind", "clinchedPlayoffsCode", "clinchedPlayoffsCodeV2",
+                   "confRank", "confWin", "confLoss", "divWin", "divLoss", "homeWin",
+                   "homeLoss", "awayWin", "awayLoss", "lastTenWin", "lastTenLoss",
+                   "streak", "divRank", "isWinStreak", "tieBreakerPts"
 
                  ),
                nameActual =
@@ -560,11 +607,11 @@ dictionary_nba_names <-
                    "timeStringWC", "timeQuarter", "descriptionPlayHome", "descriptionPlayNeutral",
                    "descriptionPlayVisitor", "slugScore", "marginScore", "idPersonType1",
                    "idPlayerNBA1", "namePlayer1", "idTeamPlayer1", "cityTeamPlayer1",
-                   "nicknameTeamPlayer1", "slugTeamPlayer1", "idPersonType2",
+                   "teamNamePlayer1", "slugTeamPlayer1", "idPersonType2",
                    "idPlayerNBA2", "namePlayer2", "idTeamPlayer2", "cityTeamPlayer2",
-                   "nicknameTeamPlayer2", "slugTeamPlayer2", "idPersonType3",
+                   "teamNamePlayer2", "slugTeamPlayer2", "idPersonType3",
                    "idPlayerNBA3", "namePlayer3", "idTeamPlayer3", "cityTeamPlayer3",
-                   "nicknameTeamPlayer3", "slugTeamPlayer3", "hasVideo",
+                   "teamNamePlayer3", "slugTeamPlayer3", "hasVideo",
                    "idTeamHome", "slugTeamHome", "ptsTotalTeamHome", "idTeamAway",
                    "slugTeamAway", "ptsTotalTeamAway",
                    "numberJersey", "groupPosition", "locationGame", "fptsFDActual",
@@ -576,7 +623,7 @@ dictionary_nba_names <-
                    "countLeadChanges", "countTies", "tovTeam", "tobTotal",
                    "trbTeam", "ptsOffTOV", "idOffical", "nameFirst", "nameLast",
                    "countAttendance", "timeGame",
-                   "cityTeam", "nicknameTeam", "slugRecordTeam", "ptsQ1",
+                   "cityTeam", "teamName", "recordOverall", "ptsQ1",
                    "ptsQ2", "ptsQ3", "ptsQ4", "ptsOT1", "ptsOT2", "ptsOT3",
                    "ptsOT4", "ptsOT5", "ptsOT6", "ptsOT7", "ptsOT8", "ptsOT9",
                    "ptsOT10",
@@ -587,7 +634,7 @@ dictionary_nba_names <-
                    "ptsTeamAwayLast",
                    "countWinsSeriesSeasonHome", "countLossesSeriesSeasonHome", "descriptionSeriesLeader",
                    "hasPT", "hasPTXYZ", "hasHustleStats", "hasHistoricalStatus", "tov",
-                   "mean_mph", "distMiles", "orebChances", "drebChances", "trebChances", "touches", "astSecondary", "ftAST",
+                   "mphMean", "distMiles", "orebChances", "drebChances", "trebChances", "touches", "astSecondary", "ftAST",
                    "passes", "fgmContested", "fgaContested", "pctFGContested", "fgmUncontested", "fgaUncontested", "pctFGUncontested",
                    "fgmRimDefended", "fgaRimDefended", "pctFGRimDefended",
                    "pctFGAasFG2", "pctFGAasFG3", "pctPTSasFG2", "pctPTSasFG2asMR",
@@ -704,7 +751,54 @@ dictionary_nba_names <-
                    "datetimeUpdatedLast", "idUpdate", "idRotoWorld", "nameFirst", "nameLast",
                    "groupPosition", "slugTeam", "codeTeam", "dateISO", "numberPriority", "articleHeadline",
                    "slugInjured", "statusInjury", "locationInjury", "typeInjury",
-                   "detailInjury", "sideInjury"
+                   "detailInjury", "sideInjury",
+                   "slugSeason", "wins", "losses", "pctWins", "rankConference", "rankDivision",
+                   "countWinsPlayoffs", "countLossesPlayoffs", "countConferenceTitles", "countDivisionTitles", "descriptionNBAFinalsAppearance",
+                   "idPlayer", "nameFirst", "nameLast", "numberJersey",
+                   "groupPosition", "idTeam", "nameTeam", "slugTeam", "nameTeamShort",
+                   "poss", "pctFrequency", "pts", "ppp", "pppWorseTeams", "pppBetterTeams", "possPerGame",
+                   "fgaPerGame", "fgmPerGame", "fgMissPerGame", "fgmTotal", "pctFG", "pctEFG", "pctFTDrawn", "pctShootingFoulDrawn", "pctAnd1Drawn",
+                   "pctScore", "typeSet", "yearSeason", "typeSeason",
+                   "idSeason", "cityTeam", "nameConference", "recordConference", "rankPlayoffs",
+                   "slugPlayoffClinch", "nameDivison", "RecordDivision", "rankDivision",
+                   "pctWinTeam", "rankTeam", "recordOverall", "recordHome", "recordAway", "recordLast10", "recordLast10Home",
+                   "recordLast10Away", "recordOT", "recordThreePTSOrLess", "recordTenPTSOrMore", "streakLongHome",
+                   "slugStreakLongHomeStreak", "streakLongAway", "slugStreakLongAway", "streakWinLong",
+                   "streakLossLong", "streakHomeCurrent", "slugStreakHomeCurrent",
+                   "streakAwayCurrent", "slugStreakAwayCurrent", "streakCurrent",
+                   "slugStreakCurrent", "gamesBackConference", "gamesBackDivision",
+                   "hasClinchedConferenceTitle", "hasClinchedDivisionTitle", "hasClinchedPlayoffBirth",
+                   "isEliminatedConference", "isEliminatedDivision", "recordAheadAtHalf",
+                   "recordBehindAtHalf", "recordTiedAtHalf", "recordAheadAtThird", "recordBehindAtThird",
+                   "recordTiedAtThird", "recordScore100PTS", "recordOppScore100PTS", "recordOppOver500",
+                   "recordLeadInFGPCT", "recordLeadInReb", "recordFewerTurnovers", "ptsPerGameTeam", "ptsPerGameOpp",
+                   "ptsPerGameDiff", "recordVsEast", "recordVsAtlantic", "recordVsCentral", "recordVsWest",
+                   "recordVsPacific", "recordVsMidwest", "recordJan", "recordFeb", "recordMar", "recordApr", "reocrdMay",
+                   "recordJun", "recordJul", "recordAug", "recordSep", "recordOct", "recordNov", "recordDec",
+                   "recordVsNorthwest", "recordVsSoutheast", "recordVsSouthwest",
+                   "nameConference", "rankSeedHigh", "teamNameShortHigh", "idTeamHigh",
+                   "rankSeedLow", "teamNameShortLow", "idTeamLow", "winsPlayoffSeedLigh",
+                   "lossesPlayoffsSeedHIgh", "gamesRemainingSeedHome", "gamesRemainingAtHomeSeedHome",
+                   "gamesRemainingAwaySeedHome",
+                   "gamesRemaining", "gamesRemainingHome", "gamesRemainingAway",
+                   "pctWinTeam", "recordDivision", "recordConference", "recordAway", "gamesBack", "gamesRemainingOver500", "gamesRemainingOver500Home",
+                   "gamesRemainingOver500Away", "gamesRemainingUnder500", "gamesRemainingUnder500Home", "gamesRemainingUnder500Away",
+                   "rankCriteria", "hasClinchedPlayoffs", "hasClinchedConference",
+                   "hasClinchedDivision", "isEliminatedPlayoffs", "strengthScheduleRemaining",
+                   "teamName", "yearFounded", "cityTeam", "nameArena", "capacityArena",
+                   "nameOwner", "nameGeneralManager", "nameHeadCoach", "nameDLeagueAffiliate",
+                   "yearActiveUntil", "nameAccount", "urlAccount", "yearSeason",
+                   "nameTeamOpponent", "idPlayer", "slugSeasonsWithTeam",
+                   "slugNetworkTVHome", "slugTVNetworkAway",
+                   "nameArena",
+                   "dateStandings", "gamesTotal", "recordHome", "recordAway",
+                   "idPlayerPTSLeader", "namePlayerPTSLeader", "idPlayerTREBLeader", "namePlayerTREBLeader",
+                   "idPlayerASTLeader", "namePlayerASTLeader",
+                   "idTeam", "wins", "losses", "pctWinRemove", "pctWins", "pctLossRemove", "pctLosses",
+                   "gamesBehindPlayoffs", "gamesBehindDivision", "codePlayoffRemove", "codePlayoffCling",
+                   "rankConference", "winsConference", "lossesConference", "winsDivison", "lossesDivision", "winsHome",
+                   "lossesHome", "winsAway", "lossesAway", "winsLast10", "lossesLast10",
+                   "streakCurrent", "rankDivision", "isWinStreak", "ptsTieBreaker"
 
                  )
     )
@@ -735,7 +829,7 @@ resolve_nba_names <- function(json_names) {
 }
 
 char_words <-
-  function(words = c("name[A-Z]", "date[A-Z]", "slug[A-Z]", "outcome[A-Z]", "team[A-Z]", 'height[A-Z]', 'result[A-Z]', "segment[A-Z]", "range[A-Z]", "vs[A-Z]",
+  function(words = c("name[A-Z]", "date[A-Z]", "slug[A-Z]", "outcome[A-Z]", "team[A-Z]", 'height[A-Z]', 'result[A-Z]', "segment[A-Z]", "range[A-Z]", "vs[A-Z]", "mode[A-Z]", "category[A-Z]", "record[A-Z]", "^url[A-Z]",
                      "description", "city", "time[A-Z]", "nickname[A-Z]", "group[A-Z]", "location[A-Z]", "zone[A-Z]", "type[A-Z]")){
     words %>% stringr::str_c(collapse = "|")
   }
@@ -891,6 +985,27 @@ munge_nba_data <- function(data) {
               funs(str_trim)) %>%
     mutate_if(is.character,
               funs(ifelse(. == "", NA, .)))
+
+  logicial_names <-
+    data %>% dplyr::select(matches("^has[A-Z]|^is[A-Z]")) %>% names()
+
+  if (logicial_names %>% length() > 0) {
+    data <-
+      data %>%
+      mutate_at(logicial_names,
+                funs(. %>% as.numeric() %>% as.logical()))
+  }
+
+  id_names <-
+    data %>% dplyr::select(matches("idTeam", "idPlayer")) %>% names()
+
+  if (id_names %>% length() > 0) {
+    data <-
+      data %>%
+      mutate_at(id_names,
+                funs(. %>% as.numeric()))
+  }
+
 
   data <-
     data %>%

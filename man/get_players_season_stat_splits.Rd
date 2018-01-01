@@ -5,7 +5,7 @@
 \title{Get Player Splits}
 \usage{
 get_players_season_stat_splits(players = NULL, player_ids = NULL,
-  years_seasons_start = c(2017), season_types = c("Regular Season"),
+  seasons = 2018, season_types = c("Regular Season"),
   measures = c("Base"), modes = c("PerGame"), is_plus_minus = F,
   is_pace_adjusted = F, periods = 0, is_rank = F, game_segments = NA,
   divisions_against = NA, conferences_against = NA, date_from = NA,
@@ -19,7 +19,7 @@ get_players_season_stat_splits(players = NULL, player_ids = NULL,
 
 \item{player_ids}{vector of player ids}
 
-\item{years_seasons_start}{vector of the start years}
+\item{seasons}{vector of the start years}
 
 \item{season_types}{vector of season types options include \itemize{
 \item Regular Season

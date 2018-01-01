@@ -7,7 +7,7 @@ dictionary_nbadraft_names <-
                            "id.class"),
     nameActual = c("dateUpdated", "yearDraft", "numberRound", "numberPickOverall", "namePlayer",
                    "slugPosition", "slugPositionSecondary", "nameTeamProjection", "slugTeamProjection",
-                   "slugTeamCurrentProjection", "isPickTraded", "heightNormal", "heightInches",
+                   "slugTeamCurrentProjection", "isPickTraded", "heightPlayer", "heightInches",
                    "weightLBS", "isComboPlayer", "nameSchool", "slugClass", "urlPlayerNBADraftNet",
                    "numberClass")
     )
@@ -427,7 +427,6 @@ get_nba_draftnet_year_mock_draft <-
         date.data.updated = last_update,
         year.draft = draft_year,
         id.pick = 1:length(name.player),
-        name.team.nbadraft_net,
         name.player,
         height,
         weight.lbs,
@@ -438,12 +437,38 @@ get_nba_draftnet_year_mock_draft <-
       ) %>%
       left_join(player_df) %>%
       left_join(school_df) %>%
+      suppressMessages()
+
+    if (name.team.nbadraft_net %>% length() > 0 ){
+      draft_data <-
+        draft_data %>%
+        mutate(
+          name.team.nbadraft_net,
+          is.traded_pick = name.team.nbadraft_net %>% str_detect('\\*'),
+          name.team.nbadraft_net = name.team.nbadraft_net %>% str_replace('\\*', '')
+        )
+
+      if (draft_year <= 2013) {
+        draft_data$name.team.nbadraft_net  <-
+          draft_data$name.team.nbadraft_net %>%
+          str_replace('Charlotte', "Charlotte Old")
+      }
+      draft_data <-
+        draft_data %>%
+        left_join(team_df) %>%
+        suppressMessages()
+    } else {
+      draft_data <-
+        draft_data %>%
+        mutate(
+          name.team.nbadraft_net = NA)
+    }
+    draft_data <-
+      draft_data %>%
       mutate(
-        name.player = ifelse(!name.player.nba %>% is.na, name.player.nba, name.player),
+        name.player = ifelse(!name.player.nba %>% is.na(), name.player.nba, name.player),
         height.inches = height %>% lapply(height_in_inches) %>% unlist,
         id.round = ifelse(id.pick <= 30, 1, 2),
-        is.traded_pick = name.team.nbadraft_net %>% str_detect('\\*'),
-        name.team.nbadraft_net = name.team.nbadraft_net %>% str_replace('\\*', ''),
         school = ifelse(!school.actual %>% is.na, school.actual, school),
         is.combo_player = id.position %>% str_detect('\\/')
       ) %>%
@@ -454,40 +479,18 @@ get_nba_draftnet_year_mock_draft <-
       ) %>%
       suppressMessages() %>%
       suppressWarnings()
-    if (draft_year <= 2013) {
-      draft_data$name.team.nbadraft_net  <-
-        draft_data$name.team.nbadraft_net %>%
-        str_replace('Charlotte', "Charlotte Old")
-    }
+
     draft_data <-
       draft_data %>%
-      left_join(team_df) %>%
       left_join(class_df) %>%
-      dplyr::select(-c(
-        name.team.nbadraft_net,
-        school.actual,
-        name.player.nba,
-        team.current
-      )) %>%
-      dplyr::select(
-        date.data.updated,
-        year.draft,
-        id.round,
-        id.pick,
-        name.player,
-        id.position,
-        id.position.secondary,
-        team,
-        slug.team,
-        slug.team.current,
-        is.traded_pick,
-        height,
-        height.inches,
-        weight.lbs,
-        is.combo_player,
-        everything()
-      ) %>%
-      suppressMessages()
+      dplyr::select(-one_of(c(
+        "name.team.nbadraft_net",
+        "school.actual",
+        "name.player.nba",
+        "team.current"
+      ))) %>%
+      suppressMessages() %>%
+      suppressWarnings()
 
     if (return_message) {
       "You the got nbadraft.net mock draft for the " %>%

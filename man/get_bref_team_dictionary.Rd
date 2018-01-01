@@ -7,5 +7,8 @@
 get_bref_team_dictionary()
 }
 \description{
-BREF Team Dictionary
+Basketball Reference Team Dictionary
+}
+\examples{
+get_bref_team_dictionary()
 }

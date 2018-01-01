@@ -2,7 +2,7 @@
 % Please edit documentation in R/get_draft_combine_data.R
 \name{get_years_draft_combines}
 \alias{get_years_draft_combines}
-\title{Get Years NBA Draft Combines}
+\title{Get NBA Draft Combine data}
 \usage{
 get_years_draft_combines(years = NULL, return_message = T, nest_data = F)
 }
@@ -13,9 +13,12 @@ get_years_draft_combines(years = NULL, return_message = T, nest_data = F)
 
 \item{nest_data}{if \code{TRUE} returns nested data_frame}
 }
+\value{
+a \code{data_frame()}
+}
 \description{
-Get Years NBA Draft Combines
+Aquires NBA draft combine data
 }
 \examples{
-get_years_draft_combines(c(2001:2017), nest_data = T)
+get_years_draft_combines(years = c(2001:2018), nest_data = T)
 }

@@ -56,6 +56,8 @@ get_nba_draft_year <-
 
 #' Get NBA Drafts
 #'
+#' Acquires NBA draft data
+#'
 #' @param draft_years \code{vector} of draft years
 #' @param return_message if \code{TRUE} returns message
 #' @param nest_data if \code{TRUE} returns nested data frame

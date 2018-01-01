@@ -17,15 +17,47 @@ remove_na_columns <-
       dplyr::select(which(colMeans(is.na(.)) < 1))
   }
 
-
 generate_team_season_logo <-
-  function(season = "1986-87", slug_team = "SAC") {
+  function(season = 1987, slug_team = "SAC") {
+
+    slug_season <-
+      generate_season_slug(season = season)
+
     url <-
-      glue::glue("http://stats.nba.com/media/img/teams/logos/season/{season}/{slug_team}_logo.svg") %>%
+      glue::glue("http://stats.nba.com/media/img/teams/logos/season/{slug_season}/{slug_team}_logo.svg") %>%
       as.character()
 
-    data_frame(idSeason = season, slugTeam = slug_team, urlLogoTeamSeason = url)
+    url
   }
+
+generate_team_seasons_logos_data <-
+  function(seasons = 1951:2018, slug_teams = "SAC") {
+    input_df <-
+      expand.grid(season = seasons,
+                slug_team = slug_teams,
+                stringsAsFactors = F) %>%
+      as_data_frame()
+    generate_team_season_logo_safe <-
+      purrr::possibly(generate_team_season_logo, NULL)
+
+    1:nrow(input_df) %>%
+      map_df(function(x){
+        df_row <-
+          input_df %>% slice(x)
+        season <- df_row$season
+        slug_team <- df_row$slug_team
+        url <-
+          generate_team_season_logo(season = season, slug_team = slug_team)
+
+        if (url %>% length() == 0) {
+          return(invisible())
+        }
+
+        data_frame(yearSeason = season, slugTeam = slug_team, urlTeamLogoSeason = url)
+
+      })
+  }
+
 
 parse.nba.json_data <-
   function(url = "http://stats.nba.com/stats/leaguedashplayerbiostats?College=&Conference=&Country=&DateFrom=&DateTo=&Division=&DraftPick=&DraftYear=&GameScope=&GameSegment=&Height=&LastNGames=0&LeagueID=00&Location=&Month=0&OpponentTeamID=0&Outcome=&PORound=0&PerMode=PerGame&Period=0&PlayerExperience=&PlayerPosition=&Season=2016-17&SeasonSegment=&SeasonType=Regular+Season&ShotClockRange=&StarterBench=&TeamID=0&VsConference=&VsDivision=&Weight=") {
@@ -349,7 +381,7 @@ parse_for_players <-
         idTeam = ifelse(idTeam == 0, NA, idTeam),
         isRookie = ifelse(countSeasons == 0 &
                             yearSeasonFirst == most_recent, TRUE, FALSE),
-        urlPlayerStats = glue::glue("http://stats.nba.com/player/{idPlayer}"),
+        urlPlayerStats = glue::glue("http://stats.nba.com/player/{idPlayer}") %>% as.character(),
         urlPlayerThumbnail = glue::glue(
           "http://stats.nba.com/media/players/230x185/{idPlayer}.png"
         ) %>% as.character(),
@@ -358,7 +390,7 @@ parse_for_players <-
           "http://stats.nba.com/media/img/league/nba-headshot-fallback.png",
           glue::glue(
             "https://ak-static.cms.nba.com/wp-content/uploads/headshots/nba/{idTeam}/{yearSeasonLast}/260x190/{idPlayer}.png"
-          )
+          ) %>% as.character()
         )) %>%
       mutate(
         urlPlayerActionPhoto = ifelse(isRookie, "http://stats.nba.com/media/img/league/nba-headshot-fallback.png",
@@ -389,7 +421,6 @@ parse_for_seasons_data <-
     seasons <-
       1:length(json_seasons) %>%
       map_df(function(x){
-        x %>% message()
         row <-
           json_seasons[[x]]
 
@@ -494,8 +525,9 @@ get_nba_teams <-
 #' @export
 #' @import readr jsonlite dplyr purrr tibble tidyr stringr
 #' @examples
+#' get_nba_stats_api_items()
 get_nba_stats_api_items <-
-  function(include_tables = F){
+  function(){
     url <- "http://stats.nba.com/js/data/ptsd/stats_ptsd.js"
     json <-
       url %>%
@@ -507,22 +539,27 @@ get_nba_stats_api_items <-
     df_players <-
       json %>%
       parse_for_players() %>%
-      assign(x = "dataPlayersNBA", value = ., envir = .GlobalEnv)
+      assign(x = "dataNBAPlayers", value = ., envir = .GlobalEnv)
 
-    if (include_tables) {
     df_tables <-
       json %>%
       parse_for_seasons_data()
     assign(x = "dataNBAStatsParamaters", value = df_tables, envir = .GlobalEnv)
-    }
 
     df_teams <-
       json %>%
       parse_for_teams() %>%
-      assign(x = "dataTeamsNBA", value = ., envir = .GlobalEnv)
+      assign(x = "dataNBATeams", value = ., envir = .GlobalEnv)
+
+    data_frame(
+      nameTable = c("Players", "Teams", "API Parameters"),
+      dataTable = list(df_players, df_teams, df_tables)
+    )
   }
 
-#' Get Players from NBA Stats API
+#' Get NBA Players
+#'
+#' Acquires NBA player dictionary
 #'
 #' @return a \code{data_frame}
 #' @export
@@ -650,77 +687,6 @@ get_nba_players <-
              everything())
   }
 
-
-# schedule ----------------------------------------------------------------
-
-
-
-parse.nba_schedule <-
-  function(url =  "https://data.nba.com/data/10s/v2015/json/mobile_teams/nba/2017/league/00_full_schedule_week.json") {
-    json <-
-      url %>%
-      get.json_data(is_data_frame = T, is_flattened = T)
-
-    months <-
-      json$lscd$mscd.mon
-    df_all <-
-      1:length(months) %>%
-      map_df(function(x) {
-        df <- json$lscd$mscd.g[[x]] %>% dplyr::as_data_frame()
-        df %>%
-          mutate(nameMonth = months[[x]]) %>%
-          select(nameMonth, everything())
-      })
-
-    ### pars
-
-    df_all
-  }
-
-get.todays_games <-
-  function(url = "https://data.nba.com/data/10s/v2015/json/mobile_teams/nba/2017/scores/00_todays_scores.json") {
-    json <-
-      url %>%
-      get.json_data(is_data_frame = T, use_read_lines = T)
-
-    df_games <-
-      json$gs$g %>% dplyr::as_data_frame() %>%
-      mutate_if(is.character,
-                funs(ifelse(. == "", NA, .))) %>%
-      remove_na_columns()
-
-    date <- json$gs$gdte %>% lubridate::ymd()
-
-    json$gs[3]
-  }
-
-
-# scoreboard --------------------------------------------------------------
-
-parse.nba.scoreboard.day <-
-  function(url = "https://data.nba.net/prod/v2/20171105/scoreboard.json") {
-    json_data <-
-      url %>%
-      get.json_data(is_data_frame = TRUE, use_read_lines = TRUE, is_flattened = T)
-
-    count_games <- json_data$numGames
-
-    df_games <-
-      json_data$games %>%
-      dplyr::as_data_frame()
-  }
-
-### URL Scoreboard
-## http://stats.nba.com/stats/scoreboardV2?DayOffset=0&LeagueID=00&gameDate=11%2F05%2F2017
-
-
-### Breakdown
-## http://stats.nba.com/js/data/widgets/boxscore_breakdown_20161105.json
-
-## vidoes
-## https://data.nba.net/prod/v2/20171104/scoreboard.json
-
-
 # games -------------------------------------------------------------------
 
 
@@ -748,27 +714,4 @@ parse.nba.scoreboard.day <-
 ### Game Book
 ## http://www.nba.com/data/html/nbacom/2017/gameinfo/20171105/0021700136_Book.pdf
 
-
-
-# leaders -----------------------------------------------------------------
-
-##
-
-## http://stats.nba.com/stats/leagueLeaders?LeagueID=00&PerMode=PerGame&Scope=S&Season=2017-18&SeasonType=Regular+Season&StatCategory=PTS
-
-# players -----------------------------------------------------------------
-
-
-## vs
-### http://stats.nba.com/stats/commonplayerinfo?IsOnlyCurrentSeason=0&LeagueID=00&PlayerID=203145&PlayerID1=0&PlayerID2=0&PlayerID3=0&PlayerID4=0&PlayerID5=0&PlayerTeamID=1&Season=2017-18&SeasonType=Regular+Season&VsPlayerID1=0&VsPlayerID2=0&VsPlayerID3=0&VsPlayerID4=0&VsPlayerID5=0&VsTeamID=1
-
-# lineups  ----------------------------------------------------------------
-
-### http://stats.nba.com/stats/teamdashlineups?DateFrom=&DateTo=&GameID=0021700136&GameSegment=&GroupQuantity=5&LastNGames=0&LeagueID=00&Location=&MeasureType=Base&Month=0&OpponentTeamID=0&Outcome=&PORound=0&PaceAdjust=N&PerMode=PerGame&Period=0&PlusMinus=N&Rank=N&Season=2017-18&SeasonSegment=&SeasonType=Regular+Season&TeamID=1610612739&VsConference=&VsDivision=
-
-
-# Teams -------------------------------------------------------------------
-
-### Standings
-## http://stats.nba.com/stats/leaguestandingsv3?LeagueID=00&Season=2017-18&SeasonType=Regular+Season
 

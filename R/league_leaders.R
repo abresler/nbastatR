@@ -145,6 +145,10 @@ get_franchise_leaders <-
            mode = "PerGame",
            season_type = "Regular Season",
            return_message = TRUE) {
+    if (!'df_dict_nba_teams_history' %>% exists()) {
+      df_dict_nba_teams_history <- get_nba_franchise_history()
+      assign(x = 'df_dict_nba_teams_history', df_dict_nba_teams_history, envir = .GlobalEnv)
+    }
     json_url <-
       glue::glue(
       "https://stats.nba.com/stats/franchiseleaderswrank?LeagueID=00&PerMode={mode}&SeasonType={season_type}&TeamID={team_id}"
@@ -152,9 +156,16 @@ get_franchise_leaders <-
       URLencode() %>%
       as.character()
 
+    team_name <-
+      df_dict_nba_teams_history %>%
+      filter(idTeam == team_id) %>%
+      pull(nameTeam) %>%
+      unique() %>%
+      str_c(collapse = ", ")
+
 
     if (return_message) {
-      glue::glue("Acquiring {team_id} {mode} franchise leaders") %>% message()
+      glue::glue("Acquiring {team_name} {mode} franchise leaders") %>% message()
     }
 
     json <-
@@ -214,13 +225,13 @@ get_franchise_leaders <-
 #' @importFrom glue glue
 
 #' @examples
-#' get_teams_franchise_leaders(teams = "Brooklyn Nets", modes = c("Totals", "PerGame"))
+#' get_teams_franchise_leaders(teams = "Brooklyn Nets", modes = c("Totals"))
 
 get_teams_franchise_leaders <-
   function(teams = NULL,
            all_teams = FALSE,
            remove_inactive_teams = F,
-           modes = c("PerGame", "Totals"),
+           modes = "Totals",
            season_types = c("Regular Season"),
            return_message = TRUE,
            nest_data = FALSE) {
@@ -228,17 +239,20 @@ get_teams_franchise_leaders <-
     if (teams %>% purrr::is_null() & !all_teams) {
       stop("Please enter a team or make all_teams = T")
     }
-    if (!'df_dict_nba_teams' %>% exists()) {
-      df_dict_nba_teams <- get_nba_franchise_history()
-      assign(x = 'df_dict_nba_teams', df_dict_nba_teams, envir = .GlobalEnv)
+    if (!'df_dict_nba_teams_history' %>% exists()) {
+      df_dict_nba_teams_history <- get_nba_franchise_history()
+      assign(x = 'df_dict_nba_teams_history', df_dict_nba_teams_history, envir = .GlobalEnv)
     }
 
     ids <- c()
 
     if (remove_inactive_teams) {
-      df_teams_filter <- df_dict_nba_teams %>% filter(isActive)
+      df_teams_filter <-
+        df_dict_nba_teams_history %>%
+        filter(isActive)
     } else {
-      df_teams_filter <- df_dict_nba_teams
+      df_teams_filter <-
+        df_dict_nba_teams_history
     }
 
     if (!teams %>% purrr::is_null()) {
@@ -273,10 +287,12 @@ get_teams_franchise_leaders <-
       sort()
 
     input_df <-
-      expand.grid(team_id = ids,
-                  modes = modes,
-                  season_type = season_types,
-                  stringsAsFactors = F) %>%
+      expand.grid(
+        team_id = ids,
+        mode = modes,
+        season_type = season_types,
+        stringsAsFactors = F
+      ) %>%
       dplyr::as_data_frame()
     get_franchise_leaders_safe <-
       purrr::possibly(get_franchise_leaders, data_frame())
@@ -290,7 +306,21 @@ get_teams_franchise_leaders <-
                                      mode = mode,
                                      season_type = season_type,
                                      return_message = return_message)
-      })
+      }) %>%
+      distinct()
+
+    if (!'df_nba_player_dict' %>% exists()) {
+      df_nba_player_dict <-
+        get_nba_players()
+
+      assign(x = 'df_nba_player_dict', df_nba_player_dict, envir = .GlobalEnv)
+    }
+
+    all_data <-
+      all_data %>%
+      left_join(
+        df_nba_player_dict %>% select(idPlayer, urlPlayerHeadshot, urlPlayerThumbnail)
+      ) %>%  suppressMessages()
 
     if (nest_data) {
       all_data <-

@@ -5,7 +5,7 @@
 \title{Get NBA teams' franchise leaders}
 \usage{
 get_teams_franchise_leaders(teams = NULL, all_teams = FALSE,
-  remove_inactive_teams = F, modes = c("PerGame", "Totals"),
+  remove_inactive_teams = F, modes = "Totals",
   season_types = c("Regular Season"), return_message = TRUE,
   nest_data = FALSE)
 }
@@ -34,5 +34,5 @@ a \code{data_frame}
 Get NBA teams' franchise leaders
 }
 \examples{
-get_teams_franchise_leaders(teams = "Brooklyn Nets", modes = c("Totals", "PerGame"))
+get_teams_franchise_leaders(teams = "Brooklyn Nets", modes = c("Totals"))
 }

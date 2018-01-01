@@ -45,41 +45,45 @@ get_nba_player_career_stats <-
 
     all_data <-
       1:table_length %>%
-      map_df(function(table_id) {
-        # table_id %>% message()
+      map_df(function(x) {
         table_name <-
-          json$resultSets$name[table_id]
+          json$resultSets$name[x]
 
-        df_table <-
-          json %>%
-          nba_json_to_df(table_id = table_id)
 
         json_names <-
-          json$resultSets$headers[[table_id]]
+          json$resultSets$headers[[x]]
 
-        #json_names %>% missing_names()
-
-        if (df_table %>% length() == 0) {
-          return(data_frame())
+        data <-
+          json$resultSets$rowSet[[x]] %>%
+          as_data_frame()
+        if (data %>% nrow() == 0) {
+          return(invisible())
         }
 
-        df_table <-
-          df_table %>%
+        actual_names <-
+          json_names %>%
+          resolve_nba_names()
+
+        data <-
+          data %>%
+          purrr::set_names(actual_names) %>%
+          munge_nba_data() %>%
           mutate(modeSearch = mode,
                  nameTable = table_name,
+                 idPlayer = player_id,
                  namePlayer = player) %>%
           select(nameTable, modeSearch, namePlayer, everything())
 
-        if (df_table %>% tibble::has_name("slugSeason")) {
+        if (data %>% tibble::has_name("slugSeason")) {
           df_players_seasons <-
-            df_table %>%
+            data %>%
             distinct(slugSeason) %>%
             mutate(numberPlayerSeason = 1:n() -
                      1) %>%
             mutate(isRookie = ifelse(numberPlayerSeason == 0, T, F))
 
-          df_table <-
-            df_table %>%
+          data <-
+            data %>%
             left_join(df_players_seasons) %>%
             suppressMessages() %>%
             dplyr::select(nameTable:slugSeason,
@@ -89,13 +93,14 @@ get_nba_player_career_stats <-
         }
 
 
-        df_table <-
-          df_table %>%
+        data <-
+          data %>%
           dplyr::select(-one_of("idLeague")) %>%
           nest(-c(nameTable, modeSearch, idPlayer, namePlayer), .key = 'dataTable') %>%
-          mutate(urlNBAAPI = url)
+          mutate(urlNBAAPI = url) %>%
+          suppressWarnings()
 
-        df_table
+        data
       })
     closeAllConnections()
     all_data

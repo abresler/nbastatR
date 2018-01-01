@@ -14,7 +14,7 @@ get_nba_drafts(draft_years = 1947:2018, nest_data = F, return_message = T)
 \item{return_message}{if \code{TRUE} returns message}
 }
 \description{
-Get NBA Drafts
+Acquires NBA draft data
 }
 \examples{
 get_nba_drafts(draft_years = 2000:2018, nest_data = FALSE, return_message = TRUE)

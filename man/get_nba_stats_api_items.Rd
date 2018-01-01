@@ -4,11 +4,14 @@
 \alias{get_nba_stats_api_items}
 \title{Get NBA Stats API items, players and teams}
 \usage{
-get_nba_stats_api_items(include_tables = F)
+get_nba_stats_api_items()
 }
 \arguments{
 \item{include_tables}{}
 }
 \description{
 Get NBA Stats API items, players and teams
+}
+\examples{
+get_nba_stats_api_items()
 }

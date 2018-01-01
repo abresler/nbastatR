@@ -4,22 +4,20 @@
 \alias{get_teams_season_stat_splits}
 \title{Get NBA Team data by split}
 \usage{
-get_teams_season_stat_splits(teams = NULL, team_ids = NULL,
-  years_seasons_start = 2017, season_types = c("Regular Season"),
-  measures = "Base", modes = c("PerGame"), is_plus_minus = F,
-  is_pace_adjusted = F, periods = 0, is_rank = F, game_segments = NA,
-  divisions_against = NA, conferences_against = NA, date_from = NA,
-  date_to = NA, last_n_games = 0, locations = NA, months = 0,
-  season_segments = NA, opponents = NA, outcomes = NA,
-  playoff_rounds = 0, shot_clock_ranges = NA, return_message = TRUE,
+get_teams_season_stat_splits(teams = NULL, team_ids = NULL, season = 2018,
+  season_types = c("Regular Season"), measures = "Base",
+  modes = c("PerGame"), is_plus_minus = F, is_pace_adjusted = F,
+  periods = 0, is_rank = F, game_segments = NA, divisions_against = NA,
+  conferences_against = NA, date_from = NA, date_to = NA,
+  last_n_games = 0, locations = NA, months = 0, season_segments = NA,
+  opponents = NA, outcomes = NA, playoff_rounds = 0,
+  shot_clock_ranges = NA, return_message = TRUE,
   assign_to_environment = TRUE, add_mode_names = T)
 }
 \arguments{
 \item{teams}{vector of team names}
 
 \item{team_ids}{vector of team ids}
-
-\item{years_seasons_start}{vector of the start years}
 
 \item{season_types}{vector of season types options include \itemize{
 \item Regular Season
@@ -130,10 +128,12 @@ if \code{NA} all teams}
 \item{assign_to_environment}{if \code{TRUE} assigns data to environment}
 
 \item{add_mode_names}{if \code{TRUE} adds data to environment}
+
+\item{seasons}{vector of the start years}
 }
 \description{
 Get NBA Team data by split
 }
 \examples{
-get_teams_season_stat_splits(teams = c("Brooklyn Nets"), years_seasons_start = 2017, measures = c("Base", "Opponent"), modes = c("PerGame"), assign_to_environment = T, add_mode_names = T, return_message = TRUE)
+get_teams_season_stat_splits(teams = c("Brooklyn Nets"), season = 2018, measures = c("Base", "Opponent"), modes = c("PerGame"), assign_to_environment = T, add_mode_names = T, return_message = TRUE)
 }

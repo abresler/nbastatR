@@ -2,10 +2,13 @@
 % Please edit documentation in R/bref.R
 \name{get_bref_coach_dictionary}
 \alias{get_bref_coach_dictionary}
-\title{Get BREF Coach Dictionary}
+\title{Basketball Reference Coach Dictionary}
 \usage{
 get_bref_coach_dictionary()
 }
 \description{
-Get BREF Coach Dictionary
+Basketball Reference Coach Dictionary
+}
+\examples{
+get_bref_coach_dictionary()
 }
