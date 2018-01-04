@@ -127,8 +127,6 @@ get_synergy_category_data <-
         "Synergy categories can only be:\n{str_c(categories, collapse = '\n')}"
       ))
     }
-    mode_search <- mode %>% str_to_lower()
-
 
     slug_season_type <-
       case_when(season_type %>% str_to_lower() %>% str_detect("regular") ~ "REG",

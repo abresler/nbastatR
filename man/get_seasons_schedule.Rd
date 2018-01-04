@@ -5,12 +5,18 @@
 \title{Get NBA Seasons Schedule}
 \usage{
 get_seasons_schedule(seasons = 2018, season_types = "Regular Season",
+  parse_boxscores = F, box_score_tables = c("Traditional"),
   nest_data = FALSE, return_message = TRUE)
 }
 \arguments{
 \item{seasons}{vector of seasons where season is year ending}
 
-\item{return_message}{}
+\item{season_types}{type of season}
+
+\item{nest_data}{}
+}
+\value{
+a \code{data_frame()}
 }
 \description{
 Get NBA Seasons Schedule

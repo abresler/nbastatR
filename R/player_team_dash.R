@@ -2,7 +2,7 @@ generate_dash_url <-
   function(type = "team",
            query_type = "dash",
            id = "",
-           year_season_start = 2017,
+           season = 2017,
            season_type =  "Regular Season",
            measure = "Base",
            mode = "PerGame",
@@ -15,6 +15,7 @@ generate_dash_url <-
            conference_against =  NA,
            date_from = NA,
            date_to = NA,
+           weight = NA,
            last_n_games = 0,
            location = NA,
            month = 0,
@@ -22,6 +23,7 @@ generate_dash_url <-
            opponent = NA,
            outcome = NA,
            playoff_round = 0,
+           country = NA,
            player_experience = NA, # c(NA, "Rookie", "Sophomore", "Veteran"),
            player_position =  NA, # c(NA, "F", "C", "G", "C-F", "F-C", "F-G", "G-F"),
            college = NA,
@@ -56,13 +58,12 @@ generate_dash_url <-
     slug_type <-
       case_when(type %>% str_to_lower() == "team" ~ "TeamID",
                 TRUE ~  'PlayerID')
-    if (year_season_start < 1996) {
+    if (season < 1996) {
       stop("Sorry data only goes back to the 1996-97 Season")
     }
 
     slugSeason <-
-      year_season_start %>%
-      paste0("-", (year_season_start + 1) %>% substr(3, 4))
+      generate_season_slug(season = season)
 
     if (!opponent %>% is.na()) {
       if (!opponent %>% str_to_lower() %in% df_nba_team_dict$nameTeam %>% str_to_lower()) {
@@ -504,7 +505,7 @@ generate_dash_url <-
   }
 
 get_player_season_summary_stats <-
-  function(year_season_start = 2017,
+  function(season = 2017,
            season_type =  "Regular Season",
            measure = "Base",
            mode = "PerGame",
@@ -530,6 +531,8 @@ get_player_season_summary_stats <-
            draft_pick = NA,
            draft_year = NA,
            game_scope =  NA,
+           country = NA,
+           weight = NA,
            height = NA,
            shot_clock_range = NA,
            starter_bench = NA,
@@ -542,11 +545,10 @@ get_player_season_summary_stats <-
 
 
     slugSeason <-
-      year_season_start %>%
-      paste0("-", (year_season_start + 1) %>% substr(3, 4))
+      generate_season_slug(season = season)
 
     if (return_message) {
-      glue::glue("Acquiring all player {mode[1]} {measure} split tables for the {slugSeason} season") %>% message()
+      glue::glue("Acquiring all players {mode[1]} {measure} split tables for the {slugSeason} season") %>% message()
     }
 
     url_json <-
@@ -554,7 +556,7 @@ get_player_season_summary_stats <-
         type = "player",
         query_type = "dash",
         id = "",
-        year_season_start = 2017,
+        season = season,
         season_type =  "Regular Season",
         measure = "Base",
         mode = "PerGame",
@@ -577,6 +579,8 @@ get_player_season_summary_stats <-
         player_experience = player_experience,
         player_position =  player_position,
         college = college,
+        country = country,
+        weight = weight,
         draft_pick = draft_pick,
         draft_year = draft_year,
         game_scope = game_scope,
@@ -627,7 +631,8 @@ get_player_season_summary_stats <-
           df_table %>%
           mutate(nameTable = table_name,
                  modeSearch = mode,
-                 slugSeason,) %>%
+                 slugSeason,
+                 yearSeason = season) %>%
           select(nameTable, modeSearch, everything())
 
         df_table <-
@@ -635,7 +640,7 @@ get_player_season_summary_stats <-
           dplyr::select(-one_of("idLeague")) %>%
           dplyr::select(-matches("Group")) %>%
           remove_zero_sum_cols() %>%
-          nest(-c(nameTable, slugSeason, modeSearch, typeSeason),
+          nest(-c(nameTable, slugSeason, yearSeason, modeSearch, typeSeason),
                .key = 'dataTable')
         df_table
       })
@@ -643,7 +648,7 @@ get_player_season_summary_stats <-
   }
 
 get_team_season_summary_stats <-
-  function(year_season_start = 2017,
+  function(season = 2017,
            season_type =  "Regular Season",
            measure = "Base",
            mode = "PerGame",
@@ -663,6 +668,7 @@ get_team_season_summary_stats <-
            opponent = NA,
            outcome = NA,
            playoff_round = 0,
+           countries = NA,
            player_experience = NA,
            player_position =  NA,
            college = NA,
@@ -681,8 +687,7 @@ get_team_season_summary_stats <-
 
 
     slugSeason <-
-      year_season_start %>%
-      paste0("-", (year_season_start + 1) %>% substr(3, 4))
+      generate_season_slug(season = season)
 
     if (return_message) {
       glue::glue("Acquiring all team {mode[1]} {measure} split tables for the {slugSeason} season") %>% message()
@@ -693,7 +698,7 @@ get_team_season_summary_stats <-
         type = "team",
         query_type = "dash",
         id = "",
-        year_season_start = year_season_start,
+        season = season,
         season_type = season_type,
         measure = measure,
         mode = mode,
@@ -706,6 +711,7 @@ get_team_season_summary_stats <-
         conference_against =  conference_against,
         date_from = date_from,
         date_to = date_to,
+        country = countries,
         last_n_games = last_n_games,
         location = location,
         month = month,
@@ -765,7 +771,8 @@ get_team_season_summary_stats <-
         df_table <-
           df_table %>%
           mutate(nameTable = table_name,
-                 slugSeason,) %>%
+                 slugSeason,
+                 yearSeason = season) %>%
           select(nameTable, modeSearch, everything())
 
         df_table <-
@@ -773,7 +780,7 @@ get_team_season_summary_stats <-
           dplyr::select(-one_of("idLeague")) %>%
           dplyr::select(-matches("Group")) %>%
           remove_zero_sum_cols() %>%
-          nest(-c(nameTable, modeSearch,slugSeason, typeSeason),
+          nest(-c(nameTable, modeSearch,slugSeason, yearSeason, typeSeason),
                .key = 'dataTable')
         df_table
       })
@@ -782,7 +789,7 @@ get_team_season_summary_stats <-
 
 #' Get Players Seasons Summary Statistics
 #'
-#' @param years_season_start
+#' @param seasons
 #' @param season_types
 #' @param measures
 #' @param modes
@@ -819,8 +826,9 @@ get_team_season_summary_stats <-
 #' @export
 #'
 #' @examples
-get_player_seasons_summary_stats <-
-  function(years_season_start = 2017,
+#' get_players_seasons_summary_stats(seasons = 2016:2018)
+get_players_seasons_summary_stats <-
+  function(seasons = 2018,
            season_types =  "Regular Season",
            measures = "Base",
            modes = "PerGame",
@@ -838,6 +846,8 @@ get_player_seasons_summary_stats <-
            months = 0,
            season_segments =  NA,
            opponents = NA,
+           countries = NA,
+           weights = NA,
            outcomes = NA,
            playoff_rounds = 0,
            players_experience = NA,
@@ -854,7 +864,7 @@ get_player_seasons_summary_stats <-
            return_message = TRUE) {
 
     input_df <-
-      expand.grid(year_season_start =  years_season_start,
+      expand.grid(season =  seasons,
                   season_type =  season_types,
                   measure = measures,
                   mode = modes,
@@ -864,12 +874,14 @@ get_player_seasons_summary_stats <-
                   is_rank = is_rank,
                   game_segment =game_segments,
                   division_against = divisions_against,
-                  conference_againsts = conferences_against,
+                  conference_against = conferences_against,
                   date_from = date_from,
                   date_to = date_to,
                   last_n_games = last_n_games,
                   location = locations,
                   month = months,
+                  country = countries,
+                  weight = weights,
                   season_segment =  season_segments,
                   opponent = opponents,
                   outcome = outcomes,
@@ -879,7 +891,7 @@ get_player_seasons_summary_stats <-
                   college = colleges,
                   draft_pick = draft_picks,
                   draft_year = draft_years,
-                  game_scopes =  game_scopes,
+                  game_scope =  game_scopes,
                   height = heights,
                   shot_clock_range = shot_clock_ranges,
                   starter_bench = starters_bench
@@ -894,7 +906,7 @@ get_player_seasons_summary_stats <-
 
         df_row %$%
           get_player_season_summary_stats(
-            year_season_start = year_season_start,
+            season = season,
             season_type = season_type,
             measure = measure,
             mode = mode,
@@ -938,7 +950,7 @@ get_player_seasons_summary_stats <-
 
 #' Get Teams Summary Stastics
 #'
-#' @param years_season_start
+#' @param seasons
 #' @param season_types
 #' @param measures
 #' @param modes
@@ -975,8 +987,8 @@ get_player_seasons_summary_stats <-
 #' @export
 #'
 #' @examples
-get_team_seasons_summary_stats <-
-  function(years_season_start = 2017,
+get_teams_seasons_summary_stats <-
+  function(seasons = 2018,
            season_types =  "Regular Season",
            measures = "Base",
            modes = "PerGame",
@@ -1010,7 +1022,7 @@ get_team_seasons_summary_stats <-
            return_message = TRUE) {
 
     input_df <-
-      expand.grid(year_season_start =  years_season_start,
+      expand.grid(season =  seasons,
                   season_type =  season_types,
                   measure = measures,
                   mode = modes,
@@ -1020,7 +1032,7 @@ get_team_seasons_summary_stats <-
                   is_rank = is_rank,
                   game_segment =game_segments,
                   division_against = divisions_against,
-                  conference_againsts = conferences_against,
+                  conference_against = conferences_against,
                   date_from = date_from,
                   date_to = date_to,
                   last_n_games = last_n_games,
@@ -1035,7 +1047,7 @@ get_team_seasons_summary_stats <-
                   college = colleges,
                   draft_pick = draft_picks,
                   draft_year = draft_years,
-                  game_scopes =  game_scopes,
+                  game_scope =  game_scopes,
                   height = heights,
                   shot_clock_range = shot_clock_ranges,
                   starter_bench = starters_bench
@@ -1050,7 +1062,7 @@ get_team_seasons_summary_stats <-
 
         df_row %$%
           get_team_season_summary_stats(
-            year_season_start = year_season_start,
+            season = season,
             season_type = season_type,
             measure = measure,
             mode = mode,

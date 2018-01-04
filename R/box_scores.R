@@ -91,7 +91,8 @@ get_box_score_type <-
       filter(cols > 1) %>%
       select(-cols) %>%
       select(typeBoxScore, typeResult, everything())
-
+    closeAllConnections()
+    gc()
     data
   }
 
@@ -109,6 +110,7 @@ get_box_score_type <-
 #' \item four factors
 #' \item tracking
 #' }
+#' @param join_data if \code{TRUE} joins the underlying table data
 #' @param result_types vector of result types options include \itemize{
 #' \item team - Team statistics
 #' \item player - player
@@ -122,12 +124,14 @@ get_box_score_type <-
 #' @import dplyr curl stringr lubridate readr magrittr tidyr httr purrr jsonlite
 #' @importFrom glue glue
 #' @examples
-#' get_games_box_scores(game_ids = c(21700002, 21700003), box_score_types = c("traditional", "advanced", "scoring", "misc", "usage", "four factors", "tracking"), result_types = c("player", "team"), assign_to_environment = TRUE, return_message = TRUE)
+#' get_games_box_scores(game_ids = c(21700002, 21700003), box_score_types = c("Traditional", "Advanced", "Scoring", "Misc", "Usage", "Four Factors", "Tracking"), result_types = c("player", "team"), join_data = TRUE, assign_to_environment = TRUE, return_message = TRUE)
+
 get_games_box_scores <-
   function(game_ids = NULL,
-           box_score_types = c("traditional", "advanced", "scoring","misc", "usage", "four factors",
+           box_score_types = c("Traditional", "Advanced", "Scoring","Misc", "Usage", "Four Factors",
                                "hustle", "tracking"),
            result_types = c("player", "team"),
+           join_data = TRUE,
            assign_to_environment = TRUE,
            return_message = TRUE) {
     if (game_ids %>% purrr::is_null()) {
@@ -160,7 +164,77 @@ get_games_box_scores <-
         )
     })
 
-    if (assign_to_environment) {
+    if (join_data) {
+      results <-
+        all_data$typeResult %>% unique()
+
+      all_data <-
+        results %>%
+        map_df(function(result){
+          df_results <-
+            all_data %>%
+            filter(typeResult == result)
+          tables <-
+            df_results$typeBoxScore %>% unique()
+          all_tables <-
+            tables %>%
+            map(function(table){
+              data <-
+                df_results %>%
+                filter(typeBoxScore == table) %>%
+                select(idGame, dataBoxScore) %>%
+                unnest()
+
+
+              if (table == "Usage") {
+                data <-
+                  data %>%
+                  dplyr::select(-one_of("pctUSG"))
+              }
+
+              if (table == "Tracking") {
+                data <-
+                  data %>%
+                  dplyr::select(-one_of("pctFG"))
+              }
+
+              if (table == "Four Factors") {
+                data <-
+                  data %>%
+                  dplyr::select(-one_of(c("pctOREB", "pctTOVTeam", "pctEFG")))
+              }
+              data
+            })
+
+          all_tables <-
+            all_tables %>%
+            purrr::reduce(left_join) %>%
+            suppressMessages()
+
+          if (result == "player") {
+            all_tables <-
+              all_tables %>%
+              mutate(isStarter = !groupStartPosition %>% is.na()) %>%
+              dplyr::select(idGame:groupStartPosition, isStarter, everything())
+          }
+          data_frame(typeResult = result, dataBoxScore = list(all_tables))
+        })
+
+      if (assign_to_environment) {
+        all_data$typeResult %>%
+          walk(function(result){
+            table_name <-
+              glue::glue("dataBoxScore{str_to_title(result)}")
+            df_table <-
+              all_data %>%
+              filter(typeResult == result) %>%
+              select(-typeResult) %>%
+              unnest()
+
+            assign(x = table_name, value = df_table, envir = .GlobalEnv)
+          })
+      }
+    } else {if (assign_to_environment) {
       results <-
         all_data$typeResult %>%
         unique()
@@ -179,13 +253,16 @@ get_games_box_scores <-
               filter(typeBoxScore == type) %>%
               tidyr::unnest(.drop = T) %>%
               select(-typeBoxScore)
+            type_slug <-
+            type %>% str_split("\\ ") %>% flatten_chr() %>%
+              str_to_title() %>% str_c(collapse = "")
 
             table_name <-
-              glue::glue('data{str_replace_all(type, " ", "")}BoxScore{str_to_title(result)}') %>% as.character()
+              glue::glue('dataBoxScore{type_slug}{str_to_title(result)}') %>% as.character()
 
             assign(x = table_name, df_table, envir = .GlobalEnv)
           })
       })
-    }
+    }}
     all_data
   }

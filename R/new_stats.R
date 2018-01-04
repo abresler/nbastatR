@@ -8,6 +8,8 @@ curl_json_to_vector <-
     readr::read_lines() %>%
     jsonlite::fromJSON(simplifyVector = T)
 
+  json
+
 }
 
 # utils -------------------------------------------------------------------
@@ -545,7 +547,6 @@ get_nba_teams_seasons <- function() {
 #' Get NBA Stats API items, players and teams
 #'
 #'
-#' @param include_tables
 #'
 #' @return
 #' @export
@@ -565,17 +566,17 @@ get_nba_stats_api_items <-
     df_players <-
       json %>%
       parse_for_players() %>%
-      assign(x = "dataNBAPlayers", value = ., envir = .GlobalEnv)
+      assign(x = "df_dict_nba_players", value = ., envir = .GlobalEnv)
 
     df_tables <-
       json %>%
       parse_for_seasons_data()
-    assign(x = "dataNBAStatsParamaters", value = df_tables, envir = .GlobalEnv)
+    assign(x = "df_dict_nba_parameters", value = df_tables, envir = .GlobalEnv)
 
     df_teams <-
       json %>%
       parse_for_teams() %>%
-      assign(x = "dataNBATeams", value = ., envir = .GlobalEnv)
+      assign(x = "df_dict_nba_teams", value = ., envir = .GlobalEnv)
 
     data_frame(
       nameTable = c("Players", "Teams", "API Parameters"),

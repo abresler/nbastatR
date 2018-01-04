@@ -2,21 +2,148 @@
 % Please edit documentation in R/team.R
 \name{get_teams_tables_data}
 \alias{get_teams_tables_data}
-\title{Title}
+\title{NBA Team table data by season}
 \usage{
 get_teams_tables_data(teams = NULL, team_ids = NULL, all_active_teams = F,
-  tables = c("performance", "splits", "player"), measures = "Base",
-  seasons = 2018, modes = c("PerGame", "Totals"),
+  seasons = 2018, tables = NULL, measures = NULL, modes = NULL,
   season_types = "Regular Season", playoff_rounds = NA, is_plus_minus = F,
   is_rank = F, is_pace_adjusted = F, outcomes = NA, locations = NA,
   months = NA, season_segments = NA, date_from = NA, date_to = NA,
   opponent_ids = NA, vs_confs = NA, vs_divisions = NA,
   game_segments = NA, periods = NA, shot_clocks = NA, last_n_games = NA,
-  assign_to_environment = T, return_messages = TRUE)
+  assign_to_environment = T, return_message = TRUE)
 }
 \arguments{
-\item{return_messages}{}
+\item{teams}{vector of NBA team names}
+
+\item{team_ids}{vector of team ids}
+
+\item{all_active_teams}{if \code{TRUE} returns data for all acive teams}
+
+\item{seasons}{vector of seasons}
+
+\item{tables}{vector of table names options include \itemize{
+\item splits
+\item passes
+\item clutch
+\item lineup
+\item opponent
+\item performance
+\item player on off details
+\item player on off summary
+\item player
+\item rebounding
+\item shooting
+\item shots
+\item team vs player
+\item year over year
+}}
+
+\item{measures}{vector of measure types options include \itemize{
+\item Base
+\item Advanced
+\item Misc
+\item Scoring
+\item Four Factors
+\item Opponent
+\item Usage
+\item Defense
+}}
+
+\item{modes}{vector of modes options include \itemize{
+\item PerGame
+\item Totals
+\item MinutesPer
+\item Per48
+\item Per40
+\item Per36
+\item PerMinute
+\item PerPossession
+\item PerPlay
+\item Per100Possessions
+\item Per100Plays
+}#'}
+
+\item{season_types}{vector of season types options include \itemize{
+\item Regular Season
+\item Pre Season
+\item Playoffs
+\item All Star
+}}
+
+\item{playoff_rounds}{vector of playoff rounds options include code{0:4}}
+
+\item{is_plus_minus}{\code{TRUE} retuns plus minus}
+
+\item{is_rank}{if \code{TRUE} returns rank}
+
+\item{is_pace_adjusted}{if \code{TRUE} adjusts for pace}
+
+\item{outcomes}{vector of outcomes options include \itemize{
+\item NA
+\item Wins
+\item Losses
+}}
+
+\item{locations}{vector of locations options include \itemize{
+\item NA
+\item Home
+\item Road
+}}
+
+\item{months}{vector of game months options include \code{0:12}}
+
+\item{season_segments}{vector of season segments, options include \itemize{
+\item NA
+\item Post All-Star
+\item Pre All-Star
+}}
+
+\item{date_from}{\code{NA} or date from}
+
+\item{date_to}{\code{NA} or date to}
+
+\item{opponent_ids}{vector of opponent ids}
+
+\item{vs_confs}{vector of conferences against options include  \itemize{
+\item NA
+\item East
+\item West
+}}
+
+\item{vs_divisions}{vector of divisions against options include \itemize{
+\item NA
+\item Atlantic
+\item Central
+\item Northwest
+\item Pacific
+\item Southeast
+\item Southwest
+}}
+
+\item{game_segments}{vector of game segments options include \itemize{
+\item NA
+\item First Half
+\item Second Half
+\item Overtime
+}}
+
+\item{periods}{vector of periods \code{0:12}}
+
+\item{last_n_games}{vector of last_n games \code{0:82}}
+
+\item{assign_to_environment}{if \code{TRUE} assigns data to environment}
+
+\item{return_messages}{if \code{TRUE} returns message}
+}
+\value{
+a \code{data_frame}
 }
 \description{
-Title
+Returns NBA team data for specified teams
+and parameters by seasons
+}
+\examples{
+get_teams_tables_data(teams = c("Brooklyn Nets", "New York Knicks"), seasons = 2017:2018, tables = c("splits", "shooting"), measures = "Base", modes = c("PerGame", "Totals"))
+
 }

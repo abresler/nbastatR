@@ -18,6 +18,9 @@ get_days_nba_scores(game_dates = NULL, day_offset = 0,
 
 \item{return_message}{if \code{TRUE} returns a message}
 }
+\value{
+a \code{data_frame}
+}
 \description{
 Returns nba score data for a given date
 }

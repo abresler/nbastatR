@@ -5,10 +5,13 @@
 \title{Basketball Reference Player Dictionary}
 \usage{
 get_bref_player_dictionary()
+
+get_bref_player_dictionary()
 }
 \description{
 Returns baketball refences player dictionary
 }
 \examples{
+get_bref_player_dictionary()
 get_bref_player_dictionary()
 }

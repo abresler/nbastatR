@@ -4,10 +4,10 @@
 \alias{get_games_box_scores}
 \title{Get games box scores}
 \usage{
-get_games_box_scores(game_ids = NULL, box_score_types = c("traditional",
-  "advanced", "scoring", "misc", "usage", "four factors", "hustle", "tracking"),
-  result_types = c("player", "team"), assign_to_environment = TRUE,
-  return_message = TRUE)
+get_games_box_scores(game_ids = NULL, box_score_types = c("Traditional",
+  "Advanced", "Scoring", "Misc", "Usage", "Four Factors", "hustle", "tracking"),
+  result_types = c("player", "team"), join_data = TRUE,
+  assign_to_environment = TRUE, return_message = TRUE)
 }
 \arguments{
 \item{game_ids}{vector of game ids}
@@ -27,6 +27,8 @@ get_games_box_scores(game_ids = NULL, box_score_types = c("traditional",
 \item player - player
 }}
 
+\item{join_data}{if \code{TRUE} joins the underlying table data}
+
 \item{assign_to_environment}{if \code{TRUE} assigns a data frame for each table to the environment
 starting with data}
 
@@ -39,5 +41,5 @@ a \code{data_frame}
 Acquires specified box score type by game ID
 }
 \examples{
-get_games_box_scores(game_ids = c(21700002, 21700003), box_score_types = c("traditional", "advanced", "scoring", "misc", "usage", "four factors", "tracking"), result_types = c("player", "team"), assign_to_environment = TRUE, return_message = TRUE)
+get_games_box_scores(game_ids = c(21700002, 21700003), box_score_types = c("Traditional", "Advanced", "Scoring", "Misc", "Usage", "Four Factors", "Tracking"), result_types = c("player", "team"), join_data = TRUE, assign_to_environment = TRUE, return_message = TRUE)
 }

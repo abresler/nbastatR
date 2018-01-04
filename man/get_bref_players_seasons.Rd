@@ -14,7 +14,7 @@ get_bref_players_seasons(seasons = 2016:2018, tables = c("advanced",
 
 \item{tables}{player table \itemize{
 \item \code{totals}: Totals
-\item \code{'per_game'}: Per game
+\item \code{per_game}: Per game
 \item \code{advanced}: Advanced
 \item \code{per_minute}: Per 36 minutes
 \item \code{per_poss}: Per Possesion
@@ -28,9 +28,12 @@ get_bref_players_seasons(seasons = 2016:2018, tables = c("advanced",
 
 \item{return_message}{if \code{TRUE} returns a message}
 }
+\value{
+a \code{data_frame}
+}
 \description{
 Basketball Reference Player Season Tables
 }
 \examples{
-get_bref_players_seasons(seasons = 2018)
+get_bref_players_seasons(seasons = 2018, tables = c("advanced", "totals"))
 }

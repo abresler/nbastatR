@@ -1,11 +1,5 @@
 
 # http://stats.nba.com/stats/scoreboardv2/?leagueId=00&gameDate=12%2F30%2F1990&dayOffset=0
-parse_to_date_url <- function(game_date = "2017-12-31") {
-  parts <-
-    game_date %>% as.character() %>%
-    str_split("\\-") %>% flatten_chr()
-  str_c(parts[2], parts[3], parts[1], sep = "%2F")
-}
 
 get_day_nba_scores <-
   function(game_date = Sys.Date() - 1,
@@ -102,7 +96,7 @@ get_day_nba_scores <-
 #' @param assign_to_environment if \code{TRUE} assigns each table to environment with name containing dataScore
 #' @param return_message if \code{TRUE} returns a message
 #'
-#' @return
+#' @return a \code{data_frame}
 #' @export
 #' @import dplyr stringr curl jsonlite lubridate purrr tidyr rlang readr tibble
 #' @importFrom glue glue

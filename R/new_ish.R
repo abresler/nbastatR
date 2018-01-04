@@ -1,4 +1,60 @@
 # http://nbasense.com/nba-api/Stats/Stats/Charts/InfographicFanDuelPlayer#request-example
+dictionary_nba_queries <-
+  function() {
+    data_frame(typeQuery = c("splits", "splits", "dash", "dash"),
+               slugQuery = c("teamdashboardbygeneralsplits", "playerdashboardbygeneralsplits", "leaguedashteamstats", "leaguedashplayerstats"),
+               typeSearch = c("team", "player", "team", "player"))
+  }
+
+#' Clean to Stem
+#'
+#' @param x
+#'
+#' @return
+#' @export
+#' @importFrom stringr str_replace
+#' @examples
+clean_to_stem <- function(x) {
+  x <-
+    x %>%
+    str_replace('\\ ', '\\+') %>%
+    str_replace('\\/', '\\2F') %>%
+    str_replace("\\'", '%27')
+
+  return(x)
+
+}
+
+get_nba_team_dict <-
+  function(teams = c("Washington Wizards", "Utah Jazz", "Toronto Raptors", "San Antonio Spurs",
+                     "Sacramento Kings", "Portland Trail Blazers", "Phoenix Suns",
+                     "Philadelphia 76ers", "Orlando Magic", "Oklahoma City Thunder",
+                     "New York Knicks", "New Orleans Pelicans", "Minnesota Timberwolves",
+                     "Milwaukee Bucks", "Miami Heat", "Memphis Grizzlies", "Los Angeles Lakers",
+                     "Los Angeles Clippers", "Indiana Pacers", "Houston Rockets",
+                     "Golden State Warriors", "Detroit Pistons", "Denver Nuggets",
+                     "Dallas Mavericks", "Cleveland Cavaliers", "Chicago Bulls", "Charlotte Hornets",
+                     "Brooklyn Nets", "Boston Celtics", "Atlanta Hawks")) {
+
+    if (!'df_nba_team_dict' %>% exists()) {
+      df_nba_team_dict <- get_nba_teams()
+
+      assign('df_nba_team_dict', df_nba_team_dict, envir = .GlobalEnv)
+    }
+    team_slugs <- teams %>% str_c(collapse = "|")
+
+    df_nba_team_dict %>%
+      filter(nameTeam %>% str_detect(team_slugs)) %>%
+      pull(idTeam)
+  }
+
+parse_to_date_url <- function(game_date = "2017-12-31") {
+  parts <-
+    game_date %>% as.character() %>%
+    str_split("\\-") %>% flatten_chr()
+  str_c(parts[2], parts[3], parts[1], sep = "%2F")
+}
+
 generate_data_name <- function(x, result = "Team") {
   x %>%
     str_split("\\ ") %>%
@@ -10,6 +66,7 @@ generate_data_name <- function(x, result = "Team") {
 assign_nba_teams <-
   function() {
     if (!'df_dict_nba_teams' %>% exists()) {
+      "Assigning NBA team dictionary to df_dict_nba_teams to your environment" %>% message()
       df_dict_nba_teams <- get_nba_teams()
       assign(x = 'df_dict_nba_teams', df_dict_nba_teams, envir = .GlobalEnv)
     }
@@ -18,6 +75,7 @@ assign_nba_teams <-
 assign_nba_players <-
   function() {
     if (!'df_dict_nba_players' %>% exists()) {
+      "Assigning NBA player dictionary to df_dict_nba_players to your environment" %>% message()
       df_dict_nba_players <- get_nba_players()
       assign(x = 'df_dict_nba_players', df_dict_nba_players, envir = .GlobalEnv)
     }
@@ -39,6 +97,12 @@ generate_call_slug <-
 
     if (x == F) {
       return("N")
+    }
+
+    if (x %>% str_detect("\\-") %>% sum(na.rm = T) >= 1) {
+      x <-
+        x %>% parse_to_date_url()
+      return(x)
     }
 
     x %>% clean_to_stem()

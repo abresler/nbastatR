@@ -15,6 +15,7 @@ parse_team_json <- function(json, team_id, season, season_type) {
         "idTeam",
         "nameTeam",
         "nameConference",
+        "nameDivision",
         "urlTeamSeasonLogo"
       )
     ))
@@ -22,7 +23,6 @@ parse_team_json <- function(json, team_id, season, season_type) {
   all_data <-
     1:table_length %>%
     map_df(function(x) {
-      x %>% message()
       table_name <-
         json$resultSets$name[x]
 
@@ -242,7 +242,9 @@ get_team_season_info <-
 
   }
 
-#' NBA Teams' Seasons information
+#' NBA teams seasons information
+#'
+#' Acquires information for a teams season
 #'
 #'
 #' @param teams vector of team names
@@ -261,6 +263,8 @@ get_team_season_info <-
 #' @export
 #'
 #' @examples
+#' get_teams_seasons_info(teams = "Brooklyn Nets", seasons = c(1984, 1990, 1995, 2018), season_types = "Regular Season")
+
 get_teams_seasons_info <-
   function(teams = NULL,
            team_ids = NULL,
@@ -299,9 +303,11 @@ get_teams_seasons_info <-
       })
 
     if (nest_data) {
-      all_data %>%
+      all_data <-
+        all_data %>%
         nest(-c(slugSeason), .key = "dataTeamSeasonPerformance")
     }
+    all_data
   }
 
 dictionary_team_tables <-
@@ -481,53 +487,148 @@ get_team_table_data <-
         team_id = team_id,
         season = season,
         season_type = season_type
-      )
+      ) %>%
+      mutate(idTeam = team_id,
+             typeMeasure = measure,
+             modeSearch = mode,
+             slugSeason = season_slug,
+             yearSeason = season) %>%
+      dplyr::select(one_of(c("nameTable", "typeMeasure", "modeSearch", "slugSeason", "yearSeason",
+                             "typeSeason", "slugSeasonSearch",
+                             "idTeam", "nameTeam", "nameConference", "nameDivision", "slugTable",
+                             "urlTeamSeasonLogo",
+                             "dataTable")
+      ), everything()) %>%
+      suppressWarnings()
     all_data
   }
 
 
-#' Title
+#' NBA Team table data by season
 #'
-#' @param teams
-#' @param team_ids
-#' @param all_active_teams
-#' @param tables
-#' @param measures
-#' @param seasons
-#' @param modes
-#' @param season_types
-#' @param playoff_rounds
-#' @param is_plus_minus
-#' @param is_rank
-#' @param is_pace_adjusted
-#' @param outcomes
-#' @param locations
-#' @param months
-#' @param season_segments
-#' @param date_from
-#' @param date_to
-#' @param opponent_ids
-#' @param vs_confs
-#' @param vs_divisions
-#' @param game_segments
-#' @param periods
-#' @param shot_clocks
-#' @param last_n_games
-#' @param assign_to_environment
-#' @param return_messages
+#' Returns NBA team data for specified teams
+#' and parameters by seasons
 #'
-#' @return
+#' @param teams vector of NBA team names
+#' @param team_ids vector of team ids
+#' @param all_active_teams if \code{TRUE} returns data for all acive teams
+#' @param tables vector of table names options include \itemize{
+#' \item splits
+#' \item passes
+#' \item clutch
+#' \item lineup
+#' \item opponent
+#' \item performance
+#' \item player on off details
+#' \item player on off summary
+#' \item player
+#' \item rebounding
+#' \item shooting
+#' \item shots
+#' \item team vs player
+#' \item year over year
+#' }
+#' @param seasons vector of seasons
+#' @param modes vector of modes options include \itemize{
+#' \item PerGame
+#' \item Totals
+#' \item MinutesPer
+#' \item Per48
+#' \item Per40
+#' \item Per36
+#' \item PerMinute
+#' \item PerPossession
+#' \item PerPlay
+#' \item Per100Possessions
+#' \item Per100Plays
+#' }#'
+#' @param measures vector of measure types options include \itemize{
+#' \item Base
+#' \item Advanced
+#' \item Misc
+#' \item Scoring
+#' \item Four Factors
+#' \item Opponent
+#' \item Usage
+#' \item Defense
+#' }
+#' @param season_types vector of season types options include \itemize{
+#' \item Regular Season
+#' \item Pre Season
+#' \item Playoffs
+#' \item All Star
+#' }
+#' @param playoff_rounds vector of playoff rounds options include code{0:4}
+#' @param is_plus_minus \code{TRUE} retuns plus minus
+#' @param is_rank if \code{TRUE} returns rank
+#' @param is_pace_adjusted if \code{TRUE} adjusts for pace
+#' @param outcomes vector of outcomes options include \itemize{
+#' \item NA
+#' \item Wins
+#' \item Losses
+#' }
+#' @param locations vector of locations options include \itemize{
+#' \item NA
+#' \item Home
+#' \item Road
+#' }
+#' @param months vector of game months options include \code{0:12}
+#' @param season_segments vector of season segments, options include \itemize{
+#' \item NA
+#' \item Post All-Star
+#' \item Pre All-Star
+#' }
+#' @param date_from \code{NA} or date from
+#' @param date_to \code{NA} or date to
+#' @param opponent_ids vector of opponent ids
+#' @param vs_confs vector of conferences against options include  \itemize{
+#' \item NA
+#' \item East
+#' \item West
+#' }
+#' @param vs_divisions vector of divisions against options include \itemize{
+#' \item NA
+#' \item Atlantic
+#' \item Central
+#' \item Northwest
+#' \item Pacific
+#' \item Southeast
+#' \item Southwest
+#' }
+#' @param game_segments vector of game segments options include \itemize{
+#' \item NA
+#' \item First Half
+#' \item Second Half
+#' \item Overtime
+#' }
+#' @param periods vector of periods \code{0:12}
+#' @param shot_clock_ranges vector of shot clock ranges options include \itemize{
+#' \item  NA,
+#' \item 24-22
+#' \item 22-18 Very Early
+#' \item 18-15 Early
+#' \item 15-7 Average
+#' \item 7-4 Late
+#' \item 4-0 Very Late
+#' \item ShotClock Off
+#' @param last_n_games vector of last_n games \code{0:82}
+#' @param assign_to_environment if \code{TRUE} assigns data to environment
+#' @param return_messages if \code{TRUE} returns message
+#'
+#' @return a \code{data_frame}
 #' @export
 #'
 #' @examples
+#' get_teams_tables_data(teams = c("Brooklyn Nets", "New York Knicks"), seasons = 2017:2018, tables = c("splits", "shooting"), measures = "Base", modes = c("PerGame", "Totals"))
+#'
 get_teams_tables_data <-
   function(teams = NULL,
            team_ids = NULL,
            all_active_teams = F,
-           tables = c("performance", "splits", "player"),
-           measures = "Base",
            seasons = 2018,
-           modes = c("PerGame", "Totals"),
+           tables = NULL,
+           measures = NULL,
+           modes = NULL,
            season_types = "Regular Season",
            playoff_rounds = NA,
            is_plus_minus = F,
@@ -547,7 +648,19 @@ get_teams_tables_data <-
            shot_clocks =  NA,
            last_n_games = NA,
            assign_to_environment = T,
-           return_messages = TRUE) {
+           return_message = TRUE) {
+    if (tables %>% purrr::is_null()) {
+      stop("Please enter tables")
+    }
+
+    if (modes %>% purrr::is_null()) {
+      stop("Please enter modes")
+    }
+
+
+    if (measures %>% purrr::is_null()) {
+      stop("Please enter measures")
+    }
     team_ids <-
       get_nba_teams_ids(teams = teams,
                         team_ids = team_ids,
@@ -638,7 +751,8 @@ get_teams_tables_data <-
       all_data %>%
       left_join(df_dict_table_names) %>%
       select(tableSlugName, nameTable, everything()) %>%
-      suppressMessages()
+      suppressMessages() %>%
+      unique()
 
     if (assign_to_environment) {
       all_tables <-
@@ -653,7 +767,11 @@ get_teams_tables_data <-
             unnest() %>%
             remove_na_columns()
 
-          measures <- df_tables$typeMeasure %>% unique()
+          has_measure <- df_tables %>% tibble::has_name("typeMeasure")
+
+          if (has_measure) {
+            measures <-
+            df_tables$typeMeasure %>% unique()
           measures %>%
             walk(function(measure) {
               table_name <-
@@ -663,14 +781,27 @@ get_teams_tables_data <-
                 df_tables %>%
                 filter(typeMeasure == measure) %>%
                 unnest() %>%
-                remove_na_columns()
+                remove_na_columns() %>%
+                distinct()
               assign(x = table_name,
                      value = df_table,
                      envir = .GlobalEnv)
             })
+          } else{
+            df_table <-
+              df_tables %>%
+              unnest() %>%
+              remove_na_columns() %>%
+              distinct()
+
+            assign(x = table,
+                   value = df_table,
+                   envir = .GlobalEnv)
+          }
         })
     }
-    all_data
+    all_data %>%
+      remove_na_columns()
   }
 
 
@@ -793,6 +924,26 @@ get_team_shot_chart <-
   }
 
 
+#' Get teams seasons shot charts
+#'
+#' @param teams
+#' @param team_ids
+#' @param all_active_teams
+#' @param season_types
+#' @param seasons
+#' @param measures
+#' @param periods
+#' @param months
+#' @param date_from
+#' @param date_to
+#' @param nest_data
+#' @param return_message
+#'
+#' @return a \code{data_frame}
+#' @export
+#'
+#' @examples
+#' get_teams_seasons_shots(teams = "Brooklyn Nets", seasons = 2018)
 get_teams_seasons_shots <-
   function(teams = NULL ,
            team_ids = NULL,
@@ -804,7 +955,7 @@ get_teams_seasons_shots <-
            months = 0,
            date_from = NA,
            date_to  = NA,
-           nest_data = T,
+           nest_data = F,
            return_message = T
   ){
     team_ids <-
@@ -812,8 +963,6 @@ get_teams_seasons_shots <-
                         team_ids = team_ids,
                         all_active_teams = all_active_teams)
 
-    get_team_season_info_safe <-
-      purrr::possibly(get_team_season_info, data_frame())
     input_df <-
       expand.grid(
         team_id = team_ids,
@@ -848,7 +997,7 @@ get_teams_seasons_shots <-
     if (nest_data) {
       all_data <-
         all_data %>%
-        nest(-c('yearSeason', "slugSeason", "idTeam", "nameTeam"))
+        nest(-c('yearSeason', "slugSeason", "idTeam", "nameTeam"), .key = 'dataShotChart')
     }
     all_data
     }

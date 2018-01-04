@@ -16,6 +16,9 @@ spread_data(data, variable_name = "item", value_name = "value",
 
 \item{perserve_order}{if \code{TRUE} perserve order}
 }
+\value{
+a \code{data_frame}
+}
 \description{
 Spread gathered data frame
 }

@@ -137,7 +137,7 @@ fix_names <-
 #' \item new_column_2 : new_column 2
 #' \item sep : seperator
 #' }
-#' @return
+#' @return a \code{data_frame}
 #' @export
 #' @import dplyr stringr
 #' @importFrom rlang UQ
@@ -248,7 +248,7 @@ gather_data <-
 #' @param value_name name of value vector
 #' @param perserve_order if \code{TRUE} perserve order
 #'
-#' @return
+#' @return a \code{data_frame}
 #' @export
 #' @import dplyr
 #' @importFrom tidyr spread

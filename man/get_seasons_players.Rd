@@ -25,5 +25,5 @@ Get NBA Player Dictionary
 Get Season's Players
 }
 \examples{
-get_nba_seasons_players(2010:2017, nest_data = T, return_message = T)
+get_seasons_players(2010:2017, nest_data = T, return_message = T)
 }

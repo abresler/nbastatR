@@ -92,15 +92,15 @@ resolve.players <-
 
       ))
 
-    if (!"dataNBAPlayers" %>% exists()) {
-      nbastatR::get_nba_stats_api_items()
+    if (!"df_dict_nba_players" %>% exists()) {
+      assign_nba_players()
     }
 
     name_site <-
       glue::glue("namePlayer{str_to_upper(site)}")
 
     df_nba_stats_players <-
-      dataNBAPlayers %>%
+      df_dict_nba_players %>%
       select(namePlayer, idPlayerNBA = idPlayer, urlPlayerThumbnail, yearSeasonFirst) %>%
       mutate(namePlayerNBA = namePlayer) %>%
       select(namePlayerNBA, everything())
@@ -205,7 +205,7 @@ resolve.players <-
       left_join(data) %>%
       dplyr::select(-namePlayer) %>%
       dplyr::rename(namePlayer = namePlayerNBA) %>%
-      left_join(dataNBAPlayers %>% select(namePlayer, idPlayerNBA = idPlayer, urlPlayerThumbnail) ) %>%
+      left_join(df_dict_nba_players %>% select(namePlayer, idPlayerNBA = idPlayer, urlPlayerThumbnail) ) %>%
       suppressMessages()
 
     df <-

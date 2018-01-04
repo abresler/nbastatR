@@ -64,7 +64,7 @@ get_nba_season_players <-
 #' @import dplyr purrr readr jsonlite tidyr curl
 #' @importFrom glue glue
 #' @examples
-#' get_nba_seasons_players(2010:2017, nest_data = T, return_message = T)
+#' get_seasons_players(2010:2017, nest_data = T, return_message = T)
 
 get_seasons_players <-
   function(seasons = 1960:2018,

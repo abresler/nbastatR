@@ -10,7 +10,6 @@ parse_player_json <- function(json, player = player, season = season, mode, meas
   all_data <-
     1:table_length %>%
     map_df(function(x) {
-      x %>% message()
       table_name <-
         json$resultSets$name[x]
 
@@ -370,45 +369,122 @@ get_player_table_data <-
         mode = mode,
         measure = measure,
         season_type = season_type
-      )
+      ) %>%
+      mutate(idPlayer = player_id,
+             typeMeasure = measure,
+             modeSearch = mode,
+             slugSeason = season_slug,
+             yearSeason = season)  %>%
+      dplyr::select(one_of(c("nameTable", "typeMeasure", "modeSearch", "slugSeason", "yearSeason",
+                             "typeSeason", "slugSeasonSearch",
+                             "idPlayer", "namePlayer", "slugTable",
+                             "dataTable")
+      ), everything()) %>%
+      suppressWarnings()
     all_data
   }
 
 
-#' Title
+#' NBA players table data
 #'
-#' @param teams
-#' @param team_ids
-#' @param all_active_teams
+#' @param players vector of player names
+#' @param player_ids vector of player ids
 #' @param tables
-#' @param measures
-#' @param seasons
-#' @param modes
-#' @param season_types
-#' @param playoff_rounds
-#' @param is_plus_minus
-#' @param is_rank
-#' @param is_pace_adjusted
-#' @param outcomes
-#' @param locations
-#' @param months
-#' @param season_segments
-#' @param date_from
-#' @param date_to
-#' @param opponent_ids
-#' @param vs_confs
-#' @param vs_divisions
-#' @param game_segments
-#' @param periods
-#' @param shot_clocks
-#' @param last_n_games
-#' @param assign_to_environment
-#' @param return_messages
+#' @param measures vector of measure types options include \itemize{
+#' \item Base
+#' \item Advanced
+#' \item Misc
+#' \item Scoring
+#' \item Four Factors
+#' \item Opponent
+#' \item Usage
+#' \item Defense
+#' }
+#' @param seasons vector of seasons
+#' @param modes vector of modes options include \itemize{
+#' \item PerGame
+#' \item Totals
+#' \item MinutesPer
+#' \item Per48
+#' \item Per40
+#' \item Per36
+#' \item PerMinute
+#' \item PerPossession
+#' \item PerPlay
+#' \item Per100Possessions
+#' \item Per100Plays
+#' }#'
+#' @param playoff_rounds vector of playoff rounds options include code{0:4}
+#' @param is_plus_minus \code{TRUE} retuns plus minus
+#' @param is_rank if \code{TRUE} returns rank
+#' @param is_pace_adjusted if \code{TRUE} adjusts for pace
+#' @param outcomes vector of outcomes options include \itemize{
+#' \item NA
+#' \item Wins
+#' \item Losses
+#' }
+#' @param locations vector of locations options include \itemize{
+#' \item NA
+#' \item Home
+#' \item Road
+#' }
+#' @param months vector of game months options include \code{0:12}
+#' @param season_segments vector of season segments, options include \itemize{
+#' \item NA
+#' \item Post All-Star
+#' \item Pre All-Star
+#' }
+#' @param date_from \code{NA} or date from
+#' @param date_to \code{NA} or date to
+#' @param opponent_ids vector of opponent ids
+#' @param vs_confs vector of conferences against options include  \itemize{
+#' \item NA
+#' \item East
+#' \item West
+#' }
+#' @param vs_divisions vector of divisions against options include \itemize{
+#' \item NA
+#' \item Atlantic
+#' \item Central
+#' \item Northwest
+#' \item Pacific
+#' \item Southeast
+#' \item Southwest
+#' }
+#' @param game_segments vector of game segments options include \itemize{
+#' \item NA
+#' \item First Half
+#' \item Second Half
+#' \item Overtime
+#' }
+#' @param periods vector of periods \code{0:12}
+#' @param last_n_games vector of last_n games \code{0:82}
+#' @param season_types vector of season types options include \itemize{
+#' \item Regular Season
+#' \item Pre Season
+#' \item Playoffs
+#' \item All Star
+#' }
+#' @param n_games number n of last games
+#' @param shot_clocks  vector of shot clock ranges options include \itemize{
+#' \item  NA,
+#' \item 24-22
+#' \item 22-18 Very Early
+#' \item 18-15 Early
+#' \item 15-7 Average
+#' \item 7-4 Late
+#' \item 4-0 Very Late
+#' \item ShotClock Off
+#' @param return_message
+#' @param assign_to_environment if \code{TRUE} assigns data to environment
+#'
+#' @return a \code{data_frame}
 #'
 #' @return
 #' @export
 #'
 #' @examples
+#' get_players_tables_data(players = c("Caris LeVert", "Joe Harris"), tables =  c("year over year", "passes", "game splits"),   modes = c("PerGame", "Totals"), measures = c("Base", "Advanced"), assign_to_environment = T)
 get_players_tables_data <-
   function(players = NULL,
            player_ids = NULL,
@@ -437,12 +513,9 @@ get_players_tables_data <-
            last_n_games = NA,
            assign_to_environment = T,
            return_message = TRUE) {
-    if (!'df_nba_player_dict' %>% exists()) {
-      df_nba_player_dict <-
-        get_nba_players()
 
-      assign(x = 'df_nba_player_dict', df_nba_player_dict, envir = .GlobalEnv)
-    }
+    assign_nba_players()
+
     ids <-
       get_nba_players_ids(player_ids = player_ids,
                           players = players)
@@ -485,7 +558,7 @@ get_players_tables_data <-
         df_row <-
           input_df %>% slice(x)
         df_row %$%
-          get_player_table_data(
+          get_player_table_data_safe(
             player_id = player_id,
             table = table,
             measure = measure,
@@ -530,9 +603,16 @@ get_players_tables_data <-
 
     all_data <-
       all_data %>%
+      left_join(df_dict_nba_players %>% select(idPlayer, matches("url"))) %>%
+      suppressWarnings() %>%
+      suppressMessages()
+
+    all_data <-
+      all_data %>%
       left_join(df_dict_table_names) %>%
       select(tableSlugName, nameTable, everything()) %>%
-      suppressMessages()
+      suppressMessages() %>%
+      unique()
 
     if (assign_to_environment) {
       all_tables <-
@@ -547,29 +627,41 @@ get_players_tables_data <-
             unnest() %>%
             remove_na_columns()
 
-          measures <- df_tables$typeMeasure %>% unique()
-          if (measures %>% length() >0 ) {
-          measures %>%
-            walk(function(measure) {
-              table_name <-
-                table %>%
-                str_c(measure)
-              df_table <-
-                df_tables %>%
-                filter(typeMeasure == measure) %>%
-                unnest() %>%
-                remove_na_columns()
-              assign(x = table_name,
-                     value = df_table,
-                     envir = .GlobalEnv)
-            })
+
+          has_measure <- df_tables %>% tibble::has_name("typeMeasure")
+
+          if (has_measure) {
+            measures <-
+              df_tables$typeMeasure %>% unique()
+            measures %>%
+              walk(function(measure) {
+                table_name <-
+                  table %>%
+                  str_c(measure)
+                df_table <-
+                  df_tables %>%
+                  filter(typeMeasure == measure) %>%
+                  unnest() %>%
+                  remove_na_columns() %>%
+                  distinct()
+                assign(x = table_name,
+                       value = df_table,
+                       envir = .GlobalEnv)
+              })
           } else{
-            table_name <-
-              table
-            assign(x = table_name,
-                   value = df_tables,
+            df_table <-
+              df_tables %>%
+              unnest() %>%
+              remove_na_columns() %>%
+              distinct()
+
+            if (df_table %>% tibble::has_name("idPlayer1")){
+              data <- data %>% select(-idPlayer1)
+            }
+
+            assign(x = table,
+                   value = df_table,
                    envir = .GlobalEnv)
-            df_tables
           }
         })
     }

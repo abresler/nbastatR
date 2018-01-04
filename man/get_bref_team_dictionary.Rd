@@ -4,11 +4,17 @@
 \alias{get_bref_team_dictionary}
 \title{BREF Team Dictionary}
 \usage{
-get_bref_team_dictionary()
+get_bref_team_dictionary(return_message = TRUE)
+
+get_bref_team_dictionary(return_message = TRUE)
+}
+\arguments{
+\item{return_message}{if \code{TRUE} returns a message}
 }
 \description{
 Basketball Reference Team Dictionary
 }
 \examples{
+get_bref_team_dictionary()
 get_bref_team_dictionary()
 }

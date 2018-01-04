@@ -2,7 +2,7 @@
 % Please edit documentation in R/players.R
 \name{get_players_tables_data}
 \alias{get_players_tables_data}
-\title{Title}
+\title{NBA players table data}
 \usage{
 get_players_tables_data(players = NULL, player_ids = NULL,
   tables = c("year over year", "passes", "game splits"), measures = "Base",
@@ -15,8 +15,115 @@ get_players_tables_data(players = NULL, player_ids = NULL,
   assign_to_environment = T, return_message = TRUE)
 }
 \arguments{
-\item{return_messages}{}
+\item{players}{vector of player names}
+
+\item{player_ids}{vector of player ids}
+
+\item{measures}{vector of measure types options include \itemize{
+\item Base
+\item Advanced
+\item Misc
+\item Scoring
+\item Four Factors
+\item Opponent
+\item Usage
+\item Defense
+}}
+
+\item{seasons}{vector of seasons}
+
+\item{modes}{vector of modes options include \itemize{
+\item PerGame
+\item Totals
+\item MinutesPer
+\item Per48
+\item Per40
+\item Per36
+\item PerMinute
+\item PerPossession
+\item PerPlay
+\item Per100Possessions
+\item Per100Plays
+}#'}
+
+\item{season_types}{vector of season types options include \itemize{
+\item Regular Season
+\item Pre Season
+\item Playoffs
+\item All Star
+}}
+
+\item{playoff_rounds}{vector of playoff rounds options include code{0:4}}
+
+\item{is_plus_minus}{\code{TRUE} retuns plus minus}
+
+\item{n_games}{number n of last games}
+
+\item{is_rank}{if \code{TRUE} returns rank}
+
+\item{is_pace_adjusted}{if \code{TRUE} adjusts for pace}
+
+\item{outcomes}{vector of outcomes options include \itemize{
+\item NA
+\item Wins
+\item Losses
+}}
+
+\item{locations}{vector of locations options include \itemize{
+\item NA
+\item Home
+\item Road
+}}
+
+\item{months}{vector of game months options include \code{0:12}}
+
+\item{season_segments}{vector of season segments, options include \itemize{
+\item NA
+\item Post All-Star
+\item Pre All-Star
+}}
+
+\item{date_from}{\code{NA} or date from}
+
+\item{date_to}{\code{NA} or date to}
+
+\item{opponent_ids}{vector of opponent ids}
+
+\item{vs_confs}{vector of conferences against options include  \itemize{
+\item NA
+\item East
+\item West
+}}
+
+\item{vs_divisions}{vector of divisions against options include \itemize{
+\item NA
+\item Atlantic
+\item Central
+\item Northwest
+\item Pacific
+\item Southeast
+\item Southwest
+}}
+
+\item{game_segments}{vector of game segments options include \itemize{
+\item NA
+\item First Half
+\item Second Half
+\item Overtime
+}}
+
+\item{periods}{vector of periods \code{0:12}}
+
+\item{last_n_games}{vector of last_n games \code{0:82}}
+
+\item{assign_to_environment}{if \code{TRUE} assigns data to environment}
+}
+\value{
+a \code{data_frame}
 }
 \description{
-Title
+NBA players table data
+}
+\examples{
+get_players_tables_data(players = c("Caris LeVert", "Joe Harris"), tables =  c("year over year", "passes", "game splits"),   modes = c("PerGame", "Totals"), measures = c("Base", "Advanced"), assign_to_environment = T)
 }

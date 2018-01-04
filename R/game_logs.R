@@ -1,4 +1,5 @@
 
+
 # full_logs ---------------------------------------------------------------
 get_season_gamelog <-
   function(season = 2018,
@@ -63,10 +64,11 @@ get_season_gamelog <-
 
     data <-
       data %>%
-      mutate(slugTeamWinner = case_when(outcomeGame == "W" ~ slugTeam,
-                                        TRUE ~ slugOpponent),
-             slugTeamLoser = case_when(outcomeGame == "L" ~ slugTeam,
-                                       TRUE ~ slugOpponent)
+      mutate(
+        slugTeamWinner = case_when(outcomeGame == "W" ~ slugTeam,
+                                   TRUE ~ slugOpponent),
+        slugTeamLoser = case_when(outcomeGame == "L" ~ slugTeam,
+                                  TRUE ~ slugOpponent)
       )
 
     data <-
@@ -74,8 +76,7 @@ get_season_gamelog <-
       clean_data_table_name() %>%
       mutate(yearSeason = season,
              typeResult = result_type) %>%
-      mutate(urlTeamSeasonLogo = generate_team_season_logo(season = yearSeason, slug_team = slugTeam)) %>%
-      dplyr::rename(nameTeam = teamName)
+      mutate(urlTeamSeasonLogo = generate_team_season_logo(season = yearSeason, slug_team = slugTeam))
 
 
     df_teams_games <-
@@ -111,80 +112,86 @@ get_season_gamelog <-
     data <-
       data %>%
       left_join(df_teams_games) %>%
-      dplyr::select(
-        one_of(c( "typeResult",  "yearSeason", "slugSeason",
-                  "typeSeason", "dateGame", "idGame",
-                  "numberGameTeamSeason",
-                  "nameTeam",
-                  "idTeam",
-                  "isB2B",
-                  "isB2BFirst", "isB2BSecond",
-                  "locationGame",
-                  "slugMatchup", "slugTeam",
-                  "countDaysRestTeam",
-                  "countDaysNextGameTeam",
-                  "slugOpponent",
-                  "slugTeamWinner",
-                  "slugTeamLoser",
-                  "outcomeGame"
-        )), everything()
-      ) %>%
+      dplyr::select(one_of(
+        c(
+          "typeResult",
+          "yearSeason",
+          "slugSeason",
+          "typeSeason",
+          "dateGame",
+          "idGame",
+          "numberGameTeamSeason",
+          "nameTeam",
+          "idTeam",
+          "isB2B",
+          "isB2BFirst",
+          "isB2BSecond",
+          "locationGame",
+          "slugMatchup",
+          "slugTeam",
+          "countDaysRestTeam",
+          "countDaysNextGameTeam",
+          "slugOpponent",
+          "slugTeamWinner",
+          "slugTeamLoser",
+          "outcomeGame"
+        )
+      ), everything()) %>%
       suppressMessages()
 
 
     if (result_type == "player") {
+      if (!'df_nba_player_dict' %>% exists()) {
+        df_nba_player_dict <-
+          get_nba_players()
 
-        if (!'df_nba_player_dict' %>% exists()) {
-          df_nba_player_dict <-
-            get_nba_players()
+        assign(x = 'df_nba_player_dict', df_nba_player_dict, envir = .GlobalEnv)
+      }
 
-          assign(x = 'df_nba_player_dict', df_nba_player_dict, envir = .GlobalEnv)
-        }
-
-        data <-
-          data %>%
-          left_join(df_nba_player_dict %>% select(idPlayer, matches("url"))) %>%
-          suppressMessages()
+      data <-
+        data %>%
+        left_join(df_nba_player_dict %>% select(idPlayer, matches("url"))) %>%
+        suppressMessages()
 
 
-        df_players_games <-
-          data %>%
-          distinct(yearSeason, dateGame, idPlayer, namePlayer) %>%
-          group_by(yearSeason, idPlayer, namePlayer) %>%
-          mutate(
-            numberGamePlayer = 1:n(),
-            countDaysRestPlayer = if_else(numberGamePlayer > 1,
-                                          (dateGame - lag(dateGame) - 1),
-                                          120),
-            countDaysNextGamePlayer =
-              if_else(countDaysRestPlayer < 82,
-                      ((
-                        lead(dateGame) - dateGame
-                      ) - 1),
-                      120)
-          ) %>%
-          mutate(
-            countDaysNextGamePlayer = countDaysNextGamePlayer %>% as.numeric(),
-            countDaysRestPlayer = countDaysRestPlayer %>% as.numeric()
-          ) %>%
-          ungroup() %>%
-          mutate_if(is.logical,
-                    funs(if_else(. %>% is.na(), FALSE, .)))
+      df_players_games <-
+        data %>%
+        distinct(yearSeason, dateGame, idPlayer, namePlayer) %>%
+        group_by(yearSeason, idPlayer, namePlayer) %>%
+        mutate(
+          numberGamePlayer = 1:n(),
+          countDaysRestPlayer = if_else(numberGamePlayer > 1,
+                                        (dateGame - lag(dateGame) - 1),
+                                        120),
+          countDaysNextGamePlayer =
+            if_else(countDaysRestPlayer < 82,
+                    ((
+                      lead(dateGame) - dateGame
+                    ) - 1),
+                    120)
+        ) %>%
+        mutate(
+          countDaysNextGamePlayer = countDaysNextGamePlayer %>% as.numeric(),
+          countDaysRestPlayer = countDaysRestPlayer %>% as.numeric()
+        ) %>%
+        ungroup() %>%
+        mutate_if(is.logical,
+                  funs(if_else(. %>% is.na(), FALSE, .)))
 
-        data <-
-          data %>%
-          left_join(df_players_games) %>%
-          suppressMessages()
+      data <-
+        data %>%
+        left_join(df_players_games) %>%
+        suppressMessages()
 
-        data <-
-          data %>%
-          dplyr::select(
-            typeResult:namePlayer,
-            numberGamePlayer,
-            countDaysRestPlayer,
-            countDaysNextGamePlayer,
-            everything()
-          )
+      data <-
+        data %>%
+        dplyr::select(
+          typeResult:namePlayer,
+          numberGamePlayer,
+          countDaysRestPlayer,
+          countDaysNextGamePlayer,
+          everything()
+        )
 
     }
 
@@ -265,11 +272,13 @@ get_game_logs <-
           input_df %>% slice(x)
         data_row <-
           df_row %$%
-          get_season_gamelog_safe(season = season,
-                                  result_type = result,
-                                  season_type = season_type,
-                                  return_message = return_message,
-                                  ...)
+          get_season_gamelog_safe(
+            season = season,
+            result_type = result,
+            season_type = season_type,
+            return_message = return_message,
+            ...
+          )
         data_row
       })
 
@@ -287,19 +296,60 @@ get_game_logs <-
         all_data$typeResult %>% unique()
 
       results %>%
-        walk(function(result){
+        walk(function(result) {
           df_table <-
             all_data %>%
             filter(typeResult == result) %>%
             select(-typeResult) %>%
             unnest()
 
-          col_order <- c("typeSeason","yearSeason" ,"slugSeason", "idSeason","idTeam", "slugMatchup","idGame", "outcomeGame", "locationGame","teamName","slugTeam",  "slugOpponent", "slugTeamWinner", "slugTeamLoser" ,  "dateGame","numberGameTeamSeason","idPlayer", "namePlayer","numberGamePlayerSeason",
+          col_order <-
+            c(
+              "typeSeason",
+              "yearSeason" ,
+              "slugSeason",
+              "idSeason",
+              "idTeam",
+              "slugMatchup",
+              "idGame",
+              "outcomeGame",
+              "locationGame",
+              "teamName",
+              "slugTeam",
+              "slugOpponent",
+              "slugTeamWinner",
+              "slugTeamLoser" ,
+              "dateGame",
+              "numberGameTeamSeason",
+              "idPlayer",
+              "namePlayer",
+              "numberGamePlayerSeason",
 
-                         "minutes", "fgm",
-                         "fga", "pctFG", "fg3m", "fg3a", "pctFG3", "ftm", "fta", "pctFT",
-                         "oreb", "dreb", "reb", "ast", "stl", "blk", "tov", "pf", "pts",
-                         "plusminus", "hasVideo", "fg2m", "fg2a", "pctFG2")
+              "minutes",
+              "fgm",
+              "fga",
+              "pctFG",
+              "fg3m",
+              "fg3a",
+              "pctFG3",
+              "ftm",
+              "fta",
+              "pctFT",
+              "oreb",
+              "dreb",
+              "reb",
+              "ast",
+              "stl",
+              "blk",
+              "tov",
+              "pf",
+              "pts",
+              "plusminus",
+              "hasVideo",
+              "fg2m",
+              "fg2a",
+              "pctFG2"
+            )
 
           df_table <-
             df_table %>%
@@ -316,7 +366,8 @@ get_game_logs <-
 
 
 
-          table_name <- glue::glue("dataGameLogs{str_to_title(result)}") %>% as.character()
+          table_name <-
+            glue::glue("dataGameLogs{str_to_title(result)}") %>% as.character()
 
           assign(x = table_name, df_table, envir = .GlobalEnv)
 
@@ -331,15 +382,28 @@ get_game_logs <-
 get_season_schedule <-
   function(season = 2018,
            season_type = "Regular Season",
+           parse_boxscores = F,
+           box_score_tables = c(
+             "Traditional",
+             "Advanced",
+             "Scoring",
+             "Misc",
+             "Usage",
+             "Four Factors",
+             "hustle",
+             "tracking"
+           ),
            return_message = TRUE) {
-
     data <-
-      get_season_gamelog(season = season,
-                         result_type = "team",
-                         season_type = season_type,
-                         return_message = return_message) %>%
+      get_season_gamelog(
+        season = season,
+        result_type = "team",
+        season_type = season_type,
+        return_message = return_message
+      ) %>%
       unnest()
-    data %>%
+    data <-
+      data %>%
       select(one_of(
         c(
           "typeSeason",
@@ -357,17 +421,60 @@ get_season_schedule <-
       filter(idRow == min(idRow)) %>%
       ungroup() %>%
       select(-idRow) %>%
-      suppressWarnings()
+      suppressWarnings() %>%
+      arrange(idGame)
+
+    if (parse_boxscores) {
+      game_ids <-
+        data$idGame %>%
+        unique() %>%
+        sort()
+
+
+      df_box_scores <-
+        get_games_box_scores(
+          game_ids = game_ids,
+          box_score_types = box_score_tables,
+          result_types = c("player", "team"),
+          join_data = T,
+          assign_to_environment = F,
+          return_message = return_message
+        )
+      data <-
+        data %>%
+        left_join(
+          df_box_scores %>%
+            filter(typeResult == "player") %>%
+            select(dataBoxScore) %>%
+            unnest() %>%
+            nest(-c(idGame, slugTeam), .key = 'dataBoxScorePlayer')
+        ) %>%
+        left_join(
+          df_box_scores %>%
+            filter(typeResult == "team") %>%
+            select(dataBoxScore) %>%
+            unnest() %>%
+            nest(-c(idGame, slugTeam), .key = 'dataBoxScoreTeam')
+        ) %>%
+        mutate(isTeamWinner = if_else(slugTeamWinner == slugTeam, TRUE, FALSE)) %>%
+        suppressMessages() %>%
+        dplyr::select(typeSeason:idGame, slugTeam, isTeamWinner, everything())
+    }
+
+    data
 
   }
 
 #' Get NBA Seasons Schedule
 #'
 #' @param seasons vector of seasons where season is year ending
-#' @param season_types
+#' @param season_types type of season
 #' @param return_message
+#' @param parse_boxscores
+#' @param box_score_tables
+#' @param nest_data
 #'
-#' @return
+#' @return a \code{data_frame()}
 #' @export
 #' @import dplyr jsonlite purrr stringr lubridate magrittr tidyr tibble httr
 #' @importFrom  glue glue
@@ -376,6 +483,10 @@ get_season_schedule <-
 get_seasons_schedule <-
   function(seasons = 2018,
            season_types = "Regular Season",
+           parse_boxscores = F,
+           box_score_tables = c(
+             "Traditional"
+           ),
            nest_data = FALSE,
            return_message = TRUE) {
     input_df <-
@@ -397,9 +508,13 @@ get_seasons_schedule <-
           input_df %>% slice(x)
         data_row <-
           df_row %$%
-          get_season_schedule_safe(season = season,
-                                   season_type = season_type,
-                                   return_message = return_message)
+          get_season_schedule_safe(
+            season = season,
+            season_type = season_type,
+            parse_boxscores = parse_boxscores,
+            box_score_tables = box_score_tables,
+            return_message = return_message
+          )
         data_row
       }) %>%
       arrange(dateGame, idGame) %>%
@@ -595,9 +710,13 @@ get_team_season_roster <-
 
     data <-
       data %>%
-      mutate(countYearsExperience = ifelse(is.na(countYearsExperience), 0, countYearsExperience),
-             dateBirth = dateBirth %>% lubridate::mdy()) %>%
-      tidyr::separate(heightInches, sep = "\\-", into = c("feet", "inches")) %>%
+      mutate(
+        countYearsExperience = ifelse(is.na(countYearsExperience), 0, countYearsExperience),
+        dateBirth = dateBirth %>% lubridate::mdy()
+      ) %>%
+      tidyr::separate(heightInches,
+                      sep = "\\-",
+                      into = c("feet", "inches")) %>%
       mutate_at(c("feet", "inches"),
                 funs(. %>% as.numeric())) %>%
       mutate(heightInches = (12 * feet) + inches) %>%
@@ -609,7 +728,8 @@ get_team_season_roster <-
 
 
 get_season_roster <-
-  function(season = 2012, return_message = TRUE) {
+  function(season = 2012,
+           return_message = TRUE) {
     get_team_season_roster_safe <-
       purrr::possibly(get_team_season_roster, data_frame())
 
@@ -659,13 +779,15 @@ get_season_roster <-
 #' get_seasons_rosters(2018)
 
 get_seasons_rosters <-
-  function(seasons = 2000:2018, return_message = TRUE, nest_data = F) {
+  function(seasons = 2000:2018,
+           return_message = TRUE,
+           nest_data = F) {
     get_season_roster_safe <-
       purrr::possibly(get_season_roster, data_frame())
 
     all_data <-
       seasons %>%
-      map_df(function(season){
+      map_df(function(season) {
         get_season_roster_safe(season = season, return_message = return_message)
       })
 

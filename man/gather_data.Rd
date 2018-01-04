@@ -49,6 +49,9 @@ gather_data(data, variable_name = "item", numeric_ids = c("^id"),
 \item sep : seperator
 }}
 }
+\value{
+a \code{data_frame}
+}
 \description{
 Gather a data frame
 }

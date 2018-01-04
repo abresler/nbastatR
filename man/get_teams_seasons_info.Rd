@@ -2,7 +2,7 @@
 % Please edit documentation in R/team.R
 \name{get_teams_seasons_info}
 \alias{get_teams_seasons_info}
-\title{NBA Teams' Seasons information}
+\title{NBA teams seasons information}
 \usage{
 get_teams_seasons_info(teams = NULL, team_ids = NULL,
   all_active_teams = F, seasons = 1990:1995,
@@ -26,5 +26,8 @@ get_teams_seasons_info(teams = NULL, team_ids = NULL,
 \item{return_message}{}
 }
 \description{
-NBA Teams' Seasons information
+Acquires information for a teams season
+}
+\examples{
+get_teams_seasons_info(teams = "Brooklyn Nets", seasons = c(1984, 1990, 1995, 2018), season_types = "Regular Season")
 }
