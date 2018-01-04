@@ -297,8 +297,8 @@ get_nba_current_season_schedule <-
 #' @export
 #' @import tidyr curl jsonlite dplyr stringr
 #' @examples
-#' get_nba_coaching_staffs()
-get_nba_coaching_staffs <-
+#' get_coaching_staffs()
+get_coaching_staffs <-
   function() {
     json <- "https://data.nba.net/prod/v1/2017/coaches.json" %>%
       curl() %>%
@@ -516,6 +516,32 @@ get_nba_teams <-
     df_teams
   }
 
+#' NBA teams seasons
+#'
+#'
+#'
+#' @return a \code{data_frame()}
+#' @export
+#'
+#' @examples
+#' get_nba_teams_seasons()
+get_nba_teams_seasons <- function() {
+  json <- "http://stats.nba.com/stats/commonteamyears/?leagueId=00" %>%
+    curl_json_to_vector()
+  actual_names <-
+    json$resultSets$headers[[1]] %>%
+    resolve_nba_names()
+
+  data <-
+    json$resultSets$rowSet[[1]] %>%
+    as_data_frame() %>%
+    purrr::set_names(actual_names) %>%
+    munge_nba_data() %>%
+    mutate(isActiveTeam = yearSeasonLast == max(yearSeasonLast)) %>%
+    select(isActiveTeam, everything())
+  data
+}
+
 #' Get NBA Stats API items, players and teams
 #'
 #'
@@ -628,7 +654,7 @@ get_nba_players <-
         idTeam = ifelse(idTeam == 0, NA, idTeam),
         isRookie = ifelse(countSeasons == 0 &
                             yearSeasonFirst == most_recent, TRUE, FALSE),
-        urlPlayerStats = glue::glue("http://stats.nba.com/player/{idPlayer}"),
+        urlPlayerStats = glue::glue("http://stats.nba.com/player/{idPlayer}") %>% as.character(),
         urlPlayerThumbnail = glue::glue(
           "http://stats.nba.com/media/players/230x185/{idPlayer}.png"
         ) %>% as.character(),
@@ -637,14 +663,14 @@ get_nba_players <-
           "http://stats.nba.com/media/img/league/nba-headshot-fallback.png",
           glue::glue(
             "https://ak-static.cms.nba.com/wp-content/uploads/headshots/nba/{idTeam}/{yearSeasonLast}/260x190/{idPlayer}.png"
-          )
+          ) %>% as.character()
         )
       ) %>%
       mutate(
         urlPlayerActionPhoto = ifelse(
           isRookie,
           "http://stats.nba.com/media/img/league/nba-headshot-fallback.png",
-          glue::glue("http://stats.nba.com/media/players/700/{idPlayer}.png")
+          glue::glue("http://stats.nba.com/media/players/700/{idPlayer}.png") %>% as.character()
         )
       )
 

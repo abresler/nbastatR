@@ -1,6 +1,13 @@
 # http://nbasense.com/nba-api/Stats/Stats/Standings/LeagueStandings#request-example
 # http://stats.nba.com/stats/leaguestandingsv3/?leagueId=00&season=1989-90&seasonType=Regular+Season
 
+assign_nba_teams <-
+  function() {
+    if (!'df_dict_nba_teams' %>% exists()) {
+      df_dict_nba_teams <- get_nba_teams()
+      assign(x = 'df_dict_nba_teams', df_dict_nba_teams, envir = .GlobalEnv)
+    }
+  }
 
 parse_record <-
   function(data, record_column = "recordTiedAtHalf") {

@@ -1,5 +1,49 @@
 # http://nbasense.com/nba-api/Stats/Stats/Charts/InfographicFanDuelPlayer#request-example
+generate_data_name <- function(x, result = "Team") {
+  x %>%
+    str_split("\\ ") %>%
+    flatten_chr() %>%
+    str_to_title() %>%
+    str_c(collapse   = "") %>%
+    str_c("data", ., str_to_title(result))
+}
+assign_nba_teams <-
+  function() {
+    if (!'df_dict_nba_teams' %>% exists()) {
+      df_dict_nba_teams <- get_nba_teams()
+      assign(x = 'df_dict_nba_teams', df_dict_nba_teams, envir = .GlobalEnv)
+    }
+  }
 
+assign_nba_players <-
+  function() {
+    if (!'df_dict_nba_players' %>% exists()) {
+      df_dict_nba_players <- get_nba_players()
+      assign(x = 'df_dict_nba_players', df_dict_nba_players, envir = .GlobalEnv)
+    }
+  }
+generate_call_slug <-
+  function(x = NULL, default_value = "") {
+
+    if (x %>% purrr::is_null()) {
+      return(default_value)
+    }
+
+    if (x %>% is.na()) {
+      return(default_value)
+    }
+
+    if (x == T) {
+      return("Y")
+    }
+
+    if (x == F) {
+      return("N")
+    }
+
+    x %>% clean_to_stem()
+
+  }
 assign_tables_modes <-
   function(all_data, stat_type = "Player", add_mode_names = TRUE) {
     tables <-
@@ -273,9 +317,11 @@ get_nba_players_ids <-
 #' @examples
 #' get_nba_teams_ids(teams = c("Brooklyn Nets", "Denver Nuggets"))
 get_nba_teams_ids <-
-  function(teams = NULL, team_ids = NULL) {
+  function(teams = NULL,
+           team_ids = NULL,
+           all_active_teams = F) {
 
-    if (team_ids %>% purrr::is_null() && teams %>% purrr::is_null()) {
+    if (team_ids %>% purrr::is_null() && teams %>% purrr::is_null() & all_active_teams == F) {
       stop("Please enter teams or team_ids ids")
     }
 
@@ -291,6 +337,11 @@ get_nba_teams_ids <-
       df_nba_team_dict <- get_nba_teams()
 
       assign('df_nba_team_dict', df_nba_team_dict, envir = .GlobalEnv)
+    }
+
+    if (all_active_teams) {
+      ids <- df_dict_nba_teams %>% filter(isNonNBATeam == 0) %>% pull(idTeam) %>% unique() %>% sort()
+      return(ids)
     }
 
     if (!teams %>% purrr::is_null() ) {
@@ -583,7 +634,30 @@ dictionary_nba_names <-
                    "gamesBehind", "divGamesBehind", "clinchedPlayoffsCode", "clinchedPlayoffsCodeV2",
                    "confRank", "confWin", "confLoss", "divWin", "divLoss", "homeWin",
                    "homeLoss", "awayWin", "awayLoss", "lastTenWin", "lastTenLoss",
-                   "streak", "divRank", "isWinStreak", "tieBreakerPts"
+                   "streak", "divRank", "isWinStreak", "tieBreakerPts",
+                   "PASS_TYPE", "PASS_FROM", "PASS_TEAMMATE_PLAYER_ID", "FREQUENCY",
+                   "FG2M", "FG2A", "FG2_PCT", "PASS_TO",
+                   "GROUP_VALUE_ORDER", "GROUP_VALUE_2",
+                   "VS_PLAYER_ID", "VS_PLAYER_NAME", "COURT_STATUS",
+                   "OVERALL", "REB_FREQUENCY", "C_OREB", "C_DREB", "C_REB", "C_REB_PCT",
+                   "UC_OREB", "UC_DREB", "UC_REB", "UC_REB_PCT",
+                   "SORT_ORDER", "SHOT_TYPE_RANGE",
+                   "REB_NUM_CONTESTING_RANGE",
+                   "FGA_FREQUENCY", "FG2A_FREQUENCY", "FG3A_FREQUENCY",
+                   "SHOT_CLOCK_RANGE", "DRIBBLE_RANGE",
+                   "CLOSE_DEF_DIST_RANGE", "TOUCH_TIME_RANGE",
+                   "GameID", "GROUP_ID", "GROUP_NAME",
+                   "SHOT_DIST_RANGE", "REB_DIST_RANGE",
+                   "TEAM_CONFERENCE", "TEAM_DIVISION",
+                   "PTS_PG", "REB_PG", "AST_PG", "OPP_PTS_PG",
+                   "MAX_GAME_DATE", "OppTeamID",
+                   "SeasonYear", "NumberOfGames",
+                   "HOME_TEAM_NAME", "VISITOR_TEAM_NAME", "HOME_TEAM_ABBREVIATION",
+                   "VISITOR_TEAM_ABBREVIATION", "HOME_TEAM_NICKNAME", "VISITOR_TEAM_NICKNAME",
+                   "HOME_WL", "VISITOR_WL",
+                   "PLAYER_NAME_LAST_FIRST",
+                   "CLOSE_DEF_PERSON_ID", "DEFENSE_CATEGORY", "FREQ", "D_FGM",
+                   "D_FGA", "D_FG_PCT", "NORMAL_FG_PCT", "PCT_PLUSMINUS"
 
                  ),
                nameActual =
@@ -641,12 +715,12 @@ dictionary_nba_names <-
                    "pctsPTSasFG3", "pctPTSasFB", "pctPTSasFT", "pctPTSasOffTOV",
                    "pctPTSasPaint", "pctFG2MasAssisted", "pctFG2MasUnassisted", "pctFG3MasAssisted",
                    "pctFG3MasUnassisted", "pctFGMasAssisted", "pctFGMasUnassisted",
-                   "ptsOffTOV", "ptsOffTOVOpp", "ptsSecondChanceOpp", "ptsFastBreakOpp",
-                   "ptsPaintOpp",
+                   "ptsOffTOV", "ptsOffTOVOpponent", "ptsSecondChanceOpponent", "ptsFastBreakOpponent",
+                   "ptsPaintOpponent",
                    "minutes", "fgContested", "fg2Contested", "fg3Contested",
                    "deflections", "looseBallsRecovered", "chargesDrawn", "screenAssist",
-                   "pctEFG", "rateFTA", "pctTOVTeam", "pctOREB", "pctEFGOpp",
-                   "rateFTAOpp", "pctTOVOpp", "pctOREBOpp",
+                   "pctEFG", "rateFTA", "pctTOVTeam", "pctOREB", "pctEFGOpponent",
+                   "rateFTAOpponent", "pctTOVOpponent", "pctOREBOpponent",
                    "ortg", "drtg", "netrtg", "pctAST", "ratioASTtoTOV",
                    "ratioAST", "pctDREB", "pctTREB", "pctTS", "pace", "ratioPIE",
                    "typeGrid", "idEvent", "minutesRemaining", "secondsRemaining",
@@ -655,7 +729,7 @@ dictionary_nba_names <-
                    "locationY", "isShotAttempted", "isShotMade", "slugTeamHome", "slugTeamAway",
                    "idTeam", "idLeague", "namePlayer", "numberJersey", "groupPosition", "heightInches",
                    "weightLBS", "dateBirth", "agePlayer", "countYearsExperience", "nameSchool",
-                   "yearFirst", "yearLast", "slugTeam", "agePlayer", "gp", "gs",
+                   "yearSeasonFirst", "yearSeasonLast", "slugTeam", "agePlayer", "gp", "gs",
                    "idTeam", "idOrganization", "nameSchool",
                    "minutesRank", "fgmRank", "fgaRank", "pctFGRank", "fg3mRank",
                    "fg3aRank", "pctFG3Rank", "ftmRank", "ftaRank", "pctFTRank",
@@ -690,24 +764,24 @@ dictionary_nba_names <-
                    "pctDREBRank", "pctTREBRank", "pctTOVTmRank", "pctEFGRank",
                    "pctTSRank", "paceRank", "pieRank",
                    "ptsOffTOVRank", "ptsSecondChanceRank", "ptsFastBreakRank", "ptsPaintRank",
-                   "potsOffTOVOppRank", "ptsSecondChanceOppRank", "ptsFastBreakOppRank",
-                   "ptsPaintOppRank",
+                   "potsOffTOVOpponentRank", "ptsSecondChanceOpponentRank", "ptsFastBreakOpponentRank",
+                   "ptsPaintOpponentRank",
                    "pctFGAasFG2Rank", "pctFGAasFG3Rank", "pctPTSasFG2Rank",
                    "pctPTSasFG2asMRRank", "pctsPTSasFG3Rank", "pctPTSasFBRank",
                    "pctPTSasFTRank", "pctPTSasOffTOVRank", "pctPTSasPaintRank",
                    "pctFG2MasAssistedRank", "pctFG2MasUnassistedRank", "pctFG3MasAssistedRank",
                    "pctFG3MasUnassistedRank", "pctFGMasAssistedRank", "pctFGMasUnassistedRank",
-                   "rateFTARank", "pctEFGOppRank", "rateFTAOppRank", "pctTOVOppRank",
-                   "pctOREBOppRank",
-                   "fgmOpp", "fgaOpp", "pctFGOpp", "fg3mOpp", "fg3aOpp",
-                   "pctFG3Opp", "ftmOpp", "ftaOpp", "pctFTOpp", "orebOpp",
-                   "drebOpp", "trebOpp", "astOpp", "tovOpp", "stlOpp", "blkOpp",
-                   "blkaOpp", "pfOpp", "pfdOpp", "ptsOpp", "fgmOppRank", "fgaOppRank",
-                   "pctFGOppRank", "fg3mOppRank", "fg3aOppRank", "pctFG3OppRank",
-                   "ftmOppRank", "ftaOppRank", "pctFTOppRank", "orebOppRank",
-                   "drebOppRank", "trebOppRank", "astOppRank", "tovOppRank",
-                   "stlOppRank", "blkOppRank", "blkaOppRank", "pfOppRank",
-                   "pfdOppRank", "ptsOppRank",
+                   "rateFTARank", "pctEFGOpponentRank", "rateFTAOpponentRank", "pctTOVOpponentRank",
+                   "pctOREBOpponentRank",
+                   "fgmOpponent", "fgaOpponent", "pctFGOpponent", "fg3mOpponent", "fg3aOpponent",
+                   "pctFG3Opponent", "ftmOpponent", "ftaOpponent", "pctFTOpponent", "orebOpponent",
+                   "drebOpponent", "trebOpponent", "astOpponent", "tovOpponent", "stlOpponent", "blkOpponent",
+                   "blkaOpponent", "pfOpponent", "pfdOpponent", "ptsOpponent", "fgmOpponentRank", "fgaOpponentRank",
+                   "pctFGOpponentRank", "fg3mOpponentRank", "fg3aOpponentRank", "pctFG3OpponentRank",
+                   "ftmOpponentRank", "ftaOpponentRank", "pctFTOpponentRank", "orebOpponentRank",
+                   "drebOpponentRank", "trebOpponentRank", "astOpponentRank", "tovOpponentRank",
+                   "stlOpponentRank", "blkOpponentRank", "blkaOpponentRank", "pfOpponentRank",
+                   "pfdOpponentRank", "ptsOpponentRank",
                    'fgmPerGame', 'fgaPerGame',  'fgaPerGameRank',  'fgmPerGameRank', 'pctUSGRank',
                    "dd2", "td3", "fptsRank", "dd2Rank",  "td3Rank",
 
@@ -720,7 +794,7 @@ dictionary_nba_names <-
                    "countSeasonsPlayed", "numberJersey", "hasDLeagueFlag", "yearDraft", "numberRound",
                    "numberOverallPick", "slugSeason", "countAllStarGames",
                    "eff", "pctFG3", "orebPerGame", "drebPerGame", "trebPerGame", "astPerGame", "tovPerGame",
-                   "stlPerGame", "blkPerGame", "pfPerGame", "ptsPerGame", "ptsOppPerGame",
+                   "stlPerGame", "blkPerGame", "pfPerGame", "ptsPerGame", "ptsOpponentPerGame",
                    "pctFGPerGame", "pctFTPerGame",
                    "heightWOShoesInches", "heightWOShoes", "heightWShoesInches",
                    "heightWShoes", "wingspanInches", "wingspan", "reachStandingInches",
@@ -770,8 +844,8 @@ dictionary_nba_names <-
                    "hasClinchedConferenceTitle", "hasClinchedDivisionTitle", "hasClinchedPlayoffBirth",
                    "isEliminatedConference", "isEliminatedDivision", "recordAheadAtHalf",
                    "recordBehindAtHalf", "recordTiedAtHalf", "recordAheadAtThird", "recordBehindAtThird",
-                   "recordTiedAtThird", "recordScore100PTS", "recordOppScore100PTS", "recordOppOver500",
-                   "recordLeadInFGPCT", "recordLeadInReb", "recordFewerTurnovers", "ptsPerGameTeam", "ptsPerGameOpp",
+                   "recordTiedAtThird", "recordScore100PTS", "recordOpponentScore100PTS", "recordOpponentOver500",
+                   "recordLeadInFGPCT", "recordLeadInReb", "recordFewerTurnovers", "ptsPerGameTeam", "ptsPerGameOpponent",
                    "ptsPerGameDiff", "recordVsEast", "recordVsAtlantic", "recordVsCentral", "recordVsWest",
                    "recordVsPacific", "recordVsMidwest", "recordJan", "recordFeb", "recordMar", "recordApr", "reocrdMay",
                    "recordJun", "recordJul", "recordAug", "recordSep", "recordOct", "recordNov", "recordDec",
@@ -791,14 +865,41 @@ dictionary_nba_names <-
                    "nameTeamOpponent", "idPlayer", "slugSeasonsWithTeam",
                    "slugNetworkTVHome", "slugTVNetworkAway",
                    "nameArena",
-                   "dateStandings", "gamesTotal", "recordHome", "recordAway",
+                   "dateStandings", "gp", "recordHome", "recordAway",
                    "idPlayerPTSLeader", "namePlayerPTSLeader", "idPlayerTREBLeader", "namePlayerTREBLeader",
                    "idPlayerASTLeader", "namePlayerASTLeader",
                    "idTeam", "wins", "losses", "pctWinRemove", "pctWins", "pctLossRemove", "pctLosses",
                    "gamesBehindPlayoffs", "gamesBehindDivision", "codePlayoffRemove", "codePlayoffCling",
                    "rankConference", "winsConference", "lossesConference", "winsDivison", "lossesDivision", "winsHome",
                    "lossesHome", "winsAway", "lossesAway", "winsLast10", "lossesLast10",
-                   "streakCurrent", "rankDivision", "isWinStreak", "ptsTieBreaker"
+                   "streakCurrent", "rankDivision", "isWinStreak", "ptsTieBreaker",
+
+                   "typePass", "namePlayerPasser", "idPlayerPasser", "pctFrequency",
+                   "fg2m", "fg2a", "pctFG2", "namePlayerPassTo",
+                   "groupOrderValue", "typeFilterSecondary" , "idPlayerOnOff", "namePlayerOnOff", "typePlayerOnOff",
+                   "typeFilter", "trebFrequency", "orebContested", "drebContested", "trebContested", "pctTREBContested",
+                   "orebUncontested", "drebUncontested", "trebUncontested", "pctTREBUncontested",
+                   "orderSort", "typeFilter",
+                   "typeFilter",
+                   "frequencyFGA", "frequencyFG2A", "frequencyFG3A",
+                   "typeFilter", "typeFilter",
+                   "typeFilter", "typeFilter",
+                   "idGame", "idGroup", "nameGroup",
+                   "typeFilter", "typeFilter",
+                   "nameConference", "nameDivision",
+                   "ptsPerGameTeam", "trebPerGameTeam",
+                   "astPerGameTeam", "ptsPerGameOpponent",
+                   "dateGameLastPlayed",
+                   "idTeamOpponent",
+                   "seasonYear",
+                   "numberNextNGames",
+
+                   "cityTeamHome", "cityTeamAway", "slugTeamHome",
+                   "slugTeamAway", "teamNameHome", "teamNameAway",
+                   "recordHome", "recordAway",
+                   "namePlayerLastFirst",
+                   "idPlayer", "typeFilter", "pctFrequency", "fgmDefending",
+                   "fgaDefending", "pctFGDefending", "pctFGAvg", "diffFGPct"
 
                  )
     )
@@ -829,7 +930,7 @@ resolve_nba_names <- function(json_names) {
 }
 
 char_words <-
-  function(words = c("name[A-Z]", "date[A-Z]", "slug[A-Z]", "outcome[A-Z]", "team[A-Z]", 'height[A-Z]', 'result[A-Z]', "segment[A-Z]", "range[A-Z]", "vs[A-Z]", "mode[A-Z]", "category[A-Z]", "record[A-Z]", "^url[A-Z]",
+  function(words = c("name[A-Z]", "date[A-Z]", "slug[A-Z]", "outcome[A-Z]", "team[A-Z]", 'height[A-Z]', 'result[A-Z]', "segment[A-Z]", "range[A-Z]", "vs[A-Z]", "mode[A-Z]", "category[A-Z]", "record[A-Z]", "^url[A-Z]", "code[A-Z]",
                      "description", "city", "time[A-Z]", "nickname[A-Z]", "group[A-Z]", "location[A-Z]", "zone[A-Z]", "type[A-Z]")){
     words %>% stringr::str_c(collapse = "|")
   }
@@ -886,7 +987,8 @@ munge_nba_data <- function(data) {
       data %>%
       mutate(fg2m = fgm - fg3m,
              fg2a = fga - fg3a,
-             pctFG2 = fg2m / fg2a)
+             pctFG2 = if_else( fg2a > 0 , fg2m / fg2a, 0 )
+      )
   }
 
   if (data %>% tibble::has_name("slugMatchup")){
@@ -944,6 +1046,13 @@ munge_nba_data <- function(data) {
                                          TRUE ~ "Home"))
   }
 
+  if (data %>% has_name("nameGroup") && data %>% has_name("nameGroupValue")) {
+    data <-
+      data %>%
+      dplyr::select(-nameGroup) %>%
+      dplyr::rename(typeFilter = nameGroupValue)
+  }
+
   if (data %>% tibble::has_name("timeQuarter")) {
     data <-
       data %>%
@@ -964,6 +1073,12 @@ munge_nba_data <- function(data) {
           ((60 - secondsRemainingQuarter) / 60 - 1)
       ) %>%
       dplyr::select(idGame:numberPeriod, minuteGame, timeRemaining, everything())
+  }
+
+  if (data %>% tibble::has_name("dateGameLastPlayed")) {
+    data <-
+      data %>%
+      mutate(dateGameLastPlayed = dateGameLastPlayed %>% substr(1,10) %>% lubridate::ymd())
   }
 
   if (data %>% tibble::has_name("slugRecordTeam")){
@@ -1006,14 +1121,106 @@ munge_nba_data <- function(data) {
                 funs(. %>% as.numeric()))
   }
 
+  if (data %>% has_name("teamName") & !data %>% has_name("cityTeam")) {
+    data <-
+      data %>%
+      dplyr::rename(nameTeam = teamName)
+  }
+
+  if (data %>% tibble::has_name("namePlayerOnOff")) {
+    assign_nba_players()
+    data <-
+      data %>%
+      dplyr::select(-one_of("namePlayerOnOff")) %>%
+      left_join(
+        df_dict_nba_players %>% select(idPlayerOnOff = idPlayer,
+                                       namePlayerOnOff = namePlayer)
+      ) %>%
+      dplyr::select(matches("type[A-Z]|id[A-Z]|name[A-Z]"),
+                    everything()) %>%
+      suppressMessages()
+
+    data <-
+      data %>%
+      filter(!namePlayerOnOff %>% is.na())
+
+    data <-
+      data %>%
+      dplyr::rename(typeFilter = namePlayerOnOff)
+  }
+
+  if (data %>% tibble::has_name("fg3a") && data %>% tibble::has_name("fg3m")) {
+    data <-
+      data %>%
+      mutate(pctFG3 = fg3m / fg3a)
+  }
+
+  if (data %>% tibble::has_name("namePlayerPasser")) {
+    assign_nba_players()
+    data <-
+      data %>%
+      dplyr::select(-one_of("namePlayerPasser")) %>%
+      dplyr::rename(idPlayerPasserPassTo = idPlayerPasser) %>%
+      left_join(
+        df_dict_nba_players %>% select(idPlayerPasserPassTo = idPlayer,
+                                       namePlayerPasserPassTo = namePlayer)
+      ) %>%
+      dplyr::select(matches("type[A-Z]|id[A-Z]|name[A-Z]"),
+                    everything()) %>%
+      suppressMessages()
+  }
+
+  if (data %>% tibble::has_name("namePlayerPassTo")) {
+    assign_nba_players()
+    data <-
+      data %>%
+      dplyr::rename(idPlayerPasserPassTo = idPlayerPasser) %>%
+      dplyr::select(-one_of("namePlayerPassTo")) %>%
+      left_join(
+        df_dict_nba_players %>% select(idPlayerPasserPassTo = idPlayer,
+                                       namePlayerPasserPassTo = namePlayer)
+      ) %>%
+      dplyr::select(matches("type[A-Z]|id[A-Z]|name[A-Z]"),
+                    everything()) %>%
+      suppressMessages()
+  }
+
 
   data <-
     data %>%
-    dplyr::select(-matches("CIF"))
+    dplyr::select(-matches("CIF")) %>%
+    dplyr::select(-one_of(c("orderSort", "idLeague", "namePlayerLastFirst", "dateGameLastPlayed"))) %>%
+    suppressWarnings()
+
+  if (data %>% tibble::has_name("idTeam1")) {
+   data <-
+     data %>%
+      dplyr::rename(idTeam = idTeam1)
+  }
+
+  if (data %>% has_name("yearSeasonFirst")) {
+    data <-
+      data %>%
+      mutate(yearSeasonFirst = yearSeasonFirst + 1,
+             yearSeasonLast = yearSeasonLast + 1)
+  }
 
   data <-
     data %>%
     dplyr::select(which(colMeans(is.na(.)) < 1))
+
+  char_names <-
+    data %>% select_if(is.character) %>% names()
+
+  data <-
+    data %>%
+    dplyr::select(one_of(char_names), everything()) %>%
+    dplyr::select(
+      matches(
+        "slugTable|group[A-Z]|type[A-Z]|mode[A-Z]|id[A-Z]|name[A-Z]|year|slug[A-Z]|number[A-Z]|date|outcome|^url|gp|gs|minutes[A-Z]|passes|^fg|^pct[A-Z]"
+      ),
+      everything()
+    )
 
   data
 }

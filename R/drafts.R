@@ -67,9 +67,9 @@ get_nba_draft_year <-
 #' @import dplyr stringr jsonlite purrr tidyr curl
 #' @importFrom glue glue
 #' @examples
-#' get_nba_drafts(draft_years = 2000:2018, nest_data = FALSE, return_message = TRUE)
+#' get_drafts(draft_years = 2000:2018, nest_data = FALSE, return_message = TRUE)
 
-get_nba_drafts <-
+get_drafts <-
   function(draft_years = 1947:2018,
            nest_data = F,
            return_message = T) {

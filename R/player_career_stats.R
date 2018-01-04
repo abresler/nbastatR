@@ -125,9 +125,9 @@ get_nba_player_career_stats <-
 #' @importFrom glue glue
 #' @import jsonlite dplyr purrr tibble stringr tidyr curl
 #' @examples
-#' get_nba_players_career_stats(players = c("Joe Harris", "Myles Turner"), modes = c("Totals", "PerGame"))
+#' get_players_career_stats(players = c("Joe Harris", "Myles Turner"), modes = c("Totals", "PerGame"))
 
-get_nba_players_career_stats <-
+get_players_career_stats <-
   function(player_ids = NULL,
            players = NULL,
            modes = c("PerGame", "Totals"),
