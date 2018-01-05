@@ -15,7 +15,7 @@ get_nba_franchise_history(return_message = T, only_active = F)
 a \code{data_frame()}
 }
 \description{
-Get NBA franchise history
+Acquires history for all NBA franchises
 }
 \examples{
 get_nba_franchise_history()

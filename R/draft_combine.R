@@ -131,7 +131,7 @@ get_year_draft_combine <-
 
 #' Get NBA Draft Combine data
 #'
-#' Aquires NBA draft combine data
+#' Acquires NBA draft combine data
 #'
 #' @param years vector of draft years
 #' @param return_message if \code{TRUE} return message

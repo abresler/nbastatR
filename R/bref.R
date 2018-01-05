@@ -28,7 +28,7 @@ munge_seasons <-
 
 #' Basketball Reference Player Dictionary
 #'
-#' Returns baketball refences player dictionary
+#' Basketball reference player dictionary
 #'
 #' @return
 #' @export
@@ -497,7 +497,7 @@ assign.bref.teams <-
             spread_data(
               variable_name = "item",
               value_name = "value",
-              perserve_order = TRUE
+              preserve_order = TRUE
             )
         }
 
@@ -656,7 +656,7 @@ assign.bref.players <-
         if (widen_data) {
           df_table <-
             df_table %>%
-            spread_data(variable_name = "item", value_name = "value", perserve_order = TRUE)
+            spread_data(variable_name = "item", value_name = "value", preserve_order = TRUE)
         }
 
         if (df_table %>% tibble::has_name("minutesAdvanced")) {
@@ -746,7 +746,7 @@ assign.bref.players <-
 #' @param widen_data if \code{TRUE} widens data
 #' @param join_data if \code{TRUE} joins tables
 #' @param nest_data if \code{TRUE} nests data
-#' @param assign_to_environment if \code{TRUE} assigns data to your enironment
+#' @param assign_to_environment if \code{TRUE} assigns data to your environment
 #'
 #' @return
 #' @export
@@ -1211,7 +1211,7 @@ get_data_bref_player_seasons <-
 #' \item \code{per_game}: Per game
 #' \item \code{advanced}: Advanced
 #' \item \code{per_minute}: Per 36 minutes
-#' \item \code{per_poss}: Per Possesion
+#' \item \code{per_poss}: Per Possession
 #' }
 #' @param include_all_nba if \code{TRUE} include all_nba teams
 #' @param seasons vector of years 1951 to current season
@@ -1632,7 +1632,7 @@ parse_season_url <-
         }
 
         if (is_opp_100) {
-          table_name <- "Opponent Stats Per 100 Possesions"
+          table_name <- "Opponent Stats Per 100 Possessions"
           table_data <-
             data %>%
             parse.bref.team.pg() %>%
@@ -1654,7 +1654,7 @@ parse_season_url <-
         }
 
         if (is_team_100) {
-          table_name <- "Team Stats Per 100 Possesions"
+          table_name <- "Team Stats Per 100 Possessions"
           table_data <-
             data %>%
             parse.bref.team.pg() %>%
@@ -1779,7 +1779,7 @@ parse.bref_season_urls <-
 #' @param seasons vector of years from 1950 to current
 #' @param return_message if \code{TRUE} returns message
 #' @param assign_to_environment  if \code{TRUE} assigns data
-#' @param widen_data if \code{TRUE} returns a merged widend data
+#' @param widen_data if \code{TRUE} returns data in wide form
 #'
 #' @return a \code{data_frame} with a list of \code{data_frames}
 #' @export

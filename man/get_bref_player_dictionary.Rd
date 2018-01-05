@@ -9,7 +9,7 @@ get_bref_player_dictionary()
 get_bref_player_dictionary()
 }
 \description{
-Returns baketball refences player dictionary
+Basketball reference player dictionary
 }
 \examples{
 get_bref_player_dictionary()

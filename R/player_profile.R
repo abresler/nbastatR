@@ -62,14 +62,14 @@ get_player_award <-
   }
 
 
-#' NBA players awatds
+#' NBA players awards
 #'
-#' @param players
-#' @param player_ids
-#' @param nest_data
-#' @param return_message
+#' @param players vector of players
+#' @param player_ids vector of player ids
+#' @param nest_data if \code{TRUE} returns nested data_frame
+#' @param return_message if \code{TRUE} returns a message
 #'
-#' @return
+#' @return a \code{data_frame}
 #' @export
 #'
 #' @examples

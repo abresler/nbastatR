@@ -1,5 +1,7 @@
 #' Get NBA franchise history
 #'
+#' Acquires history for all NBA franchises
+#'
 #' @param return_message if \code{TRUE} returns message
 #' @param only_active if \code{TRUE} only active teams
 #'
@@ -130,9 +132,9 @@ get_nba_franchise_history <-
 #' @import dplyr purrr stringr readr tidyr jsonlite curl lubridate
 #' @importFrom glue glue
 #' @examples
-#' get_nba_team_season_roster(team = "Denver Nuggets", season = 1991)
+#' get_team_season_roster(team = "Denver Nuggets", season = 1991)
 
-get_nba_team_season_roster <-
+get_team_season_roster <-
   function(team = "Denver Nuggets",
            season = 2015,
            return_message = T) {
@@ -243,13 +245,13 @@ get_season_teams_rosters <-
         get_nba_franchise_history(only_active = T)
       assign('df_dict_team_history', df_dict_team_history, envir = .GlobalEnv)
     }
-    get_nba_team_season_roster_safe <-
-      purrr::possibly(get_nba_team_season_roster, data_frame())
+    get_team_season_roster_safe <-
+      purrr::possibly(get_team_season_roster, data_frame())
 
     all_data <-
       df_dict_team_history$nameTeam %>%
       map_df(function(team) {
-        get_nba_team_season_roster_safe(team = team,
+        get_team_season_roster_safe(team = team,
                                         season = season,
                                         return_message = return_message)
       })

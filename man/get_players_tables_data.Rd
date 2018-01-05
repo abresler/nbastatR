@@ -55,7 +55,7 @@ get_players_tables_data(players = NULL, player_ids = NULL,
 
 \item{playoff_rounds}{vector of playoff rounds options include code{0:4}}
 
-\item{is_plus_minus}{\code{TRUE} retuns plus minus}
+\item{is_plus_minus}{\code{TRUE} returns plus minus}
 
 \item{n_games}{number n of last games}
 
@@ -114,9 +114,22 @@ get_players_tables_data(players = NULL, player_ids = NULL,
 
 \item{periods}{vector of periods \code{0:12}}
 
+\item{shot_clocks}{vector of shot clock ranges options include \itemize{
+\item  NA,
+\item 24-22
+\item 22-18 Very Early
+\item 18-15 Early
+\item 15-7 Average
+\item 7-4 Late
+\item 4-0 Very Late
+\item ShotClock Off
+}}
+
 \item{last_n_games}{vector of last_n games \code{0:82}}
 
 \item{assign_to_environment}{if \code{TRUE} assigns data to environment}
+
+\item{return_message}{if \code{TRUE} returns a message}
 }
 \value{
 a \code{data_frame}

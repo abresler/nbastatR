@@ -18,7 +18,7 @@ get_teams_tables_data(teams = NULL, team_ids = NULL, all_active_teams = F,
 
 \item{team_ids}{vector of team ids}
 
-\item{all_active_teams}{if \code{TRUE} returns data for all acive teams}
+\item{all_active_teams}{if \code{TRUE} returns data for all active teams}
 
 \item{seasons}{vector of seasons}
 
@@ -73,7 +73,7 @@ get_teams_tables_data(teams = NULL, team_ids = NULL, all_active_teams = F,
 
 \item{playoff_rounds}{vector of playoff rounds options include code{0:4}}
 
-\item{is_plus_minus}{\code{TRUE} retuns plus minus}
+\item{is_plus_minus}{\code{TRUE} returns plus minus}
 
 \item{is_rank}{if \code{TRUE} returns rank}
 
@@ -133,6 +133,17 @@ get_teams_tables_data(teams = NULL, team_ids = NULL, all_active_teams = F,
 \item{last_n_games}{vector of last_n games \code{0:82}}
 
 \item{assign_to_environment}{if \code{TRUE} assigns data to environment}
+
+\item{shot_clock_ranges}{vector of shot clock ranges options include \itemize{
+\item  NA,
+\item 24-22
+\item 22-18 Very Early
+\item 18-15 Early
+\item 15-7 Average
+\item 7-4 Late
+\item 4-0 Very Late
+\item ShotClock Off
+}}
 
 \item{return_messages}{if \code{TRUE} returns message}
 }

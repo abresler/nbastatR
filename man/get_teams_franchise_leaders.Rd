@@ -18,7 +18,7 @@ get_teams_franchise_leaders(teams = NULL, all_teams = FALSE,
 
 \item{modes}{mode of search \itemize{
 \item Totals
-\item Per Gamee
+\item Per Game
 }}
 
 \item{season_types}{type of season \itemize{

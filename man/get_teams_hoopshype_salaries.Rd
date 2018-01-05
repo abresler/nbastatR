@@ -15,11 +15,11 @@ get_teams_hoopshype_salaries(teams = NULL, all_teams = TRUE,
 
 \item{assume_player_opt_out}{if \code{TRUE} assumes player opt out of options}
 
-\item{assume_team_doesnt_exercise}{if \code{TRUE} assunmes teams don't excerise options}
+\item{assume_team_doesnt_exercise}{if \code{TRUE} assumes teams don't excerise options}
 
 \item{nest_data}{if \code{TRUE} nests data}
 
-\item{return_message}{if \code{TRUE} returns a messag}
+\item{return_message}{if \code{TRUE} returns a message}
 }
 \description{
 Get HoopsHype Salaries by Teams

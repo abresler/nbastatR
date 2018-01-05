@@ -477,9 +477,9 @@ parse_hoops_hype_salary_urls <-
 #' @param teams vector of team names
 #' @param all_teams if \code{TRUE} returns all teams
 #' @param assume_player_opt_out if \code{TRUE} assumes player opt out of options
-#' @param assume_team_doesnt_exercise if \code{TRUE} assunmes teams don't excerise options
+#' @param assume_team_doesnt_exercise if \code{TRUE} assumes teams don't excerise options
 #' @param nest_data if \code{TRUE} nests data
-#' @param return_message if \code{TRUE} returns a messag
+#' @param return_message if \code{TRUE} returns a message
 #'
 #' @return
 #' @export

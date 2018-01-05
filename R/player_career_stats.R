@@ -118,7 +118,7 @@ get_nba_player_career_stats <-
 #' @param assign_to_environment if \code{TRUE} assign to each table environment
 #' with a name starting with data
 #' @param add_mode_names if \code{TRUE} adds the type of mode to the table data
-#' @param return_message if \code{TRUE} returns a messag
+#' @param return_message if \code{TRUE} returns a message
 #'
 #' @return a \code{data_frame}
 #' @export

@@ -821,6 +821,8 @@ get_team_season_summary_stats <-
 #' @param assign_to_environment
 #' @param add_mode_names
 #' @param return_message
+#' @param countries
+#' @param weights
 #'
 #' @return
 #' @export
@@ -948,7 +950,7 @@ get_players_seasons_summary_stats <-
 
   }
 
-#' Get Teams Summary Stastics
+#' Get Teams Summary Statistics
 #'
 #' @param seasons
 #' @param season_types

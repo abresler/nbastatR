@@ -347,7 +347,7 @@ parse.bio <-
 
     }
 
-    if (all_data %>% tibble::has_name("locationHighSchool")) {
+    if (all_data %>% tibble::has_name("yearRankHighSchool")) {
       all_data <-
         all_data %>%
         tidyr::separate(
@@ -419,6 +419,7 @@ parse_bref_player_data_url <-
     glue::glue("Parsing basketball reference biography data for {player}") %>% message()
   }
 
+
   parse.transactions.safe <-
     purrr::possibly(parse.transactions, data_frame())
 
@@ -430,16 +431,37 @@ parse_bref_player_data_url <-
 
   parse.salary.safe <-
     purrr::possibly(parse.salary, data_frame())
+  dataPlayerBio =
+    parse.bio.safe(page = page)
+  dataPlayerTransactions =
+    parse.transactions.safe(page = page)
+  dataPlayerContracts =
+    parse.contracts.safe(page = page)
+  dataPlayerSalaries =  parse.salary.safe(page = page)
 
   data <-
-    data_frame(namePlayerBREF = player ,
-             idPlayerBREF = id_bref,
-             urlPlayerBioBREF = url,
-             dataPlayerBio = list(parse.bio.safe(page = page)),
-             dataPlayerTransactions = list(parse.transactions.safe(page = page)),
-             dataPlayerContracts = list(parse.contracts.safe(page = page)),
-             dataPlayerSalaries = list(parse.salary.safe(page = page))
-             )
+    data_frame(
+      nameTable = c("Biography", "Transactions", "Contracts", "Salaries"),
+      dataTable = list(
+        dataPlayerBio,
+        dataPlayerTransactions,
+        dataPlayerContracts,
+        dataPlayerSalaries
+      )
+    ) %>%
+    mutate(
+      lengthTable = dataTable %>% map_dbl(length),
+      namePlayerBREF = player ,
+      idPlayerBREF = id_bref,
+      urlPlayerBioBREF = url
+    ) %>%
+    filter(lengthTable != 0) %>%
+    select(-lengthTable) %>%
+    dplyr::select(idPlayerBREF,
+                  namePlayerBREF,
+                  urlPlayerBioBREF,
+                  nameTable,
+                  dataTable)
 
   if (image %>% length() > 0) {
     urlPlayerImageBREF <- page %>% html_nodes("#meta img") %>% html_attr("src")
@@ -463,10 +485,6 @@ parse_bref_player_data_urls <-
       url <-
         res$url
 
-      if (return_message) {
-        glue::glue("Parsing {url}") %>%
-          message()
-      }
       parse_bref_player_data_url_safe <-
         purrr::possibly(parse_bref_player_data_url, data_frame())
 
@@ -490,13 +508,82 @@ parse_bref_player_data_urls <-
   }
 
 
-get_bref_player_ids  <-
+get_bref_players_ids  <-
   function(players = c("Aaron McKie", "Aaron Gordon"), player_ids = "bonnean01") {
+    if (players %>% purrr::is_null() && player_ids %>% purrr::is_null()) {
+      stop("Please Enter IDS")
+    }
    ids <- c()
    df_bref_player_dict <-  get_bref_player_dictionary() %>% suppressMessages()
    if (!players %>% purrr::is_null()) {
-     df_bref_player_dict %>%
+     search_ids <-
+       df_bref_player_dict %>%
        filter(namePlayerBREF %>% str_detect(players %>% str_c(collapse = "|"))) %>%
        pull(idPlayerBREF)
+     ids <-
+       ids %>% append(search_ids)
    }
+
+   if (!player_ids %>% purrr::is_null()) {
+     ids <-
+       player_ids %>%
+       append(ids)
+   }
+
+   ids %>%
+     unique() %>%
+     sort()
+
+  }
+
+#' Get Basketball Reference Player Biography data
+#'
+#' Includes player bios, salaries, contracts and transactions
+#'
+#' @param players vector of player names
+#' @param player_ids vector of basketball reference player ids
+#' @param assign_to_environment if \code{TRUE} assigns each table to environment
+#' @param return_message if \code{TRUE} returns
+#'
+#' @return a \code{data_frame}
+#' @export
+#'
+#' @examples
+#' get_bref_players_bios( players = c("Jarrett Allen", "Mitch Richmond", "Michael Adams"),  player_ids = NULL, assign_to_environment = TRUE)
+get_bref_players_bios <-
+  function(players = NULL,
+           player_ids = NULL,
+           assign_to_environment = T,
+           return_message = T) {
+    ids <-
+      get_bref_players_ids(players = players, player_ids = player_ids) %>%
+      suppressMessages()
+
+    df_bref_player_dict <-  get_bref_player_dictionary() %>% suppressMessages()
+    urls <-
+      df_bref_player_dict %>%
+      filter(idPlayerBREF %in% ids) %>%
+      pull(urlPlayerBioBREF)
+    parse_bref_player_data_urls_safe <-
+      purrr::possibly(parse_bref_player_data_urls, data_frame())
+
+    all_data <-
+      parse_bref_player_data_urls(urls = urls, return_message = T)
+
+    if (assign_to_environment) {
+      tables <- all_data$nameTable
+      tables %>%
+        walk(function(table){
+          df_table <-
+            all_data %>%
+            filter(nameTable == table) %>%
+            select(-nameTable) %>%
+            unnest()
+
+          table_name <-
+            glue::glue("dataBREFPlayers{table}") %>% as.character()
+          assign(x = table_name, value = df_table, envir = .GlobalEnv)
+        })
+    }
+    all_data
   }

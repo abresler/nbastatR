@@ -38,13 +38,13 @@ get_seasons_metrics_league_leaders(seasons = 2017:2018, metric = "pts",
 
 \item{modes}{mode of search \itemize{
 \item Totals
-\item Per Gamee
+\item Per Game
 \item Per48
 }}
 
 \item{return_message}{if \code{TRUE} returns a message}
 
-\item{nest_data}{if \code{TRUE} returns a nested data fram}
+\item{nest_data}{if \code{TRUE} returns a nested data frame}
 }
 \value{
 a \code{data_frame}

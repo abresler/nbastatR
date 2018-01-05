@@ -17,7 +17,7 @@ get_years_draft_combines(years = NULL, return_message = T, nest_data = F)
 a \code{data_frame()}
 }
 \description{
-Aquires NBA draft combine data
+Acquires NBA draft combine data
 }
 \examples{
 get_years_draft_combines(years = c(2001:2018), nest_data = T)

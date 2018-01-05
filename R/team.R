@@ -511,7 +511,7 @@ get_team_table_data <-
 #'
 #' @param teams vector of NBA team names
 #' @param team_ids vector of team ids
-#' @param all_active_teams if \code{TRUE} returns data for all acive teams
+#' @param all_active_teams if \code{TRUE} returns data for all active teams
 #' @param tables vector of table names options include \itemize{
 #' \item splits
 #' \item passes
@@ -559,7 +559,7 @@ get_team_table_data <-
 #' \item All Star
 #' }
 #' @param playoff_rounds vector of playoff rounds options include code{0:4}
-#' @param is_plus_minus \code{TRUE} retuns plus minus
+#' @param is_plus_minus \code{TRUE} returns plus minus
 #' @param is_rank if \code{TRUE} returns rank
 #' @param is_pace_adjusted if \code{TRUE} adjusts for pace
 #' @param outcomes vector of outcomes options include \itemize{
@@ -611,6 +611,7 @@ get_team_table_data <-
 #' \item 7-4 Late
 #' \item 4-0 Very Late
 #' \item ShotClock Off
+#' }
 #' @param last_n_games vector of last_n games \code{0:82}
 #' @param assign_to_environment if \code{TRUE} assigns data to environment
 #' @param return_messages if \code{TRUE} returns message

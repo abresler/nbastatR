@@ -218,7 +218,7 @@ get_season_playoff_picture <-
 #' @param seasons vector of seasons
 #' @param include_include_numeric_records if \code{TRUE} parses records
 #' @param assign_to_environment if \code{TRUE} returns assigns a data frame for each table in environment
-#' @param nest_data if \code{TRUE} returns nested data fram
+#' @param nest_data if \code{TRUE} returns nested data frame
 #' @param return_message if \code{TRUE} returns a message
 #'
 #' @return
@@ -332,7 +332,7 @@ get_season_standings <-
 #' }
 #' @param resolve_records \code{TRUE} resolve records into wins, losses and win percentage
 #' @param return_message if \code{TRUE} returns a message
-#' @param nest_data if \code{TRUE} returns a nesed data frame
+#' @param nest_data if \code{TRUE} returns a nested data frame
 #'
 #' @return
 #' @export

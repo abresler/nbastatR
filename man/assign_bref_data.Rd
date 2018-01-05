@@ -18,7 +18,7 @@ assign_bref_data(data, type = "Players", widen_data = TRUE,
 
 \item{nest_data}{if \code{TRUE} nests data}
 
-\item{assign_to_environment}{if \code{TRUE} assigns data to your enironment}
+\item{assign_to_environment}{if \code{TRUE} assigns data to your environment}
 }
 \description{
 Assign nested BREF data to environment

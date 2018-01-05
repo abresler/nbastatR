@@ -490,12 +490,13 @@ pad_id <-
     glue::glue("{start}{id}") %>% as.character()
   }
 
-#' Dictioanry of NBA Headers and nbastatR usd name
+#' Dictionary of NBA Headers and nbastatR names
 #'
-#' @return
+#' @return a \code{data_frame}
 #' @export
 #' @import dplyr
 #' @examples
+#' dictionary_nba_names()
 dictionary_nba_names <-
   function() {
     data_frame(nameNBA =
@@ -881,7 +882,7 @@ dictionary_nba_names <-
                    "orebRankF", "drebRankF", "trebRankF", "astRankF", "pfRankF",
                    "stlRankF", "tovRankF", "blkRankF", "fptsRankF",
                    "numberEvent", "pctWinProbHome", "pctWinProbAway", "ptsTotalHome", "ptsTotalVisitor",
-                   "ptsMarginHome", "isHomePossesion", "numberHomeG", "descriptionPlay",
+                   "ptsMarginHome", "isHomePossession", "numberHomeG", "descriptionPlay",
                    "isPlayVisible",
                    "typeTransaction", "dateTransaction", "descriptionTransaction",
                    "idTeamFrom", "sortGroup",

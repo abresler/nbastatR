@@ -2,10 +2,16 @@
 % Please edit documentation in R/new_ish.R
 \name{dictionary_nba_names}
 \alias{dictionary_nba_names}
-\title{Dictioanry of NBA Headers and nbastatR usd name}
+\title{Dictionary of NBA Headers and nbastatR names}
 \usage{
 dictionary_nba_names()
 }
+\value{
+a \code{data_frame}
+}
 \description{
-Dictioanry of NBA Headers and nbastatR usd name
+Dictionary of NBA Headers and nbastatR names
+}
+\examples{
+dictionary_nba_names()
 }

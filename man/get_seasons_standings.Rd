@@ -18,7 +18,7 @@ get_seasons_standings(seasons = 1950:2018,
 
 \item{resolve_records}{\code{TRUE} resolve records into wins, losses and win percentage}
 
-\item{nest_data}{if \code{TRUE} returns a nesed data frame}
+\item{nest_data}{if \code{TRUE} returns a nested data frame}
 
 \item{return_message}{if \code{TRUE} returns a message}
 }

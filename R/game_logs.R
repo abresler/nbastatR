@@ -208,7 +208,7 @@ get_season_gamelog <-
 
 
 #' NBA game logs
-#' NBA game logs for specified parameers
+#' NBA game logs for specified parameters
 #'
 #' @param seasons vector of seasons where season is year ending
 #' @param result_types vector of result types \itemize{

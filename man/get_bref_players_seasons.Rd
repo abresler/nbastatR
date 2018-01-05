@@ -17,7 +17,7 @@ get_bref_players_seasons(seasons = 2016:2018, tables = c("advanced",
 \item \code{per_game}: Per game
 \item \code{advanced}: Advanced
 \item \code{per_minute}: Per 36 minutes
-\item \code{per_poss}: Per Possesion
+\item \code{per_poss}: Per Possession
 }}
 
 \item{include_all_nba}{if \code{TRUE} include all_nba teams}

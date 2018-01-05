@@ -3,7 +3,7 @@
 \name{get_game_logs}
 \alias{get_game_logs}
 \title{NBA game logs
-NBA game logs for specified parameers}
+NBA game logs for specified parameters}
 \usage{
 get_game_logs(seasons = NULL, result_types = NULL,
   season_types = "Regular Season", nest_data = F,
@@ -32,7 +32,7 @@ get_game_logs(seasons = NULL, result_types = NULL,
 }
 \description{
 NBA game logs
-NBA game logs for specified parameers
+NBA game logs for specified parameters
 }
 \examples{
 get_game_logs(seasons = 2017:2018, result_types = c("team", "player"))

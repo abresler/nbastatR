@@ -17,7 +17,7 @@ get_players_seasons_summary_stats(seasons = 2018,
   assign_to_environment = TRUE, add_mode_names = T, return_message = TRUE)
 }
 \arguments{
-\item{return_message}{}
+\item{weights}{}
 }
 \description{
 Get Players Seasons Summary Statistics

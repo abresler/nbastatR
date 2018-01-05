@@ -15,6 +15,8 @@ spread_data(data, variable_name = "item", value_name = "value",
 \item{value_name}{name of value vector}
 
 \item{perserve_order}{if \code{TRUE} perserve order}
+
+\item{seperate_columns}{}
 }
 \value{
 a \code{data_frame}

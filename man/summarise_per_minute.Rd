@@ -2,15 +2,22 @@
 % Please edit documentation in R/utils.R
 \name{summarise_per_minute}
 \alias{summarise_per_minute}
-\title{Summarise data per minute}
+\title{Summarize data per minute}
 \usage{
 summarise_per_minute(data, id_columns = c("idPlayerSeason"),
   scale_columns = c("pts", "fg", "ast", "tov", "blk", "stl", "drb", "trb",
   "orb", "ft", "pf", "countLayupsShooting", "countDunks", "hlf"))
 }
 \arguments{
-\item{scale_columns}{}
+\item{data}{a data frame}
+
+\item{id_columns}{vector of id columns}
+
+\item{scale_columns}{vector of columns to scale}
+}
+\value{
+a \code{data_frame}
 }
 \description{
-Summarise data per minute
+Summarize data per minute
 }

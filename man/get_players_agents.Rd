@@ -7,7 +7,7 @@
 get_players_agents(nest_data = F, return_message = T)
 }
 \arguments{
-\item{return_message}{if \code{TRUE} retruns player url}
+\item{return_message}{if \code{TRUE} returns player url}
 }
 \description{
 Get NBA Players Agents

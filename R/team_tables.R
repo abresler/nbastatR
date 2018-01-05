@@ -62,7 +62,7 @@ get_team_details <- function(team_id = 1610612745, return_message = TRUE) {
 #'
 #' @param teams vector of team names
 #' @param team_ids vector of team ids
-#' @param all_teams if \code{TRUE} retuns all team names
+#' @param all_teams if \code{TRUE} returns all team names
 #' @param assign_to_environment if \code{TRUE} assigns each table to a data frame in
 #' your environment starting with data
 #' @param return_message if \code{TRUE} returns a message
@@ -207,7 +207,8 @@ get_teams_details <-
 get_team_year_by_year_stats <-
   function(team_id = 1610612751,
          season_type = "Regular Season",
-         mode = "Totals") {
+         mode = "Totals",
+         return_message = T) {
   query_slug <- "teamyearbyyearstats"
   season_slug <- season_type %>% clean_to_stem()
   json_url <-
@@ -233,11 +234,109 @@ get_team_year_by_year_stats <-
 
   num_cols <- names(data)[!names(data) %>% str_detect(char_words())]
 
+  teams <- data$nameTeam %>% unique() %>% str_c(collapse = ", ")
+
+  if (return_message) {
+    glue::glue("Acquired {teams} history") %>% message()
+  }
+
   data <-
     data %>%
     mutate_at(num_cols,
-              funs(. %>% as.numeric()))
+              funs(. %>% as.numeric())) %>%
+    mutate(modeSearch = mode) %>%
+    dplyr::select(modeSearch, everything())
 
   data
 
 }
+
+#' NBA Year-over-year franchise history
+#'
+#' @param teams vector of team names
+#' @param team_ids vecor of team ids
+#' @param all_active_teams if \code{TRUE} returns all active teams
+#' @param season_types type of season options include \itemize{
+#' \item Pre Season
+#' \item Regular Season
+#' \item Playoffs
+#' \item All Star
+#' }
+#' @param modes mode of search options include \itemize{
+#' \item PerGame
+#' \item Totals
+#' }
+#' @param return_message if \code{TRUE} returns a message
+#' @param nest_data if \code{TRUE} returns a nested data_frame
+#'
+#' @return a \code{data_frame}
+#' @export
+#'
+#' @examples
+#' get_teams_year_by_year_stats(all_active_teams = T, modes = c("Totals"), return_message = TRUE, nest_data =F)
+get_teams_year_by_year_stats <-
+  function(teams = NULL,
+           team_ids = NULL,
+           all_active_teams = T,
+           season_types = c("Regular Season"),
+           modes = c("Totals"),
+           return_message = TRUE,
+           nest_data = F) {
+    assign_nba_teams()
+    team_ids <-
+      get_nba_teams_ids(teams = teams,
+                        team_ids = team_ids,
+                        all_active_teams = all_active_teams)
+
+    get_team_year_by_year_stats_safe <-
+      purrr::possibly(get_team_year_by_year_stats, data_frame())
+    df_input <-
+      expand.grid(
+        team_id = team_ids,
+        season_type =  season_types,
+        mode = modes,
+        stringsAsFactors = F
+      ) %>%
+      as_data_frame()
+
+    all_data <-
+      1:nrow(df_input) %>%
+      map_df(function(x) {
+        df_row <- df_input %>% slice(x)
+
+        df_row %$%
+          get_team_year_by_year_stats_safe(
+            team_id = team_id,
+            season_type = season_type,
+            mode = mode,
+            return_message = return_message
+          )
+      })
+
+    if (nest_data) {
+      all_data <-
+        all_data %>%
+        nest(-c(slugSeason), .key = "dataTeamSeasonPerformance")
+    }
+
+
+    all_data <-
+      all_data %>%
+      mutate(
+        descriptionNBAFinalsAppearance = case_when(
+          descriptionNBAFinalsAppearance == "LEAGUE CHAMPION" ~ "NBA Champion",
+          descriptionNBAFinalsAppearance == "FINALS APPEARANCE " ~ "Runner Up",
+          descriptionNBAFinalsAppearance == "N/A" ~ NA_character_
+        ),
+        isConferenceChampion = !descriptionNBAFinalsAppearance %>% is.na(),
+        isNBAChampion = descriptionNBAFinalsAppearance == "NBA Champion"
+      )
+
+    if (nest_data) {
+      all_data <-
+        all_data %>%
+        nest(-idTeam, .key = 'dataTeamYearlyStats')
+    }
+
+    all_data
+  }

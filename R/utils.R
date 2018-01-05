@@ -78,27 +78,6 @@ fix_name <- function(data, fix_name = "Weeks12") {
 }
 
 
-#' Fix data frame's names
-#'
-#' @param data \code{data_frame}
-#' @param slugs vector of slugs
-#'
-#' @return
-#' @export
-#' @import stringr
-#' @importFrom glue glue
-#' @examples
-fix_names <-
-  function(data, slugs = c("FD", "DK")) {
-
-    slugs <- slugs %>% unique()
-
-    for(slug in slugs) {
-      data <-
-        data %>% fix_name(fix_name = slug)
-    }
-    data
-  }
 
 
 # tidy --------------------------------------------------------------------
@@ -137,6 +116,7 @@ fix_names <-
 #' \item new_column_2 : new_column 2
 #' \item sep : seperator
 #' }
+#' @param remove_na removes NA colums
 #' @return a \code{data_frame}
 #' @export
 #' @import dplyr stringr
@@ -247,6 +227,8 @@ gather_data <-
 #' @param variable_name name of variable vector
 #' @param value_name name of value vector
 #' @param perserve_order if \code{TRUE} perserve order
+#' @param unite_columns
+#' @param seperate_columns
 #'
 #' @return a \code{data_frame}
 #' @export
@@ -377,13 +359,13 @@ get.json_data <-
 
 
 # normalizing -------------------------------------------------------------
-#' Summarise data per minute
+#' Summarize data per minute
 #'
-#' @param data
-#' @param id_columns
-#' @param scale_columns
+#' @param data a data frame
+#' @param id_columns vector of id columns
+#' @param scale_columns vector of columns to scale
 #'
-#' @return
+#' @return a \code{data_frame}
 #' @export
 #' @import dplyr stringr purrr
 #' @importFrom glue glue
@@ -436,9 +418,8 @@ summarise_per_minute <-
 
 #' Summarise data per minute
 #'
-#' @param data
-#' @param id_columns
-#' @param scale_columns
+#' @param data a data frame
+#' @param scale_columns vector of columns to scal
 #'
 #' @return
 #' @export
@@ -447,7 +428,10 @@ summarise_per_minute <-
 #' @examples
 scale_per_minute <-
   function(data,
-           scale_columns = c("pts", "fg", "ast", "tov", "blk", "stl", "drb", "trb", "orb", "ft", "pf", "countLayupsShooting", "countDunks", "hlf")) {
+           scale_columns = NULL) {
+    if (scale_columns %>% purrr::is_null()) {
+      stop("Please enter columns to scale")
+    }
     cols_to_match <-
       glue::glue("^{scale_columns}") %>%
       str_c(collapse = "|")

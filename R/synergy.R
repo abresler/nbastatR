@@ -224,7 +224,7 @@ get_synergy_category_data <-
 #' \item team
 #' \item player
 #' }
-#' @param categories vecto of synergy categories options include: \itemize{
+#' @param categories vector of synergy categories options include: \itemize{
 #' \item Transition
 #' \item Isolation
 #' \item PRBallHandler

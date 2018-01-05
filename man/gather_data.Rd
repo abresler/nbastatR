@@ -35,6 +35,8 @@ gather_data(data, variable_name = "item", numeric_ids = c("^id"),
 
 \item{use_date_keys}{if \code{TRUE} uses dates as a key}
 
+\item{remove_na}{removes NA colums}
+
 \item{unite_columns}{if not \code{NULL} \code{list} \itemize{
 \item new_column : new column name
 \item column_1 : first column to unite

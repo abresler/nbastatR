@@ -29,7 +29,7 @@ get_synergy_categories_stats(seasons = 2016:2018, result_types = c("player",
 \item defensive
 }}
 
-\item{categories}{vecto of synergy categories options include: \itemize{
+\item{categories}{vector of synergy categories options include: \itemize{
 \item Transition
 \item Isolation
 \item PRBallHandler

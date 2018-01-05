@@ -509,7 +509,7 @@ get_agents_players <-
 
 #' Get NBA Players Agents
 #'
-#' @param return_message if \code{TRUE} retruns player url
+#' @param return_message if \code{TRUE} returns player url
 #'
 #' @return
 #' @export

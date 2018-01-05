@@ -15,7 +15,7 @@ get_bref_teams_seasons(seasons = 1950:2018, return_message = TRUE,
 
 \item{assign_to_environment}{if \code{TRUE} assigns data}
 
-\item{widen_data}{if \code{TRUE} returns a merged widend data}
+\item{widen_data}{if \code{TRUE} returns data in wide form}
 }
 \value{
 a \code{data_frame} with a list of \code{data_frames}

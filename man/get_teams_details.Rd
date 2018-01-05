@@ -12,7 +12,7 @@ get_teams_details(teams = NULL, team_ids = NULL, all_teams = T,
 
 \item{team_ids}{vector of team ids}
 
-\item{all_teams}{if \code{TRUE} retuns all team names}
+\item{all_teams}{if \code{TRUE} returns all team names}
 
 \item{assign_to_environment}{if \code{TRUE} assigns each table to a data frame in
 your environment starting with data}

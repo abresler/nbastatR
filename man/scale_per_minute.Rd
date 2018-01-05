@@ -4,12 +4,12 @@
 \alias{scale_per_minute}
 \title{Summarise data per minute}
 \usage{
-scale_per_minute(data, scale_columns = c("pts", "fg", "ast", "tov", "blk",
-  "stl", "drb", "trb", "orb", "ft", "pf", "countLayupsShooting", "countDunks",
-  "hlf"))
+scale_per_minute(data, scale_columns = NULL)
 }
 \arguments{
-\item{scale_columns}{}
+\item{data}{a data frame}
+
+\item{scale_columns}{vector of columns to scal}
 }
 \description{
 Summarise data per minute

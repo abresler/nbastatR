@@ -415,7 +415,7 @@ get_player_table_data <-
 #' \item Per100Plays
 #' }#'
 #' @param playoff_rounds vector of playoff rounds options include code{0:4}
-#' @param is_plus_minus \code{TRUE} retuns plus minus
+#' @param is_plus_minus \code{TRUE} returns plus minus
 #' @param is_rank if \code{TRUE} returns rank
 #' @param is_pace_adjusted if \code{TRUE} adjusts for pace
 #' @param outcomes vector of outcomes options include \itemize{
@@ -475,12 +475,12 @@ get_player_table_data <-
 #' \item 7-4 Late
 #' \item 4-0 Very Late
 #' \item ShotClock Off
-#' @param return_message
+#' }
+#' @param return_message if \code{TRUE} returns a message
 #' @param assign_to_environment if \code{TRUE} assigns data to environment
 #'
 #' @return a \code{data_frame}
 #'
-#' @return
 #' @export
 #'
 #' @examples

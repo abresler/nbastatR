@@ -2,16 +2,25 @@
 % Please edit documentation in R/player_profile.R
 \name{get_players_awards}
 \alias{get_players_awards}
-\title{NBA players awatds}
+\title{NBA players awards}
 \usage{
 get_players_awards(players = NULL, player_ids = NULL, nest_data = F,
   return_message = TRUE)
 }
 \arguments{
-\item{return_message}{}
+\item{players}{vector of players}
+
+\item{player_ids}{vector of player ids}
+
+\item{nest_data}{if \code{TRUE} returns nested data_frame}
+
+\item{return_message}{if \code{TRUE} returns a message}
+}
+\value{
+a \code{data_frame}
 }
 \description{
-NBA players awatds
+NBA players awards
 }
 \examples{
 get_players_awards(players = c( "Charles Oakley", "Gary Melchionni"), player_ids = c(893, 76375), return_message = T, nest_data = F)

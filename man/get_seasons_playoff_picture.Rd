@@ -12,7 +12,7 @@ get_seasons_playoff_picture(seasons = NULL, assign_to_environment = TRUE,
 
 \item{assign_to_environment}{if \code{TRUE} returns assigns a data frame for each table in environment}
 
-\item{nest_data}{if \code{TRUE} returns nested data fram}
+\item{nest_data}{if \code{TRUE} returns nested data frame}
 
 \item{return_message}{if \code{TRUE} returns a message}
 

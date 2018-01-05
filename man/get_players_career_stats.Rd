@@ -24,7 +24,7 @@ with a name starting with data}
 
 \item{add_mode_names}{if \code{TRUE} adds the type of mode to the table data}
 
-\item{return_message}{if \code{TRUE} returns a messag}
+\item{return_message}{if \code{TRUE} returns a message}
 }
 \value{
 a \code{data_frame}

@@ -62,7 +62,7 @@ get_season_metric_league_leaders <-
 #' @param seasons vector of seasons
 #' @param modes mode of search \itemize{
 #' \item Totals
-#' \item Per Gamee
+#' \item Per Game
 #' \item Per48
 #' }
 #'
@@ -90,7 +90,7 @@ get_season_metric_league_leaders <-
 #'
 #' }
 #' @param return_message if \code{TRUE} returns a message
-#' @param nest_data if \code{TRUE} returns a nested data fram
+#' @param nest_data if \code{TRUE} returns a nested data frame
 #'
 #' @return a \code{data_frame}
 #' @export
@@ -211,7 +211,7 @@ get_franchise_leaders <-
 #' @param remove_inactive_teams if \code{TRUE} removes inactive teams
 #' @param modes mode of search \itemize{
 #' \item Totals
-#' \item Per Gamee
+#' \item Per Game
 #' }
 #'
 #' @param season_types type of season \itemize{
