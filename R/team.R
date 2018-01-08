@@ -273,6 +273,7 @@ get_teams_seasons_info <-
            season_types = "Regular Season",
            nest_data = F,
            return_message = T) {
+    assign_nba_teams()
     team_ids <-
       get_nba_teams_ids(teams = teams,
                         team_ids = team_ids,
