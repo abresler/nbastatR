@@ -2,7 +2,7 @@
 % Please edit documentation in R/league_leaders.R
 \name{get_seasons_metrics_league_leaders}
 \alias{get_seasons_metrics_league_leaders}
-\title{Get League Leaders by Season by Type}
+\title{League leaders by season}
 \usage{
 get_seasons_metrics_league_leaders(seasons = 2017:2018, metric = "pts",
   season_types = "Regular Season", modes = c("PerGame", "Totals"),
@@ -50,8 +50,22 @@ get_seasons_metrics_league_leaders(seasons = 2017:2018, metric = "pts",
 a \code{data_frame}
 }
 \description{
-Get League Leaders by Season by Type
+Gets league leader data by
+specified input for specific seasons
 }
 \examples{
-get_seasons_metrics_league_leaders(seasons = 2000:2005, metric = "pts", season_types = "Regular Season", modes = "PerGame", return_message = T)
+get_seasons_metrics_league_leaders(seasons = 2000:2005,
+metric = "pts",
+season_types = "Regular Season",
+ modes = "PerGame",
+ return_message = T)
 }
+\seealso{
+Other players: \code{\link{get_nba_player_injuries}},
+  \code{\link{get_players_bios}},
+  \code{\link{get_teams_players_seasons_summary_stats}}
+
+Other leaders: \code{\link{get_teams_franchise_leaders}}
+}
+\concept{leaders}
+\concept{players}

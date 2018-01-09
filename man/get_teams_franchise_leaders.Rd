@@ -2,7 +2,7 @@
 % Please edit documentation in R/league_leaders.R
 \name{get_teams_franchise_leaders}
 \alias{get_teams_franchise_leaders}
-\title{Get NBA teams' franchise leaders}
+\title{Franchise leaders}
 \usage{
 get_teams_franchise_leaders(teams = NULL, all_teams = FALSE,
   remove_inactive_teams = F, modes = "Totals",
@@ -31,8 +31,19 @@ get_teams_franchise_leaders(teams = NULL, all_teams = FALSE,
 a \code{data_frame}
 }
 \description{
-Get NBA teams' franchise leaders
+Gets franchise leader information for
+by specified input for specific teams
 }
 \examples{
 get_teams_franchise_leaders(teams = "Brooklyn Nets", modes = c("Totals"))
 }
+\seealso{
+Other teams: \code{\link{get_drafts}},
+  \code{\link{get_seasons_rosters}},
+  \code{\link{get_teams_players_seasons_summary_stats}},
+  \code{\link{get_teams_seasons_rankings}}
+
+Other leaders: \code{\link{get_seasons_metrics_league_leaders}}
+}
+\concept{leaders}
+\concept{teams}

@@ -56,7 +56,7 @@ get_team_details <- function(team_id = 1610612745, return_message = TRUE) {
   data
 }
 
-#'   NBA teams details
+#' NBA teams details
 #'
 #' Gets information about NBA franchises
 #'
@@ -251,7 +251,7 @@ get_team_year_by_year_stats <-
 
 }
 
-#' NBA Year-over-year franchise history
+#' NBA teams yearly performance
 #'
 #' @param teams vector of team names
 #' @param team_ids vecor of team ids
@@ -273,7 +273,10 @@ get_team_year_by_year_stats <-
 #' @export
 #'
 #' @examples
-#' get_teams_year_by_year_stats(all_active_teams = T, modes = c("Totals"), return_message = TRUE, nest_data =F)
+#' get_teams_year_by_year_stats(all_active_teams = T,
+#' modes = c("Totals"),
+#' return_message = TRUE,
+#'  nest_data =F)
 get_teams_year_by_year_stats <-
   function(teams = NULL,
            team_ids = NULL,

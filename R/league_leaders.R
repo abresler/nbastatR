@@ -57,7 +57,10 @@ get_season_metric_league_leaders <-
 
   }
 
-#' Get League Leaders by Season by Type
+#' League leaders by season
+#'
+#' Gets league leader data by
+#' specified input for specific seasons
 #'
 #' @param seasons vector of seasons
 #' @param modes mode of search \itemize{
@@ -96,8 +99,14 @@ get_season_metric_league_leaders <-
 #' @export
 #' @import curl lubridate dplyr jsonlite stringr purrr tidyr readr
 #' @importFrom glue glue
+#' @family players
+#' @family leaders
 #' @examples
-#' get_seasons_metrics_league_leaders(seasons = 2000:2005, metric = "pts", season_types = "Regular Season", modes = "PerGame", return_message = T)
+#' get_seasons_metrics_league_leaders(seasons = 2000:2005,
+#' metric = "pts",
+#' season_types = "Regular Season",
+#'  modes = "PerGame",
+#'  return_message = T)
 
 get_seasons_metrics_league_leaders <-
   function(seasons = 2017:2018,
@@ -191,7 +200,6 @@ get_franchise_leaders <-
       munge_nba_data() %>%
       mutate(isActiveWithTeam = isActiveWithTeam %>% as.logical()) %>%
       mutate(numberTable = 1) %>%
-      select(-one_of("idLeague")) %>%
       dplyr::rename(nameTeam = slugTeam)
 
     data %>%
@@ -204,7 +212,10 @@ get_franchise_leaders <-
 }
 
 
-#' Get NBA teams' franchise leaders
+#' Franchise leaders
+#'
+#' Gets franchise leader information for
+#' by specified input for specific teams
 #'
 #' @param teams vector of team names
 #' @param all_teams if \code{TRUE} returns all teams
@@ -220,6 +231,8 @@ get_franchise_leaders <-
 #' \item Pre Season
 #' }'
 #' @return a \code{data_frame}
+#' @family teams
+#' @family leaders
 #' @export
 #' @import curl lubridate dplyr jsonlite stringr purrr tidyr readr
 #' @importFrom glue glue

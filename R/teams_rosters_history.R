@@ -121,13 +121,16 @@ get_nba_franchise_history <-
   }
 
 
-#' Get NBA Team's Season Roster
+#' Team roster
+#'
+#' Gets teams roster from a specified seasons
 #'
 #' @param team team name
 #' @param season season vector
 #' @param return_message
 #'
-#' @return
+#' @return a `data_frame`
+#' @family rosters
 #' @export
 #' @import dplyr purrr stringr readr tidyr jsonlite curl lubridate
 #' @importFrom glue glue
@@ -264,18 +267,21 @@ get_season_teams_rosters <-
 
   }
 
-#' Get Teams Seasons Rosters
+#' Teams seaosons rosters
+#'
+#' Gets NBA teams rosters for specified seasonss
 #'
 #' @param seasons vector of seasons
 #' @param nest_data if \code{TRUE} returns nested data frame
 #' @param return_message if \code{TRUE} returns a message
 #'
 #' @return a \code{data_frame}
+#' @family rosters
 #' @export
 #' @import dplyr purrr stringr readr tidyr jsonlite curl lubridate
 #' @importFrom glue glue
 #' @examples
-#' get_seasons_teams_rosters(2010:2018, nest_data = T, return_message = T)
+#' get_seasons_teams_rosters(seasons = 2010:2018, nest_data = F, return_message = T)
 get_seasons_teams_rosters <-
   function(seasons = 1990:2018,
            nest_data = F,
@@ -297,13 +303,16 @@ get_seasons_teams_rosters <-
   }
 
 
-#' Get Team's Season Coaching Staff
+#' Teams coaching staff
+#'
+#' Gets coaching staff for team and season
 #'
 #' @param team name of the team
 #' @param season season
 #' @param return_message if \code{TRUE} returns a message
 #'
-#' @return
+#' @return a `data_frame`
+#' @family coaches
 #' @export
 #' @import dplyr purrr stringr readr tidyr jsonlite curl lubridate
 #' @importFrom glue glue
@@ -394,7 +403,7 @@ get_team_coaches <-
       suppressWarnings()
 
     if (return_message) {
-      glue::glue("You got the {team}'s coaches for the {slugSeason}") %>% message()
+      glue::glue("You got the {team}'s coaches for the {slugSeason} season") %>% message()
     }
     data_roster
   }
@@ -427,18 +436,20 @@ get_season_teams_coaches <-
   }
 
 
-#' Get Seaons Coaching Staffs
+#' Seasons coaching staffs
+#'
+#' Gets coaching staffs for specified seasons
 #'
 #' @param seasons vector of seasons
 #' @param nest_data if \code{TRUE} nests data
 #' @param return_message if \code{TRUE} returns a message
 #'
-#' @return
+#' @return a `data_frame`
 #' @export
 #' @import dplyr purrr stringr readr tidyr jsonlite curl lubridate
 #' @importFrom glue glue
 #' @examples
-#' get_seasons_teams_coaches(1990:1992)
+#' get_seasons_teams_coaches(2018)
 
 get_seasons_teams_coaches <-
   function(seasons = 1990:2018,

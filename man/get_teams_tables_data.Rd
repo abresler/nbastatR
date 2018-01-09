@@ -155,6 +155,7 @@ Returns NBA team data for specified teams
 and parameters by seasons
 }
 \examples{
-get_teams_tables_data(teams = c("Brooklyn Nets", "New York Knicks"), seasons = 2017:2018, tables = c("splits", "shooting"), measures = "Base", modes = c("PerGame", "Totals"))
+get_teams_tables_data(teams = c("Brooklyn Nets", "New York Knicks"),
+ seasons = 2017:2018, tables = c("splits", "shooting"), measures = "Base", modes = c("PerGame", "Totals"))
 
 }

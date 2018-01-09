@@ -1,5 +1,7 @@
 #' nbastatR
 #'
+#' Tools to acquire and explore NBA data
+#'
 #' @name nbastatR
 #' @docType package
 #' @author Alex Bresler (abresler@@asbcllc.com)

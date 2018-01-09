@@ -2,9 +2,9 @@
 % Please edit documentation in R/real_gm.R
 \name{get_agents_players}
 \alias{get_agents_players}
-\title{Get agents players}
+\title{Players Agents}
 \usage{
-get_agents_players(agents = "Jeff Schwartz", all_agents = T,
+get_agents_players(agents = "Jeff Schwartz", all_agents = F,
   return_message = FALSE)
 }
 \arguments{
@@ -12,8 +12,19 @@ get_agents_players(agents = "Jeff Schwartz", all_agents = T,
 
 \item{all_agents}{if \code{TRUE} scrapes all agents}
 
-\item{message}{}
+\item{return_message}{if \code{TRUE} returns a message}
+}
+\value{
+a  \code{data_frame}
 }
 \description{
-Get agents players
+Acquires NBA players agents
 }
+\examples{
+get_agents_players(agents = c("Jeff Schwartz"))
+
+}
+\seealso{
+Other agents: \code{\link{get_players_agents}}
+}
+\concept{agents}

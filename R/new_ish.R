@@ -1,19 +1,5 @@
 # http://nbasense.com/nba-api/Stats/Stats/Charts/InfographicFanDuelPlayer#request-example
-dictionary_nba_queries <-
-  function() {
-    data_frame(typeQuery = c("splits", "splits", "dash", "dash"),
-               slugQuery = c("teamdashboardbygeneralsplits", "playerdashboardbygeneralsplits", "leaguedashteamstats", "leaguedashplayerstats"),
-               typeSearch = c("team", "player", "team", "player"))
-  }
 
-#' Clean to Stem
-#'
-#' @param x
-#'
-#' @return
-#' @export
-#' @importFrom stringr str_replace
-#' @examples
 clean_to_stem <- function(x) {
   x <-
     x %>%
@@ -21,7 +7,7 @@ clean_to_stem <- function(x) {
     str_replace('\\/', '\\2F') %>%
     str_replace("\\'", '%27')
 
-  return(x)
+  x
 
 }
 
@@ -66,6 +52,8 @@ generate_data_name <- function(x, result = "Team") {
 #' Assign NBA teams to environment
 #'
 #' @return a `data_frame`
+#' @family dictionary
+#' @family NBA teams
 #' @export
 #'
 #' @examples
@@ -81,8 +69,11 @@ assign_nba_teams <-
 
 #' Assign NBA player dictionary to environment
 #'
-#' @return
+#'
+#' @return a `data_frame` to `df_dict_nba_players` in your environment
 #' @export
+#' @family dictionary
+#' @family NBA players
 #'
 #' @examples
 #' assign_nba_players()
@@ -334,14 +325,17 @@ get_nba_headers <- function() {
 
 }
 
-#' Get NBA Player Ids
+#' Players' NBA player ids
+#'
+#' Resolve player ids for specified playrs
 #'
 #' @param players vector of player names
 #' @param player_ids vector of player ids
 #'
-#' @return
+#' @return a `data_frame`
 #' @export
 #' @import dplyr stringr jsonlite readr purrr tibble tidyr curl
+#' @family ids
 #' @examples
 #' get_nba_players_ids(players = c("Mitch Richmond", "Kyle Kuzma"))
 get_nba_players_ids <-
@@ -384,12 +378,15 @@ get_nba_players_ids <-
     ids %>% unique() %>% sort()
   }
 
-#' Get NBA Team IDs
+#' NBA team ids
+#'
+#' Resolve NBA team ID
 #'
 #' @param teams vector of team names
 #' @param team_ids vector of team ids
 #'
-#' @return
+#' @return a `data_frame`
+#' @family ids
 #' @export
 #'
 #' @examples
@@ -509,6 +506,8 @@ pad_id <-
 #' @return a \code{data_frame}
 #' @export
 #' @import dplyr
+#' @family Dictionary
+#' @family nbastatR tool
 #' @examples
 #' dictionary_nba_names()
 dictionary_nba_names <-
@@ -736,7 +735,10 @@ dictionary_nba_names <-
                    "HOME_WL", "VISITOR_WL",
                    "PLAYER_NAME_LAST_FIRST",
                    "CLOSE_DEF_PERSON_ID", "DEFENSE_CATEGORY", "FREQ", "D_FGM",
-                   "D_FGA", "D_FG_PCT", "NORMAL_FG_PCT", "PCT_PLUSMINUS"
+                   "D_FGA", "D_FG_PCT", "NORMAL_FG_PCT", "PCT_PLUSMINUS",
+                   "DraftPick", "DefenseCategory", "PLAYER_LAST_TEAM_ID", "PLAYER_LAST_TEAM_ABBREVIATION",
+                   "ClutchTime", "PointDiff", "AheadBehind", "DistanceRange",
+                   "DribbleRange", "GeneralRange"
 
                  ),
                nameActual =
@@ -978,7 +980,12 @@ dictionary_nba_names <-
                    "recordHome", "recordAway",
                    "namePlayerLastFirst",
                    "idPlayer", "typeFilter", "pctFrequency", "fgmDefending",
-                   "fgaDefending", "pctFGDefending", "pctFGAvg", "diffFGPct"
+                   "fgaDefending", "pctFGDefending", "pctFGAvg", "diffFGPct",
+                   "typeDraftPick", "categoryDefense",
+                   "idPlayerTeam", "slugTeam", "categoryClutchTime",
+                   "ptsDifference", "categoryAheadBehind",
+                   "rangeShotDistance",
+                   "rangeDribble", "rangeGeneral"
 
                  )
     )
@@ -1301,6 +1308,11 @@ munge_nba_data <- function(data) {
       everything()
     )
 
+  data <-
+    data %>%
+    mutate_if(is.numeric,
+              funs(ifelse(. %>% is.nan(), 0 , .)))
+
   data
 }
 
@@ -1308,16 +1320,25 @@ nba_json_to_df <-
   function(json, table_id = 1) {
     json_names <-
       json$resultSets$headers[[table_id]]
-
-    actual_names <-
-      json_names %>% resolve_nba_names()
-
     data <-
       json$resultSets$rowSet[table_id] %>%
       data.frame(stringsAsFactors = F) %>%
       dplyr::as_data_frame() %>%
-      purrr::set_names(actual_names)
+      purrr::set_names(json_names)
 
+    if (data %>% tibble::has_name("G")) {
+      data <-
+        data %>%
+        dplyr::select(-G)
+    }
+
+    actual_names <-
+      names(data) %>% resolve_nba_names()
+
+
+    data <-
+      data %>%
+      purrr::set_names(actual_names)
 
     if (data %>% nrow() == 0) {
       return(invisible())

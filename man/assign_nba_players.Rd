@@ -6,9 +6,22 @@
 \usage{
 assign_nba_players()
 }
+\value{
+a `data_frame` to `df_dict_nba_players` in your environment
+}
 \description{
 Assign NBA player dictionary to environment
 }
 \examples{
 assign_nba_players()
 }
+\seealso{
+Other dictionary: \code{\link{assign_nba_teams}},
+  \code{\link{get_bref_coach_dictionary}},
+  \code{\link{get_bref_player_dictionary}},
+  \code{\link{get_bref_team_dictionary}}
+
+Other NBA players: \code{\link{get_bref_player_dictionary}}
+}
+\concept{NBA players}
+\concept{dictionary}

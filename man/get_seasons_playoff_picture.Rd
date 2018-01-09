@@ -2,7 +2,7 @@
 % Please edit documentation in R/standings.R
 \name{get_seasons_playoff_picture}
 \alias{get_seasons_playoff_picture}
-\title{Get seasons playoff picture}
+\title{NBA seasons playoff picture}
 \usage{
 get_seasons_playoff_picture(seasons = NULL, assign_to_environment = TRUE,
   include_numeric_records = F, nest_data = FALSE, return_message = TRUE)
@@ -19,11 +19,14 @@ get_seasons_playoff_picture(seasons = NULL, assign_to_environment = TRUE,
 \item{include_include_numeric_records}{if \code{TRUE} parses records}
 }
 \value{
-a `data_Frame`
+a `data_frame`
 }
 \description{
-Returns
+Returns playoff picture for specified seasons
 }
 \examples{
-get_seasons_playoff_picture(seasons = 2015:2018, assign_to_environment = T, include_numeric_records = T)
+get_seasons_playoff_picture(seasons = 2015:2018,
+assign_to_environment = T,
+ include_numeric_records = T)
 }
+\concept{playoffs}

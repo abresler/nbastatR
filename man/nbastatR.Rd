@@ -6,7 +6,7 @@
 \alias{nbastatR-package}
 \title{nbastatR}
 \description{
-nbastatR
+Tools to acquire and explore NBA data
 }
 \author{
 Alex Bresler (abresler@asbcllc.com)

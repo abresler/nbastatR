@@ -494,14 +494,17 @@ get_nba_draftnet_year_mock_draft <-
 
     if (return_message) {
       "You the got nbadraft.net mock draft for the " %>%
-        paste0(draft_year, ' NBA Draft\ndata last updated on ', last_update) %>%
+        paste0(draft_year, ' NBA Draft\nData last updated on ', last_update) %>%
         message()
     }
     draft_data
   }
 
 
-#' Get NBADraft.net mock drafts
+#' NBADraft.net mock drafts
+#'
+#' Returns mock drafts from nbadraft.net
+#' for specified years
 #'
 #' @param years vector of draft years
 #' @param merge_nba_data if \code{TRUE} merges NBA player data
@@ -512,8 +515,12 @@ get_nba_draftnet_year_mock_draft <-
 #' @export
 #' @import dplyr lubridate purrr stringr tibble tidyr rvest xml2
 #' @importFrom glue glue
+#' @family draft
 #' @examples
-#' get_nbadraftnet_mock_drafts(years = 2012:2017, merge_nba_data = TRUE, nest_data = F, return_message = T)
+#' get_nbadraftnet_mock_drafts(years = 2012:2017,
+#' merge_nba_data = TRUE,
+#' nest_data = F,
+#' return_message = T)
 
 get_nbadraftnet_mock_drafts <-
   function(years = 2009:2018,
@@ -587,7 +594,9 @@ get_nbadraftnet_mock_drafts <-
 
       all_data <-
         all_data %>%
-        mutate(isNBAPlayer = ifelse(!idPlayer %>% is.na(), TRUE, FALSE)) %>%
+        mutate(isNBAPlayer = ifelse(!idPlayer %>% is.na(), TRUE, FALSE),
+               heightInches = heightPlayer %>% height_in_inches(),
+               slugClass = slugClass %>% str_to_upper() ) %>%
         dplyr::select(dateUpdated:namePlayer, isNBAPlayer, everything())
     }
 

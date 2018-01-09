@@ -138,7 +138,7 @@ get_hoopshype_teams_ids <-
     return(data)
   }
 
-#' Get HoopsHype NBA teams salaries
+#' HoopsHype NBA teams summary salaries
 #'
 #' Gets all team salary summaries from HoopsHype
 #'
@@ -146,6 +146,8 @@ get_hoopshype_teams_ids <-
 #' @param return_message if \code{TRUE} returns a message
 #'
 #' @return a \code{data_frame()}
+#' @family hoopshype
+#' @family salaries
 #' @export
 #' @import dplyr purrr stringr rvest xml2 tidyr readr
 #' @examples
@@ -474,9 +476,10 @@ parse_hoops_hype_salary_urls <-
     df
   }
 
-#' HoopsHype teams players salaries
+#' Hoopshype teams players salaries
 #'
-#' gets detailed player salaries from HoopsHype
+#' Detailed salaries for each player and
+#' team from hoopshype
 #'
 #' @param teams vector of team names
 #' @param all_teams if \code{TRUE} returns all teams
@@ -486,10 +489,21 @@ parse_hoops_hype_salary_urls <-
 #' @param return_message if \code{TRUE} returns a message
 #'
 #' @return a `data_frame`
+#' @family hoopshype
+#' @family salaries
 #' @export
 #' @import dplyr rvest xml2 readr curl stringr tidyr
 #' @examples
-#' get_teams_hoopshype_salaries(all_teams = TRUE, nest_data = F, return_message = T)
+#' library(dplyr)
+#' df_salaries <-
+#' get_teams_hoopshype_salaries(all_teams = TRUE,
+#'  nest_data = F, return_message = T)
+#'  ## By Expiring Salary Type and Team
+#'  df_salaries %>% group_by(slugSeason,  nameTeam, isFinalSeason) %>%
+#'  summarise(expiringSalaries = sum(amountContractMil, na.rm = T) / 1000000) %>%
+#'  arrange(nameTeam)
+
+
 get_teams_hoopshype_salaries <-
   function(teams = NULL,
            all_teams = TRUE,

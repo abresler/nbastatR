@@ -2,7 +2,7 @@
 % Please edit documentation in R/play_by_play.R
 \name{get_games_play_by_play}
 \alias{get_games_play_by_play}
-\title{Get Play by Play for NBA Game IDs}
+\title{NBA games play-by play}
 \usage{
 get_games_play_by_play(game_ids = NULL, nest_data = FALSE,
   return_message = TRUE)
@@ -18,7 +18,8 @@ get_games_play_by_play(game_ids = NULL, nest_data = FALSE,
 a \code{data_frame}
 }
 \description{
-Get Play by Play for NBA Game IDs
+Returns play-by-play data
+for specified game ids
 }
 \examples{
 get_games_play_by_play(game_ids = c(21700002, 21700003), nest_data = F, return_message = T)

@@ -20,3 +20,7 @@ All NBA teams
 \examples{
 get_bref_all_nba_teams()
 }
+\seealso{
+Other awards: \code{\link{get_players_awards}}
+}
+\concept{awards}

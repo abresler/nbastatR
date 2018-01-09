@@ -39,7 +39,7 @@ get_player_rotowire_news <-
     data
   }
 
-#' Get players RotoWire news
+#' Players RotoWire news
 #'
 #' Returns rotowire news for specified
 #' players.
@@ -52,6 +52,7 @@ get_player_rotowire_news <-
 #'
 #' @return a `data_frame`
 #' @export
+#' @family news
 #' @import dplyr curl readr lubridate purrr jsonlite tidyr
 #' @importFrom glue glue
 #' @examples
@@ -114,7 +115,7 @@ get_players_roto_wire_news <-
     all_data
   }
 
-#' Teams roto wire news
+#' Teams Rotowire news
 #'
 #' Returns roto wire news for specified teams.
 #'
@@ -126,6 +127,7 @@ get_players_roto_wire_news <-
 #' @param return_message if `TRUE` returns a message
 #'
 #' @return a `data_frame`
+#' @family news
 #' @export
 #' @import dplyr curl readr lubridate purrr jsonlite tidyr
 #' @importFrom glue glue
@@ -243,8 +245,9 @@ nba_transactions_historic <-
 #'
 #' Acquires all NBA transctations since 2012
 #'
-#' @return
+#' @return a `data_frame`
 #' @export
+#' @family transactions
 #' @import dplyr purrr curl jsonlite readr lubridate tidyr tibble
 #' @examples
 #' get_nba_transactions()
@@ -316,17 +319,22 @@ get_nba_transactions <-
 
 # beyond_the_numbers ------------------------------------------------------
 
-#' Get Beyond the Numbers articles
+#'  NBA.com Beyond The Numbers Articles
+#'
+#'  Returns articles from beyond the numbers
 #'
 #' @param count_articles numeric vector of counts
 #'
 #' @return a \code{data_frame}
+#' @family news
 #' @export
 #' @import dplyr curl jsonlite rvest xml2 purrr stringr lubridate readr
 #' @importFrom glue glue
 #' @examples
-#'
-#' get_beyond_the_numbers_articles(10)
+#'\dontrun{
+#' get_beyond_the_numbers_articles(count_aricles = 10)
+#' }
+
 get_beyond_the_numbers_articles <-
   function(count_articles = 50) {
     if (count_articles > 500){
@@ -356,8 +364,6 @@ get_beyond_the_numbers_articles <-
         x %>% read_html() %>% html_text() %>% str_trim()
       })) %>%
       dplyr::select(-htmlContent)
-
-   closeAllConnections()
 
    df
   }

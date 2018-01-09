@@ -2,7 +2,7 @@
 % Please edit documentation in R/mockdrafts.R
 \name{get_nbadraftnet_mock_drafts}
 \alias{get_nbadraftnet_mock_drafts}
-\title{Get NBADraft.net mock drafts}
+\title{NBADraft.net mock drafts}
 \usage{
 get_nbadraftnet_mock_drafts(years = 2009:2018, merge_nba_data = T,
   nest_data = F, return_message = T)
@@ -20,8 +20,17 @@ get_nbadraftnet_mock_drafts(years = 2009:2018, merge_nba_data = T,
 a \code{data_frame()}
 }
 \description{
-Get NBADraft.net mock drafts
+Returns mock drafts from nbadraft.net
+for specified years
 }
 \examples{
-get_nbadraftnet_mock_drafts(years = 2012:2017, merge_nba_data = TRUE, nest_data = F, return_message = T)
+get_nbadraftnet_mock_drafts(years = 2012:2017,
+merge_nba_data = TRUE,
+nest_data = F,
+return_message = T)
 }
+\seealso{
+Other draft: \code{\link{get_drafts}},
+  \code{\link{get_years_draft_combines}}
+}
+\concept{draft}

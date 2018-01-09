@@ -2,7 +2,7 @@
 % Please edit documentation in R/teams_rosters_history.R
 \name{get_seasons_teams_rosters}
 \alias{get_seasons_teams_rosters}
-\title{Get Teams Seasons Rosters}
+\title{Teams seaosons rosters}
 \usage{
 get_seasons_teams_rosters(seasons = 1990:2018, nest_data = F,
   return_message = T)
@@ -18,8 +18,13 @@ get_seasons_teams_rosters(seasons = 1990:2018, nest_data = F,
 a \code{data_frame}
 }
 \description{
-Get Teams Seasons Rosters
+Gets NBA teams rosters for specified seasonss
 }
 \examples{
-get_seasons_teams_rosters(2010:2018, nest_data = T, return_message = T)
+get_seasons_teams_rosters(seasons = 2010:2018, nest_data = F, return_message = T)
 }
+\seealso{
+Other rosters: \code{\link{get_seasons_rosters}},
+  \code{\link{get_team_season_roster}}
+}
+\concept{rosters}

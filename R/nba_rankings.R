@@ -1,21 +1,24 @@
 
-#' NBA Team Rankings
-#'
-#' Gets most recent NBA team rankings
-#'
-#' @return a `data_frame`
-#' @export
-#' @import curl dplyr stringr readr purrr jsonlite
-#' @importFrom lubridate ymd_hms
-#' @examples
-#' get_nba_team_current_rankings()
-get_nba_team_current_rankings <-
-  function() {
+
+get_teams_season_rankings <-
+  function(season = 2018,
+           return_message = T) {
+    year <- season - 1
     json <-
-      "https://data.nba.net/prod/v1/2017/team_stats_rankings.json" %>%
+      glue::glue("https://data.nba.net/prod/v1/{year}/team_stats_rankings.json") %>%
+      as.character() %>%
       curl_json_to_vector()
 
-    datetimePublished <- json$`_internal`$pubDateTime %>% lubridate::ymd_hms()
+    season_slug <- generate_season_slug(season = season)
+
+    if (return_message) {
+      glue::glue("Getting {season_slug} team rankings") %>% message()
+    }
+
+
+
+    datetimePublished <-
+      json$`_internal`$pubDateTime %>% lubridate::ymd_hms()
     json_data <- json$league$standard
     dict_names <- dictionary_nba_names()
     year_season_start <- json_data$seasonYear
@@ -41,17 +44,66 @@ get_nba_team_current_rankings <-
       var_df
     })
 
-     data <-
-       data %>%
-       purrr::reduce(left_join) %>%
-       mutate(yearSeasonStart = year_season_start,
-              datetimePublished) %>%
-       left_join(get_nba_teams() %>% select(idTeam, nameTeam)) %>%
-       suppressMessages() %>%
-       mutate(typeSeason = "Regular Season") %>%
-       select(yearSeasonStart, typeSeason, datetimePublished, idTeam, nameTeam, everything()) %>%
-       filter(!minutesAvg %>% is.na())
+    data <-
+      data %>%
+      purrr::reduce(left_join) %>%
+      mutate(slugSeason = season_slug,
+             yearSeason = year_season_start + 1,
+             datetimePublished) %>%
+      left_join(get_nba_teams() %>% select(idTeam, nameTeam)) %>%
+      suppressMessages() %>%
+      mutate(typeSeason = "Regular Season") %>%
+      select(
+        slugSeason,
+        yearSeason,
+        typeSeason,
+        datetimePublished,
+        idTeam,
+        nameTeam,
+        everything()
+      ) %>%
+      filter(!minutesAvg %>% is.na())
 
+    data
 
-     data
+  }
+
+#' NBA teams rankings
+#'
+#' Team rankings for specified season
+#'
+#' @param seasons vector of numeric seasons
+#' @param nest_data  if `TRUE` nests data by season
+#' @param return_message `TRUE` returns a message
+#'
+#' @return a `data_frame`
+#' @export
+#' @import curl dplyr stringr readr purrr jsonlite
+#' @importFrom lubridate ymd_hms
+#' @family rankings
+#' @family teams
+#'
+#' @examples
+#' get_teams_seasons_rankings(seasons = 2018)
+get_teams_seasons_rankings <-
+  function(seasons = NULL,
+           nest_data = F,
+           return_message = T) {
+    get_teams_season_rankings_safe <-
+      purrr::possibly(get_teams_season_rankings, data_frame())
+    if (seasons %>% purrr::is_null()) {
+      stop("Enter seasons")
+    }
+    all_data <-
+      seasons %>%
+      map_df(function(season){
+        get_teams_season_rankings_safe(season = season, return_message = return_message)
+      })
+
+    if (nest_data) {
+      all_data <-
+        all_data %>%
+        nest(-c(slugSeason), .key = 'dataRankings')
+    }
+    all_data
   }

@@ -2,7 +2,7 @@
 % Please edit documentation in R/teams_rosters_history.R
 \name{get_team_coaches}
 \alias{get_team_coaches}
-\title{Get Team's Season Coaching Staff}
+\title{Teams coaching staff}
 \usage{
 get_team_coaches(team = "Denver Nuggets", season = 2015,
   return_message = T)
@@ -14,9 +14,13 @@ get_team_coaches(team = "Denver Nuggets", season = 2015,
 
 \item{return_message}{if \code{TRUE} returns a message}
 }
+\value{
+a `data_frame`
+}
 \description{
-Get Team's Season Coaching Staff
+Gets coaching staff for team and season
 }
 \examples{
 get_team_coaches("Brooklyn Nets", 2016)
 }
+\concept{coaches}

@@ -31,3 +31,7 @@ NBA season standing data
 \examples{
 get_seasons_standings(seasons = 2015:2018, season_types = "Regular Season", resolve_records = T, nest_data = F, return_message = T)
 }
+\seealso{
+Other standings: \code{\link{get_current_standings}}
+}
+\concept{standings}

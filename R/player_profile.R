@@ -64,27 +64,31 @@ get_player_award <-
 
 #' NBA players awards
 #'
+#' Gets NBA awards for
+#' specified players
+#'
 #' @param players vector of players
 #' @param player_ids vector of player ids
 #' @param nest_data if \code{TRUE} returns nested data_frame
 #' @param return_message if \code{TRUE} returns a message
 #'
 #' @return a \code{data_frame}
+#' @family player
+#' @family awards
 #' @export
 #'
 #' @examples
-#' get_players_awards(players = c( "Charles Oakley", "Gary Melchionni"), player_ids = c(893, 76375), return_message = T, nest_data = F)
+#' get_players_awards(players = c( "Charles Oakley", "Gary Melchionni"),
+#' player_ids = c(893, 76375),
+#' return_message = T,
+#'  nest_data = F)
+
 get_players_awards <-
   function(players =  NULL,
            player_ids = NULL,
            nest_data = F,
            return_message = TRUE) {
-    if (!'df_nba_player_dict' %>% exists()) {
-      df_nba_player_dict <-
-        get_nba_players()
-
-      assign(x = 'df_nba_player_dict', df_nba_player_dict, envir = .GlobalEnv)
-    }
+    assign_nba_players()
     ids <-
       get_nba_players_ids(player_ids = player_ids,
                           players = players)
@@ -194,17 +198,21 @@ get_player_bio <-
 
   }
 
-#' Get Player bios
+#' NBA.com bios
 #'
-#' Seems to have ended after 2013-14 season
+#' Player biographies.
+#'
+#' Seems to only work for the 2013-14 season
 #'
 #' @param players vector of players
 #' @param player_ids  vector of player ids
 #' @param return_message if \code{TRUE} returns a message
 #' @param nest_data if \code{TRUE} returns nested data_frame
 #'
-#' @return
+#' @return a `data_frame`
 #' @export
+#' @family biography
+#' @family players
 #' @import dplyr curl purrr jsonlite tidyr readr
 #' @importFrom glue glue
 #' @examples
@@ -319,21 +327,25 @@ get_player_profile <-
     all_data
   }
 
-#' Get NBA players profiles
+#' NBA.com player profiles
 #'
-#' Acquires NBA player profile information
+#' Returns NBA player profilies for specified
+#' players.
 #'
 #' @param player_ids numeric vector of player IDs
 #' @param players character vector of player names
 #' @param return_message if \code{TRUE} returns a message
 #' @param nest_data if \code{TRUE}
 #'
-#' @return
+#' @return a `data_frame`
 #' @export
 #' @import dplyr curl purrr jsonlite tidyr readr
 #' @importFrom glue glue
 #' @examples
-#' get_players_profiles(player_ids = c(203500, 1628384), players = c("Michael Jordan", "Caris LeVert", "Jarrett Allen"), nest_data = FALSE, return_message = TRUE)
+#' get_players_profiles(player_ids = c(203500, 1628384),
+#' players = c("Michael Jordan", "Caris LeVert", "Jarrett Allen"),
+#' nest_data = FALSE,
+#' return_message = TRUE)
 get_players_profiles <- function(players = NULL,
                                      player_ids = NULL,
                                      nest_data = F,
@@ -402,7 +414,21 @@ get_players_profiles <- function(players = NULL,
       ),
       everything()
     ) %>%
+    suppressMessages() %>%
+    suppressWarnings()
+
+  assign_nba_players()
+
+  all_data <-
+    all_data %>%
+    left_join(df_dict_nba_players %>% dplyr::select(idPlayer, matches("url"))) %>%
     suppressMessages()
+
+  if (all_data %>% tibble::has_name("datetimeBirth")) {
+    all_data <-
+      all_data %>%
+      dplyr::rename(dateBirth = datetimeBirth)
+  }
 
   if (nest_data) {
     all_data <-

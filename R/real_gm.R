@@ -464,21 +464,26 @@ parse_agent_urls <-
   }
 
 
-#' Get agents players
+#' Players Agents
+#'
+#' Acquires NBA players agents
 #'
 #' @param agents vector of agents
 #' @param all_agents if \code{TRUE} scrapes all agents
-#' @param message
+#' @param return_message if \code{TRUE} returns a message
 #'
-#' @return
+#' @return a  \code{data_frame}
 #' @export
+#' @family agents
 #' @import dplyr rvest stringr tidyr purrr xml2 readr magrittr
 #' @examples
+#' get_agents_players(agents = c("Jeff Schwartz"))
+#'
 get_agents_players <-
   function(agents = "Jeff Schwartz",
-           all_agents = T,
+           all_agents = F,
            return_message = FALSE) {
-    if (!all_agents & !agents %>% purrr::is_null()) {
+    if (!all_agents & agents %>% purrr::is_null()) {
       stop("Please enter agents")
     }
     if (!'df_all_agent_urls' %>% exists()) {
@@ -496,12 +501,8 @@ get_agents_players <-
     }
 
     all_data <-
-      parse_agent_urls(urls = urls) %>%
+      parse_agent_urls(urls = urls, return_message = return_message) %>%
       arrange(nameAgent)
-
-    df_all_agent_urls %>%
-      anti_join(all_data %>%
-      distinct(nameAgent))
 
     all_data
 
@@ -511,11 +512,16 @@ get_agents_players <-
 #'
 #' @param return_message if \code{TRUE} returns player url
 #'
-#' @return
+#' @return a `data_frame()`
 #' @export
+#' @family agents
 #' @import dplyr rvest stringr tidyr purrr xml2 readr magrittr curl
 #' @examples
-#' get_players_agents()
+#' library(dplyr)
+#' df_players_agents <-
+#'  get_players_agents()
+#' df_players_agents %>%
+#' glimpse()
 get_players_agents <-
   function(nest_data = F,
            return_message = T) {

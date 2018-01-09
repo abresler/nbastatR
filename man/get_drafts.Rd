@@ -2,7 +2,7 @@
 % Please edit documentation in R/drafts.R
 \name{get_drafts}
 \alias{get_drafts}
-\title{Get NBA Drafts}
+\title{NBA drafts}
 \usage{
 get_drafts(draft_years = 1947:2018, nest_data = F, return_message = T)
 }
@@ -13,9 +13,31 @@ get_drafts(draft_years = 1947:2018, nest_data = F, return_message = T)
 
 \item{return_message}{if \code{TRUE} returns message}
 }
+\value{
+a `data_frame`
+}
 \description{
-Acquires NBA draft data
+NBA draft data for specified sasons
 }
 \examples{
-get_drafts(draft_years = 2000:2018, nest_data = FALSE, return_message = TRUE)
+library(dplyr)
+df_drafts <-
+get_drafts(draft_years = 1983:2018, nest_data = FALSE, return_message = TRUE)
+
+## Where do top 5 picks since 1983 come from?
+
+df_drafts \%>\%
+filter(numberPickOverall <= 5) \%>\%
+count(nameOrganizationFrom, sort = T)
 }
+\seealso{
+Other draft: \code{\link{get_nbadraftnet_mock_drafts}},
+  \code{\link{get_years_draft_combines}}
+
+Other teams: \code{\link{get_seasons_rosters}},
+  \code{\link{get_teams_franchise_leaders}},
+  \code{\link{get_teams_players_seasons_summary_stats}},
+  \code{\link{get_teams_seasons_rankings}}
+}
+\concept{draft}
+\concept{teams}

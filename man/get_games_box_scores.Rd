@@ -43,3 +43,9 @@ Acquires specified box score type by game ID
 \examples{
 get_games_box_scores(game_ids = c(21700002, 21700003), box_score_types = c("Traditional", "Advanced", "Scoring", "Misc", "Usage", "Four Factors", "Tracking"), result_types = c("player", "team"), join_data = TRUE, assign_to_environment = TRUE, return_message = TRUE)
 }
+\seealso{
+Other game: \code{\link{get_game_logs}},
+  \code{\link{get_games_fanduel_summary}},
+  \code{\link{get_games_pbp_win_probablity}}
+}
+\concept{game}

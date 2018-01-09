@@ -2,7 +2,7 @@
 % Please edit documentation in R/bref_bio.R
 \name{get_bref_players_bios}
 \alias{get_bref_players_bios}
-\title{Basketball-Reference players bios}
+\title{Basketball Reference players bios}
 \usage{
 get_bref_players_bios(players = NULL, player_ids = NULL,
   assign_to_environment = T, return_message = T)
@@ -23,5 +23,24 @@ a \code{data_frame}
 Includes player bios, salaries, contracts and transactions
 }
 \examples{
-get_bref_players_bios( players = c("Jarrett Allen", "Mitch Richmond", "Michael Adams"),  player_ids = NULL, assign_to_environment = TRUE)
+\dontrun{
+get_bref_players_bios( players = c("Jarrett Allen", "Mitch Richmond", "Michael Adams"),
+player_ids = NULL,
+assign_to_environment = TRUE)
 }
+}
+\seealso{
+Other BREF: \code{\link{get_bref_coach_dictionary}},
+  \code{\link{get_bref_player_dictionary}},
+  \code{\link{get_bref_players_seasons}},
+  \code{\link{get_bref_team_dictionary}},
+  \code{\link{get_bref_teams_seasons}}
+
+Other player: \code{\link{get_players_awards}},
+  \code{\link{get_players_career_stats}},
+  \code{\link{get_players_tables_data}},
+  \code{\link{get_years_draft_combines}}
+}
+\concept{BREF}
+\concept{player}
+\concept{salarise}

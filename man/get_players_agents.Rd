@@ -9,9 +9,20 @@ get_players_agents(nest_data = F, return_message = T)
 \arguments{
 \item{return_message}{if \code{TRUE} returns player url}
 }
+\value{
+a `data_frame()`
+}
 \description{
 Get NBA Players Agents
 }
 \examples{
-get_players_agents()
+library(dplyr)
+df_players_agents <-
+ get_players_agents()
+df_players_agents \%>\%
+glimpse()
 }
+\seealso{
+Other agents: \code{\link{get_agents_players}}
+}
+\concept{agents}

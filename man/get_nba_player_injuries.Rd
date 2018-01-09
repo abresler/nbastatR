@@ -18,3 +18,10 @@ Returns information about NBA injured players
 \examples{
 get_nba_player_injuries()
 }
+\seealso{
+Other players: \code{\link{get_players_bios}},
+  \code{\link{get_seasons_metrics_league_leaders}},
+  \code{\link{get_teams_players_seasons_summary_stats}}
+}
+\concept{injuries}
+\concept{players}

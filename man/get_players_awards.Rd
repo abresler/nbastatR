@@ -20,8 +20,22 @@ get_players_awards(players = NULL, player_ids = NULL, nest_data = F,
 a \code{data_frame}
 }
 \description{
-NBA players awards
+Gets NBA awards for
+specified players
 }
 \examples{
-get_players_awards(players = c( "Charles Oakley", "Gary Melchionni"), player_ids = c(893, 76375), return_message = T, nest_data = F)
+get_players_awards(players = c( "Charles Oakley", "Gary Melchionni"),
+player_ids = c(893, 76375),
+return_message = T,
+ nest_data = F)
 }
+\seealso{
+Other player: \code{\link{get_bref_players_bios}},
+  \code{\link{get_players_career_stats}},
+  \code{\link{get_players_tables_data}},
+  \code{\link{get_years_draft_combines}}
+
+Other awards: \code{\link{get_bref_all_nba_teams}}
+}
+\concept{awards}
+\concept{player}

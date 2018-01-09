@@ -1,4 +1,3 @@
-# gdeltr2::load_needed_packages(c("purrr", "dplyr", "tidyr", "magrittr","stringr", "stringi", "requestsR", "curl", "tibble", "jsonlite", "readr", "rvest", "httr"))
 
 curl_json_to_vector <-
   function(url = "https://data.nba.net/prod/v1/2017/coaches.json") {
@@ -303,6 +302,9 @@ get_nba_current_season_schedule <-
 #' @return a \code{data_frames}
 #' @export
 #' @import tidyr curl jsonlite dplyr stringr
+#' @family Current data
+#' @family Coaching
+#' @family Roster information
 #' @examples
 #' get_coaching_staffs()
 get_coaching_staffs <-

@@ -25,3 +25,9 @@ Gets information about NBA teams salaries
 \examples{
 get_all_nba_teams_salaries(assume_player_opt_out = T, assume_team_doesnt_exercise = T, return_message = TRUE)
 }
+\seealso{
+Other salaries: \code{\link{get_hoops_hype_teams_salary_summary}},
+  \code{\link{get_nba_team_salaries}},
+  \code{\link{get_teams_hoopshype_salaries}}
+}
+\concept{salaries}

@@ -118,7 +118,7 @@ parse.bio <-
           node_text <-
             node %>% html_text() %>%
             stringi::stri_trans_general("Latin-ASCII") %>%
-            str_split("\\▪") %>%
+            str_split("\\.") %>%
             flatten_chr()
 
           node_text_single <-
@@ -536,7 +536,7 @@ get_bref_players_ids  <-
 
   }
 
-#' Basketball-Reference players bios
+#' Basketball Reference players bios
 #'
 #' Includes player bios, salaries, contracts and transactions
 #'
@@ -547,9 +547,16 @@ get_bref_players_ids  <-
 #'
 #' @return a \code{data_frame}
 #' @export
+#' @family BREF
+#' @family player
+#' @family salarise
 #'
 #' @examples
-#' get_bref_players_bios( players = c("Jarrett Allen", "Mitch Richmond", "Michael Adams"),  player_ids = NULL, assign_to_environment = TRUE)
+#' \dontrun{
+#' get_bref_players_bios( players = c("Jarrett Allen", "Mitch Richmond", "Michael Adams"),
+#' player_ids = NULL,
+#' assign_to_environment = TRUE)
+#' }
 get_bref_players_bios <-
   function(players = NULL,
            player_ids = NULL,

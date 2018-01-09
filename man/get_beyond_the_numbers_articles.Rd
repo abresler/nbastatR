@@ -2,7 +2,7 @@
 % Please edit documentation in R/random.R
 \name{get_beyond_the_numbers_articles}
 \alias{get_beyond_the_numbers_articles}
-\title{Get Beyond the Numbers articles}
+\title{NBA.com Beyond The Numbers Articles}
 \usage{
 get_beyond_the_numbers_articles(count_articles = 50)
 }
@@ -13,9 +13,15 @@ get_beyond_the_numbers_articles(count_articles = 50)
 a \code{data_frame}
 }
 \description{
-Get Beyond the Numbers articles
+Returns articles from beyond the numbers
 }
 \examples{
-
-get_beyond_the_numbers_articles(10)
+\dontrun{
+get_beyond_the_numbers_articles(count_aricles = 10)
 }
+}
+\seealso{
+Other news: \code{\link{get_players_roto_wire_news}},
+  \code{\link{get_teams_roto_wire_news}}
+}
+\concept{news}

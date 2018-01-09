@@ -256,10 +256,10 @@ get_team_season_info <-
 #' \item Playoffs
 #' \item Pre Season
 #' }
-#' @param nest_data
-#' @param return_message
+#' @param nest_data if `TRUE` nests data
+#' @param return_message if `TRUE` returns a message
 #'
-#' @return
+#' @return a `data_frame`
 #' @export
 #'
 #' @examples
@@ -621,7 +621,8 @@ get_team_table_data <-
 #' @export
 #'
 #' @examples
-#' get_teams_tables_data(teams = c("Brooklyn Nets", "New York Knicks"), seasons = 2017:2018, tables = c("splits", "shooting"), measures = "Base", modes = c("PerGame", "Totals"))
+#' get_teams_tables_data(teams = c("Brooklyn Nets", "New York Knicks"),
+#'  seasons = 2017:2018, tables = c("splits", "shooting"), measures = "Base", modes = c("PerGame", "Totals"))
 #'
 get_teams_tables_data <-
   function(teams = NULL,
@@ -928,30 +929,36 @@ get_team_shot_chart <-
 
 #' Get teams seasons shot charts
 #'
-#' @param teams
-#' @param team_ids
-#' @param all_active_teams
-#' @param season_types
-#' @param seasons
-#' @param measures
-#' @param periods
-#' @param months
-#' @param date_from
-#' @param date_to
-#' @param nest_data
-#' @param return_message
+#' @param teams vector of team names
+#' @param team_ids vector of team ids
+#' @param all_active_teams if `TRUE` returns all active teams
+#' @param season_types vector of season types options \itemize{
+#' \item Pre Season
+#' \item Regular Season
+#' \item Playoffs
+#' \item All Star
+#' }
+#' @param seasons vector of seasons
+#' @param measures vector of measures
+#' @param periods vector of periods
+#' @param months vector of months
+#' @param date_from date from
+#' @param date_to date to
+#' @param nest_data if `TRUE` nests data
+#' @param return_message if `TRUE` returns a message
 #'
 #' @return a \code{data_frame}
 #' @export
 #'
 #' @examples
-#' get_teams_seasons_shots(teams = "Brooklyn Nets", seasons = 2018)
+#' get_teams_seasons_shots(teams = "Brooklyn Nets",
+#' seasons = 2018)
 get_teams_seasons_shots <-
   function(teams = NULL ,
            team_ids = NULL,
            all_active_teams = F,
            season_types = "Regular Season",
-           seasons = 2017:2018,
+           seasons =  2018,
            measures = "FGA",
            periods = 0,
            months = 0,

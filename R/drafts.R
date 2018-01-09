@@ -54,20 +54,30 @@ get_nba_draft_year <-
 
   }
 
-#' Get NBA Drafts
+#' NBA drafts
 #'
-#' Acquires NBA draft data
+#' NBA draft data for specified sasons
 #'
 #' @param draft_years \code{vector} of draft years
 #' @param return_message if \code{TRUE} returns message
 #' @param nest_data if \code{TRUE} returns nested data frame
 #'
-#' @return
+#' @return a `data_frame`
+#' @family draft
+#' @family teams
 #' @export
 #' @import dplyr stringr jsonlite purrr tidyr curl
 #' @importFrom glue glue
 #' @examples
-#' get_drafts(draft_years = 2000:2018, nest_data = FALSE, return_message = TRUE)
+#' library(dplyr)
+#' df_drafts <-
+#' get_drafts(draft_years = 1983:2018, nest_data = FALSE, return_message = TRUE)
+#'
+#' ## Where do top 5 picks since 1983 come from?
+#'
+#' df_drafts %>%
+#' filter(numberPickOverall <= 5) %>%
+#' count(nameOrganizationFrom, sort = T)
 
 get_drafts <-
   function(draft_years = 1947:2018,

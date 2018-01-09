@@ -37,14 +37,6 @@ parse_out_set <-
 
   }
 
-#' get shot pct
-#'
-#' @param x
-#'
-#' @return
-#' @import stringr
-#'
-#' @examples
 get_shot_pct <- function(x) {
   shots <-
     x %>%
@@ -138,11 +130,15 @@ get_year_draft_combine <-
 #' @param nest_data if \code{TRUE} returns nested data_frame
 #'
 #' @return a \code{data_frame()}
+#' @family draft
+#' @family player
 #' @export
 #' @import dplyr stringr curl jsonlite lubridate purrr tidyr rlang
 #' @importFrom glue glue
 #' @examples
-#' get_years_draft_combines(years = c(2001:2018), nest_data = T)
+#' get_years_draft_combines(years = c(2001:2018),
+#' nest_data = T)
+
 get_years_draft_combines <-
   function(years = NULL,
            return_message = T,
@@ -164,7 +160,9 @@ get_years_draft_combines <-
     if (nest_data) {
       all_data <-
         all_data %>%
-        nest(-yearCombine, .key = 'dataCombine')
+        nest(-yearCombine, .key = 'dataCombine') %>%
+        mutate(countPlayers = dataCombine %>% map_dbl(nrow)) %>%
+        select(yearCombine, countPlayers, dataCombine)
     }
 
     all_data

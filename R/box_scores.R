@@ -120,6 +120,7 @@ get_box_score_type <-
 #' @param return_message if \code{TRUE} returns a message
 #'
 #' @return a \code{data_frame}
+#' @family game
 #' @export
 #' @import dplyr curl stringr lubridate readr magrittr tidyr httr purrr jsonlite
 #' @importFrom glue glue

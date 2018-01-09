@@ -2,7 +2,7 @@
 % Please edit documentation in R/player_profile.R
 \name{get_players_bios}
 \alias{get_players_bios}
-\title{Get Player bios}
+\title{NBA.com bios}
 \usage{
 get_players_bios(players = NULL, player_ids = NULL, nest_data = F,
   return_message = TRUE)
@@ -16,9 +16,22 @@ get_players_bios(players = NULL, player_ids = NULL, nest_data = F,
 
 \item{return_message}{if \code{TRUE} returns a message}
 }
+\value{
+a `data_frame`
+}
 \description{
-Seems to have ended after 2013-14 season
+Player biographies.
+}
+\details{
+Seems to only work for the 2013-14 season
 }
 \examples{
 get_players_bios(players = c("Carmelo Anthony", "Joe Johnson"))
 }
+\seealso{
+Other players: \code{\link{get_nba_player_injuries}},
+  \code{\link{get_seasons_metrics_league_leaders}},
+  \code{\link{get_teams_players_seasons_summary_stats}}
+}
+\concept{biography}
+\concept{players}

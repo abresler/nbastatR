@@ -39,15 +39,6 @@ parse_record <-
 
   }
 
-#' Parse Record columns
-#'
-#' @param data a \code{data_frame}
-#' @param record_names vecor of record_names
-#'
-#' @return
-#' @export
-#' @import glue dplyr purrr rlang stringr
-#' @examples
 parse_records <- function(data, record_names) {
   data <-
     record_names %>%
@@ -66,7 +57,7 @@ parse_records <- function(data, record_names) {
 
 # current -----------------------------------------------------------------
 
-#' Current NBA season standings
+#' Current standings
 #'
 #' Acquires current season's standings
 #'
@@ -74,7 +65,7 @@ parse_records <- function(data, record_names) {
 #'
 #' @return a `data_frame`
 #' @export
-#'
+#' @family standings
 #' @examples
 #' get_current_standings()
 get_current_standings <-
@@ -204,9 +195,9 @@ get_season_playoff_picture <-
     data
   }
 
-#' Get seasons playoff picture
+#' NBA seasons playoff picture
 #'
-#' Returns
+#' Returns playoff picture for specified seasons
 #'
 #' @param seasons vector of seasons
 #' @param include_include_numeric_records if \code{TRUE} parses records
@@ -214,12 +205,16 @@ get_season_playoff_picture <-
 #' @param nest_data if \code{TRUE} returns nested data frame
 #' @param return_message if \code{TRUE} returns a message
 #'
-#' @return a `data_Frame`
+#' @return a `data_frame`
+#' @family playoffs
 #' @export
 #' @import dplyr stringr curl jsonlite lubridate purrr tidyr rlang readr tibble
 #' @importFrom glue glue
 #' @examples
-#' get_seasons_playoff_picture(seasons = 2015:2018, assign_to_environment = T, include_numeric_records = T)
+#' get_seasons_playoff_picture(seasons = 2015:2018,
+#' assign_to_environment = T,
+#'  include_numeric_records = T)
+
 get_seasons_playoff_picture <-
   function(seasons = NULL,
            assign_to_environment = TRUE,
@@ -331,6 +326,7 @@ get_season_standings <-
 #' @export
 #' @import dplyr stringr curl jsonlite lubridate purrr tidyr rlang readr tibble
 #' @importFrom glue glue
+#' @family standings
 #' @examples
 #' get_seasons_standings(seasons = 2015:2018, season_types = "Regular Season", resolve_records = T, nest_data = F, return_message = T)
 get_seasons_standings <-

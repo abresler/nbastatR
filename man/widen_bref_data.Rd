@@ -9,6 +9,9 @@ widen_bref_data(data)
 \arguments{
 \item{data}{}
 }
+\value{
+a `data_frame`
+}
 \description{
 Widens basketball reference table data
 }

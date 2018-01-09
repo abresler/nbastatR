@@ -5,14 +5,17 @@
 \title{Assign nested BREF data to environment}
 \usage{
 assign_bref_data(data, type = "Players", widen_data = TRUE,
-  join_data = TRUE, nest_data = FALSE, assign_to_environment = TRUE)
+  include_all_nba = F, join_data = TRUE, nest_data = FALSE,
+  assign_to_environment = TRUE)
 }
 \arguments{
 \item{data}{a \code{data_frame} of tables}
 
-\item{type}{type of BREF data}
+\item{type}{type of BREF data are `teams` and `players`}
 
 \item{widen_data}{if \code{TRUE} widens data}
+
+\item{include_all_nba}{if `TRUE` include all NBA teams}
 
 \item{join_data}{if \code{TRUE} joins tables}
 

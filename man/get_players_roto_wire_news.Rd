@@ -2,7 +2,7 @@
 % Please edit documentation in R/random.R
 \name{get_players_roto_wire_news}
 \alias{get_players_roto_wire_news}
-\title{Get players RotoWire news}
+\title{Players RotoWire news}
 \usage{
 get_players_roto_wire_news(players = NULL, player_ids = NULL,
   nest_data = F, results = 50, return_message = TRUE)
@@ -28,3 +28,8 @@ players.
 \examples{
 get_players_roto_wire_news(players = c( "Jarrett Allen", "DeMarre Carroll", "Allen Crabbe"))
 }
+\seealso{
+Other news: \code{\link{get_beyond_the_numbers_articles}},
+  \code{\link{get_teams_roto_wire_news}}
+}
+\concept{news}

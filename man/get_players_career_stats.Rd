@@ -2,16 +2,16 @@
 % Please edit documentation in R/player_career_stats.R
 \name{get_players_career_stats}
 \alias{get_players_career_stats}
-\title{NBA players career stats}
+\title{Player career stats}
 \usage{
-get_players_career_stats(player_ids = NULL, players = NULL,
+get_players_career_stats(players = NULL, player_ids = NULL,
   modes = c("PerGame", "Totals"), assign_to_environment = TRUE,
   add_mode_names = TRUE, return_message = TRUE)
 }
 \arguments{
-\item{player_ids}{\code{vector} of NBA Player IDs}
-
 \item{players}{\code{NULL} or \code{vector} of NBA players}
+
+\item{player_ids}{\code{vector} of NBA Player IDs}
 
 \item{modes}{\code{vector} of items that can include \itemize{
 \item Totals
@@ -30,8 +30,18 @@ with a name starting with data}
 a \code{data_frame}
 }
 \description{
-Get NBA Players Summary Statistics by Mode
+NBA player career statistics for
+specified players and inputs
 }
 \examples{
-get_players_career_stats(players = c("Joe Harris", "Myles Turner"), modes = c("Totals", "PerGame"))
+get_players_career_stats(players = c("Joe Harris", "Myles Turner", "Spencer Dinwiddie"),
+modes = c("Totals", "PerGame"))
 }
+\seealso{
+Other player: \code{\link{get_bref_players_bios}},
+  \code{\link{get_players_awards}},
+  \code{\link{get_players_tables_data}},
+  \code{\link{get_years_draft_combines}}
+}
+\concept{player}
+\concept{summary stats}

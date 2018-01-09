@@ -5,12 +5,39 @@
 \title{Get teams seasons shot charts}
 \usage{
 get_teams_seasons_shots(teams = NULL, team_ids = NULL,
-  all_active_teams = F, season_types = "Regular Season",
-  seasons = 2017:2018, measures = "FGA", periods = 0, months = 0,
-  date_from = NA, date_to = NA, nest_data = F, return_message = T)
+  all_active_teams = F, season_types = "Regular Season", seasons = 2018,
+  measures = "FGA", periods = 0, months = 0, date_from = NA,
+  date_to = NA, nest_data = F, return_message = T)
 }
 \arguments{
-\item{return_message}{}
+\item{teams}{vector of team names}
+
+\item{team_ids}{vector of team ids}
+
+\item{all_active_teams}{if `TRUE` returns all active teams}
+
+\item{season_types}{vector of season types options \itemize{
+\item Pre Season
+\item Regular Season
+\item Playoffs
+\item All Star
+}}
+
+\item{seasons}{vector of seasons}
+
+\item{measures}{vector of measures}
+
+\item{periods}{vector of periods}
+
+\item{months}{vector of months}
+
+\item{date_from}{date from}
+
+\item{date_to}{date to}
+
+\item{nest_data}{if `TRUE` nests data}
+
+\item{return_message}{if `TRUE` returns a message}
 }
 \value{
 a \code{data_frame}
@@ -19,5 +46,6 @@ a \code{data_frame}
 Get teams seasons shot charts
 }
 \examples{
-get_teams_seasons_shots(teams = "Brooklyn Nets", seasons = 2018)
+get_teams_seasons_shots(teams = "Brooklyn Nets",
+seasons = 2018)
 }

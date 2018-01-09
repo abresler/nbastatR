@@ -2,7 +2,7 @@
 % Please edit documentation in R/random.R
 \name{get_teams_roto_wire_news}
 \alias{get_teams_roto_wire_news}
-\title{Teams roto wire news}
+\title{Teams Rotowire news}
 \usage{
 get_teams_roto_wire_news(teams = NULL, team_ids = NULL,
   all_active_teams = F, nest_data = F, results = 50,
@@ -30,3 +30,8 @@ Returns roto wire news for specified teams.
 \examples{
 get_teams_roto_wire_news(teams = "Brooklyn Nets")
 }
+\seealso{
+Other news: \code{\link{get_beyond_the_numbers_articles}},
+  \code{\link{get_players_roto_wire_news}}
+}
+\concept{news}

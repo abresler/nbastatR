@@ -6,9 +6,13 @@
 \usage{
 get_nba_transactions(include_history = T)
 }
+\value{
+a `data_frame`
+}
 \description{
 Acquires all NBA transctations since 2012
 }
 \examples{
 get_nba_transactions()
 }
+\concept{transactions}

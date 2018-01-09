@@ -2,7 +2,7 @@
 % Please edit documentation in R/hoops_hype_functions.R
 \name{get_hoops_hype_teams_salary_summary}
 \alias{get_hoops_hype_teams_salary_summary}
-\title{Get HoopsHype NBA teams salaries}
+\title{HoopsHype NBA teams summary salaries}
 \usage{
 get_hoops_hype_teams_salary_summary(spread_data = F, return_message = T)
 }
@@ -20,3 +20,12 @@ Gets all team salary summaries from HoopsHype
 \examples{
 get_hoops_hype_teams_salary_summary(spread_data = TRUE)
 }
+\seealso{
+Other hoopshype: \code{\link{get_teams_hoopshype_salaries}}
+
+Other salaries: \code{\link{get_all_nba_teams_salaries}},
+  \code{\link{get_nba_team_salaries}},
+  \code{\link{get_teams_hoopshype_salaries}}
+}
+\concept{hoopshype}
+\concept{salaries}

@@ -139,7 +139,7 @@ get_basketball_insider_team_ids <- function() {
       )
     ) %>%
     suppressMessages()
-  return(data)
+  data
 }
 
 #' NBA team salary
@@ -156,6 +156,7 @@ get_basketball_insider_team_ids <- function() {
 #' @return a `data_frame`
 #' @export
 #' @import dplyr rvest stringr purrr tidyr readr
+#' @family salaries
 #' @examples
 #' get_nba_team_salaries(team_name = "Brooklyn Nets")
 get_nba_team_salaries <-
@@ -294,7 +295,7 @@ get_nba_team_salaries <-
 
     salary_data <-
       salary_data %>%  mutate_if(is.character,
-                funs(. %>% str_replace_all("\\\\", "") %>% str_trim()))
+                                 funs(. %>% str_replace_all("\\\\", "") %>% str_trim()))
 
 
     year_1_salary <-
@@ -501,9 +502,9 @@ get_nba_team_salaries <-
 
     if (spread_data) {
       all_data <-
-      all_data %>%
-      select(nameTeam, namePlayer, slugSeason, value) %>%
-      spread(slugSeason, value)
+        all_data %>%
+        select(nameTeam, namePlayer, slugSeason, value) %>%
+        spread(slugSeason, value)
     }
     all_data
   }
@@ -519,6 +520,7 @@ get_nba_team_salaries <-
 #'
 #' @return a `data_frame`
 #' @export
+#' @family salaries
 #' @import dplyr rvest stringr purrr tidyr readr
 #' @examples
 #' get_all_nba_teams_salaries(assume_player_opt_out = T, assume_team_doesnt_exercise = T, return_message = TRUE)

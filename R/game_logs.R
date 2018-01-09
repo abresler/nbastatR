@@ -226,6 +226,7 @@ get_season_gamelog <-
 #' @param ...
 #'
 #' @return a `data_frame`
+#' @family game
 #' @export
 #' @import dplyr jsonlite purrr stringr lubridate magrittr tidyr tibble httr
 #' @importFrom  glue glue
@@ -458,7 +459,8 @@ get_season_schedule <-
         ) %>%
         mutate(isTeamWinner = if_else(slugTeamWinner == slugTeam, TRUE, FALSE)) %>%
         suppressMessages() %>%
-        dplyr::select(typeSeason:idGame, slugTeam, isTeamWinner, everything())
+        dplyr::select(typeSeason, slugSeason, dateGame, idGame, numberGameDay,
+                      slugTeam, isTeamWinner, everything())
     }
 
     data
@@ -475,6 +477,7 @@ get_season_schedule <-
 #' @param nest_data if `TRUE` nests thedata
 #'
 #' @return a \code{data_frame()}
+#' @family schedule
 #' @export
 #' @import dplyr jsonlite purrr stringr lubridate magrittr tidyr tibble httr
 #' @importFrom  glue glue
@@ -532,77 +535,6 @@ get_seasons_schedule <-
 
 
 # seasons_players ---------------------------------------------------------
-#' Get NBA Player Dictionary
-#'
-#' @param return_message
-#' @param ...
-#'
-#' @return
-#' @export
-#' @import dplyr jsonlite purrr stringr lubridate magrittr tidyr tibble httr
-#' @importFrom  glue glue
-#' @examples
-get_seasons_players <-
-  function(return_message = TRUE,
-           ...) {
-    table_id <- 1
-    URL <- gen_url("commonallplayers")
-    params <- list(
-      LeagueID = "00",
-      SeasonType = "",
-      Season = "2017-18",
-      IsOnlyCurrentSeason = "0",
-      PlayerID = "",
-      TeamID = "",
-      GameID = "",
-      ContextMeasure = "",
-      PlayerPosition = "",
-      DateFrom = "",
-      DateTo = "",
-      GameSegment = "",
-      LastNGames = "",
-      Location = "",
-      Month = "",
-      OpponentTeamID = "",
-      Outcome = "",
-      SeasonSegment = "",
-      VSConference = "",
-      VSDivision = "",
-      RookieYear = "",
-      Period = "",
-      StartPeriod = "",
-      EndPeriod = ""
-    )
-    params <- utils::modifyList(params, list(...))
-
-    nba_h <- get_nba_headers()
-
-    resp <-
-      httr::GET(url = URL, query = params, nba_h) %>%
-      httr::content("text", encoding = "UTF-8")
-    json <-
-      resp %>% jsonlite::fromJSON(simplifyVector = T)
-
-    data <-
-      json %>%
-      nba_json_to_df(table_id = table_id)
-
-    closeAllConnections()
-    data
-  }
-
-
-
-#' NBA seasons teams
-#'
-#' @param return_message if
-#' @param ...
-#'
-#' @return a `data_frame`
-#' @export
-#'
-#' @examples
-#' get_seasons_teams()
 get_seasons_teams <-
   function(return_message = TRUE,
            ...) {
@@ -648,9 +580,9 @@ get_seasons_teams <-
       json %>%
       nba_json_to_df(table_id = table_id) %>%
       mutate(isActive = ifelse(slugTeam %>% is.na(), F, T)) %>%
-      dplyr::select(-one_of("idLeague")) %>%
       select(isActive, slugTeam, idTeam, everything()) %>%
-      arrange(slugTeam)
+      arrange(slugTeam) %>%
+      suppressWarnings()
 
     closeAllConnections()
     data
@@ -763,25 +695,39 @@ get_season_roster <-
   }
 
 
-#' Get seasons rosters
+#' NBA teams seasons rosters
 #'
-#' Returns rosters for each team of a specified season
+#' Rosters for each team of specified seasons
 #'
 #' @param seasons vector of seasons
 #' @param return_message if \code{TRUE} returns a message
 #' @param nest_data if \code{TRUE} nests data
 #'
 #' @return a `date_frame`
+#' @family teams
+#' @family rosters
 #' @export
 #' @import dplyr jsonlite purrr stringr lubridate magrittr tidyr tibble httr
 #' @importFrom glue glue
 #' @examples
-#' get_seasons_rosters(2018)
+#' library(nbastatR)
+#' library(dplyr)
+#' df_rosters <- get_seasons_rosters(2015:2018)
+#'
+#' ### Mean Age by Season and Team
+#' df_rosters %>%
+#' group_by(slugSeason, slugTeam) %>%
+#' summarise(ageMean = mean(agePlayer)) %>%
+#' arrange(ageMean) %>%
+#' ungroup()
 
 get_seasons_rosters <-
-  function(seasons = 2000:2018,
+  function(seasons = NULL,
            return_message = TRUE,
            nest_data = F) {
+    if (seasons %>% purrr::is_null()) {
+      stop("Enter seasons")
+    }
     get_season_roster_safe <-
       purrr::possibly(get_season_roster, data_frame())
 
@@ -791,18 +737,12 @@ get_seasons_rosters <-
         get_season_roster_safe(season = season, return_message = return_message)
       })
 
-    if (!'df_nba_player_dict' %>% exists()) {
-      df_nba_player_dict <-
-        get_nba_players()
-
-      assign(x = 'df_nba_player_dict', df_nba_player_dict, envir = .GlobalEnv)
-    }
+    assign_nba_players()
 
     all_data <-
       all_data %>%
       left_join(df_nba_player_dict %>% select(idPlayer, matches("url"))) %>%
-      suppressMessages() %>%
-      m
+      suppressMessages()
 
     if (nest_data) {
       all_data <-

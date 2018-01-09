@@ -2,13 +2,33 @@
 % Please edit documentation in R/bref.R
 \name{get_bref_coach_dictionary}
 \alias{get_bref_coach_dictionary}
-\title{Basketball Reference Coach Dictionary}
+\title{Basketball Reference coach dictionary}
 \usage{
 get_bref_coach_dictionary()
 }
+\value{
+a `data_frame`
+}
 \description{
-Basketball Reference Coach Dictionary
+Basketball Reference coach dictionary
 }
 \examples{
 get_bref_coach_dictionary()
 }
+\seealso{
+Other dictionary: \code{\link{assign_nba_players}},
+  \code{\link{assign_nba_teams}},
+  \code{\link{get_bref_player_dictionary}},
+  \code{\link{get_bref_team_dictionary}}
+
+Other BREF: \code{\link{get_bref_player_dictionary}},
+  \code{\link{get_bref_players_bios}},
+  \code{\link{get_bref_players_seasons}},
+  \code{\link{get_bref_team_dictionary}},
+  \code{\link{get_bref_teams_seasons}}
+
+Other Coaching: \code{\link{get_coaching_staffs}}
+}
+\concept{BREF}
+\concept{Coaching}
+\concept{dictionary}

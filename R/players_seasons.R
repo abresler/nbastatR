@@ -53,13 +53,13 @@ get_nba_season_players <-
   }
 
 
-#' Get Season's Players
+#' Seasons players
 #'
 #' @param seasons numeric vector of seasons
 #' @param nest_data  if \code{TRUE} returns a nested data_frame
 #' @param return_message  if \code{TRUE} return message
 #'
-#' @return
+#' @return a `data_frame`
 #' @export
 #' @import dplyr purrr readr jsonlite tidyr curl
 #' @importFrom glue glue

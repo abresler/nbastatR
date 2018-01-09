@@ -2,7 +2,7 @@
 % Please edit documentation in R/hoops_hype_functions.R
 \name{get_teams_hoopshype_salaries}
 \alias{get_teams_hoopshype_salaries}
-\title{HoopsHype teams players salaries}
+\title{Hoopshype teams players salaries}
 \usage{
 get_teams_hoopshype_salaries(teams = NULL, all_teams = TRUE,
   assume_player_opt_out = T, assume_team_doesnt_exercise = T,
@@ -25,8 +25,25 @@ get_teams_hoopshype_salaries(teams = NULL, all_teams = TRUE,
 a `data_frame`
 }
 \description{
-gets detailed player salaries from HoopsHype
+Detailed salaries for each player and
+team from hoopshype
 }
 \examples{
-get_teams_hoopshype_salaries(all_teams = TRUE, nest_data = F, return_message = T)
+library(dplyr)
+df_salaries <-
+get_teams_hoopshype_salaries(all_teams = TRUE,
+ nest_data = F, return_message = T)
+ ## By Expiring Salary Type and Team
+ df_salaries \%>\% group_by(slugSeason,  nameTeam, isFinalSeason) \%>\%
+ summarise(expiringSalaries = sum(amountContractMil, na.rm = T) / 1000000) \%>\%
+ arrange(nameTeam)
 }
+\seealso{
+Other hoopshype: \code{\link{get_hoops_hype_teams_salary_summary}}
+
+Other salaries: \code{\link{get_all_nba_teams_salaries}},
+  \code{\link{get_hoops_hype_teams_salary_summary}},
+  \code{\link{get_nba_team_salaries}}
+}
+\concept{hoopshype}
+\concept{salaries}

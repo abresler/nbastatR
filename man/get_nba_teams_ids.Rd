@@ -2,7 +2,7 @@
 % Please edit documentation in R/new_ish.R
 \name{get_nba_teams_ids}
 \alias{get_nba_teams_ids}
-\title{Get NBA Team IDs}
+\title{NBA team ids}
 \usage{
 get_nba_teams_ids(teams = NULL, team_ids = NULL, all_active_teams = F)
 }
@@ -11,9 +11,16 @@ get_nba_teams_ids(teams = NULL, team_ids = NULL, all_active_teams = F)
 
 \item{team_ids}{vector of team ids}
 }
+\value{
+a `data_frame`
+}
 \description{
-Get NBA Team IDs
+Resolve NBA team ID
 }
 \examples{
 get_nba_teams_ids(teams = c("Brooklyn Nets", "Denver Nuggets"))
 }
+\seealso{
+Other ids: \code{\link{get_nba_players_ids}}
+}
+\concept{ids}

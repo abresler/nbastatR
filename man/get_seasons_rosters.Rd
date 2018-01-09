@@ -2,10 +2,9 @@
 % Please edit documentation in R/game_logs.R
 \name{get_seasons_rosters}
 \alias{get_seasons_rosters}
-\title{Get seasons rosters}
+\title{NBA teams seasons rosters}
 \usage{
-get_seasons_rosters(seasons = 2000:2018, return_message = TRUE,
-  nest_data = F)
+get_seasons_rosters(seasons = NULL, return_message = TRUE, nest_data = F)
 }
 \arguments{
 \item{seasons}{vector of seasons}
@@ -18,8 +17,28 @@ get_seasons_rosters(seasons = 2000:2018, return_message = TRUE,
 a `date_frame`
 }
 \description{
-Returns rosters for each team of a specified season
+Rosters for each team of specified seasons
 }
 \examples{
-get_seasons_rosters(2018)
+library(nbastatR)
+library(dplyr)
+df_rosters <- get_seasons_rosters(2015:2018)
+
+### Mean Age by Season and Team
+df_rosters \%>\%
+group_by(slugSeason, slugTeam) \%>\%
+summarise(ageMean = mean(agePlayer)) \%>\%
+arrange(ageMean) \%>\%
+ungroup()
 }
+\seealso{
+Other teams: \code{\link{get_drafts}},
+  \code{\link{get_teams_franchise_leaders}},
+  \code{\link{get_teams_players_seasons_summary_stats}},
+  \code{\link{get_teams_seasons_rankings}}
+
+Other rosters: \code{\link{get_seasons_teams_rosters}},
+  \code{\link{get_team_season_roster}}
+}
+\concept{rosters}
+\concept{teams}

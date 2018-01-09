@@ -2,7 +2,7 @@
 % Please edit documentation in R/teams_rosters_history.R
 \name{get_seasons_teams_coaches}
 \alias{get_seasons_teams_coaches}
-\title{Get Seaons Coaching Staffs}
+\title{Seasons coaching staffs}
 \usage{
 get_seasons_teams_coaches(seasons = 1990:2018, nest_data = F,
   return_message = T)
@@ -14,9 +14,12 @@ get_seasons_teams_coaches(seasons = 1990:2018, nest_data = F,
 
 \item{return_message}{if \code{TRUE} returns a message}
 }
+\value{
+a `data_frame`
+}
 \description{
-Get Seaons Coaching Staffs
+Gets coaching staffs for specified seasons
 }
 \examples{
-get_seasons_teams_coaches(1990:1992)
+get_seasons_teams_coaches(2018)
 }

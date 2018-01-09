@@ -2,7 +2,7 @@
 % Please edit documentation in R/play_by_play.R
 \name{get_games_pbp_win_probablity}
 \alias{get_games_pbp_win_probablity}
-\title{Get Win Probabilities for NBA Game IDs}
+\title{NBA games win probabilities}
 \usage{
 get_games_pbp_win_probablity(game_ids = c(21700002, 21700003),
   nest_data = FALSE, filter_non_plays = FALSE, return_message = TRUE)
@@ -18,10 +18,24 @@ get_games_pbp_win_probablity(game_ids = c(21700002, 21700003),
 }
 \value{
 a \code{data_frame}
+
+a `data_frame`
 }
 \description{
-Get Win Probabilities for NBA Game IDs
+Gets nba in-game win probabilities
+for specified game ids
 }
 \examples{
-get_games_pbp_win_probablity(game_ids = c(21700002, 21700005), filter_non_plays = T, nest_data = FALSE, return_message = TRUE)
+get_games_pbp_win_probablity(game_ids = c(21700002, 21700005), filter_non_plays = T,
+nest_data = FALSE,
+return_message = TRUE)
 }
+\seealso{
+Other game: \code{\link{get_game_logs}},
+  \code{\link{get_games_box_scores}},
+  \code{\link{get_games_fanduel_summary}}
+
+Other season: \code{\link{get_games_fanduel_summary}}
+}
+\concept{game}
+\concept{season}

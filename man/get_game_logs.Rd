@@ -40,3 +40,9 @@ NBA game logs for specified parameters
 \examples{
 get_game_logs(seasons = 2017:2018, result_types = c("team", "player"))
 }
+\seealso{
+Other game: \code{\link{get_games_box_scores}},
+  \code{\link{get_games_fanduel_summary}},
+  \code{\link{get_games_pbp_win_probablity}}
+}
+\concept{game}

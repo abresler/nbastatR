@@ -43,3 +43,12 @@ Basketball Reference Player Season Tables
 \examples{
 get_bref_players_seasons(seasons = 2017:2018, tables = c("advanced", "totals"))
 }
+\seealso{
+Other BREF: \code{\link{get_bref_coach_dictionary}},
+  \code{\link{get_bref_player_dictionary}},
+  \code{\link{get_bref_players_bios}},
+  \code{\link{get_bref_team_dictionary}},
+  \code{\link{get_bref_teams_seasons}}
+}
+\concept{BREF}
+\concept{player statistics}

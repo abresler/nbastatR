@@ -1,9 +1,9 @@
 
+
 get_nba_player_career_stats <-
   function(player_id = 1628386,
            mode = "Totals",
            return_message = TRUE) {
-
     if (player_id %>% purrr::is_null()) {
       stop("Please enter an NBA player ID")
     }
@@ -23,12 +23,13 @@ get_nba_player_career_stats <-
     if (return_message) {
       glue::glue("Acquiring {player} career {mode} statistic tables") %>% message()
     }
-    mode_options <- c('Totals', 'PerGame', "Per36") %>% str_to_upper()
-  mode_slug <- str_to_upper(mode)
+    mode_options <-
+      c('Totals', 'PerGame', "Per36") %>% str_to_upper()
+    mode_slug <- str_to_upper(mode)
 
-  if (!mode_slug %in% mode_options) {
-    stop("Mode can only be Totals, PerGame or Per36")
-  }
+    if (!mode_slug %in% mode_options) {
+      stop("Mode can only be Totals, PerGame or Per36")
+    }
 
     url <-
       glue::glue(
@@ -68,10 +69,12 @@ get_nba_player_career_stats <-
           data %>%
           purrr::set_names(actual_names) %>%
           munge_nba_data() %>%
-          mutate(modeSearch = mode,
-                 nameTable = table_name,
-                 idPlayer = player_id,
-                 namePlayer = player) %>%
+          mutate(
+            modeSearch = mode,
+            nameTable = table_name,
+            idPlayer = player_id,
+            namePlayer = player
+          ) %>%
           select(nameTable, modeSearch, namePlayer, everything())
 
         if (data %>% tibble::has_name("slugSeason")) {
@@ -106,13 +109,14 @@ get_nba_player_career_stats <-
     all_data
   }
 
-#' NBA players career stats
+#' Player career stats
 #'
-#' Get NBA Players Summary Statistics by Mode
+#' NBA player career statistics for
+#' specified players and inputs
 #'
 #'
-#' @param player_ids \code{vector} of NBA Player IDs
 #' @param players \code{NULL} or \code{vector} of NBA players
+#' @param player_ids \code{vector} of NBA Player IDs
 #' @param modes \code{vector} of items that can include \itemize{
 #' \item Totals
 #' \item PerGame
@@ -126,18 +130,21 @@ get_nba_player_career_stats <-
 #' @return a \code{data_frame}
 #' @export
 #' @importFrom glue glue
+#' @family player
+#' @family summary stats
 #' @import jsonlite dplyr purrr tibble stringr tidyr curl
 #' @examples
-#' get_players_career_stats(players = c("Joe Harris", "Myles Turner"), modes = c("Totals", "PerGame"))
+#' get_players_career_stats(players = c("Joe Harris", "Myles Turner", "Spencer Dinwiddie"),
+#' modes = c("Totals", "PerGame"))
 
 get_players_career_stats <-
-  function(player_ids = NULL,
-           players = NULL,
+  function(players = NULL,
+           player_ids = NULL,
            modes = c("PerGame", "Totals"),
            assign_to_environment = TRUE,
            add_mode_names = TRUE,
-           return_message = TRUE){
-    if (modes %>% purrr::is_null()){
+           return_message = TRUE) {
+    if (modes %>% purrr::is_null()) {
       stop("Please enter a valid mode")
     }
     ids <- c()
@@ -149,7 +156,6 @@ get_players_career_stats <-
     }
 
     if (!players %>% purrr::is_null()) {
-
       players_search <-
         get_nba_players_ids(players = players)
 
@@ -163,8 +169,11 @@ get_players_career_stats <-
     }
 
     df_input <-
-      expand.grid(player_id = ids %>% unique() %>% sort(),
-                  mode = modes, stringsAsFactors = F) %>%
+      expand.grid(
+        player_id = ids %>% unique() %>% sort(),
+        mode = modes,
+        stringsAsFactors = F
+      ) %>%
       dplyr::as_data_frame()
 
 
@@ -185,9 +194,11 @@ get_players_career_stats <-
       })
 
     if (assign_to_environment) {
-      assign_tables_modes(all_data = all_data,
-                          stat_type = "Player",
-                          add_mode_names = add_mode_names)
+      assign_tables_modes(
+        all_data = all_data,
+        stat_type = "Player",
+        add_mode_names = add_mode_names
+      )
     }
 
     all_data

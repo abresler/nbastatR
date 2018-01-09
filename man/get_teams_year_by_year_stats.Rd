@@ -2,7 +2,7 @@
 % Please edit documentation in R/team_tables.R
 \name{get_teams_year_by_year_stats}
 \alias{get_teams_year_by_year_stats}
-\title{NBA Year-over-year franchise history}
+\title{NBA teams yearly performance}
 \usage{
 get_teams_year_by_year_stats(teams = NULL, team_ids = NULL,
   all_active_teams = T, season_types = c("Regular Season"),
@@ -35,8 +35,11 @@ get_teams_year_by_year_stats(teams = NULL, team_ids = NULL,
 a \code{data_frame}
 }
 \description{
-NBA Year-over-year franchise history
+NBA teams yearly performance
 }
 \examples{
-get_teams_year_by_year_stats(all_active_teams = T, modes = c("Totals"), return_message = TRUE, nest_data =F)
+get_teams_year_by_year_stats(all_active_teams = T,
+modes = c("Totals"),
+return_message = TRUE,
+ nest_data =F)
 }

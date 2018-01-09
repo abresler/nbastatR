@@ -20,5 +20,17 @@ a \code{data_frame()}
 Acquires NBA draft combine data
 }
 \examples{
-get_years_draft_combines(years = c(2001:2018), nest_data = T)
+get_years_draft_combines(years = c(2001:2018),
+nest_data = T)
 }
+\seealso{
+Other draft: \code{\link{get_drafts}},
+  \code{\link{get_nbadraftnet_mock_drafts}}
+
+Other player: \code{\link{get_bref_players_bios}},
+  \code{\link{get_players_awards}},
+  \code{\link{get_players_career_stats}},
+  \code{\link{get_players_tables_data}}
+}
+\concept{draft}
+\concept{player}

@@ -2,7 +2,7 @@
 % Please edit documentation in R/standings.R
 \name{get_current_standings}
 \alias{get_current_standings}
-\title{Current NBA season standings}
+\title{Current standings}
 \usage{
 get_current_standings(return_message = TRUE)
 }
@@ -18,3 +18,7 @@ Acquires current season's standings
 \examples{
 get_current_standings()
 }
+\seealso{
+Other standings: \code{\link{get_seasons_standings}}
+}
+\concept{standings}

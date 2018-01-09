@@ -26,64 +26,15 @@ munge_seasons <-
     df
   }
 
-#' Basketball Reference Player Dictionary
+#' Basketball Reference coach dictionary
 #'
-#' Basketball reference player dictionary
-#'
-#' @return
+#' @return a `data_frame`
 #' @export
 #' @import dplyr purrr readr stringr
 #' @importFrom glue glue
-#' @examples
-#' get_bref_player_dictionary()
-get_bref_player_dictionary <-
-  function() {
-    data <-
-      "https://d2cwpp38twqe55.cloudfront.net/short/inc/players_search_list.csv" %>%
-      read_csv(col_names = F) %>%
-      purrr::set_names(c("slugPlayerBREF", "namePlayer", "slugSeasons", "isActivePlayer")) %>%
-      mutate(isActivePlayer = isActivePlayer %>% as.logical()) %>%
-      suppressWarnings() %>%
-      suppressMessages()
-
-    data <-
-      data %>%
-      mutate(
-        urlPlayerBREF = glue::glue(
-          "https://www.basketball-reference.com/players/{slugPlayerBREF %>% substr(1, 1)}/{slugPlayerBREF}.html"
-        ) %>% as.character()
-      )
-
-    data <-
-      data %>%
-      mutate(slugSeasons = ifelse(slugSeasons == "-", NA, slugSeasons))
-
-   seasons <-
-     data %>%
-     filter(!is.na(slugSeasons)) %>%
-     distinct(slugSeasons) %>%
-     pull(slugSeasons)
-
-   df_seasons <-
-     seasons %>%
-     map_df(function(season){
-         munge_seasons(season = season)
-     })
-
-    data <-
-      data %>%
-      left_join(df_seasons) %>%
-      select(namePlayer, slugPlayerBREF, isActivePlayer, slugSeasons, seasonFirst, seasonLast, everything()) %>%
-    suppressMessages()
-    data
-  }
-
-#' Basketball Reference Coach Dictionary
-#'
-#' @return
-#' @export
-#' @import dplyr purrr readr stringr
-#' @importFrom glue glue
+#' @family dictionary
+#' @family BREF
+#' @family Coaching
 #' @examples
 #' get_bref_coach_dictionary()
 get_bref_coach_dictionary <-
@@ -128,14 +79,15 @@ get_bref_coach_dictionary <-
     data
   }
 
-#' BREF Team Dictionary
+#' Basketball Reference team dictionary
 #'
-#' Basketball Reference Team Dictionary
 #'
-#' @return
+#' @return a `data_frame`
 #' @export
 #' @import dplyr purrr readr stringr
 #' @importFrom glue glue
+#' @family dictionary
+#' @family BREF
 #' @examples
 #' get_bref_team_dictionary()
 get_bref_team_dictionary <-
@@ -349,7 +301,7 @@ get_bref_name_df <- function() {
 #'
 #' @param data
 #'
-#' @return
+#' @return a `data_frame`
 #' @export
 #' @import dplyr stringr tidyr
 #'
@@ -525,15 +477,23 @@ assign.bref.teams <-
         all_data %>%
         filter(nameTable %in% c("PerGame", "Totals", "PerPoss", 'Misc', "Shooting")) %>%
         select(dataTable) %>%
-        purrr::flatten() %>%
-        purrr::reduce(left_join)
+        purrr::flatten()
+
+      df_tables_joined <-
+        df_tables_joined %>%
+        purrr::reduce(left_join) %>%
+        suppressMessages()
 
       df_standings <-
         all_data %>%
         filter(nameTable %in% c("StandingsConf", "StandingsDiv")) %>%
         select(dataTable) %>%
-        purrr::flatten() %>%
-        purrr::reduce(left_join)
+        purrr::flatten()
+
+      df_standings <-
+        df_standings %>%
+        purrr::reduce(left_join) %>%
+        suppressMessages()
 
       df_tables_joined <-
         df_standings %>%
@@ -578,7 +538,9 @@ assign.bref.teams <-
   }
 
 assign.bref.players <-
-  function(all_data, widen_data = TRUE, join_data = FALSE, assign_to_environment = TRUE) {
+  function(all_data, widen_data = TRUE, join_data = FALSE,
+           include_all_nba = F,
+           assign_to_environment = TRUE) {
 
     if (!all_data %>% tibble::has_name("typeData")) {
       return(all_data)
@@ -754,11 +716,12 @@ assign.bref.players <-
 #' Assign nested BREF data to environment
 #'
 #' @param data a \code{data_frame} of tables
-#' @param type type of BREF data
+#' @param type type of BREF data are `teams` and `players`
 #' @param widen_data if \code{TRUE} widens data
 #' @param join_data if \code{TRUE} joins tables
 #' @param nest_data if \code{TRUE} nests data
 #' @param assign_to_environment if \code{TRUE} assigns data to your environment
+#' @param include_all_nba if `TRUE` include all NBA teams
 #'
 #' @return a `data_frame`
 #' @export
@@ -768,6 +731,7 @@ assign_bref_data <-
   function(data,
            type = "Players",
            widen_data = TRUE,
+           include_all_nba = F,
            join_data = TRUE,
            nest_data = FALSE,
            assign_to_environment = TRUE) {
@@ -784,6 +748,7 @@ assign_bref_data <-
           all_data = data,
           widen_data = widen_data,
           join_data = join_data,
+          include_all_nba = include_all_nba,
           assign_to_environment = assign_to_environment
         )
     }
@@ -811,24 +776,21 @@ assign_bref_data <-
 
 # csvs --------------------------------------------------------------------
 
-function() {
-  url = c(
-    "https://d2cwpp38twqe55.cloudfront.net/short/inc/players_search_list.csv",
-    "https://d2cwpp38twqe55.cloudfront.net/short/inc/teams_search_list.csv",
-    "https://d2cwpp38twqe55.cloudfront.net/short/inc/coaches_search_list.csv",
-    )
-}
-
-#' BREF player dictionary
+#' Basketball Reference player dictionary
+#'
 #'
 #' @return a `data_frame`
 #' @export
+#' @family BREF
+#' @family dictionary
+#' @family NBA players
 #'
 #' @examples
 #' get_bref_player_dictionary()
 get_bref_player_dictionary <-
   function() {
-  data <- readr::read_csv(
+  data <-
+    readr::read_csv(
     "https://d2cwpp38twqe55.cloudfront.net/short/inc/players_search_list.csv",
     col_names = F
   ) %>%
@@ -841,6 +803,7 @@ get_bref_player_dictionary <-
   data <-
     data %>%
     mutate(
+      yearsPlayer = ifelse(yearsPlayer == "-", NA, yearsPlayer),
       letterLastName = substr(idPlayerBREF, 1, 1),
       urlPlayerBioBREF =
         glue::glue(
@@ -854,19 +817,7 @@ get_bref_player_dictionary <-
 
 # all_nba -----------------------------------------------------------------
 
-
-#' BREF team dictionary
-#'
-#' Returns basketball reference team dictionary
-#'
-#' @param return_message if \code{TRUE} returns a message
-#'
-#' @return
-#' @export
-#' @import httr rvest xml2 dplyr purrr stringr readr
-#' @examples
-#' get_bref_team_dictionary()
-get_bref_team_dictionary <-
+all_nba <-
   function(return_message = TRUE) {
     page <-
       "http://www.basketball-reference.com/awards/all_league.html" %>%
@@ -1176,7 +1127,7 @@ parse_player_season <-
 #'
 #' @return a `data_frame`
 #' @export
-#'
+#' @family awards
 #' @examples
 #' get_bref_all_nba_teams()
 get_bref_all_nba_teams <-
@@ -1305,6 +1256,8 @@ get_data_bref_player_seasons <-
 #' @param join_data if `TRUE` joins `data_frames`
 #'
 #' @return a \code{data_frame}
+#' @family BREF
+#' @family player statistics
 #' @export
 #' @import curl dplyr tidyr httr xml2 rvest tidyr stringr purrr readr
 #' @examples
@@ -1340,6 +1293,7 @@ get_bref_players_seasons <-
         data = all_data,
         type = "Players",
         widen_data = widen_data,
+        include_all_nba = include_all_nba,
         join_data = join_data,
         nest_data = nest_data,
         assign_to_environment = assign_to_environment
@@ -1859,7 +1813,8 @@ parse.bref_season_urls <-
 
 #' Basketball Reference teams seasons data
 #'
-#' Get team table data by seasons
+#' Get all available team tables from BREF
+#' for specified seasons
 #'
 #' @param seasons vector of years from 1950 to current
 #' @param return_message if \code{TRUE} returns message
@@ -1867,6 +1822,8 @@ parse.bref_season_urls <-
 #' @param widen_data if \code{TRUE} returns data in wide form
 #'
 #' @return a \code{data_frame} with a list of \code{data_frames}
+#' @family BREF
+#' @family team statistics
 #' @export
 #' @import purrr dplyr curl stringr tidyr readr glue rvest
 #' @examples
@@ -1920,17 +1877,24 @@ get_bref_teams_seasons <-
 
 # all star games ----------------------------------------------------------
 
-#' NBA All Star Game Scores
+#' NBA All Star Games
 #'
-#' @param include_aba if \code{TRUE} includes ABA
-#' @param return_message
+#' Returns scores from All-Star Games
 #'
-#' @return
+#' @param include_aba if `TRUE` includes ABA scores
+#' @param return_message if `TRUE` returns a message
+#'
+#' @return a `data_frame`
 #' @export
 #' @import dplyr purrr stringr rvest readr
 #' @examples
-#' get_nba_all_star_game_scores()
-get_nba_all_star_game_scores <-
+#' library(dplyr)
+#' library(nbastatR)
+#'df_asg <-
+#' get_all_star_game_scores()
+#'df_asg %>% glimpse()
+#'df_asg %>% count(namePlayerMVP, sort = T)
+get_all_star_game_scores <-
   function(include_aba = T,
            return_message = T) {
     page <-

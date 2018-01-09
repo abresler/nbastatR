@@ -23,7 +23,12 @@ get_teams_seasons_info(teams = NULL, team_ids = NULL,
 \item Pre Season
 }}
 
-\item{return_message}{}
+\item{nest_data}{if `TRUE` nests data}
+
+\item{return_message}{if `TRUE` returns a message}
+}
+\value{
+a `data_frame`
 }
 \description{
 Acquires information for a teams season

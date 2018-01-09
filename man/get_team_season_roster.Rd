@@ -2,7 +2,7 @@
 % Please edit documentation in R/teams_rosters_history.R
 \name{get_team_season_roster}
 \alias{get_team_season_roster}
-\title{Get NBA Team's Season Roster}
+\title{Team roster}
 \usage{
 get_team_season_roster(team = "Denver Nuggets", season = 2015,
   return_message = T)
@@ -14,9 +14,17 @@ get_team_season_roster(team = "Denver Nuggets", season = 2015,
 
 \item{return_message}{}
 }
+\value{
+a `data_frame`
+}
 \description{
-Get NBA Team's Season Roster
+Gets teams roster from a specified seasons
 }
 \examples{
 get_team_season_roster(team = "Denver Nuggets", season = 1991)
 }
+\seealso{
+Other rosters: \code{\link{get_seasons_rosters}},
+  \code{\link{get_seasons_teams_rosters}}
+}
+\concept{rosters}

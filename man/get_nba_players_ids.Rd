@@ -2,7 +2,7 @@
 % Please edit documentation in R/new_ish.R
 \name{get_nba_players_ids}
 \alias{get_nba_players_ids}
-\title{Get NBA Player Ids}
+\title{Players' NBA player ids}
 \usage{
 get_nba_players_ids(players = NULL, player_ids = NULL)
 }
@@ -11,9 +11,16 @@ get_nba_players_ids(players = NULL, player_ids = NULL)
 
 \item{player_ids}{vector of player ids}
 }
+\value{
+a `data_frame`
+}
 \description{
-Get NBA Player Ids
+Resolve player ids for specified playrs
 }
 \examples{
 get_nba_players_ids(players = c("Mitch Richmond", "Kyle Kuzma"))
 }
+\seealso{
+Other ids: \code{\link{get_nba_teams_ids}}
+}
+\concept{ids}

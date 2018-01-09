@@ -71,9 +71,7 @@ get_fanduel <-
       data %>%
       purrr::set_names(actual_names) %>%
       munge_nba_data() %>%
-      suppressMessages() %>%
-      dplyr::rename(nameTeam = teamName)
-
+      suppressMessages()
     data
 
   }
@@ -143,7 +141,10 @@ get_win_prob <-
   }
 
 
-#' Get Win Probabilities for NBA Game IDs
+#' NBA games win probabilities
+#'
+#' Gets nba in-game win probabilities
+#' for specified game ids
 #'
 #' @param game_ids vector of game ids
 #' @param filter_non_plays if \code{TRUE} filters out non plays
@@ -153,11 +154,15 @@ get_win_prob <-
 #' @export
 #' @import dplyr curl stringr lubridate readr magrittr tidyr httr purrr jsonlite
 #' @importFrom glue glue
-#' @return
+#' @family game
+#' @family season
+#' @return a `data_frame`
 #' @export
 #'
 #' @examples
-#' get_games_pbp_win_probablity(game_ids = c(21700002, 21700005), filter_non_plays = T, nest_data = FALSE, return_message = TRUE)
+#' get_games_pbp_win_probablity(game_ids = c(21700002, 21700005), filter_non_plays = T,
+#' nest_data = FALSE,
+#' return_message = TRUE)
 
 get_games_pbp_win_probablity <-
   function(game_ids = c(21700002, 21700003),
@@ -209,7 +214,10 @@ get_games_pbp_win_probablity <-
   }
 
 
-#' Get Play by Play for NBA Game IDs
+#' NBA games play-by play
+#'
+#' Returns play-by-play data
+#' for specified game ids
 #'
 #' @param game_ids vector of game ids
 #' @param nest_data if \code{TRUE} nests data
@@ -246,7 +254,10 @@ get_games_play_by_play <-
   }
 
 
-#' Get games' fanduel summary
+#' Games fanduel summary
+#'
+#' Returns fanduel summary for specified
+#' game ids
 #'
 #' @param game_ids vector of game ids
 #' @param nest_data if \code{TRUE} nests data
@@ -254,6 +265,8 @@ get_games_play_by_play <-
 #'
 #' @return a \code{data_frame}
 #' @export
+#' @family season
+#' @family game
 #' @import dplyr curl stringr lubridate readr magrittr tidyr httr purrr jsonlite
 #' @importFrom glue glue
 #'
