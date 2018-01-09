@@ -22,6 +22,9 @@ get_seasons_standings(seasons = 1950:2018,
 
 \item{return_message}{if \code{TRUE} returns a message}
 }
+\value{
+a `data_frame`
+}
 \description{
 NBA season standing data
 }

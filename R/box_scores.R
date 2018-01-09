@@ -96,7 +96,7 @@ get_box_score_type <-
     data
   }
 
-#' Get games box scores
+#' NBA box scores
 #'
 #' Acquires specified box score type by game ID
 #'

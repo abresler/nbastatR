@@ -2,15 +2,31 @@
 % Please edit documentation in R/basketball_insider_functions.R
 \name{get_nba_team_salaries}
 \alias{get_nba_team_salaries}
-\title{Get NBA team salaries}
+\title{NBA team salary}
 \usage{
 get_nba_team_salaries(team_name = "Brooklyn Nets", team_slug = NA,
   assume_player_opt_out = T, assume_team_doesnt_exercise = T,
   spread_data = FALSE, return_message = T)
 }
 \arguments{
-\item{return_message}{}
+\item{team_name}{NBA team name}
+
+\item{team_slug}{NBA team slug}
+
+\item{assume_player_opt_out}{if `TRUE` assumes NBA player opts out}
+
+\item{assume_team_doesnt_exercise}{if `TRUE` assumes teams don't excercise team option}
+
+\item{spread_data}{if `TRUE` returns wide data}
+
+\item{return_message}{if `TRUE` returns a messag}
+}
+\value{
+a `data_frame`
 }
 \description{
-Get NBA team salaries
+Returns information about an NBA teams salary
+}
+\examples{
+get_nba_team_salaries(team_name = "Brooklyn Nets")
 }

@@ -2,10 +2,13 @@
 % Please edit documentation in R/random.R
 \name{get_nba_transactions}
 \alias{get_nba_transactions}
-\title{Get NBA transactions since 2012}
+\title{NBA transactions since 2012}
 \usage{
-get_nba_transactions(include_histori)
+get_nba_transactions(include_history = T)
 }
 \description{
-Get NBA transactions since 2012
+Acquires all NBA transctations since 2012
+}
+\examples{
+get_nba_transactions()
 }

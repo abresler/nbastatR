@@ -5,9 +5,9 @@
 \title{Basketball Reference Player Season Tables}
 \usage{
 get_bref_players_seasons(seasons = 2016:2018, tables = c("advanced",
-  "totals"), include_all_nba = TRUE, only_totals = TRUE,
-  nest_data = FALSE, assign_to_environment = TRUE, widen_data = TRUE,
-  join_data = TRUE, return_message = TRUE)
+  "totals"), include_all_nba = F, only_totals = TRUE, nest_data = FALSE,
+  assign_to_environment = TRUE, widen_data = TRUE, join_data = TRUE,
+  return_message = TRUE)
 }
 \arguments{
 \item{seasons}{vector of years 1951 to current season}
@@ -26,6 +26,12 @@ get_bref_players_seasons(seasons = 2016:2018, tables = c("advanced",
 
 \item{nest_data}{if \code{TRUE} returns a nested data frame}
 
+\item{assign_to_environment}{if `TRUE` assigns to environment}
+
+\item{widen_data}{if `TRUE` widens data}
+
+\item{join_data}{if `TRUE` joins `data_frames`}
+
 \item{return_message}{if \code{TRUE} returns a message}
 }
 \value{
@@ -35,5 +41,5 @@ a \code{data_frame}
 Basketball Reference Player Season Tables
 }
 \examples{
-get_bref_players_seasons(seasons = 2018, tables = c("advanced", "totals"))
+get_bref_players_seasons(seasons = 2017:2018, tables = c("advanced", "totals"))
 }

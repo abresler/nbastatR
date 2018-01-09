@@ -50,7 +50,7 @@ get_player_rotowire_news <-
 #' @param results integer of results
 #' @param return_message if \code{TRUE} returns a message
 #'
-#' @return
+#' @return a `data_frame`
 #' @export
 #' @import dplyr curl readr lubridate purrr jsonlite tidyr
 #' @importFrom glue glue
@@ -114,23 +114,27 @@ get_players_roto_wire_news <-
     all_data
   }
 
-#' Get teams roto wire news
+#' Teams roto wire news
 #'
-#' Returns roto wire news for specified
-#' teams.
+#' Returns roto wire news for specified teams.
 #'
-#' @param teams
-#' @param nest_data
-#' @param results
-#' @param return_message
+#' @param teams vector of teams
+#' @param team_ids vector
+#' @param all_active_teams if `TRUE` searchs all active teams
+#' @param nest_data if `TRUE` returns nested data frame
+#' @param results numeric vector of results
+#' @param return_message if `TRUE` returns a message
 #'
-#' @return
+#' @return a `data_frame`
 #' @export
 #' @import dplyr curl readr lubridate purrr jsonlite tidyr
 #' @importFrom glue glue
 #' @examples
+#' get_teams_roto_wire_news(teams = "Brooklyn Nets")
   get_teams_roto_wire_news <-
   function(teams = NULL,
+           team_ids = NULL,
+           all_active_teams = F,
            nest_data = F,
            results = 50,
            return_message = TRUE) {
@@ -140,16 +144,16 @@ get_players_roto_wire_news <-
 
       assign(x = 'df_nba_player_dict', df_nba_player_dict, envir = .GlobalEnv)
     }
-    if (teams %>% purrr::is_null()) {
-      stop("Please Enter a team name")
-    }
-    teams_search <-
-      teams %>% str_to_lower() %>% str_c(collapse  = "|")
+
+    assign_nba_teams()
+    team_ids <-
+      get_nba_teams_ids(teams = teams,
+                        team_ids = team_ids,
+                        all_active_teams = all_active_teams)
 
     ids <-
       df_nba_player_dict %>%
-      mutate(teamLower = nameTeam %>% str_to_lower()) %>%
-      filter(teamLower %>% str_detect(teams_search)) %>%
+      filter(idTeam %in% team_ids) %>%
       pull(idPlayer) %>%
       unique()
 
@@ -235,14 +239,17 @@ nba_transactions_historic <-
 
   }
 
-#' Get NBA transactions since 2012
+#' NBA transactions since 2012
+#'
+#' Acquires all NBA transctations since 2012
 #'
 #' @return
 #' @export
 #' @import dplyr purrr curl jsonlite readr lubridate tidyr tibble
 #' @examples
+#' get_nba_transactions()
 get_nba_transactions <-
-  function(include_histori) {
+  function(include_history = T) {
     json <-
       "http://stats.nba.com/js/data/playermovement/NBA_Player_Movement.json" %>%
       curl_json_to_vector()

@@ -14,6 +14,9 @@ get_seasons_rosters(seasons = 2000:2018, return_message = TRUE,
 
 \item{nest_data}{if \code{TRUE} nests data}
 }
+\value{
+a `date_frame`
+}
 \description{
 Returns rosters for each team of a specified season
 }

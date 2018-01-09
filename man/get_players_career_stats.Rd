@@ -2,7 +2,7 @@
 % Please edit documentation in R/player_career_stats.R
 \name{get_players_career_stats}
 \alias{get_players_career_stats}
-\title{Get NBA Players Summary Statistics by Mode}
+\title{NBA players career stats}
 \usage{
 get_players_career_stats(player_ids = NULL, players = NULL,
   modes = c("PerGame", "Totals"), assign_to_environment = TRUE,

@@ -8,6 +8,9 @@ get_bref_player_dictionary()
 
 get_bref_player_dictionary()
 }
+\value{
+a `data_frame`
+}
 \description{
 Basketball reference player dictionary
 }

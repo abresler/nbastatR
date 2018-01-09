@@ -2,7 +2,7 @@
 % Please edit documentation in R/box_scores.R
 \name{get_games_box_scores}
 \alias{get_games_box_scores}
-\title{Get games box scores}
+\title{NBA box scores}
 \usage{
 get_games_box_scores(game_ids = NULL, box_score_types = c("Traditional",
   "Advanced", "Scoring", "Misc", "Usage", "Four Factors", "hustle", "tracking"),

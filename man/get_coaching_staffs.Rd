@@ -2,7 +2,7 @@
 % Please edit documentation in R/new_stats.R
 \name{get_coaching_staffs}
 \alias{get_coaching_staffs}
-\title{Get active NBA coaching staffs}
+\title{NBA active coaching staffs}
 \usage{
 get_coaching_staffs()
 }
@@ -10,7 +10,8 @@ get_coaching_staffs()
 a \code{data_frames}
 }
 \description{
-Get active NBA coaching staffs
+Gets active coaching staff information for all
+NBA teams
 }
 \examples{
 get_coaching_staffs()

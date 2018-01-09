@@ -2,15 +2,31 @@
 % Please edit documentation in R/random.R
 \name{get_teams_roto_wire_news}
 \alias{get_teams_roto_wire_news}
-\title{Get teams roto wire news}
+\title{Teams roto wire news}
 \usage{
-get_teams_roto_wire_news(teams = NULL, nest_data = F, results = 50,
+get_teams_roto_wire_news(teams = NULL, team_ids = NULL,
+  all_active_teams = F, nest_data = F, results = 50,
   return_message = TRUE)
 }
 \arguments{
-\item{return_message}{}
+\item{teams}{vector of teams}
+
+\item{team_ids}{vector}
+
+\item{all_active_teams}{if `TRUE` searchs all active teams}
+
+\item{nest_data}{if `TRUE` returns nested data frame}
+
+\item{results}{numeric vector of results}
+
+\item{return_message}{if `TRUE` returns a message}
+}
+\value{
+a `data_frame`
 }
 \description{
-Returns roto wire news for specified
-teams.
+Returns roto wire news for specified teams.
+}
+\examples{
+get_teams_roto_wire_news(teams = "Brooklyn Nets")
 }

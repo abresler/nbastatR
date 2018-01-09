@@ -63,15 +63,29 @@ generate_data_name <- function(x, result = "Team") {
     str_c(collapse   = "") %>%
     str_c("data", ., str_to_title(result))
 }
+#' Assign NBA teams to environment
+#'
+#' @return a `data_frame`
+#' @export
+#'
+#' @examples
+#' assign_nba_teams()
 assign_nba_teams <-
   function() {
     if (!'df_dict_nba_teams' %>% exists()) {
-      "Assigning NBA team dictionary to df_dict_nba_teams to your environment" %>% message()
       df_dict_nba_teams <- get_nba_teams()
       assign(x = 'df_dict_nba_teams', df_dict_nba_teams, envir = .GlobalEnv)
     }
   }
 
+
+#' Assign NBA player dictionary to environment
+#'
+#' @return
+#' @export
+#'
+#' @examples
+#' assign_nba_players()
 assign_nba_players <-
   function() {
     if (!'df_dict_nba_players' %>% exists()) {
@@ -1111,7 +1125,7 @@ munge_nba_data <- function(data) {
                                          TRUE ~ "Home"))
   }
 
-  if (data %>% has_name("nameGroup") && data %>% has_name("nameGroupValue")) {
+  if (data %>% tibble::has_name("nameGroup") && data %>% tibble::has_name("nameGroupValue")) {
     data <-
       data %>%
       dplyr::select(-nameGroup) %>%

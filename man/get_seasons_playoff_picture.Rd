@@ -18,6 +18,9 @@ get_seasons_playoff_picture(seasons = NULL, assign_to_environment = TRUE,
 
 \item{include_include_numeric_records}{if \code{TRUE} parses records}
 }
+\value{
+a `data_Frame`
+}
 \description{
 Returns
 }

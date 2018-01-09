@@ -106,7 +106,10 @@ get_nba_player_career_stats <-
     all_data
   }
 
+#' NBA players career stats
+#'
 #' Get NBA Players Summary Statistics by Mode
+#'
 #'
 #' @param player_ids \code{vector} of NBA Player IDs
 #' @param players \code{NULL} or \code{vector} of NBA players

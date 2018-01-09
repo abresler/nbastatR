@@ -18,6 +18,9 @@ get_players_roto_wire_news(players = NULL, player_ids = NULL,
 
 \item{return_message}{if \code{TRUE} returns a message}
 }
+\value{
+a `data_frame`
+}
 \description{
 Returns rotowire news for specified
 players.

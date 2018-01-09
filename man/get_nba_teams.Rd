@@ -2,10 +2,16 @@
 % Please edit documentation in R/new_stats.R
 \name{get_nba_teams}
 \alias{get_nba_teams}
-\title{Get NBA team dictionary}
+\title{NBA team dictionary}
 \usage{
 get_nba_teams()
 }
+\value{
+a `data_frame`
+}
 \description{
-Get NBA team dictionary
+Returns team dictionary
+}
+\examples{
+get_nba_teams()
 }

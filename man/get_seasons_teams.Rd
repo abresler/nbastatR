@@ -2,15 +2,20 @@
 % Please edit documentation in R/game_logs.R
 \name{get_seasons_teams}
 \alias{get_seasons_teams}
-\title{Get Seasons teams}
+\title{NBA seasons teams}
 \usage{
 get_seasons_teams(return_message = TRUE, ...)
 }
 \arguments{
+\item{return_message}{if}
+
 \item{...}{}
 }
+\value{
+a `data_frame`
+}
 \description{
-Get Seasons teams
+NBA seasons teams
 }
 \examples{
 get_seasons_teams()

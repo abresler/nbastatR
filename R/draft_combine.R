@@ -123,13 +123,13 @@ get_year_draft_combine <-
     data <-
       data %>%
       mutate(yearCombine = combine_year) %>%
-      select(syearCombine, everything()) %>%
+      select(yearCombine, everything()) %>%
       remove_na_columns()
 
     data
   }
 
-#' Get NBA Draft Combine data
+#' NBA draft combine data
 #'
 #' Acquires NBA draft combine data
 #'

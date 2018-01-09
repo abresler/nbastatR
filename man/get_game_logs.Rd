@@ -30,6 +30,9 @@ get_game_logs(seasons = NULL, result_types = NULL,
 
 \item{...}{}
 }
+\value{
+a `data_frame`
+}
 \description{
 NBA game logs
 NBA game logs for specified parameters

@@ -9,8 +9,11 @@ get_nba_player_injuries(filter_returning_today = T)
 \arguments{
 \item{filter_returning_today}{if \code{TRUE} filter players returning today}
 }
+\value{
+a `data_frame`
+}
 \description{
-NBA Injuries
+Returns information about NBA injured players
 }
 \examples{
 get_nba_player_injuries()

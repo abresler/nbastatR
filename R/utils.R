@@ -236,9 +236,13 @@ gather_data <-
 #' @importFrom tidyr spread
 #' @examples
 spread_data <-
-  function(data, variable_name = "item", value_name = "value", perserve_order = TRUE,
+  function(data,
+           variable_name = "item",
+           value_name = "value",
+           perserve_order = TRUE,
            unite_columns = NULL,
-           seperate_columns = NULL) {
+           seperate_columns = NULL
+  ) {
 
     if (!unite_columns %>% purrr::is_null()) {
       df_unite <- unite_columns %>% flatten_df()

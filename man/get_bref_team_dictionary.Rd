@@ -13,6 +13,8 @@ get_bref_team_dictionary(return_message = TRUE)
 }
 \description{
 Basketball Reference Team Dictionary
+
+Returns basketball reference team dictionary
 }
 \examples{
 get_bref_team_dictionary()

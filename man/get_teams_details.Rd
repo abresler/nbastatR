@@ -2,7 +2,7 @@
 % Please edit documentation in R/team_tables.R
 \name{get_teams_details}
 \alias{get_teams_details}
-\title{Get NBA Teams details}
+\title{NBA teams details}
 \usage{
 get_teams_details(teams = NULL, team_ids = NULL, all_teams = T,
   assign_to_environment = TRUE, return_message = T)
@@ -18,6 +18,9 @@ get_teams_details(teams = NULL, team_ids = NULL, all_teams = T,
 your environment starting with data}
 
 \item{return_message}{if \code{TRUE} returns a message}
+}
+\value{
+a `data_frame`
 }
 \description{
 Gets information about NBA franchises

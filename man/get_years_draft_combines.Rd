@@ -2,7 +2,7 @@
 % Please edit documentation in R/draft_combine.R
 \name{get_years_draft_combines}
 \alias{get_years_draft_combines}
-\title{Get NBA Draft Combine data}
+\title{NBA draft combine data}
 \usage{
 get_years_draft_combines(years = NULL, return_message = T, nest_data = F)
 }

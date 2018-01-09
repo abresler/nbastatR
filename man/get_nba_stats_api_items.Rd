@@ -2,12 +2,15 @@
 % Please edit documentation in R/new_stats.R
 \name{get_nba_stats_api_items}
 \alias{get_nba_stats_api_items}
-\title{Get NBA Stats API items, players and teams}
+\title{NBA stats API parameters, teams and items}
 \usage{
 get_nba_stats_api_items()
 }
+\value{
+a `data_frame`
+}
 \description{
-Get NBA Stats API items, players and teams
+NBA stats API parameters, teams and items
 }
 \examples{
 get_nba_stats_api_items()

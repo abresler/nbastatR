@@ -2,7 +2,7 @@
 % Please edit documentation in R/hoops_hype_functions.R
 \name{get_teams_hoopshype_salaries}
 \alias{get_teams_hoopshype_salaries}
-\title{Get HoopsHype Salaries by Teams}
+\title{HoopsHype teams players salaries}
 \usage{
 get_teams_hoopshype_salaries(teams = NULL, all_teams = TRUE,
   assume_player_opt_out = T, assume_team_doesnt_exercise = T,
@@ -21,8 +21,11 @@ get_teams_hoopshype_salaries(teams = NULL, all_teams = TRUE,
 
 \item{return_message}{if \code{TRUE} returns a message}
 }
+\value{
+a `data_frame`
+}
 \description{
-Get HoopsHype Salaries by Teams
+gets detailed player salaries from HoopsHype
 }
 \examples{
 get_teams_hoopshype_salaries(all_teams = TRUE, nest_data = F, return_message = T)

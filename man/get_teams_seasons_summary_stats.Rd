@@ -2,7 +2,7 @@
 % Please edit documentation in R/player_team_dash.R
 \name{get_teams_seasons_summary_stats}
 \alias{get_teams_seasons_summary_stats}
-\title{Get Teams Summary Statistics}
+\title{NBA teams summary statistics}
 \usage{
 get_teams_seasons_summary_stats(seasons = 2018,
   season_types = "Regular Season", measures = "Base", modes = "PerGame",
@@ -19,5 +19,5 @@ get_teams_seasons_summary_stats(seasons = 2018,
 \item{return_message}{}
 }
 \description{
-Get Teams Summary Statistics
+Gets NBA teams summary statistics
 }

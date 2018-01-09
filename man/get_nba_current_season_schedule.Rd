@@ -2,12 +2,15 @@
 % Please edit documentation in R/new_stats.R
 \name{get_nba_current_season_schedule}
 \alias{get_nba_current_season_schedule}
-\title{Get Current Season Schedule}
+\title{NBA current season schedule}
 \usage{
 get_nba_current_season_schedule()
 }
+\value{
+a `data_frame`
+}
 \description{
-Get Current Season Schedule
+Get NBA schedule for most current season
 }
 \examples{
 get_nba_current_season_schedule()

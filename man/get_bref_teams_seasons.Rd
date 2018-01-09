@@ -2,7 +2,7 @@
 % Please edit documentation in R/bref.R
 \name{get_bref_teams_seasons}
 \alias{get_bref_teams_seasons}
-\title{Basketball Reference Team Season Data}
+\title{Basketball Reference teams seasons data}
 \usage{
 get_bref_teams_seasons(seasons = 1950:2018, return_message = TRUE,
   assign_to_environment = TRUE, nest_data = FALSE, join_data = TRUE,

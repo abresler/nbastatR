@@ -1,13 +1,6 @@
 # http://nbasense.com/nba-api/Stats/Stats/Standings/LeagueStandings#request-example
 # http://stats.nba.com/stats/leaguestandingsv3/?leagueId=00&season=1989-90&seasonType=Regular+Season
 
-assign_nba_teams <-
-  function() {
-    if (!'df_dict_nba_teams' %>% exists()) {
-      df_dict_nba_teams <- get_nba_teams()
-      assign(x = 'df_dict_nba_teams', df_dict_nba_teams, envir = .GlobalEnv)
-    }
-  }
 
 parse_record <-
   function(data, record_column = "recordTiedAtHalf") {
@@ -79,7 +72,7 @@ parse_records <- function(data, record_names) {
 #'
 #' @param return_message if \code{TRUE} returns a message
 #'
-#' @return
+#' @return a `data_frame`
 #' @export
 #'
 #' @examples
@@ -221,7 +214,7 @@ get_season_playoff_picture <-
 #' @param nest_data if \code{TRUE} returns nested data frame
 #' @param return_message if \code{TRUE} returns a message
 #'
-#' @return
+#' @return a `data_Frame`
 #' @export
 #' @import dplyr stringr curl jsonlite lubridate purrr tidyr rlang readr tibble
 #' @importFrom glue glue
@@ -334,7 +327,7 @@ get_season_standings <-
 #' @param return_message if \code{TRUE} returns a message
 #' @param nest_data if \code{TRUE} returns a nested data frame
 #'
-#' @return
+#' @return a `data_frame`
 #' @export
 #' @import dplyr stringr curl jsonlite lubridate purrr tidyr rlang readr tibble
 #' @importFrom glue glue

@@ -2,7 +2,7 @@
 % Please edit documentation in R/bref_bio.R
 \name{get_bref_players_bios}
 \alias{get_bref_players_bios}
-\title{Get Basketball Reference Player Biography data}
+\title{Basketball-Reference players bios}
 \usage{
 get_bref_players_bios(players = NULL, player_ids = NULL,
   assign_to_environment = T, return_message = T)

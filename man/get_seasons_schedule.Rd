@@ -2,7 +2,7 @@
 % Please edit documentation in R/game_logs.R
 \name{get_seasons_schedule}
 \alias{get_seasons_schedule}
-\title{Get NBA Seasons Schedule}
+\title{NBA seasons schedules}
 \usage{
 get_seasons_schedule(seasons = 2018, season_types = "Regular Season",
   parse_boxscores = F, box_score_tables = c("Traditional"),
@@ -13,13 +13,19 @@ get_seasons_schedule(seasons = 2018, season_types = "Regular Season",
 
 \item{season_types}{type of season}
 
-\item{nest_data}{}
+\item{parse_boxscores}{if `TRUE` parses box scores}
+
+\item{box_score_tables}{vector of box score table names}
+
+\item{nest_data}{if `TRUE` nests thedata}
+
+\item{return_message}{if `TRUE`}
 }
 \value{
 a \code{data_frame()}
 }
 \description{
-Get NBA Seasons Schedule
+NBA seasons schedules
 }
 \examples{
 get_seasons_schedule(seasons = c(2012, 2018))

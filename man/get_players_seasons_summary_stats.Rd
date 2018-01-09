@@ -2,7 +2,7 @@
 % Please edit documentation in R/player_team_dash.R
 \name{get_players_seasons_summary_stats}
 \alias{get_players_seasons_summary_stats}
-\title{Get Players Seasons Summary Statistics}
+\title{NBA players summary statistics}
 \usage{
 get_players_seasons_summary_stats(seasons = 2018,
   season_types = "Regular Season", measures = "Base", modes = "PerGame",
@@ -17,10 +17,79 @@ get_players_seasons_summary_stats(seasons = 2018,
   assign_to_environment = TRUE, add_mode_names = T, return_message = TRUE)
 }
 \arguments{
-\item{weights}{}
+\item{seasons}{vector of seasons}
+
+\item{season_types}{vector of season types}
+
+\item{measures}{vector of measures}
+
+\item{modes}{vector of modes}
+
+\item{is_plus_minus}{if `TRUE` uses plus minus}
+
+\item{is_pace_adjusted}{if `TRUE` is pace adjusted}
+
+\item{periods}{vector of periods}
+
+\item{is_rank}{if `TRUE` returns rank}
+
+\item{game_segments}{vector of game segments}
+
+\item{divisions_against}{vector of seasons}
+
+\item{conferences_against}{vector of conferences against}
+
+\item{date_from}{dates from}
+
+\item{date_to}{dates to}
+
+\item{last_n_games}{vector games}
+
+\item{locations}{vector of locations}
+
+\item{months}{vector of months}
+
+\item{season_segments}{vector of seasons segments}
+
+\item{opponents}{vector of opponents}
+
+\item{countries}{vector of countries}
+
+\item{weights}{vector of weights}
+
+\item{outcomes}{vector of outcomes}
+
+\item{playoff_rounds}{vector of playoff rounds}
+
+\item{players_experience}{vector of player experience}
+
+\item{players_positions}{vector of positions}
+
+\item{colleges}{vector of colleges}
+
+\item{draft_picks}{vector of draft picks}
+
+\item{draft_years}{vector of draft years}
+
+\item{game_scopes}{vector game scopes}
+
+\item{heights}{vector of heights}
+
+\item{shot_clock_ranges}{vector of shot clock ranges}
+
+\item{starters_bench}{vector of starter type}
+
+\item{assign_to_environment}{if `TRUE` assigns tables to environment}
+
+\item{add_mode_names}{if `TRUE` adds mode names}
+
+\item{return_message}{if `TRUE` returns a message}
+}
+\value{
+a `data_frame`
 }
 \description{
-Get Players Seasons Summary Statistics
+Gets NBA summary statistics tables
 }
 \examples{
 get_players_seasons_summary_stats(seasons = 2016:2018)

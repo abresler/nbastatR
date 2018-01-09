@@ -225,7 +225,7 @@ get_season_gamelog <-
 #' @param assign_to_environment assigns individual table to environment
 #' @param ...
 #'
-#' @return
+#' @return a `data_frame`
 #' @export
 #' @import dplyr jsonlite purrr stringr lubridate magrittr tidyr tibble httr
 #' @importFrom  glue glue
@@ -465,14 +465,14 @@ get_season_schedule <-
 
   }
 
-#' Get NBA Seasons Schedule
+#' NBA seasons schedules
 #'
 #' @param seasons vector of seasons where season is year ending
 #' @param season_types type of season
-#' @param return_message
-#' @param parse_boxscores
-#' @param box_score_tables
-#' @param nest_data
+#' @param return_message if `TRUE`
+#' @param parse_boxscores if `TRUE` parses box scores
+#' @param box_score_tables vector of box score table names
+#' @param nest_data if `TRUE` nests thedata
 #'
 #' @return a \code{data_frame()}
 #' @export
@@ -593,12 +593,12 @@ get_seasons_players <-
 
 
 
-#' Get Seasons teams
+#' NBA seasons teams
 #'
-#' @param return_message
+#' @param return_message if
 #' @param ...
 #'
-#' @return
+#' @return a `data_frame`
 #' @export
 #'
 #' @examples
@@ -771,7 +771,7 @@ get_season_roster <-
 #' @param return_message if \code{TRUE} returns a message
 #' @param nest_data if \code{TRUE} nests data
 #'
-#' @return
+#' @return a `date_frame`
 #' @export
 #' @import dplyr jsonlite purrr stringr lubridate magrittr tidyr tibble httr
 #' @importFrom glue glue

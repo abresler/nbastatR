@@ -142,19 +142,22 @@ get_basketball_insider_team_ids <- function() {
   return(data)
 }
 
-#' Get NBA team salaries
+#' NBA team salary
 #'
-#' @param team_name
-#' @param team_slug
-#' @param assume_player_opt_out
-#' @param assume_team_doesnt_exercise
-#' @param spread_data
-#' @param return_message
+#' Returns information about an NBA teams salary
 #'
-#' @return
+#' @param team_name NBA team name
+#' @param team_slug NBA team slug
+#' @param assume_player_opt_out if `TRUE` assumes NBA player opts out
+#' @param assume_team_doesnt_exercise if `TRUE` assumes teams don't excercise team option
+#' @param spread_data if `TRUE` returns wide data
+#' @param return_message if `TRUE` returns a messag
+#'
+#' @return a `data_frame`
 #' @export
 #' @import dplyr rvest stringr purrr tidyr readr
 #' @examples
+#' get_nba_team_salaries(team_name = "Brooklyn Nets")
 get_nba_team_salaries <-
   function(team_name = "Brooklyn Nets",
            team_slug = NA,
@@ -505,15 +508,21 @@ get_nba_team_salaries <-
     all_data
   }
 
-#' Get All NBA Teams Salaries
+#' NBA team salaries
 #'
-#' @param assume_player_opt_out
-#' @param assume_team_doesnt_exercise
+#' Gets information about NBA teams salaries
 #'
-#' @return
+#' @param assume_player_opt_out if `TRUE` assumes player opts out of a player option
+#' @param assume_team_doesnt_exercise if `TRUE` assumes teams do not excercise team option
+#' @param spread_data if `TRUE` spreads data
+#' @param return_message if `TRUE` returns a message
+#'
+#' @return a `data_frame`
 #' @export
 #' @import dplyr rvest stringr purrr tidyr readr
 #' @examples
+#' get_all_nba_teams_salaries(assume_player_opt_out = T, assume_team_doesnt_exercise = T, return_message = TRUE)
+
 get_all_nba_teams_salaries <-
   function(assume_player_opt_out = T,
            assume_team_doesnt_exercise = T,

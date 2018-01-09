@@ -56,7 +56,7 @@ get_team_details <- function(team_id = 1610612745, return_message = TRUE) {
   data
 }
 
-#' Get NBA Teams details
+#'   NBA teams details
 #'
 #' Gets information about NBA franchises
 #'
@@ -67,7 +67,7 @@ get_team_details <- function(team_id = 1610612745, return_message = TRUE) {
 #' your environment starting with data
 #' @param return_message if \code{TRUE} returns a message
 #'
-#' @return
+#' @return a `data_frame`
 #' @export
 #' @import dplyr stringr curl jsonlite lubridate purrr tidyr rlang readr tibble
 #' @importFrom glue glue

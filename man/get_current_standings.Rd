@@ -9,6 +9,9 @@ get_current_standings(return_message = TRUE)
 \arguments{
 \item{return_message}{if \code{TRUE} returns a message}
 }
+\value{
+a `data_frame`
+}
 \description{
 Acquires current season's standings
 }

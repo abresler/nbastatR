@@ -1,11 +1,14 @@
 
-#' Get NBA Team Rankings for most current period
+#' NBA Team Rankings
 #'
-#' @return
+#' Gets most recent NBA team rankings
+#'
+#' @return a `data_frame`
 #' @export
 #' @import curl dplyr stringr readr purrr jsonlite
 #' @importFrom lubridate ymd_hms
 #' @examples
+#' get_nba_team_current_rankings()
 get_nba_team_current_rankings <-
   function() {
     json <-

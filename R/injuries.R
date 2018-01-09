@@ -15,9 +15,11 @@ get_player_names <- function(){
 
 #' NBA Injuries
 #'
+#' Returns information about NBA injured players
+#'
 #' @param filter_returning_today if \code{TRUE} filter players returning today
 #'
-#' @return
+#' @return a `data_frame`
 #' @export
 #' @import lubridate dplyr curl stringr purrr tidyr rvest xml2
 #' @examples

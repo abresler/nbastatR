@@ -221,9 +221,11 @@ get.nba_headers <-
 
 # base --------------------------------------------------------------------
 
-#' Get Current Season Schedule
+#' NBA current season schedule
 #'
-#' @return
+#' Get NBA schedule for most current season
+#'
+#' @return a `data_frame`
 #' @export
 #'
 #' @import curl jsonlite readr purrr stringr lubridate
@@ -293,7 +295,10 @@ get_nba_current_season_schedule <-
   data
 }
 
-#' Get active NBA coaching staffs
+#' NBA active coaching staffs
+#'
+#' Gets active coaching staff information for all
+#' NBA teams
 #'
 #' @return a \code{data_frames}
 #' @export
@@ -494,14 +499,17 @@ parse_for_teams <-
 
   }
 
-#' Get NBA team dictionary
+#' NBA team dictionary
 #'
-#' @return
+#' Returns team dictionary
+#'
+#' @return a `data_frame`
 #' @export
 #' @importFrom readr read_lines
 #' @importFrom glue glue
 #' @import dplyr jsonlite stringr tidyr purrr
 #' @examples
+#' get_nba_teams()
 get_nba_teams <-
   function() {
     url <- "http://stats.nba.com/js/data/ptsd/stats_ptsd.js"
@@ -544,11 +552,11 @@ get_nba_teams_seasons <- function() {
   data
 }
 
-#' Get NBA Stats API items, players and teams
+#' NBA stats API parameters, teams and items
 #'
 #'
 #'
-#' @return
+#' @return a `data_frame`
 #' @export
 #' @import readr jsonlite dplyr purrr tibble tidyr stringr
 #' @examples
@@ -584,14 +592,12 @@ get_nba_stats_api_items <-
     )
   }
 
-#' Get NBA Players
+#' NBA player dictionary
 #'
-#' Acquires NBA player dictionary
 #'
 #' @return a \code{data_frame}
 #' @export
 #'
-#' @examples
 #' @import dplyr purrr jsonlite curl stringr lubridate
 #' @importFrom glue glue
 #' @importFrom readr read_lines

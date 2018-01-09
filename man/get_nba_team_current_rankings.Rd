@@ -2,10 +2,16 @@
 % Please edit documentation in R/nba_rankings.R
 \name{get_nba_team_current_rankings}
 \alias{get_nba_team_current_rankings}
-\title{Get NBA Team Rankings for most current period}
+\title{NBA Team Rankings}
 \usage{
 get_nba_team_current_rankings()
 }
+\value{
+a `data_frame`
+}
 \description{
-Get NBA Team Rankings for most current period
+Gets most recent NBA team rankings
+}
+\examples{
+get_nba_team_current_rankings()
 }

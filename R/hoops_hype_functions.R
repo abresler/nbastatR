@@ -140,6 +140,8 @@ get_hoopshype_teams_ids <-
 
 #' Get HoopsHype NBA teams salaries
 #'
+#' Gets all team salary summaries from HoopsHype
+#'
 #' @param spread_data if \code{TRUE} spreads data
 #' @param return_message if \code{TRUE} returns a message
 #'
@@ -472,7 +474,9 @@ parse_hoops_hype_salary_urls <-
     df
   }
 
-#' Get HoopsHype Salaries by Teams
+#' HoopsHype teams players salaries
+#'
+#' gets detailed player salaries from HoopsHype
 #'
 #' @param teams vector of team names
 #' @param all_teams if \code{TRUE} returns all teams
@@ -481,7 +485,7 @@ parse_hoops_hype_salary_urls <-
 #' @param nest_data if \code{TRUE} nests data
 #' @param return_message if \code{TRUE} returns a message
 #'
-#' @return
+#' @return a `data_frame`
 #' @export
 #' @import dplyr rvest xml2 readr curl stringr tidyr
 #' @examples

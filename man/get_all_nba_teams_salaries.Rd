@@ -2,14 +2,26 @@
 % Please edit documentation in R/basketball_insider_functions.R
 \name{get_all_nba_teams_salaries}
 \alias{get_all_nba_teams_salaries}
-\title{Get All NBA Teams Salaries}
+\title{NBA team salaries}
 \usage{
 get_all_nba_teams_salaries(assume_player_opt_out = T,
   assume_team_doesnt_exercise = T, spread_data = F, return_message = T)
 }
 \arguments{
-\item{assume_team_doesnt_exercise}{}
+\item{assume_player_opt_out}{if `TRUE` assumes player opts out of a player option}
+
+\item{assume_team_doesnt_exercise}{if `TRUE` assumes teams do not excercise team option}
+
+\item{spread_data}{if `TRUE` spreads data}
+
+\item{return_message}{if `TRUE` returns a message}
+}
+\value{
+a `data_frame`
 }
 \description{
-Get All NBA Teams Salaries
+Gets information about NBA teams salaries
+}
+\examples{
+get_all_nba_teams_salaries(assume_player_opt_out = T, assume_team_doesnt_exercise = T, return_message = TRUE)
 }

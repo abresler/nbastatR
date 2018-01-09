@@ -536,7 +536,7 @@ get_bref_players_ids  <-
 
   }
 
-#' Get Basketball Reference Player Biography data
+#' Basketball-Reference players bios
 #'
 #' Includes player bios, salaries, contracts and transactions
 #'

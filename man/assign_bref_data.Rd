@@ -20,6 +20,9 @@ assign_bref_data(data, type = "Players", widen_data = TRUE,
 
 \item{assign_to_environment}{if \code{TRUE} assigns data to your environment}
 }
+\value{
+a `data_frame`
+}
 \description{
 Assign nested BREF data to environment
 }

@@ -2,7 +2,7 @@
 % Please edit documentation in R/new_stats.R
 \name{get_nba_players}
 \alias{get_nba_players}
-\title{Get NBA Players}
+\title{NBA player dictionary}
 \usage{
 get_nba_players()
 }
@@ -10,7 +10,7 @@ get_nba_players()
 a \code{data_frame}
 }
 \description{
-Acquires NBA player dictionary
+NBA player dictionary
 }
 \examples{
 get_nba_players()

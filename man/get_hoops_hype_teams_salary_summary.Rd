@@ -15,7 +15,7 @@ get_hoops_hype_teams_salary_summary(spread_data = F, return_message = T)
 a \code{data_frame()}
 }
 \description{
-Get HoopsHype NBA teams salaries
+Gets all team salary summaries from HoopsHype
 }
 \examples{
 get_hoops_hype_teams_salary_summary(spread_data = TRUE)

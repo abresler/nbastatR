@@ -787,44 +787,46 @@ get_team_season_summary_stats <-
 
   }
 
-#' Get Players Seasons Summary Statistics
+#' NBA players summary statistics
 #'
-#' @param seasons
-#' @param season_types
-#' @param measures
-#' @param modes
-#' @param is_plus_minus
-#' @param is_pace_adjusted
-#' @param periods
-#' @param is_rank
-#' @param game_segments
-#' @param divisions_against
-#' @param conferences_against
-#' @param date_from
-#' @param date_to
-#' @param last_n_games
-#' @param locations
-#' @param months
-#' @param season_segments
-#' @param opponents
-#' @param outcomes
-#' @param playoff_rounds
-#' @param players_experience
-#' @param players_positions
-#' @param colleges
-#' @param draft_picks
-#' @param draft_years
-#' @param game_scopes
-#' @param heights
-#' @param shot_clock_ranges
-#' @param starters_bench
-#' @param assign_to_environment
-#' @param add_mode_names
-#' @param return_message
-#' @param countries
-#' @param weights
+#' Gets NBA summary statistics tables
 #'
-#' @return
+#' @param seasons vector of seasons
+#' @param season_types vector of season types
+#' @param measures vector of measures
+#' @param modes vector of modes
+#' @param is_plus_minus if `TRUE` uses plus minus
+#' @param is_pace_adjusted if `TRUE` is pace adjusted
+#' @param periods vector of periods
+#' @param is_rank if `TRUE` returns rank
+#' @param game_segments vector of game segments
+#' @param divisions_against vector of seasons
+#' @param conferences_against vector of conferences against
+#' @param date_from dates from
+#' @param date_to dates to
+#' @param last_n_games vector games
+#' @param locations vector of locations
+#' @param months vector of months
+#' @param season_segments vector of seasons segments
+#' @param opponents vector of opponents
+#' @param outcomes vector of outcomes
+#' @param playoff_rounds vector of playoff rounds
+#' @param players_experience vector of player experience
+#' @param players_positions vector of positions
+#' @param colleges vector of colleges
+#' @param draft_picks vector of draft picks
+#' @param draft_years vector of draft years
+#' @param game_scopes vector game scopes
+#' @param heights vector of heights
+#' @param shot_clock_ranges vector of shot clock ranges
+#' @param starters_bench vector of starter type
+#' @param assign_to_environment if `TRUE` assigns tables to environment
+#' @param weights vector of weights
+#' @param countries vector of countries
+#' @param add_mode_names if `TRUE` adds mode names
+#' @param return_message if `TRUE` returns a message
+#'
+#' @return a `data_frame`
 #' @export
 #'
 #' @examples
@@ -950,7 +952,9 @@ get_players_seasons_summary_stats <-
 
   }
 
-#' Get Teams Summary Statistics
+#' NBA teams summary statistics
+#'
+#' Gets NBA teams summary statistics
 #'
 #' @param seasons
 #' @param season_types
