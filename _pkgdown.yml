@@ -1,0 +1,40 @@
+url: http://asbcllc.com/nbastatR/
+
+template:
+  params:
+    bootswatch: cerulean
+
+reference:
+  - title: Various NBA Stats API functions
+    contents:
+    - starts_with("get_nba|get_coaching_staffs|get_days_nba_scores|get_synergy_categories_stats")
+  - title: Seasons
+    contents:
+    - starts_with("get_season")
+  - title: Basketball Reference
+    contents:
+    - starts_with("get_bref")
+  - title: Agent
+    contents:
+      - starts_with("get_agent|get_players_agents")
+  - title: Hoops Hype
+    contents:
+      - starts_with("get_hoops_hype")
+  - title: Drafts
+    contents: 
+      - starts_with("get_years_draft_combines|get_drafts")
+  - title: Games
+    contents: 
+      - starts_with("get_game|get_games")
+  - title: Teams
+    contents:
+      - starts_with("get_teams|get_team")
+  - title: Players
+    contents:
+      - starts_with("get_players")
+  - title: Dictionaries
+    contents:
+      - starts_with("dictionar")
+  - title: Other
+    contents:
+      - starts_with("assign|scale_per_minute|widen|nbastatR|gather|spread|summarise_per_minute|get_beyond|get_all_nba_teams_salaries|get_all_star_game_scores|get_current_standings")

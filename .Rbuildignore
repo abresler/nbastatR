@@ -10,3 +10,4 @@
 ^\dev
 ^\depricated
 ^docs$
+^_pkgdown\.yml$

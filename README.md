@@ -7,7 +7,9 @@ nbastatR
 devtools::install_github("abresler/nbastatR")
 ```
 
-Mastering the NBA universe in R
+### nbastatR
+
+A package to help you master the NBA data universe in R.
 
 ## Wrappers
 
