@@ -106,7 +106,7 @@ get_days_nba_scores <-
   function(game_dates = NULL,
            day_offset= 0,
            include_standings = F,
-           assign_to_environment = T,
+           assign_to_environment = TRUE,
            return_message = TRUE) {
     if (game_dates %>% purrr::is_null()) {
       stop("Please enter game dates")

@@ -5,7 +5,7 @@
 \title{Basketball Reference players bios}
 \usage{
 get_bref_players_bios(players = NULL, player_ids = NULL,
-  assign_to_environment = T, return_message = T)
+  assign_to_environment = TRUE, return_message = T)
 }
 \arguments{
 \item{players}{vector of player names}

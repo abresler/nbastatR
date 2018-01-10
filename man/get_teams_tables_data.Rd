@@ -11,7 +11,7 @@ get_teams_tables_data(teams = NULL, team_ids = NULL, all_active_teams = F,
   months = NA, season_segments = NA, date_from = NA, date_to = NA,
   opponent_ids = NA, vs_confs = NA, vs_divisions = NA,
   game_segments = NA, periods = NA, shot_clocks = NA, last_n_games = NA,
-  assign_to_environment = T, return_message = TRUE)
+  assign_to_environment = TRUE, return_message = TRUE)
 }
 \arguments{
 \item{teams}{vector of NBA team names}

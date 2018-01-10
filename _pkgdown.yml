@@ -2,7 +2,7 @@ url: http://asbcllc.com/nbastatR/
 
 template:
   params:
-    bootswatch: cerulean
+    bootswatch: united
 
 reference:
   - title: Various NBA Stats API functions

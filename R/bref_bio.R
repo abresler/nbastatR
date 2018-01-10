@@ -560,7 +560,7 @@ get_bref_players_ids  <-
 get_bref_players_bios <-
   function(players = NULL,
            player_ids = NULL,
-           assign_to_environment = T,
+           assign_to_environment = TRUE,
            return_message = T) {
     ids <-
       get_bref_players_ids(players = players, player_ids = player_ids) %>%

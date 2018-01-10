@@ -12,7 +12,7 @@ get_players_tables_data(players = NULL, player_ids = NULL,
   locations = NA, months = NA, season_segments = NA, date_from = NA,
   date_to = NA, opponent_ids = NA, vs_confs = NA, vs_divisions = NA,
   game_segments = NA, periods = NA, shot_clocks = NA, last_n_games = NA,
-  assign_to_environment = T, return_message = TRUE)
+  assign_to_environment = TRUE, return_message = TRUE)
 }
 \arguments{
 \item{players}{vector of player names}
@@ -155,7 +155,7 @@ a \code{data_frame}
 NBA players table data
 }
 \examples{
-get_players_tables_data(players = c("Caris LeVert", "Joe Harris"), tables =  c("year over year", "passes", "game splits"),   modes = c("PerGame", "Totals"), measures = c("Base", "Advanced"), assign_to_environment = T)
+get_players_tables_data(players = c("Caris LeVert", "Joe Harris"), tables =  c("year over year", "passes", "game splits"),   modes = c("PerGame", "Totals"), measures = c("Base", "Advanced"), assign_to_environment = TRUE)
 }
 \seealso{
 Other player: \code{\link{get_bref_players_bios}},

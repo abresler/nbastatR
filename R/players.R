@@ -499,7 +499,7 @@ get_player_table_data <-
 #' @export
 #' @family player
 #' @examples
-#' get_players_tables_data(players = c("Caris LeVert", "Joe Harris"), tables =  c("year over year", "passes", "game splits"),   modes = c("PerGame", "Totals"), measures = c("Base", "Advanced"), assign_to_environment = T)
+#' get_players_tables_data(players = c("Caris LeVert", "Joe Harris"), tables =  c("year over year", "passes", "game splits"),   modes = c("PerGame", "Totals"), measures = c("Base", "Advanced"), assign_to_environment = TRUE)
 get_players_tables_data <-
   function(players = NULL,
            player_ids = NULL,
@@ -526,7 +526,7 @@ get_players_tables_data <-
            periods = NA,
            shot_clocks =  NA,
            last_n_games = NA,
-           assign_to_environment = T,
+           assign_to_environment = TRUE,
            return_message = TRUE) {
 
     assign_nba_players()

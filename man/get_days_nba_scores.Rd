@@ -5,7 +5,8 @@
 \title{Get NBA Dates' NBA Scores}
 \usage{
 get_days_nba_scores(game_dates = NULL, day_offset = 0,
-  include_standings = F, assign_to_environment = T, return_message = TRUE)
+  include_standings = F, assign_to_environment = TRUE,
+  return_message = TRUE)
 }
 \arguments{
 \item{game_dates}{vector of dates}

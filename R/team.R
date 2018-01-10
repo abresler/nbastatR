@@ -650,7 +650,7 @@ get_teams_tables_data <-
            periods = NA,
            shot_clocks =  NA,
            last_n_games = NA,
-           assign_to_environment = T,
+           assign_to_environment = TRUE,
            return_message = TRUE) {
     if (tables %>% purrr::is_null()) {
       stop("Please enter tables")

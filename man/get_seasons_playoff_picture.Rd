@@ -26,7 +26,7 @@ Returns playoff picture for specified seasons
 }
 \examples{
 get_seasons_playoff_picture(seasons = 2015:2018,
-assign_to_environment = T,
+assign_to_environment = TRUE,
  include_numeric_records = T)
 }
 \concept{playoffs}
