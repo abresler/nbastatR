@@ -159,8 +159,8 @@ get_season_gamelog <-
         distinct(yearSeason, dateGame, idPlayer, namePlayer) %>%
         group_by(yearSeason, idPlayer, namePlayer) %>%
         mutate(
-          numberGamePlayer = 1:n(),
-          countDaysRestPlayer = if_else(numberGamePlayer > 1,
+          numberGamePlayerSeason = 1:n(),
+          countDaysRestPlayer = if_else(numberGamePlayerSeason > 1,
                                         (dateGame - lag(dateGame) - 1),
                                         120),
           countDaysNextGamePlayer =
@@ -187,7 +187,7 @@ get_season_gamelog <-
         data %>%
         dplyr::select(
           typeResult:namePlayer,
-          numberGamePlayer,
+          numberGamePlayerSeason,
           countDaysRestPlayer,
           countDaysNextGamePlayer,
           everything()
@@ -248,7 +248,7 @@ get_game_logs <-
       stop("Please enter result type {player and/or team}")
     }
 
-    if (!result_types %>% str_to_lower()  %in% c("player", "team")) {
+    if (result_types %>% str_to_lower()  %in% c("player", "team") %>% sum(na.rm = T) == 0) {
       stop("Result type can only be player and/or team")
     }
 
