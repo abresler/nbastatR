@@ -1086,6 +1086,11 @@ get_teams_players_seasons_summary_stats <-
            add_mode_names = T,
            return_message = TRUE) {
 
+
+    if (!types %>% str_to_lower()  %in% c("player", "team")) {
+      stop("Result type can only be player and/or team")
+    }
+
     input_df <-
       expand.grid(season =  seasons,
                   type = types,

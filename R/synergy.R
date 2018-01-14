@@ -272,6 +272,10 @@ get_synergy_categories_stats <-
     if (seasons %>% purrr::is_null()) {
       stop("please enter season")
     }
+
+    if (!result_types %>% str_to_lower()  %in% c("player", "team")) {
+      stop("Result type can only be player and/or team")
+    }
     input_df <-
       expand.grid(
         season = seasons,

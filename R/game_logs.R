@@ -248,6 +248,10 @@ get_game_logs <-
       stop("Please enter result type {player and/or team}")
     }
 
+    if (!result_types %>% str_to_lower()  %in% c("player", "team")) {
+      stop("Result type can only be player and/or team")
+    }
+
     result_length <- result_types %>% length()
     if (result_length == 2) {
       result_types <-  c("player", "team")
