@@ -21,10 +21,10 @@ reference:
     contents:
       - starts_with("get_hoops_hype")
   - title: Drafts
-    contents: 
+    contents:
       - starts_with("get_years_draft_combines|get_drafts")
   - title: Games
-    contents: 
+    contents:
       - starts_with("get_game|get_games")
   - title: Teams
     contents:
@@ -38,3 +38,10 @@ reference:
   - title: Other
     contents:
       - starts_with("assign|scale_per_minute|widen|nbastatR|gather|spread|summarise_per_minute|get_beyond|get_all_nba_teams_salaries|get_all_star_game_scores|get_current_standings")
+
+navbar:
+  left:
+  - text: ASBC LLC
+    href: http://asbcllc.com/
+  - text: Reference
+    href: reference/index.html
