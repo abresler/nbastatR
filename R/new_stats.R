@@ -239,24 +239,48 @@ get_nba_current_season_schedule <-
 
   df_season_games <-
     json_data[!json_data %>% names() %in% c("period", "nugget", "hTeam", "vTeam", "watch")] %>%
-    dplyr::as_data_frame() %>%
+    dplyr::as_data_frame()
+
+  df_season_games <-
+    df_season_games %>%
     purrr::set_names(c("slugGame", "idStageGame", "slugGameCode", "idGameStatus",
                        "hasExtendedStatus", "isUnknownStartTime", "datetimeGame", "dateSlugGame",
-                       "timeEasternGame", "hasBuzzerBeater")) %>%
-    mutate(idGame = slugGame %>% as.numeric(),
-           urlNBAGameBook = glue::glue("https://data.nba.net/prod/v1/{dateSlugGame}/{dateSlugGame}_Book.pdf") %>% as.character(),
-           datetimeGame = readr::parse_datetime(datetimeGame),
-           dateGame = lubridate::ymd(dateSlugGame)) %>%
+                       "timeEasternGame", "hasBuzzerBeater", "tags")) %>%
+    select(-one_of("tags")) %>%
+    tidyr::separate(slugGameCode,
+                    into = c("idGame", "slugTeams"),
+                    sep = "/")
+  season <- df_season_games$idGame[[1]] %>% substr(1,4) %>% as.numeric() + 1
+
+  df_season_games <-
+    df_season_games %>%
+    mutate(
+      yearSeason = season,
+      idGame = idGame %>% as.numeric(),
+      slugTeamHome = slugTeams %>% substr(4, 6),
+      slugTeamAway = slugTeams %>% substr(1, 3)
+    ) %>%
+    mutate(
+      idGame = slugGame %>% as.numeric(),
+      urlNBAGameBook = glue::glue(
+        "https://data.nba.net/prod/v1/{dateSlugGame}/{dateSlugGame}_Book.pdf"
+      ) %>% as.character(),
+      datetimeGame = readr::parse_datetime(datetimeGame),
+      dateGame = lubridate::ymd(dateSlugGame)
+    ) %>%
     mutate(idRow = 1:n()) %>%
-    select(idGame, everything())
+    select(idGame, everything()) %>%
+    select(yearSeason, dateGame, slugTeamAway, slugTeamHome, everything())
 
   df_periods <-
     json_data$period %>%
     as_data_frame() %>%
     purrr::set_names(c("quarterMaxPlayed", "idSeasonType", "maxQuartersRegular")) %>%
-    mutate(hasOvertime = quarterMaxPlayed > 4,
-           countOTQuarters =  quarterMaxPlayed - maxQuartersRegular,
-           isComplete = !quarterMaxPlayed == 1) %>%
+    mutate(
+      hasOvertime = quarterMaxPlayed > 4,
+      countOTQuarters =  quarterMaxPlayed - maxQuartersRegular,
+      isComplete = !quarterMaxPlayed == 1
+    ) %>%
     mutate(idRow = 1:n())
 
   df_descriptions <-
