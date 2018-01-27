@@ -2039,3 +2039,36 @@ get_all_star_game_scores <-
   }
 
 
+
+# active_injuries ---------------------------------------------------------
+
+#' Active injuries
+#'
+#' Returns information of
+#' active NBA player injuries from
+#' Basketball-Reference
+#'
+#' @return a \code{data_frame()}
+#' @export
+#'
+#' @examples
+#' get_bref_active_injuries()
+get_bref_active_injuries <-
+  function() {
+    page <-
+      "https://www.basketball-reference.com/friv/injuries.fcgi" %>%
+      read_page()
+
+    data <-
+      page %>%
+      html_table(fill = F) %>%
+      flatten_df() %>%
+      purrr::set_names(c("namePlayer", "nameTeam", "dateInjury", "typeInjury",
+                         "descriptionInjury"))
+    data <-
+      data %>%
+      mutate(dateInjury = dateInjury %>% lubridate::mdy()) %>%
+      arrange(desc(dateInjury))
+
+    data
+  }

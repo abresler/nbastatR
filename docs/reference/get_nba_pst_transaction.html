@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Get seasons standing data — get_seasons_standings • nbastatR</title>
+<title>ProSports NBA Transcations — get_nba_pst_transaction • nbastatR</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
@@ -72,38 +72,67 @@
       <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Get seasons standing data</h1>
+    <h1>ProSports NBA Transcations</h1>
     </div>
 
     
-    <p>NBA season standing data</p>
+    <p>Returns data matching specified
+parameters</p>
     
 
-    <pre class="usage"><span class='fu'>get_seasons_standings</span>(<span class='kw'>seasons</span> <span class='kw'>=</span> <span class='fl'>1950</span>:<span class='fl'>2018</span>,
-  <span class='kw'>season_types</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>"Regular Season"</span>), <span class='kw'>resolve_records</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
-  <span class='kw'>nest_data</span> <span class='kw'>=</span> <span class='no'>F</span>, <span class='kw'>return_message</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</pre>
+    <pre class="usage"><span class='fu'>get_nba_pst_transaction</span>(<span class='kw'>person</span> <span class='kw'>=</span> <span class='st'>"Jarrett Jack"</span>, <span class='kw'>team</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>date_from</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>date_to</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>include_trades</span> <span class='kw'>=</span> <span class='no'>T</span>,
+  <span class='kw'>include_injury_list_movement</span> <span class='kw'>=</span> <span class='no'>T</span>, <span class='kw'>include_g_league_movement</span> <span class='kw'>=</span> <span class='no'>T</span>,
+  <span class='kw'>include_injury_missed_games</span> <span class='kw'>=</span> <span class='no'>T</span>, <span class='kw'>include_personal_missed_games</span> <span class='kw'>=</span> <span class='no'>T</span>,
+  <span class='kw'>include_discipline</span> <span class='kw'>=</span> <span class='no'>T</span>, <span class='kw'>include_criminal_incidents</span> <span class='kw'>=</span> <span class='no'>T</span>,
+  <span class='kw'>return_message</span> <span class='kw'>=</span> <span class='no'>T</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>seasons</th>
-      <td><p>vector of seasons</p></td>
+      <th>person</th>
+      <td><p>if not <code>NULL</code> vector of person name</p></td>
     </tr>
     <tr>
-      <th>season_types</th>
-      <td><p>type of season options include</p><ul>
-<li><p>Regular Season</p></li>
-<li><p>Pre Season</p></li>
-</ul></td>
+      <th>team</th>
+      <td><p>if not <code>NULL</code> vector of team name</p></td>
     </tr>
     <tr>
-      <th>resolve_records</th>
-      <td><p><code>TRUE</code> resolve records into wins, losses and win percentage</p></td>
+      <th>date_from</th>
+      <td><p>if not <code>NULL</code> vector ofdate</p></td>
     </tr>
     <tr>
-      <th>nest_data</th>
-      <td><p>if <code>TRUE</code> returns a nested data frame</p></td>
+      <th>date_to</th>
+      <td><p>if not <code>NULL</code> vector of person name</p></td>
+    </tr>
+    <tr>
+      <th>include_trades</th>
+      <td><p>if <code>TRUE</code> includs trades</p></td>
+    </tr>
+    <tr>
+      <th>include_injury_list_movement</th>
+      <td><p>if <code>TRUE</code> includes injury list</p></td>
+    </tr>
+    <tr>
+      <th>include_g_league_movement</th>
+      <td><p>if <code>TRUE</code> includes g-league movenment</p></td>
+    </tr>
+    <tr>
+      <th>include_injury_missed_games</th>
+      <td><p>if <code>TRUE</code> includes injury missed games</p></td>
+    </tr>
+    <tr>
+      <th>include_personal_missed_games</th>
+      <td><p>if <code>TRUE</code> inclue personal missed games</p></td>
+    </tr>
+    <tr>
+      <th>include_discipline</th>
+      <td><p>if <code>TRUE</code> include disciple</p></td>
+    </tr>
+    <tr>
+      <th>include_criminal_incidents</th>
+      <td><p>if <code>TRUE</code> include criminal incidents</p></td>
     </tr>
     <tr>
       <th>return_message</th>
@@ -113,16 +142,12 @@
     
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>a `data_frame`</p>
-    
-    <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
-
-    <p>Other standings: <code><a href='get_current_standings.html'>get_current_standings</a></code></p>
+    <p>a <code>data_frame</code></p>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><span class='co'># NOT RUN {</span>
-<span class='fu'>get_seasons_standings</span>(<span class='kw'>seasons</span> <span class='kw'>=</span> <span class='fl'>2015</span>:<span class='fl'>2018</span>, <span class='kw'>season_types</span> <span class='kw'>=</span> <span class='st'>"Regular Season"</span>, <span class='kw'>resolve_records</span> <span class='kw'>=</span> <span class='no'>T</span>, <span class='kw'>nest_data</span> <span class='kw'>=</span> <span class='no'>F</span>, <span class='kw'>return_message</span> <span class='kw'>=</span> <span class='no'>T</span>)
+<span class='fu'>get_nba_pst_transaction</span>(<span class='kw'>person</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>team</span> <span class='kw'>=</span> <span class='st'>"Nets"</span>)
 <span class='co'># }</span></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
@@ -131,8 +156,6 @@
       <li><a href="#arguments">Arguments</a></li>
       
       <li><a href="#value">Value</a></li>
-
-      <li><a href="#see-also">See also</a></li>
       
       <li><a href="#examples">Examples</a></li>
     </ul>
