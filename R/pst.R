@@ -1,33 +1,54 @@
 # http://www.prosportstransactions.com/basketball/Search/SearchResults.php?Player=&Team=&BeginDate=&EndDate=&PlayerMovementChkBx=yes&ILChkBx=yes&NBADLChkBx=yes&InjuriesChkBx=yes&PersonalChkBx=yes&DisciplinaryChkBx=yes&LegalChkBx=yes&Submit=Search
 
+fix_double_name <-
+  function(x) {
+    if (x %>% is.na()) {
+      return(x)
+    }
+    count_slashes <-x %>% str_count("/")
+    if (count_slashes == 0) {
+      return(x)
+    }
+    actual_name <- x %>% str_split("/") %>% flatten_chr() %>% str_trim() %>% .[[2]]
+    actual_name
+  }
+
 munge_data <-
   function(data) {
-   data <-
-     data %>%
+
+    data <-
+      data %>%
       separate(nicknameTeam,
                into = c("nicknameTeam", "slugLeague"),
                sep = "\\(") %>%
-      mutate(slugLeague = slugLeague %>% str_replace("\\)", ""),
-             slugLeague = if_else(slugLeague %>% is.na(), "NBA", slugLeague),
-             isTrade = descriptionTransaction %>% str_detect("trade"),
-             isDraftPick = descriptionTransaction %>% str_detect("round pick"),
-             isHiredExec = descriptionTransaction %>% str_detect("hire"),
-             isPromotedExec = descriptionTransaction %>% str_detect("promote"),
-             isLostFreeAgent = descriptionTransaction %>% str_detect("lost free agent"),
-             isSignedFreeAgent = descriptionTransaction %>% str_detect("signed"),
-             isWaived = descriptionTransaction %>% str_detect("waived"),
-             isActivedFromIL = descriptionTransaction %>% str_detect("activated from IL"),
-             isIRPlacement = descriptionTransaction %>% str_detect("placed on IR"),
-             isILPlacement = descriptionTransaction %>% str_detect("placed on IL"),
-             isArrested = descriptionTransaction %>% str_detect("arrest"),
-             iSurgery = descriptionTransaction %>% str_detect("Surgery"),
-             isFine = descriptionTransaction %>% str_detect("fined"),
-             isDNP = descriptionTransaction %>% str_detect("DNP"),
-             isLostExpansionDraft = descriptionTransaction %>% str_detect("lost in expansion draft"),
-             isDTD = descriptionTransaction %>% str_detect("DTD")) %>%
+      mutate(
+        slugLeague = slugLeague %>% str_replace("\\)", ""),
+        slugLeague = if_else(slugLeague %>% is.na(), "NBA", slugLeague),
+        isTrade = descriptionTransaction %>% str_detect("trade"),
+        isDraftPick = descriptionTransaction %>% str_detect("round pick"),
+        isHiredExec = descriptionTransaction %>% str_detect("hire"),
+        isPromotedExec = descriptionTransaction %>% str_detect("promote"),
+        isLostFreeAgent = descriptionTransaction %>% str_detect("lost free agent"),
+        isSignedFreeAgent = descriptionTransaction %>% str_detect("signed"),
+        isWaived = descriptionTransaction %>% str_detect("waived"),
+        isActivedFromIL = descriptionTransaction %>% str_detect("activated from IL"),
+        isIRPlacement = descriptionTransaction %>% str_detect("placed on IR"),
+        isILPlacement = descriptionTransaction %>% str_detect("placed on IL"),
+        isArrested = descriptionTransaction %>% str_detect("arrest"),
+        iSurgery = descriptionTransaction %>% str_detect("Surgery"),
+        isFine = descriptionTransaction %>% str_detect("fined"),
+        isDNP = descriptionTransaction %>% str_detect("DNP"),
+        isLostExpansionDraft = descriptionTransaction %>% str_detect("lost in expansion draft"),
+        isDTD = descriptionTransaction %>% str_detect("DTD")
+      ) %>%
       mutate_if(is.character,
                 funs(str_trim)) %>%
       suppressWarnings()
+
+    data <-
+      data %>%
+      mutate(namePlayerAcquired = namePlayerAcquired %>% map_chr(fix_double_name),
+             namePlayerRelinquished = namePlayerRelinquished %>% map_chr(fix_double_name))
 
    data
   }
@@ -208,6 +229,11 @@ get_pst_result_url_df <-
       html_nodes('.center+ table td:nth-child(3) a') %>%
       html_text() %>%
       readr::parse_number()
+
+    if (pages %>% length() == 0) {
+      return(data_frame(idPage = 1,
+                 urlPST = url))
+    }
 
     urls <-
       page %>%
