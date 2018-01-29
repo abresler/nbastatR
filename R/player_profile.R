@@ -357,11 +357,12 @@ get_players_profiles <- function(players = NULL,
 
   player_ids <-
     get_nba_players_ids(player_ids = player_ids, players = players)
-
+  get_player_profile_safe <-
+    purrr::possibly(get_player_profile, data_frame())
   all_data <-
     player_ids %>%
     map_df(function(player_id) {
-      get_player_profile(player_id = player_id)
+      get_player_profile_safe(player_id = player_id)
     })
   tables <- all_data$nameTable %>% unique()
   tables <- tables[!tables %in% "AvailableSeasons"]
