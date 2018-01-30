@@ -91,8 +91,6 @@ get_nba_player_injuries <-
   player_missing_df <-
     get_player_names()
 
-
-
   injury_data <-
     injury_data %>%
     left_join(player_missing_df) %>%
@@ -150,7 +148,7 @@ get_nba_player_injuries <-
     if (active_players %>% length() >0 ) {
       injury_data <-
         injury_data %>%
-        dplyr::filter(!name.player %in% active_players)
+        dplyr::filter(!namePlayer %in% active_players)
     }
 
   }
