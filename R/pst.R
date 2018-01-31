@@ -72,12 +72,14 @@ generate_pst_url <-
     if (person %>% purrr::is_null()) {
       entity_slug <- ''
     } else {
-      entity_slug <- person
+      entity_slug <-
+        person %>% URLencode()
     }
     if (team %>% purrr::is_null()) {
       team_slug <- ''
     } else {
-      team_slug <- team
+      team_slug <-
+        team %>% URLencode()
     }
 
     if (date_from %>% purrr::is_null()) {
