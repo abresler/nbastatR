@@ -738,8 +738,19 @@ dictionary_nba_names <-
                    "D_FGA", "D_FG_PCT", "NORMAL_FG_PCT", "PCT_PLUSMINUS",
                    "DraftPick", "DefenseCategory", "PLAYER_LAST_TEAM_ID", "PLAYER_LAST_TEAM_ABBREVIATION",
                    "ClutchTime", "PointDiff", "AheadBehind", "DistanceRange",
-                   "DribbleRange", "GeneralRange"
-
+                   "DribbleRange", "GeneralRange", "BOX_OUTS",
+                   "POSS",
+                   "PLAYER_PTS",
+                   "TEAM_PTS",
+                   "SFL",
+                   "DEF_FLS",
+                   "CFG3M",
+                   "CFG3A",
+                   "CFG3_PCT",
+                   "OFF_TEAM_ID", "OFF_TEAM_ABBREVIATION", "OFF_TEAM_CITY", "OFF_TEAM_NICKNAME",
+                   "OFF_PLAYER_ID", "OFF_PLAYER_NAME", "DEF_TEAM_ID", "DEF_TEAM_ABBREVIATION",
+                   "DEF_TEAM_CITY", "DEF_TEAM_NICKNAME", "DEF_PLAYER_ID", "DEF_PLAYER_NAME",
+                   "OFF_MATCHUP_PCT", "HELP_BLK", "HELP_BLK_REC", "DEF_FOULS", "OFF_FOULS"
                  ),
                nameActual =
                  c("idPlayer", "namePlayerLastFirst", "namePlayer",
@@ -985,7 +996,20 @@ dictionary_nba_names <-
                    "idPlayerTeam", "slugTeam", "categoryClutchTime",
                    "ptsDifference", "categoryAheadBehind",
                    "rangeShotDistance",
-                   "rangeDribble", "rangeGeneral"
+                   "rangeDribble", "rangeGeneral", "boxOuts",
+                   "possessions",
+                   "ptsPlayerAllowed",
+                   "ptsTeamAllowed",
+                   "pfShootingCommitted",
+                   "pfNonShootingComitted",
+                   "fgm3mContested",
+                   "fgm3Contested",
+                   "pctFG3M",
+
+                   "idTeamOffense", "slugTeamOffense", "cityTeamOffense", "nicknameTeamOffense",
+                   "idPlayerOffense", "namePlayerOffense", "idTeamDefense", "slugTeamDefense",
+                   "cityTeamDefense", "nicknameTeamDefense", "idPlayerDefense", "namePlayerDefense",
+                   "pctOffenseMatchup", "blkHelp", "blkHelpRecorded", "pfDefensiveDrawn", "pfOffensiveCommitted"
 
                  )
     )
@@ -1290,6 +1314,13 @@ munge_nba_data <- function(data) {
       mutate(yearSeasonFirst = yearSeasonFirst + 1,
              yearSeasonLast = yearSeasonLast + 1)
   }
+
+  data <-
+    data %>%
+    mutate_at(
+      .vars = data %>% select(matches("^pts|^blk")) %>% names(),
+      funs(. %>% as.numeric())
+    )
 
   data <-
     data %>%

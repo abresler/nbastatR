@@ -3,18 +3,19 @@
 dictionary_boxscore_slugs <-
   function(){
     data_frame(nameSlug = c("traditional", "advanced", "scoring","misc", "usage", "four factors",
-                            "hustle", "tracking", "winprob"),
+                            "hustle", "tracking", "winprob", "defense", "matchups"),
                slugNBA = c("boxscoretraditionalv2","boxscoreadvancedv2", "boxscorescoringv2", "boxscoremiscv2",
                            "boxscoreusagev2", "boxscorefourfactorsv2", "hustlestatsboxscore",
-                           "boxscoreplayertrackv2", "winprobabilitypbp"),
+                           "boxscoreplayertrackv2", "winprobabilitypbp", "boxscoredefensive",
+                           "boxscorematchups"),
                slugBase = c("traditional", "advanced", "scoring", "misc", "usage", "fourfactors",
-                            "hustlestats", "playertrack", "winprob")) %>%
+                            "hustlestats", "playertrack", "winprob", "defense", "matchups")) %>%
       mutate(typeStatsCall = "boxscore")
   }
 
 
 get_box_score_type <-
-  function(game_id = 21601112,
+  function(game_id = 21700865,
            result_type = "player",
            boxscore = "traditional",
            return_message = T,
@@ -25,6 +26,10 @@ get_box_score_type <-
     table_id <-
       case_when(type_slug %>% str_detect("player")~ 1,
                TRUE ~ 2)
+
+    if (boxscore %>% str_to_lower() %>% str_detect("hustle")) {
+      table_id <- 2
+    }
 
     df_box_slugs <-
       dictionary_boxscore_slugs()
@@ -71,6 +76,7 @@ get_box_score_type <-
       purrr::set_names(actual_names) %>%
       munge_nba_data()
 
+
     if (table_id == 2) {
       data <-
         data %>%
@@ -81,6 +87,66 @@ get_box_score_type <-
               sep =  " ",
               remove = F)
     }
+
+    if (boxscore %>% str_to_lower() %>% str_detect("defense")) {
+
+      names(data)[names(data) %in% c(
+        "fgm",
+                         "fga",
+                         "pctFG",
+                         "fg3m",
+                         "fg3a",
+                         "pctFG3",
+                         "fgmContested",
+                         "fgaContested",
+                         "pctFGContested",
+                         "fgm3mConested",
+                         "fgm3Contested",
+                         "pctFG3M",
+                         "fg2m",
+                         "fg2a",
+                         "ast",
+                         "ftm"
+      )] <-
+        names(data)[names(data) %in% c(
+          "fgm",
+          "fga",
+          "pctFG",
+          "fg3m",
+          "fg3a",
+          "pctFG3",
+          "fgmContested",
+          "fgaContested",
+          "pctFGContested",
+          "fgm3mConested",
+          "fgm3Contested",
+          "pctFG3M",
+          "fg2m",
+          "fg2a",
+          "ast",
+          "ftm"
+        )] %>% str_c(., "Allowed")
+
+      if (data %>% tibble::has_name("tov")) {
+        data <-
+          data %>%
+          dplyr::rename(tovForced = tov)
+      }
+
+      if (data %>% tibble::has_name("possessions")) {
+        data <-
+          data %>%
+          dplyr::rename(possessionsDefense = possessions)
+      }
+    }
+
+    if (boxscore %>% str_to_lower() %>% str_detect("matchup")) {
+      data <-
+        data %>%
+        unite(nameTeamOffense, cityTeamOffense, nicknameTeamOffense, sep = " ") %>%
+        unite(nameTeamDefense, cityTeamDefense, nicknameTeamDefense, sep = " ") %>%
+        dplyr::rename(pfShootingDrawn = pfShootingCommitted)
+      }
 
     data <-
       data %>%
@@ -109,6 +175,8 @@ get_box_score_type <-
 #' \item usage
 #' \item four factors
 #' \item tracking
+#' \item defense
+#' \item matchups
 #' }
 #' @param join_data if \code{TRUE} joins the underlying table data
 #' @param result_types vector of result types options include \itemize{

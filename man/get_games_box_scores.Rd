@@ -20,6 +20,8 @@ get_games_box_scores(game_ids = NULL, box_score_types = c("Traditional",
 \item usage
 \item four factors
 \item tracking
+\item defense
+\item matchups
 }}
 
 \item{result_types}{vector of result types options include \itemize{
