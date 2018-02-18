@@ -77,7 +77,7 @@ get_box_score_type <-
       munge_nba_data()
 
 
-    if (table_id == 2) {
+    if (table_id == 2 & data %>% tibble::has_name("nameTeam")) {
       data <-
         data %>%
         munge_nba_data() %>%
@@ -177,6 +177,7 @@ get_box_score_type <-
 #' \item tracking
 #' \item defense
 #' \item matchups
+#' \item hustle
 #' }
 #' @param join_data if \code{TRUE} joins the underlying table data
 #' @param result_types vector of result types options include \itemize{
@@ -225,7 +226,7 @@ get_games_box_scores <-
         input_df %>% slice(x)
 
       df_row %$%
-        get_box_score_type_safe(
+        get_box_score_type(
           game_id = game_id,
           result_type = result_type,
           boxscore = boxscore,
