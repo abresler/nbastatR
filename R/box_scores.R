@@ -65,6 +65,10 @@ get_box_score_type <-
       json$resultSets$rowSet[[table_id]] %>%
       as_data_frame()
 
+    if (data %>% nrow() == 0) {
+      return(invisible())
+    }
+
     json_names <-
       json$resultSets$headers[[table_id]]
 
@@ -226,7 +230,7 @@ get_games_box_scores <-
         input_df %>% slice(x)
 
       df_row %$%
-        get_box_score_type(
+        get_box_score_type_safe(
           game_id = game_id,
           result_type = result_type,
           boxscore = boxscore,
