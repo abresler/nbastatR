@@ -513,7 +513,7 @@ get_nba_draftnet_year_mock_draft <-
 #'
 #' @return a \code{data_frame()}
 #' @export
-#' @import dplyr lubridate purrr stringr tibble tidyr rvest xml2
+#' @import dplyr lubridate purrr stringr tibble tidyr rvest
 #' @importFrom glue glue
 #' @family draft
 #' @examples

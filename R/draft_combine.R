@@ -17,7 +17,7 @@ parse_out_set <-
           c(
             set_column,
             glue::glue("{set_column}Made"),
-            glue::glue("{set_column}Atempted"),
+            glue::glue("{set_column}Attempted"),
             glue::glue("{set_column}Pct")
           )
         values <-

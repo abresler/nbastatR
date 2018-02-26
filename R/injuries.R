@@ -23,7 +23,7 @@ get_player_names <- function(){
 #' @export
 #' @family players
 #' @family injuries
-#' @import lubridate dplyr curl stringr purrr tidyr rvest xml2
+#' @import lubridate dplyr curl stringr purrr tidyr rvest
 #' @examples
 #' get_nba_player_injuries()
 get_nba_player_injuries <-
