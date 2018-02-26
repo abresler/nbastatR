@@ -595,7 +595,7 @@ get_nbadraftnet_mock_drafts <-
       all_data <-
         all_data %>%
         mutate(isNBAPlayer = ifelse(!idPlayer %>% is.na(), TRUE, FALSE),
-               heightInches = heightPlayer %>% height_in_inches(),
+               heightInches = heightPlayer %>% map_dbl(height_in_inches),
                slugClass = slugClass %>% str_to_upper() ) %>%
         dplyr::select(dateUpdated:namePlayer, isNBAPlayer, everything())
     }
