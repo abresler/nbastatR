@@ -45,3 +45,14 @@ navbar:
     href: http://asbcllc.com/
   - text: Reference
     href: reference/index.html
+  right:
+  - icon: fa-github fa-lg
+    href: https://github.com/abresler/nbastatR
+  - icon: fa-twitter fa-lg
+    href: https://twitter.com/abresler
+  - icon: fa-linkedin fa-lg
+    href: https://www.linkedin.com/in/abresler
+  - icon: fa-dollar fa-lg
+    href: http://www.asbcllc.com/portfolio_investments
+
+

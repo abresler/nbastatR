@@ -47,9 +47,6 @@ get_nba_draft_year <-
       glue::glue("Acquired {draft_year} NBA Draft data") %>%
         message()
     }
-
-    closeAllConnections()
-
     all_data
 
   }

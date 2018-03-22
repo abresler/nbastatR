@@ -206,8 +206,6 @@ get_synergy_category_data <-
       data %>%
       number_to_pct()
 
-    closeAllConnections()
-
     data %>%
       nest(-c(slugSeason, typeResult, categorySynergy, typeSet),
            .key = "dataSynergy")

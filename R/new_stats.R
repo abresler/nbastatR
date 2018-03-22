@@ -158,8 +158,6 @@ get.nba_api_parameters <-
     get.json_data() %>%
     .$parameters %>%
     names()
-
-  closeAllConnections()
   gc()
 
   data_frame(slugBase = slug_nba,

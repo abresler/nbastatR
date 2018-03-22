@@ -59,8 +59,8 @@ get_season_gamelog <-
              typeResult = result_type) %>%
       mutate(dateGame = dateGame %>% lubridate::ymd()) %>%
       select(typeResult, typeSeason, slugSeason, everything()) %>%
-      arrange(dateGame) %>%
-      dplyr::select(typeResult:pctFG, fg2m:pctFG2, everything())
+      arrange(dateGame)
+
 
     data <-
       data %>%
@@ -202,7 +202,6 @@ get_season_gamelog <-
       dplyr::select(typeResult, typeSeason, yearSeason, everything()) %>%
       nest(-c(typeResult, slugSeason, yearSeason), .key = 'dataTables')
 
-    closeAllConnections()
     data
   }
 
@@ -587,8 +586,6 @@ get_seasons_teams <-
       select(isActive, slugTeam, idTeam, everything()) %>%
       arrange(slugTeam) %>%
       suppressWarnings()
-
-    closeAllConnections()
     data
   }
 

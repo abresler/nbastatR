@@ -156,7 +156,7 @@ parse.pst.page <-
          value %>%
           map_chr(function(v){
             v %>%
-              str_split("• ") %>%
+              str_split(". ") %>%
               flatten_chr() %>%
               discard(~.x == "") %>% str_c(collapse = " | ")
           })

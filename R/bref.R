@@ -1115,7 +1115,6 @@ parse_player_season <-
         message()
     }
     gc()
-    closeAllConnections()
     return(df)
   }
 

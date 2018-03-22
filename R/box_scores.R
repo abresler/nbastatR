@@ -161,7 +161,6 @@ get_box_score_type <-
       filter(cols > 1) %>%
       select(-cols) %>%
       select(typeBoxScore, typeResult, everything())
-    closeAllConnections()
     gc()
     data
   }

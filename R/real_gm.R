@@ -690,6 +690,5 @@ get_players_agents <-
         nest(-nameAgent, .key = 'dataNBAPlayers')
     }
 
-    closeAllConnections()
     players_agents_df
   }

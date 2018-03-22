@@ -105,7 +105,6 @@ get_nba_player_career_stats <-
 
         data
       })
-    closeAllConnections()
     all_data
   }
 

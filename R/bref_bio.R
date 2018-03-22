@@ -470,7 +470,6 @@ parse_bref_player_data_url <-
       mutate(urlPlayerImageBREF) %>%
       select(matches("^id|name|url"), everything())
   }
-  closeAllConnections()
   data
 
 }
