@@ -106,20 +106,32 @@ get_team_id_season_roster <-
       nba_json_to_df(table_id = table_id) %>%
       mutate(slugSeason = season_slug)
 
+    if (data %>% tibble::has_name("dateBirth")) {
+      data <-
+        data %>%
+        mutate(dateBirth = dateBirth %>% lubridate::mdy())
+    }
+
+    if (data %>% tibble::has_name("countYearsExperience")) {
     data <-
       data %>%
       mutate(
         countYearsExperience = ifelse(is.na(countYearsExperience), 0, countYearsExperience),
-        dateBirth = dateBirth %>% lubridate::mdy()
-      ) %>%
-      tidyr::separate(heightInches,
-                      sep = "\\-",
-                      into = c("feet", "inches")) %>%
-      mutate_at(c("feet", "inches"),
-                funs(. %>% as.numeric())) %>%
-      mutate(heightInches = (12 * feet) + inches) %>%
-      select(-one_of(c("feet", "inches"))) %>%
-      select(slugSeason, idTeam:weightLBS, heightInches, everything())
+      )
+    }
+
+    if (data %>% tibble::has_name("heightInches")) {
+      data <-
+        data %>%
+        tidyr::separate(heightInches,
+                        sep = "\\-",
+                        into = c("feet", "inches")) %>%
+        mutate_at(c("feet", "inches"),
+                  funs(. %>% as.numeric())) %>%
+        mutate(heightInches = (12 * feet) + inches) %>%
+        select(-one_of(c("feet", "inches"))) %>%
+        select(slugSeason, idTeam:weightLBS, heightInches, everything())
+    }
 
     data
   }
