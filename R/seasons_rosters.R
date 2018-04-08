@@ -206,11 +206,12 @@ get_seasons_rosters <-
     if (seasons %>% purrr::is_null()) {
       stop("Enter seasons")
     }
-
+    .get_season_roster_safe <-
+      purrr::possibly(.get_season_roster, data_frame())
     all_data <-
       seasons %>%
       map_df(function(season) {
-        .get_season_roster(season = season, return_message = return_message)
+        .get_season_roster_safe(season = season, return_message = return_message)
       })
 
     df_dict_nba_players <- get_nba_players()
