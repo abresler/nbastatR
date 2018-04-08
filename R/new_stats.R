@@ -416,13 +416,10 @@ parse_for_players <-
         urlPlayerThumbnail = glue::glue(
           "http://stats.nba.com/media/players/230x185/{idPlayer}.png"
         ) %>% as.character(),
-        urlPlayerHeadshot = ifelse(
-          idTeam %>% is.na(),
-          "http://stats.nba.com/media/img/league/nba-headshot-fallback.png",
-          glue::glue(
-            "https://ak-static.cms.nba.com/wp-content/uploads/headshots/nba/{idTeam}/{yearSeasonLast}/260x190/{idPlayer}.png"
+        urlPlayerHeadshot = glue::glue(
+            "https://ak-static.cms.nba.com/wp-content/uploads/headshots/nba/latest/260x190/{idPlayer}.png"
           ) %>% as.character()
-        )) %>%
+        ) %>%
       mutate(
         urlPlayerActionPhoto = ifelse(isRookie, "http://stats.nba.com/media/img/league/nba-headshot-fallback.png",
                                       glue::glue("http://stats.nba.com/media/players/700/{idPlayer}.png")) %>% as.character())
@@ -689,13 +686,9 @@ get_nba_players <-
         urlPlayerThumbnail = glue::glue(
           "http://stats.nba.com/media/players/230x185/{idPlayer}.png"
         ) %>% as.character(),
-        urlPlayerHeadshot = ifelse(
-          idTeam %>% is.na(),
-          "http://stats.nba.com/media/img/league/nba-headshot-fallback.png",
-          glue::glue(
-            "https://ak-static.cms.nba.com/wp-content/uploads/headshots/nba/{idTeam}/{yearSeasonLast}/260x190/{idPlayer}.png"
-          ) %>% as.character()
-        )
+        urlPlayerHeadshot = glue::glue(
+          "https://ak-static.cms.nba.com/wp-content/uploads/headshots/nba/latest/260x190/{idPlayer}.png"
+        ) %>% as.character()
       ) %>%
       mutate(
         urlPlayerActionPhoto = ifelse(
