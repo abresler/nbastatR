@@ -267,9 +267,9 @@ get_season_teams_rosters <-
 
   }
 
-#' Teams seaosons rosters
+#' Teams seasons rosters
 #'
-#' Gets NBA teams rosters for specified seasonss
+#' Gets NBA teams rosters for specified seasons
 #'
 #' @param seasons vector of seasons
 #' @param nest_data if \code{TRUE} returns nested data frame

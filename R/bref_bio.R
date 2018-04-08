@@ -548,7 +548,7 @@ get_bref_players_ids  <-
 #' @export
 #' @family BREF
 #' @family player
-#' @family salarise
+#' @family salaries
 #'
 #' @examples
 #' \dontrun{

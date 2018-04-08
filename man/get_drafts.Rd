@@ -17,7 +17,7 @@ get_drafts(draft_years = 1947:2018, nest_data = F, return_message = T)
 a `data_frame`
 }
 \description{
-NBA draft data for specified sasons
+NBA draft data for specified seasons
 }
 \examples{
 library(dplyr)

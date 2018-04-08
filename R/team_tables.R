@@ -73,13 +73,17 @@ get_team_details <- function(team_id = 1610612745, return_message = TRUE) {
 #' @importFrom glue glue
 #' @examples
 #' get_teams_details(all_teams = TRUE, assign_to_environment = TRUE)
+#'
+
 get_teams_details <-
-  function(teams = NULL, team_ids = NULL,
-           all_teams = T,
+  function(teams = NULL,
+           team_ids = NULL,
+           all_teams = F,
            assign_to_environment = TRUE,
            return_message = T) {
-
-    if (teams %>% purrr::is_null() & !all_teams) {
+    no_ids <- as.numeric( (team_ids %>% purrr::is_null() & !all_teams))
+    no_teams <-  as.numeric((teams %>% purrr::is_null() & !all_teams))
+    if (no_ids + no_teams == 2) {
       stop("Please enter a team or make all_teams = T")
     }
     if (!'df_dict_nba_teams_history' %>% exists()) {
@@ -119,6 +123,12 @@ get_teams_details <-
         append(all_ids)
     }
 
+    if (!team_ids %>% purrr::is_null()) {
+      ids <-
+        ids %>%
+        append(team_ids)
+    }
+
     ids <-
       ids %>%
       unique() %>%
@@ -129,7 +139,7 @@ get_teams_details <-
     all_data <-
       ids %>%
       map_df(function(id) {
-        get_team_details_safe(team_id = id, return_message = return_message)
+        get_team_details(team_id = id, return_message = return_message)
       })
 
     tables <- all_data$nameTable %>% unique()
@@ -254,7 +264,7 @@ get_team_year_by_year_stats <-
 #' NBA teams yearly performance
 #'
 #' @param teams vector of team names
-#' @param team_ids vecor of team ids
+#' @param team_ids vector of team ids
 #' @param all_active_teams if \code{TRUE} returns all active teams
 #' @param season_types type of season options include \itemize{
 #' \item Pre Season

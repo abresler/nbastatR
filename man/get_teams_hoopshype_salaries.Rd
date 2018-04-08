@@ -15,7 +15,7 @@ get_teams_hoopshype_salaries(teams = NULL, all_teams = TRUE,
 
 \item{assume_player_opt_out}{if \code{TRUE} assumes player opt out of options}
 
-\item{assume_team_doesnt_exercise}{if \code{TRUE} assumes teams don't excerise options}
+\item{assume_team_doesnt_exercise}{if \code{TRUE} assumes teams don't exercise options}
 
 \item{nest_data}{if \code{TRUE} nests data}
 
@@ -42,6 +42,7 @@ get_teams_hoopshype_salaries(all_teams = TRUE,
 Other hoopshype: \code{\link{get_hoops_hype_teams_salary_summary}}
 
 Other salaries: \code{\link{get_all_nba_teams_salaries}},
+  \code{\link{get_bref_players_bios}},
   \code{\link{get_hoops_hype_teams_salary_summary}},
   \code{\link{get_nba_team_salaries}}
 }

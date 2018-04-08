@@ -452,7 +452,7 @@ assign.bref.teams <-
               value_name = "value",
               perserve_order = TRUE,
               unite_columns = NULL,
-              seperate_columns = NULL
+              separate_columns = NULL
             )
         }
 
@@ -626,7 +626,7 @@ assign.bref.players <-
               value_name = "value",
               perserve_order = TRUE,
               unite_columns = NULL,
-              seperate_columns = NULL
+              separate_columns = NULL
             )
         }
 

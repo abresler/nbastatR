@@ -10,7 +10,7 @@ get_nba_transactions(include_history = T)
 a `data_frame`
 }
 \description{
-Acquires all NBA transctations since 2012
+Acquires all NBA transactions since 2012
 }
 \examples{
 get_nba_transactions()

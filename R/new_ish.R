@@ -327,7 +327,7 @@ get_nba_headers <- function() {
 
 #' Players' NBA player ids
 #'
-#' Resolve player ids for specified playrs
+#' Resolve player ids for specified players
 #'
 #' @param players vector of player names
 #' @param player_ids vector of player ids
@@ -496,8 +496,10 @@ generate_season_slug <-
 
 pad_id <-
   function(id = 21601112) {
-    zeros <- 10 - nchar(id)
-    start <- rep("0", zeros) %>% str_c(collapse = "")
+    zeros <-
+      10 - nchar(id)
+    start <-
+      rep("0", times = zeros) %>% str_c(collapse = "")
     glue::glue("{start}{id}") %>% as.character()
   }
 

@@ -808,7 +808,7 @@ get_players_teams_season_summary_stats <-
 
 
 
-#' NBA teams and player statisitcs
+#' NBA teams and player statistics
 #'
 #' Gets NBA summary statistics tables
 

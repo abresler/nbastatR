@@ -15,7 +15,7 @@ get_nba_players_ids(players = NULL, player_ids = NULL)
 a `data_frame`
 }
 \description{
-Resolve player ids for specified playrs
+Resolve player ids for specified players
 }
 \examples{
 get_nba_players_ids(players = c("Mitch Richmond", "Kyle Kuzma"))

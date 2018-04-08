@@ -20,7 +20,7 @@ get_players_profiles(players = NULL, player_ids = NULL, nest_data = F,
 a `data_frame`
 }
 \description{
-Returns NBA player profilies for specified
+Returns NBA player profiles for specified
 players.
 }
 \examples{

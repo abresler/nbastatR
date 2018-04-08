@@ -13,7 +13,7 @@ get_teams_roto_wire_news(teams = NULL, team_ids = NULL,
 
 \item{team_ids}{vector}
 
-\item{all_active_teams}{if `TRUE` searchs all active teams}
+\item{all_active_teams}{if `TRUE` searches all active teams}
 
 \item{nest_data}{if `TRUE` returns nested data frame}
 

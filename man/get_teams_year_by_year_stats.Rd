@@ -11,7 +11,7 @@ get_teams_year_by_year_stats(teams = NULL, team_ids = NULL,
 \arguments{
 \item{teams}{vector of team names}
 
-\item{team_ids}{vecor of team ids}
+\item{team_ids}{vector of team ids}
 
 \item{all_active_teams}{if \code{TRUE} returns all active teams}
 

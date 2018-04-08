@@ -88,7 +88,7 @@ fix_name <- function(data, fix_name = "Weeks12") {
 #'
 #' @param data a \code{data_frame}
 #' @param numeric_ids vector of numeric ids
-#' @param use_logical_keys if \code{TRUE} uses logicals as eys
+#' @param use_logical_keys if \code{TRUE} uses logicals as keys
 #' @param use_factor_keys if \code{TRUE} uses factors as a key
 #' @param use_date_keys if \code{TRUE} uses dates as a key
 #' @param variable_name variable column name
@@ -96,27 +96,27 @@ fix_name <- function(data, fix_name = "Weeks12") {
 #' \item new_column : new column name
 #' \item column_1 : first column to unite
 #' \item column_2 : second column to unite
-#' \item sep : seperator
+#' \item sep : separator
 #' }
-#' @param seperate_columns if not \code{NULL} \code{list} \itemize{
-#' \item column : column to seperate
+#' @param separate_columns if not \code{NULL} \code{list} \itemize{
+#' \item column : column to separate
 #' \item new_column_1 : new_column 1
 #' \item new_column_2 : new_column 2
-#' \item sep : seperator
+#' \item sep : separator
 #' }
 #' @param unite_columns if not \code{NULL} \code{list} \itemize{
 #' \item new_column : new column name
 #' \item column_1 : first column to unite
 #' \item column_2 : second column to unite
-#' \item sep : seperator
+#' \item sep : separator
 #' }
-#' @param seperate_columns if not \code{NULL} \code{list} \itemize{
-#' \item column : column to seperate
+#' @param separate_columns if not \code{NULL} \code{list} \itemize{
+#' \item column : column to separate
 #' \item new_column_1 : new_column 1
 #' \item new_column_2 : new_column 2
-#' \item sep : seperator
+#' \item sep : separator
 #' }
-#' @param remove_na removes NA colums
+#' @param remove_na removes NA columns
 #' @return a \code{data_frame}
 #' @export
 #' @import dplyr stringr
@@ -131,7 +131,7 @@ gather_data <-
            use_logical_keys = TRUE,
            use_factor_keys = TRUE,
            unite_columns = NULL,
-           seperate_columns = NULL,
+           separate_columns = NULL,
            use_date_keys = FALSE,
            remove_na = TRUE) {
 
@@ -201,9 +201,9 @@ gather_data <-
         suppressWarnings()
     }
 
-    if (!seperate_columns %>% purrr::is_null()) {
+    if (!separate_columns %>% purrr::is_null()) {
       df_sep <-
-        seperate_columns %>% flatten_df()
+        separate_columns %>% flatten_df()
       data <-
         data %>%
         separate(col = rlang::UQ(df_sep$column), into = c(df_sep$new_column_1, df_sep$new_column_2), sep = df_sep$sep) %>%
@@ -226,9 +226,9 @@ gather_data <-
 #' @param data a \code{data_frame}
 #' @param variable_name name of variable vector
 #' @param value_name name of value vector
-#' @param perserve_order if \code{TRUE} perserve order
+#' @param preserve_order if \code{TRUE} preserve order
 #' @param unite_columns
-#' @param seperate_columns
+#' @param separate_columns
 #'
 #' @return a \code{data_frame}
 #' @export
@@ -239,9 +239,9 @@ spread_data <-
   function(data,
            variable_name = "item",
            value_name = "value",
-           perserve_order = TRUE,
+           preserve_order = TRUE,
            unite_columns = NULL,
-           seperate_columns = NULL
+           separate_columns = NULL
   ) {
 
     if (!unite_columns %>% purrr::is_null()) {
@@ -251,9 +251,9 @@ spread_data <-
         unite(col = rlang::UQ(df_unite$new_column), df_unite$column_1, df_unite$column_2, sep = df_unite$sep)
     }
 
-    if (!seperate_columns %>% purrr::is_null()) {
+    if (!separate_columns %>% purrr::is_null()) {
       df_sep <-
-        seperate_columns %>% flatten_df()
+        separate_columns %>% flatten_df()
       data <-
         data %>%
         separate(col = rlang::UQ(df_sep$column), into = c(df_sep$new_column_1, df_sep$new_column_2), sep = df_sep$sep) %>%
@@ -271,7 +271,7 @@ spread_data <-
       data %>%
       spread(variable_name, value_name)
 
-    if (perserve_order) {
+    if (preserve_order) {
       data <-
         data %>% dplyr::select(one_of(col_order))
     }
@@ -423,7 +423,7 @@ summarise_per_minute <-
 #' Summarise data per minute
 #'
 #' @param data a data frame
-#' @param scale_columns vector of columns to scal
+#' @param scale_columns vector of columns to scale
 #'
 #' @return
 #' @export

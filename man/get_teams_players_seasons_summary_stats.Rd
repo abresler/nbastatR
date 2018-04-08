@@ -2,7 +2,7 @@
 % Please edit documentation in R/players_teams.R
 \name{get_teams_players_seasons_summary_stats}
 \alias{get_teams_players_seasons_summary_stats}
-\title{NBA teams and player statisitcs}
+\title{NBA teams and player statistics}
 \usage{
 get_teams_players_seasons_summary_stats(seasons = 2018, types = c("player",
   "team"), tables = c("defense"), season_types = "Regular Season",

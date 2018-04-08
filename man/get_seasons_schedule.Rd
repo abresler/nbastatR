@@ -17,7 +17,7 @@ get_seasons_schedule(seasons = 2018, season_types = "Regular Season",
 
 \item{box_score_tables}{vector of box score table names}
 
-\item{nest_data}{if `TRUE` nests thedata}
+\item{nest_data}{if `TRUE` nests the data}
 
 \item{return_message}{if `TRUE`}
 }

@@ -15,11 +15,11 @@ get_nba_team_salaries(team_name = "Brooklyn Nets", team_slug = NA,
 
 \item{assume_player_opt_out}{if `TRUE` assumes NBA player opts out}
 
-\item{assume_team_doesnt_exercise}{if `TRUE` assumes teams don't excercise team option}
+\item{assume_team_doesnt_exercise}{if `TRUE` assumes teams don't exercise team option}
 
 \item{spread_data}{if `TRUE` returns wide data}
 
-\item{return_message}{if `TRUE` returns a messag}
+\item{return_message}{if `TRUE` returns a message}
 }
 \value{
 a `data_frame`
@@ -32,6 +32,7 @@ get_nba_team_salaries(team_name = "Brooklyn Nets")
 }
 \seealso{
 Other salaries: \code{\link{get_all_nba_teams_salaries}},
+  \code{\link{get_bref_players_bios}},
   \code{\link{get_hoops_hype_teams_salary_summary}},
   \code{\link{get_teams_hoopshype_salaries}}
 }

@@ -329,7 +329,7 @@ get_player_profile <-
 
 #' NBA.com player profiles
 #'
-#' Returns NBA player profilies for specified
+#' Returns NBA player profiles for specified
 #' players.
 #'
 #' @param player_ids numeric vector of player IDs

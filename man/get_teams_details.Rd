@@ -4,7 +4,7 @@
 \alias{get_teams_details}
 \title{NBA teams details}
 \usage{
-get_teams_details(teams = NULL, team_ids = NULL, all_teams = T,
+get_teams_details(teams = NULL, team_ids = NULL, all_teams = F,
   assign_to_environment = TRUE, return_message = T)
 }
 \arguments{
@@ -27,4 +27,5 @@ Gets information about NBA franchises
 }
 \examples{
 get_teams_details(all_teams = TRUE, assign_to_environment = TRUE)
+
 }

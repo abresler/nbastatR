@@ -247,20 +247,20 @@ get_pst_result_url_df <-
                urlPST = urls)
   }
 
-#' ProSports NBA Transcations
+#' ProSports NBA transactions
 #'
 #' Returns data matching specified
 #' parameters
 #'
 #' @param person if not \code{NULL} vector of person name
 #' @param team if not \code{NULL} vector of team name
-#' @param date_from if not \code{NULL} vector ofdate
+#' @param date_from if not \code{NULL} vector of dates
 #' @param date_to if not \code{NULL} vector of person name
-#' @param include_trades if \code{TRUE} includs trades
+#' @param include_trades if \code{TRUE} includes trades
 #' @param include_injury_list_movement if \code{TRUE} includes injury list
-#' @param include_g_league_movement if \code{TRUE} includes g-league movenment
+#' @param include_g_league_movement if \code{TRUE} includes g-league movement
 #' @param include_injury_missed_games if \code{TRUE} includes injury missed games
-#' @param include_personal_missed_games if \code{TRUE} inclue personal missed games
+#' @param include_personal_missed_games if \code{TRUE} include personal missed games
 #' @param include_discipline if \code{TRUE} include disciple
 #' @param include_criminal_incidents if \code{TRUE} include criminal incidents
 #' @param return_message if \code{TRUE} returns a message

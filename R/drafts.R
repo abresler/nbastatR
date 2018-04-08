@@ -53,7 +53,7 @@ get_nba_draft_year <-
 
 #' NBA drafts
 #'
-#' NBA draft data for specified sasons
+#' NBA draft data for specified seasons
 #'
 #' @param draft_years \code{vector} of draft years
 #' @param return_message if \code{TRUE} returns message

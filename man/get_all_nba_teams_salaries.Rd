@@ -10,7 +10,7 @@ get_all_nba_teams_salaries(assume_player_opt_out = T,
 \arguments{
 \item{assume_player_opt_out}{if `TRUE` assumes player opts out of a player option}
 
-\item{assume_team_doesnt_exercise}{if `TRUE` assumes teams do not excercise team option}
+\item{assume_team_doesnt_exercise}{if `TRUE` assumes teams do not exercise team option}
 
 \item{spread_data}{if `TRUE` spreads data}
 
@@ -26,7 +26,8 @@ Gets information about NBA teams salaries
 get_all_nba_teams_salaries(assume_player_opt_out = T, assume_team_doesnt_exercise = T, return_message = TRUE)
 }
 \seealso{
-Other salaries: \code{\link{get_hoops_hype_teams_salary_summary}},
+Other salaries: \code{\link{get_bref_players_bios}},
+  \code{\link{get_hoops_hype_teams_salary_summary}},
   \code{\link{get_nba_team_salaries}},
   \code{\link{get_teams_hoopshype_salaries}}
 }

@@ -6,7 +6,7 @@
 \usage{
 gather_data(data, variable_name = "item", numeric_ids = c("^id"),
   use_logical_keys = TRUE, use_factor_keys = TRUE, unite_columns = NULL,
-  seperate_columns = NULL, use_date_keys = FALSE, remove_na = TRUE)
+  separate_columns = NULL, use_date_keys = FALSE, remove_na = TRUE)
 }
 \arguments{
 \item{data}{a \code{data_frame}}
@@ -15,7 +15,7 @@ gather_data(data, variable_name = "item", numeric_ids = c("^id"),
 
 \item{numeric_ids}{vector of numeric ids}
 
-\item{use_logical_keys}{if \code{TRUE} uses logicals as eys}
+\item{use_logical_keys}{if \code{TRUE} uses logicals as keys}
 
 \item{use_factor_keys}{if \code{TRUE} uses factors as a key}
 
@@ -23,32 +23,32 @@ gather_data(data, variable_name = "item", numeric_ids = c("^id"),
 \item new_column : new column name
 \item column_1 : first column to unite
 \item column_2 : second column to unite
-\item sep : seperator
+\item sep : separator
 }}
 
-\item{seperate_columns}{if not \code{NULL} \code{list} \itemize{
-\item column : column to seperate
+\item{separate_columns}{if not \code{NULL} \code{list} \itemize{
+\item column : column to separate
 \item new_column_1 : new_column 1
 \item new_column_2 : new_column 2
-\item sep : seperator
+\item sep : separator
 }}
 
 \item{use_date_keys}{if \code{TRUE} uses dates as a key}
 
-\item{remove_na}{removes NA colums}
+\item{remove_na}{removes NA columns}
 
 \item{unite_columns}{if not \code{NULL} \code{list} \itemize{
 \item new_column : new column name
 \item column_1 : first column to unite
 \item column_2 : second column to unite
-\item sep : seperator
+\item sep : separator
 }}
 
-\item{seperate_columns}{if not \code{NULL} \code{list} \itemize{
-\item column : column to seperate
+\item{separate_columns}{if not \code{NULL} \code{list} \itemize{
+\item column : column to separate
 \item new_column_1 : new_column 1
 \item new_column_2 : new_column 2
-\item sep : seperator
+\item sep : separator
 }}
 }
 \value{

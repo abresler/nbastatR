@@ -85,11 +85,11 @@ get_season_gamelog <-
       group_by(yearSeason, slugTeam) %>%
       mutate(
         numberGameTeamSeason = 1:n(),
-        countDaysRestTeam = if_else(numberGameTeamSeason > 1,
+        countDaysRestTeam = ifelse(numberGameTeamSeason > 1,
                                     (dateGame - lag(dateGame) - 1),
                                     120),
         countDaysNextGameTeam =
-          if_else(numberGameTeamSeason < 82,
+          ifelse(numberGameTeamSeason < 82,
                   ((
                     lead(dateGame) - dateGame
                   ) - 1),
@@ -98,16 +98,16 @@ get_season_gamelog <-
       mutate(
         countDaysNextGameTeam = countDaysNextGameTeam %>% as.numeric(),
         countDaysRestTeam = countDaysRestTeam %>% as.numeric(),
-        isB2B = if_else(countDaysNextGameTeam == 0 |
+        isB2B = ifelse(countDaysNextGameTeam == 0 |
                           countDaysRestTeam == 0, TRUE, FALSE)
       ) %>%
       mutate(
-        isB2BFirst = if_else(lead(countDaysNextGameTeam) == 0, TRUE, FALSE),
-        isB2BSecond = if_else(lag(countDaysNextGameTeam) == 0, TRUE, FALSE)
+        isB2BFirst = ifelse(dplyr::lead(countDaysNextGameTeam) == 0, TRUE, FALSE),
+        isB2BSecond = ifelse(dplyr::lag(countDaysNextGameTeam) == 0, TRUE, FALSE)
       ) %>%
       ungroup() %>%
       mutate_if(is.logical,
-                funs(if_else(. %>% is.na(), FALSE, .)))
+                funs(ifelse(. %>% is.na(), FALSE, .)))
 
     data <-
       data %>%
@@ -160,11 +160,11 @@ get_season_gamelog <-
         group_by(yearSeason, idPlayer, namePlayer) %>%
         mutate(
           numberGamePlayerSeason = 1:n(),
-          countDaysRestPlayer = if_else(numberGamePlayerSeason > 1,
+          countDaysRestPlayer = ifelse(numberGamePlayerSeason > 1,
                                         (dateGame - lag(dateGame) - 1),
                                         120),
           countDaysNextGamePlayer =
-            if_else(countDaysRestPlayer < 82,
+            ifelse(countDaysRestPlayer < 82,
                     ((
                       lead(dateGame) - dateGame
                     ) - 1),
@@ -176,7 +176,7 @@ get_season_gamelog <-
         ) %>%
         ungroup() %>%
         mutate_if(is.logical,
-                  funs(if_else(. %>% is.na(), FALSE, .)))
+                  funs(ifelse(. %>% is.na(), FALSE, .)))
 
       data <-
         data %>%
@@ -460,7 +460,7 @@ get_season_schedule <-
             unnest() %>%
             nest(-c(idGame, slugTeam), .key = 'dataBoxScoreTeam')
         ) %>%
-        mutate(isTeamWinner = if_else(slugTeamWinner == slugTeam, TRUE, FALSE)) %>%
+        mutate(isTeamWinner = ifelse(slugTeamWinner == slugTeam, TRUE, FALSE)) %>%
         suppressMessages() %>%
         dplyr::select(typeSeason, slugSeason, dateGame, idGame, numberGameDay,
                       slugTeam, isTeamWinner, everything())
@@ -477,7 +477,7 @@ get_season_schedule <-
 #' @param return_message if `TRUE`
 #' @param parse_boxscores if `TRUE` parses box scores
 #' @param box_score_tables vector of box score table names
-#' @param nest_data if `TRUE` nests thedata
+#' @param nest_data if `TRUE` nests the data
 #'
 #' @return a \code{data_frame()}
 #' @family schedule
@@ -677,7 +677,8 @@ get_season_roster <-
         if (return_message) {
           glue::glue("Acquiring {df_teams$slugTeam[x]}'s team roster for the {season} season") %>% message()
         }
-        get_team_season_roster_safe(season = season, team_id = df_teams$idTeam[x])
+        team_id <-  df_teams$idTeam[x]
+        get_team_season_roster_safe(season = season, team_id = team_id)
       })
 
     df_rosters <-

@@ -9,7 +9,7 @@ scale_per_minute(data, scale_columns = NULL)
 \arguments{
 \item{data}{a data frame}
 
-\item{scale_columns}{vector of columns to scal}
+\item{scale_columns}{vector of columns to scale}
 }
 \description{
 Summarise data per minute

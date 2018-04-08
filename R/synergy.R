@@ -32,7 +32,7 @@ assign.synergy <-
               use_logical_keys = TRUE,
               use_factor_keys = TRUE,
               unite_columns = NULL,
-              seperate_columns = NULL,
+              separate_columns = NULL,
               use_date_keys = FALSE
             )
           df_result <-

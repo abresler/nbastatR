@@ -121,7 +121,7 @@ get_players_roto_wire_news <-
 #'
 #' @param teams vector of teams
 #' @param team_ids vector
-#' @param all_active_teams if `TRUE` searchs all active teams
+#' @param all_active_teams if `TRUE` searches all active teams
 #' @param nest_data if `TRUE` returns nested data frame
 #' @param results numeric vector of results
 #' @param return_message if `TRUE` returns a message
@@ -243,7 +243,7 @@ nba_transactions_historic <-
 
 #' NBA transactions since 2012
 #'
-#' Acquires all NBA transctations since 2012
+#' Acquires all NBA transactions since 2012
 #'
 #' @return a `data_frame`
 #' @export

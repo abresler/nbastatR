@@ -149,9 +149,9 @@ get_basketball_insider_team_ids <- function() {
 #' @param team_name NBA team name
 #' @param team_slug NBA team slug
 #' @param assume_player_opt_out if `TRUE` assumes NBA player opts out
-#' @param assume_team_doesnt_exercise if `TRUE` assumes teams don't excercise team option
+#' @param assume_team_doesnt_exercise if `TRUE` assumes teams don't exercise team option
 #' @param spread_data if `TRUE` returns wide data
-#' @param return_message if `TRUE` returns a messag
+#' @param return_message if `TRUE` returns a message
 #'
 #' @return a `data_frame`
 #' @export
@@ -514,7 +514,7 @@ get_nba_team_salaries <-
 #' Gets information about NBA teams salaries
 #'
 #' @param assume_player_opt_out if `TRUE` assumes player opts out of a player option
-#' @param assume_team_doesnt_exercise if `TRUE` assumes teams do not excercise team option
+#' @param assume_team_doesnt_exercise if `TRUE` assumes teams do not exercise team option
 #' @param spread_data if `TRUE` spreads data
 #' @param return_message if `TRUE` returns a message
 #'

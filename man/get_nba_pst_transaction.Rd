@@ -2,7 +2,7 @@
 % Please edit documentation in R/pst.R
 \name{get_nba_pst_transaction}
 \alias{get_nba_pst_transaction}
-\title{ProSports NBA Transcations}
+\title{ProSports NBA transactions}
 \usage{
 get_nba_pst_transaction(person = "Jarrett Jack", team = NULL,
   date_from = NULL, date_to = NULL, include_trades = T,
@@ -16,19 +16,19 @@ get_nba_pst_transaction(person = "Jarrett Jack", team = NULL,
 
 \item{team}{if not \code{NULL} vector of team name}
 
-\item{date_from}{if not \code{NULL} vector ofdate}
+\item{date_from}{if not \code{NULL} vector of dates}
 
 \item{date_to}{if not \code{NULL} vector of person name}
 
-\item{include_trades}{if \code{TRUE} includs trades}
+\item{include_trades}{if \code{TRUE} includes trades}
 
 \item{include_injury_list_movement}{if \code{TRUE} includes injury list}
 
-\item{include_g_league_movement}{if \code{TRUE} includes g-league movenment}
+\item{include_g_league_movement}{if \code{TRUE} includes g-league movement}
 
 \item{include_injury_missed_games}{if \code{TRUE} includes injury missed games}
 
-\item{include_personal_missed_games}{if \code{TRUE} inclue personal missed games}
+\item{include_personal_missed_games}{if \code{TRUE} include personal missed games}
 
 \item{include_discipline}{if \code{TRUE} include disciple}
 

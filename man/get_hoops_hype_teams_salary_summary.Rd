@@ -24,6 +24,7 @@ get_hoops_hype_teams_salary_summary(spread_data = TRUE)
 Other hoopshype: \code{\link{get_teams_hoopshype_salaries}}
 
 Other salaries: \code{\link{get_all_nba_teams_salaries}},
+  \code{\link{get_bref_players_bios}},
   \code{\link{get_nba_team_salaries}},
   \code{\link{get_teams_hoopshype_salaries}}
 }
