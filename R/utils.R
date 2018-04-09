@@ -226,7 +226,7 @@ gather_data <-
 #' @param data a \code{data_frame}
 #' @param variable_name name of variable vector
 #' @param value_name name of value vector
-#' @param preserve_order if \code{TRUE} preserve order
+#' @param perserve_order if \code{TRUE} preserve order
 #' @param unite_columns
 #' @param separate_columns
 #'
@@ -239,7 +239,7 @@ spread_data <-
   function(data,
            variable_name = "item",
            value_name = "value",
-           preserve_order = TRUE,
+           perserve_order = TRUE,
            unite_columns = NULL,
            separate_columns = NULL
   ) {
@@ -271,7 +271,7 @@ spread_data <-
       data %>%
       spread(variable_name, value_name)
 
-    if (preserve_order) {
+    if (perserve_order) {
       data <-
         data %>% dplyr::select(one_of(col_order))
     }

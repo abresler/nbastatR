@@ -5,7 +5,7 @@
 \title{Spread gathered data frame}
 \usage{
 spread_data(data, variable_name = "item", value_name = "value",
-  preserve_order = TRUE, unite_columns = NULL, separate_columns = NULL)
+  perserve_order = TRUE, unite_columns = NULL, separate_columns = NULL)
 }
 \arguments{
 \item{data}{a \code{data_frame}}
@@ -14,7 +14,7 @@ spread_data(data, variable_name = "item", value_name = "value",
 
 \item{value_name}{name of value vector}
 
-\item{preserve_order}{if \code{TRUE} preserve order}
+\item{perserve_order}{if \code{TRUE} preserve order}
 
 \item{separate_columns}{}
 }
