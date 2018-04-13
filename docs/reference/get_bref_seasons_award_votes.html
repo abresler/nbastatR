@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Basketball Reference team dictionary — get_bref_team_dictionary • nbastatR</title>
+<title>Basketball Reference award votes — get_bref_seasons_award_votes • nbastatR</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
@@ -25,9 +25,9 @@
 <link href="../pkgdown.css" rel="stylesheet">
 <script src="../jquery.sticky-kit.min.js"></script>
 <script src="../pkgdown.js"></script>
-<meta property="og:title" content="Basketball Reference team dictionary — get_bref_team_dictionary" />
+<meta property="og:title" content="Basketball Reference award votes — get_bref_seasons_award_votes" />
 
-<meta property="og:description" content="Basketball Reference team dictionary" />
+<meta property="og:description" content="Acquires seasons awards votes" />
 <meta name="twitter:card" content="summary" />
 
 
@@ -108,43 +108,62 @@
       <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Basketball Reference team dictionary</h1>
+    <h1>Basketball Reference award votes</h1>
     <small>Source: <a href='https://github.com/abresler/nbastatR/blob/master/R/bref.R'><code>R/bref.R</code></a></small>
     </div>
 
     
-    <p>Basketball Reference team dictionary</p>
+    <p>Acquires seasons awards votes</p>
     
 
-    <pre class="usage"><span class='fu'>get_bref_team_dictionary</span>()</pre>
-        
+    <pre class="usage"><span class='fu'>get_bref_seasons_award_votes</span>(<span class='kw'>seasons</span> <span class='kw'>=</span> <span class='fl'>2017</span>, <span class='kw'>assign_to_environment</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
+  <span class='kw'>return_message</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</pre>
+    
+    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
+    <table class="ref-arguments">
+    <colgroup><col class="name" /><col class="desc" /></colgroup>
+    <tr>
+      <th>seasons</th>
+      <td><p>vector of seasons starting in 1964</p></td>
+    </tr>
+    <tr>
+      <th>assign_to_environment</th>
+      <td><p>if <code>TRUE</code> assigns a data frame for each
+nested table into your global environment</p></td>
+    </tr>
+    <tr>
+      <th>return_message</th>
+      <td><p>if <code>TRUE</code> returns a message</p></td>
+    </tr>
+    </table>
+    
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>a `data_frame`</p>
+    <p>a <code>data_frame()</code></p>
     
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <p>Other dictionary: <code><a href='assign_nba_players.html'>assign_nba_players</a></code>,
-  <code><a href='assign_nba_teams.html'>assign_nba_teams</a></code>,
-  <code><a href='get_bref_coach_dictionary.html'>get_bref_coach_dictionary</a></code>,
-  <code><a href='get_bref_player_dictionary.html'>get_bref_player_dictionary</a></code></p>
-<p>Other BREF: <code><a href='get_bref_awards.html'>get_bref_awards</a></code>,
+    <p>Other BREF: <code><a href='get_bref_awards.html'>get_bref_awards</a></code>,
   <code><a href='get_bref_coach_dictionary.html'>get_bref_coach_dictionary</a></code>,
   <code><a href='get_bref_player_dictionary.html'>get_bref_player_dictionary</a></code>,
   <code><a href='get_bref_players_bios.html'>get_bref_players_bios</a></code>,
   <code><a href='get_bref_players_seasons.html'>get_bref_players_seasons</a></code>,
-  <code><a href='get_bref_seasons_award_votes.html'>get_bref_seasons_award_votes</a></code>,
+  <code><a href='get_bref_team_dictionary.html'>get_bref_team_dictionary</a></code>,
   <code><a href='get_bref_teams_seasons.html'>get_bref_teams_seasons</a></code></p>
+<p>Other awards: <code><a href='get_bref_all_nba_teams.html'>get_bref_all_nba_teams</a></code>,
+  <code><a href='get_bref_awards.html'>get_bref_awards</a></code>,
+  <code><a href='get_players_awards.html'>get_players_awards</a></code></p>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><span class='co'># NOT RUN {</span>
-<span class='fu'>get_bref_team_dictionary</span>()
+<span class='fu'>get_bref_seasons_award_votes</span>(<span class='kw'>seasons</span> <span class='kw'>=</span> <span class='fl'>2000</span>:<span class='fl'>2017</span>)
 <span class='co'># }</span></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
+      <li><a href="#arguments">Arguments</a></li>
       
       <li><a href="#value">Value</a></li>
 

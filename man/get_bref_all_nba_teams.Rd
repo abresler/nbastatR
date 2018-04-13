@@ -21,6 +21,8 @@ All NBA teams
 get_bref_all_nba_teams()
 }
 \seealso{
-Other awards: \code{\link{get_players_awards}}
+Other awards: \code{\link{get_bref_awards}},
+  \code{\link{get_bref_seasons_award_votes}},
+  \code{\link{get_players_awards}}
 }
 \concept{awards}

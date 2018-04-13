@@ -232,8 +232,8 @@ get_season_gamelog <-
 #' @examples
 #' get_game_logs(seasons = 2017:2018, result_types = c("team", "player"))
 get_game_logs <-
-  function(seasons = NULL,
-           result_types  = NULL,
+  function(seasons = 2018,
+           result_types  = "player",
            season_types = "Regular Season",
            nest_data = F,
            assign_to_environment = TRUE,
@@ -534,6 +534,3 @@ get_seasons_schedule <-
     }
     all_data
   }
-
-
-

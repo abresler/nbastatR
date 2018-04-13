@@ -30,9 +30,11 @@ assign_to_environment = TRUE)
 }
 }
 \seealso{
-Other BREF: \code{\link{get_bref_coach_dictionary}},
+Other BREF: \code{\link{get_bref_awards}},
+  \code{\link{get_bref_coach_dictionary}},
   \code{\link{get_bref_player_dictionary}},
   \code{\link{get_bref_players_seasons}},
+  \code{\link{get_bref_seasons_award_votes}},
   \code{\link{get_bref_team_dictionary}},
   \code{\link{get_bref_teams_seasons}}
 

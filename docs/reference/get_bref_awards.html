@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Basketball Reference team dictionary — get_bref_team_dictionary • nbastatR</title>
+<title>Basketball reference awards — get_bref_awards • nbastatR</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
@@ -25,9 +25,9 @@
 <link href="../pkgdown.css" rel="stylesheet">
 <script src="../jquery.sticky-kit.min.js"></script>
 <script src="../pkgdown.js"></script>
-<meta property="og:title" content="Basketball Reference team dictionary — get_bref_team_dictionary" />
+<meta property="og:title" content="Basketball reference awards — get_bref_awards" />
 
-<meta property="og:description" content="Basketball Reference team dictionary" />
+<meta property="og:description" content="Award winners from basketball-reference" />
 <meta name="twitter:card" content="summary" />
 
 
@@ -108,43 +108,79 @@
       <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Basketball Reference team dictionary</h1>
+    <h1>Basketball reference awards</h1>
     <small>Source: <a href='https://github.com/abresler/nbastatR/blob/master/R/bref.R'><code>R/bref.R</code></a></small>
     </div>
 
     
-    <p>Basketball Reference team dictionary</p>
+    <p>Award winners from basketball-reference</p>
     
 
-    <pre class="usage"><span class='fu'>get_bref_team_dictionary</span>()</pre>
-        
+    <pre class="usage"><span class='fu'>get_bref_awards</span>(<span class='kw'>awards</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>"Most Valuable Player"</span>, <span class='st'>"Rookie of the Year"</span>,
+  <span class='st'>"Defensive Player of the Year"</span>, <span class='st'>"Sixth Man of the Year"</span>,
+  <span class='st'>"Most Improved Player"</span>, <span class='st'>"Teammate of the Year"</span>,
+  <span class='st'>"J. Walter Kennedy Citizenship Award"</span>, <span class='st'>"NBA Finals Most Valuable Player"</span>,
+  <span class='st'>"ABA Playoffs Most Valuable Player"</span>, <span class='st'>"All-Star Game Most Valuable Player"</span>,
+  <span class='st'>"Comeback Player of the Year"</span>, <span class='st'>"Sporting News MVP"</span>,
+  <span class='st'>"Sporting News Rookie of the Year"</span>, <span class='st'>"Coach of the Year"</span>,
+  <span class='st'>"Executive of the Year"</span>), <span class='kw'>return_message</span> <span class='kw'>=</span> <span class='no'>T</span>)</pre>
+    
+    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
+    <table class="ref-arguments">
+    <colgroup><col class="name" /><col class="desc" /></colgroup>
+    <tr>
+      <th>awards</th>
+      <td><p>vector of awards options include</p><ul>
+<li><p>Most Valuable Player</p></li>
+<li><p>Rookie of the Year</p></li>
+<li><p>Defensive Player of the Year</p></li>
+<li><p>Sixth Man of the Year</p></li>
+<li><p>Most Improved Player</p></li>
+<li><p>Teammate of the Year</p></li>
+<li><p>J. Walter Kennedy Citizenship Award</p></li>
+<li><p>NBA Finals Most Valuable Player</p></li>
+<li><p>ABA Playoffs Most Valuable Player</p></li>
+<li><p>All-Star Game Most Valuable Player</p></li>
+<li><p>Comeback Player of the Year</p></li>
+<li><p>Sporting News MVP</p></li>
+<li><p>Sporting News Rookie of the Year</p></li>
+<li><p>Coach of the Year</p></li>
+<li><p>Executive of the Year</p></li>
+</ul></td>
+    </tr>
+    <tr>
+      <th>return_message</th>
+      <td><p>if <code>TRUE</code> returns a message</p></td>
+    </tr>
+    </table>
+    
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>a `data_frame`</p>
+    <p>a <code>data_frame</code></p>
     
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <p>Other dictionary: <code><a href='assign_nba_players.html'>assign_nba_players</a></code>,
-  <code><a href='assign_nba_teams.html'>assign_nba_teams</a></code>,
-  <code><a href='get_bref_coach_dictionary.html'>get_bref_coach_dictionary</a></code>,
-  <code><a href='get_bref_player_dictionary.html'>get_bref_player_dictionary</a></code></p>
-<p>Other BREF: <code><a href='get_bref_awards.html'>get_bref_awards</a></code>,
-  <code><a href='get_bref_coach_dictionary.html'>get_bref_coach_dictionary</a></code>,
+    <p>Other BREF: <code><a href='get_bref_coach_dictionary.html'>get_bref_coach_dictionary</a></code>,
   <code><a href='get_bref_player_dictionary.html'>get_bref_player_dictionary</a></code>,
   <code><a href='get_bref_players_bios.html'>get_bref_players_bios</a></code>,
   <code><a href='get_bref_players_seasons.html'>get_bref_players_seasons</a></code>,
   <code><a href='get_bref_seasons_award_votes.html'>get_bref_seasons_award_votes</a></code>,
+  <code><a href='get_bref_team_dictionary.html'>get_bref_team_dictionary</a></code>,
   <code><a href='get_bref_teams_seasons.html'>get_bref_teams_seasons</a></code></p>
+<p>Other awards: <code><a href='get_bref_all_nba_teams.html'>get_bref_all_nba_teams</a></code>,
+  <code><a href='get_bref_seasons_award_votes.html'>get_bref_seasons_award_votes</a></code>,
+  <code><a href='get_players_awards.html'>get_players_awards</a></code></p>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><span class='co'># NOT RUN {</span>
-<span class='fu'>get_bref_team_dictionary</span>()
+<span class='fu'>get_bref_awards</span>(<span class='kw'>awards</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>"Most Valuable Player"</span>, <span class='st'>"Rookie of the Year"</span>, <span class='st'>"Defensive Player of the Year"</span>))
 <span class='co'># }</span></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
+      <li><a href="#arguments">Arguments</a></li>
       
       <li><a href="#value">Value</a></li>
 
