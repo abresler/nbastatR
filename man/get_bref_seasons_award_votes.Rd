@@ -22,7 +22,7 @@ a \code{data_frame()}
 Acquires seasons awards votes
 }
 \examples{
-get_bref_seasons_award_votes(seasons = 2000:2017)
+get_bref_seasons_award_votes
 }
 \seealso{
 Other BREF: \code{\link{get_bref_awards}},

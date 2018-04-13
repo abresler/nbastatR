@@ -1444,6 +1444,10 @@ get_bref_players_seasons <-
       all_data %>%
       mutate(yearSeason = slugSeason %>% substr(1, 4) %>% as.numeric() + 1)
 
+    all_data <-
+      all_data %>%
+      dplyr::rename(slugPlayerBREF = idPlayer)
+
     all_data
   }
 
@@ -2602,11 +2606,12 @@ dictionary_bref_awards <-
   function(award = c("Most Improved Player")) {
     award_slug <- award %>% str_to_upper()
     dict_awards <-
-      dictionary_awards() %>%
+      dictionary_bref_awards() %>%
       mutate(titleAward = nameAward %>% str_to_upper())
     df_aw <-
       dict_awards %>%
-      filter(titleAward %>% str_detect(award_slug))
+      filter(titleAward %in% award_slug)
+
     if (df_aw %>% nrow() == 0) {
       stop("Sorry not a valid award")
     }
@@ -2701,7 +2706,7 @@ dictionary_award_css <-
     url <-
       glue::glue("https://www.basketball-reference.com/awards/awards_{season}.html")
 
-    data_frame(yearSeasonEnd = season, urlBREF = url)
+    data_frame(yearSeason = season, urlBREF = url)
   }
 
 .parse_vote_url <-
@@ -2780,10 +2785,10 @@ dictionary_award_css <-
     all_data <-
       all_data %>%
       left_join(df_players) %>%
-      mutate(yearSeasonEnd = season_end,
+      mutate(yearSeason = season_end,
              slugSeason = season,
              urlBREF = url) %>%
-      select(yearSeasonEnd, slugSeason, slugTable:namePlayer, slugPlayerBREF, everything()) %>%
+      select(yearSeason, slugSeason, slugTable:namePlayer, slugPlayerBREF, everything()) %>%
       select(-idRow) %>%
       suppressMessages() %>%
       distinct()
@@ -2793,11 +2798,11 @@ dictionary_award_css <-
       group_by(slugTable) %>%
       mutate(rankVotes = min_rank(-pointsVote)) %>%
       ungroup() %>%
-      select(yearSeasonEnd:slugTable, rankVotes, namePlayer, everything())
+      select(yearSeason:slugTable, rankVotes, namePlayer, everything())
 
     all_data <-
       all_data %>%
-      nest(-c(slugSeason, yearSeasonEnd, slugTable, urlBREF), .key = 'dataVotes')
+      nest(-c(slugSeason, yearSeason, slugTable, urlBREF), .key = 'dataVotes')
 
     all_data
   }
@@ -2854,7 +2859,7 @@ dictionary_award_css <-
 #' @export
 #'
 #' @examples
-#' get_bref_seasons_award_votes(seasons = 2000:2017)
+#' get_bref_seasons_award_votes
 get_bref_seasons_award_votes <-
   function(seasons = 2017,
            assign_to_environment = TRUE,
@@ -2870,7 +2875,7 @@ get_bref_seasons_award_votes <-
 
     all_data <-
       all_data %>%
-      arrange(yearSeasonEnd)
+      arrange(yearSeason)
 
     all_data <-
       all_data %>%
