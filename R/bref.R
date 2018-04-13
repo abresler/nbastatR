@@ -909,7 +909,7 @@ get_bref_player_dictionary <-
         "https://d2cwpp38twqe55.cloudfront.net/short/inc/players_search_list.csv",
         col_names = F
       ) %>%
-      purrr::set_names(c("idPlayerBREF", "namePlayerBREF", "yearsPlayer", "isActive")) %>%
+      purrr::set_names(c("slugPlayerBREF", "namePlayerBREF", "yearsPlayer", "isActive")) %>%
       mutate(isActive = as.logical(isActive)) %>%
       suppressWarnings() %>%
       suppressMessages()
@@ -919,10 +919,10 @@ get_bref_player_dictionary <-
       data %>%
       mutate(
         yearsPlayer = ifelse(yearsPlayer == "-", NA, yearsPlayer),
-        letterLastName = substr(idPlayerBREF, 1, 1),
+        letterLastName = substr(slugPlayerBREF, 1, 1),
         urlPlayerBioBREF =
           glue::glue(
-            "https://www.basketball-reference.com/players/{letterLastName}/{idPlayerBREF}.html"
+            "https://www.basketball-reference.com/players/{letterLastName}/{slugPlayerBREF}.html"
           ) %>% as.character()
       ) %>%
       select(-one_of("letterLastName"))
@@ -943,7 +943,7 @@ get_bref_player_dictionary <-
     data <-
       data %>%
       left_join(df_years) %>%
-      select(namePlayerBREF, idPlayerBREF, isActive, yearsPlayer,
+      select(namePlayerBREF, slugPlayerBREF, isActive, yearsPlayer,
              countSeasons, slugSeasonRookie, slugSeasonLast, everything()) %>%
       suppressMessages()
 

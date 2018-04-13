@@ -452,12 +452,12 @@ parse_bref_player_data_url <-
     mutate(
       lengthTable = dataTable %>% map_dbl(length),
       namePlayerBREF = player ,
-      idPlayerBREF = id_bref,
+      slugPlayerBREF = id_bref,
       urlPlayerBioBREF = url
     ) %>%
     filter(lengthTable != 0) %>%
     select(-lengthTable) %>%
-    dplyr::select(idPlayerBREF,
+    dplyr::select(slugPlayerBREF,
                   namePlayerBREF,
                   urlPlayerBioBREF,
                   nameTable,
@@ -518,7 +518,7 @@ get_bref_players_ids  <-
      search_ids <-
        df_bref_player_dict %>%
        filter(namePlayerBREF %>% str_detect(players %>% str_c(collapse = "|"))) %>%
-       pull(idPlayerBREF)
+       pull(slugPlayerBREF)
      ids <-
        ids %>% append(search_ids)
    }
@@ -568,7 +568,7 @@ get_bref_players_bios <-
     df_bref_player_dict <-  get_bref_player_dictionary() %>% suppressMessages()
     urls <-
       df_bref_player_dict %>%
-      filter(idPlayerBREF %in% ids) %>%
+      filter(slugPlayerBREF %in% ids) %>%
       pull(urlPlayerBioBREF)
     parse_bref_player_data_urls_safe <-
       purrr::possibly(parse_bref_player_data_urls, data_frame())
