@@ -28,5 +28,3 @@ Other salaries: \code{\link{get_all_nba_teams_salaries}},
   \code{\link{get_nba_team_salaries}},
   \code{\link{get_teams_hoopshype_salaries}}
 }
-\concept{hoopshype}
-\concept{salaries}

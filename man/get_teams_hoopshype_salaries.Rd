@@ -46,5 +46,3 @@ Other salaries: \code{\link{get_all_nba_teams_salaries}},
   \code{\link{get_hoops_hype_teams_salary_summary}},
   \code{\link{get_nba_team_salaries}}
 }
-\concept{hoopshype}
-\concept{salaries}

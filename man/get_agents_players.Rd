@@ -27,4 +27,3 @@ get_agents_players(agents = c("Jeff Schwartz"))
 \seealso{
 Other agents: \code{\link{get_players_agents}}
 }
-\concept{agents}

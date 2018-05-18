@@ -30,4 +30,3 @@ NBA seasons schedules
 \examples{
 get_seasons_schedule(seasons = c(2012, 2018))
 }
-\concept{schedule}

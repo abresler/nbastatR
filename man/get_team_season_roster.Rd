@@ -27,4 +27,3 @@ get_team_season_roster(team = "Denver Nuggets", season = 1991)
 Other rosters: \code{\link{get_seasons_rosters}},
   \code{\link{get_seasons_teams_rosters}}
 }
-\concept{rosters}

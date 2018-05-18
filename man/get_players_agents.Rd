@@ -25,4 +25,3 @@ glimpse()
 \seealso{
 Other agents: \code{\link{get_agents_players}}
 }
-\concept{agents}

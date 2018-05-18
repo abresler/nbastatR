@@ -37,5 +37,3 @@ Other game: \code{\link{get_game_logs}},
 
 Other season: \code{\link{get_games_fanduel_summary}}
 }
-\concept{game}
-\concept{season}

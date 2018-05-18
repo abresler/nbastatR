@@ -40,5 +40,3 @@ Other teams: \code{\link{get_drafts}},
 Other rosters: \code{\link{get_seasons_teams_rosters}},
   \code{\link{get_team_season_roster}}
 }
-\concept{rosters}
-\concept{teams}

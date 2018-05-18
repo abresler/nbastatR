@@ -29,5 +29,3 @@ Other teams: \code{\link{get_drafts}},
   \code{\link{get_teams_franchise_leaders}},
   \code{\link{get_teams_players_seasons_summary_stats}}
 }
-\concept{rankings}
-\concept{teams}

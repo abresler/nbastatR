@@ -15,4 +15,3 @@ Acquires all NBA transactions since 2012
 \examples{
 get_nba_transactions()
 }
-\concept{transactions}

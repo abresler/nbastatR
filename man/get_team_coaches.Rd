@@ -23,4 +23,3 @@ Gets coaching staff for team and season
 \examples{
 get_team_coaches("Brooklyn Nets", 2016)
 }
-\concept{coaches}

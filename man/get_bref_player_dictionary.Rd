@@ -31,6 +31,3 @@ Other dictionary: \code{\link{assign_nba_players}},
 
 Other NBA players: \code{\link{assign_nba_players}}
 }
-\concept{BREF}
-\concept{NBA players}
-\concept{dictionary}

@@ -304,6 +304,3 @@ Other teams: \code{\link{get_drafts}},
   \code{\link{get_teams_franchise_leaders}},
   \code{\link{get_teams_seasons_rankings}}
 }
-\concept{players}
-\concept{summary statistics}
-\concept{teams}

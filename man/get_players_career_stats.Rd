@@ -43,5 +43,3 @@ Other player: \code{\link{get_bref_players_bios}},
   \code{\link{get_players_tables_data}},
   \code{\link{get_years_draft_combines}}
 }
-\concept{player}
-\concept{summary stats}

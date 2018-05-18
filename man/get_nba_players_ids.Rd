@@ -23,4 +23,3 @@ get_nba_players_ids(players = c("Mitch Richmond", "Kyle Kuzma"))
 \seealso{
 Other ids: \code{\link{get_nba_teams_ids}}
 }
-\concept{ids}
