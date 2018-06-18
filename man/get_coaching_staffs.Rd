@@ -19,3 +19,6 @@ get_coaching_staffs()
 \seealso{
 Other Coaching: \code{\link{get_bref_coach_dictionary}}
 }
+\concept{Coaching}
+\concept{Current data}
+\concept{Roster information}

@@ -182,7 +182,7 @@ get_hoops_hype_teams_salary_summary <-
     salary_table_df <-
       salary_table_df %>%
       mutate_at(salary_table_df %>% select(matches("X")) %>% names(),
-                funs(. %>% readr::parse_number()))
+                funs(. %>%  as.character() %>% readr::parse_number()))
 
     salary_data <-
       salary_table_df %>%
@@ -191,7 +191,7 @@ get_hoops_hype_teams_salary_summary <-
              -c(nameTeam, nameTeam, slugTeam, urlTeamSalaryHoopsHype)) %>%
       mutate(
         slugSeason = slugSeason %>% str_replace('\\.', '\\-') %>% str_replace("X", '') %>% factor(ordered = T),
-        amountSalary = amountSalary %>% readr::parse_number()
+        amountSalary = amountSalary %>% as.character() %>% readr::parse_number()
       )
 
     if (spread_data) {
@@ -267,6 +267,7 @@ parse_hoops_hype_salary_url <-
       page %>%
       html_nodes('tbody .hh-salaries-sorted') %>%
       html_text() %>%
+      as.character() %>%
       readr::parse_number() %>%
       suppressWarnings()
 
@@ -280,6 +281,7 @@ parse_hoops_hype_salary_url <-
       page %>%
       html_nodes('tbody .hh-salaries-sorted+ td') %>%
       html_text() %>%
+      as.character() %>%
       readr::parse_number() %>%
       suppressWarnings()
 
@@ -293,6 +295,7 @@ parse_hoops_hype_salary_url <-
       page %>%
       html_nodes('tbody td:nth-child(4)') %>%
       html_text() %>%
+      as.character() %>%
       readr::parse_number() %>%
       suppressWarnings()
 
@@ -306,6 +309,7 @@ parse_hoops_hype_salary_url <-
       page %>%
       html_nodes('tbody td:nth-child(5)') %>%
       html_text() %>%
+      as.character() %>%
       readr::parse_number() %>%
       suppressWarnings()
 
@@ -319,6 +323,7 @@ parse_hoops_hype_salary_url <-
       page %>%
       html_nodes('tbody td:nth-child(6)') %>%
       html_text() %>%
+      as.character() %>%
       readr::parse_number() %>%
       suppressWarnings()
 
@@ -331,7 +336,8 @@ parse_hoops_hype_salary_url <-
     salary.6 <-
       page %>%
       html_nodes('tbody td:nth-child(7)') %>%
-      html_text %>%
+      html_text() %>%
+      as.character() %>%
       readr::parse_number() %>%
       suppressWarnings()
 

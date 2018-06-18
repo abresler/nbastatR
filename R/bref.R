@@ -982,7 +982,7 @@ all_nba <-
       mutate(
         yearSeasonStart = yearSeasonStart %>% as.numeric(),
         yearSeason = yearSeasonStart + 1,
-        numberAllNBATeam = classAllNBA %>% readr::parse_number(),
+        numberAllNBATeam = classAllNBA %>% as.character() %>% readr::parse_number(),
         namePlayer =
           ifelse(
             yearSeasonStart >= 1955,
@@ -1132,7 +1132,7 @@ parse_player_season <-
       url_df$path %>% str_replace_all(".html|leagues/NBA_", '')
 
     year_season_end <-
-      url_path %>% str_split('\\_') %>% flatten_chr() %>% .[[1]] %>% readr::parse_number()
+      url_path %>% str_split('\\_') %>% flatten_chr() %>% .[[1]] %>% as.character() %>% readr::parse_number()
 
     name_slug <-
       url_path %>%
@@ -1300,11 +1300,11 @@ get_bref_all_nba_teams <-
     data <-
       data %>%
       mutate(
-        numberAllNBATeam = numberAllNBATeam %>% readr::parse_number(),
+        numberAllNBATeam = numberAllNBATeam %>% as.character() %>% readr::parse_number(),
         nchar = nchar(namePlayerPosition),
         groupPosition = namePlayerPosition %>% substr(nchar - 1, nchar),
         namePlayer =  namePlayerPosition %>% substr(1, nchar - 1),
-        yearSeason = slugSeason %>% substr(1, 4) %>% readr::parse_number() + 1
+        yearSeason = slugSeason %>% substr(1, 4) %>% as.character() %>% readr::parse_number() + 1
       ) %>%
       select(yearSeason,
              slugSeason,
@@ -1500,7 +1500,7 @@ parse.bref.team.conference <-
           "ptsOppPerGame",
           "ratingStrengthOfSchedule"
         ),
-        funs(. %>% readr::parse_number() %>% as.numeric())
+        funs(. %>% as.character() %>% readr::parse_number() %>% as.numeric())
       ) %>%
       mutate(
         gamesBehind1Conference = ifelse(
@@ -1569,7 +1569,7 @@ parse.bref.team.division <-
           "ptsOppPerGame",
           "ratingStrengthOfSchedule"
         ),
-        funs(. %>% readr::parse_number() %>% as.numeric())
+        funs(. %>% as.character() %>% readr::parse_number() %>% as.numeric())
       ) %>%
       mutate(
         gamesBehind1Division = ifelse(gamesBehind1Division %>% is.na(), 0, gamesBehind1Division),
@@ -1745,7 +1745,7 @@ parse.bref.team.misc <-
         nameTeam = nameTeam %>% str_replace_all("\\*", "")
       ) %>%
       mutate_at(numeric_names,
-                readr::parse_number) %>%
+                funs(. %>% as.character() %>% readr::parse_number())) %>%
       dplyr::select(nameTeam, isPlayoffTeam, everything()) %>%
       suppressWarnings()
 
@@ -1802,7 +1802,7 @@ parse.bref.team.shooting <-
         nameTeam = nameTeam %>% str_replace_all("\\*", "")
       ) %>%
       mutate_at(numeric_names,
-                readr::parse_number) %>%
+                funs(. %>% as.character() %>% readr::parse_number())) %>%
       dplyr::select(nameTeam, isPlayoffTeam, everything()) %>%
       suppressWarnings()
 

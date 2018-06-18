@@ -39,3 +39,5 @@ Other awards: \code{\link{get_bref_all_nba_teams}},
   \code{\link{get_bref_awards}},
   \code{\link{get_bref_seasons_award_votes}}
 }
+\concept{awards}
+\concept{player}

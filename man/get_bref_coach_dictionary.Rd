@@ -31,3 +31,6 @@ Other BREF: \code{\link{get_bref_awards}},
 
 Other Coaching: \code{\link{get_coaching_staffs}}
 }
+\concept{BREF}
+\concept{Coaching}
+\concept{dictionary}

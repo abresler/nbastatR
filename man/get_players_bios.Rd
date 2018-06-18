@@ -33,3 +33,5 @@ Other players: \code{\link{get_nba_player_injuries}},
   \code{\link{get_seasons_metrics_league_leaders}},
   \code{\link{get_teams_players_seasons_summary_stats}}
 }
+\concept{biography}
+\concept{players}

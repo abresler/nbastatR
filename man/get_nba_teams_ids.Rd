@@ -23,3 +23,4 @@ get_nba_teams_ids(teams = c("Brooklyn Nets", "Denver Nuggets"))
 \seealso{
 Other ids: \code{\link{get_nba_players_ids}}
 }
+\concept{ids}

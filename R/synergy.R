@@ -192,7 +192,7 @@ get_synergy_category_data <-
   data <-
     data %>%
     mutate_at(num_cols,
-             funs(. %>% readr::parse_number()))
+             funs(. %>% as.character() %>% readr::parse_number()))
 
   ppp_names <- data %>% dplyr::select(matches("PPP")) %>% names()
 

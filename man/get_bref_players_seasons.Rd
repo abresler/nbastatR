@@ -52,3 +52,5 @@ Other BREF: \code{\link{get_bref_awards}},
   \code{\link{get_bref_team_dictionary}},
   \code{\link{get_bref_teams_seasons}}
 }
+\concept{BREF}
+\concept{player statistics}

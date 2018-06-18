@@ -33,3 +33,4 @@ return_message = T)
 Other draft: \code{\link{get_drafts}},
   \code{\link{get_years_draft_combines}}
 }
+\concept{draft}

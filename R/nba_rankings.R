@@ -37,7 +37,7 @@ get_teams_season_rankings <-
       var_df <-
         var_data %>%
         flatten_df() %>%
-        mutate_all(readr::parse_number) %>%
+        mutate_all(funs(. %>% as.character() %>% readr::parse_number())) %>%
         purrr::set_names(var_names) %>%
         mutate(idTeam = teams) %>%
         suppressWarnings()

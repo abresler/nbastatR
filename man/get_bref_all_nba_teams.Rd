@@ -25,3 +25,4 @@ Other awards: \code{\link{get_bref_awards}},
   \code{\link{get_bref_seasons_award_votes}},
   \code{\link{get_players_awards}}
 }
+\concept{awards}

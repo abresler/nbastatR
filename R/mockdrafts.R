@@ -395,6 +395,7 @@ get_nba_draftnet_year_mock_draft <-
       page %>%
       html_nodes('td:nth-child(5)') %>%
       html_text() %>%
+      as.character() %>%
       readr::parse_number()
 
     id.position <-

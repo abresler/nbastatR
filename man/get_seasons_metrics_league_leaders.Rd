@@ -67,3 +67,5 @@ Other players: \code{\link{get_nba_player_injuries}},
 
 Other leaders: \code{\link{get_teams_franchise_leaders}}
 }
+\concept{leaders}
+\concept{players}

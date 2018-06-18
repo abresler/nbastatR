@@ -45,3 +45,5 @@ Other teams: \code{\link{get_drafts}},
 
 Other leaders: \code{\link{get_seasons_metrics_league_leaders}}
 }
+\concept{leaders}
+\concept{teams}

@@ -1,5 +1,6 @@
 
 
+
 # full_logs ---------------------------------------------------------------
 get_season_gamelog <-
   function(season = 2018,
@@ -29,6 +30,7 @@ get_season_gamelog <-
     }
 
     URL <- gen_url("leaguegamelog")
+
     params <- list(
       Season = season_slug,
       LeagueID = '00',
@@ -38,16 +40,23 @@ get_season_gamelog <-
       Sorter = 'FGM',
       DateFrom = date_from,
       DateTo = date_to,
-      # Defaulting to yesterday as it gets wonky with games still in play
       Counter = 0
     )
-    params <- utils::modifyList(params, list(...))
 
-    nba_h <- get_nba_headers()
+    params <-
+      utils::modifyList(params, list(...))
+
+    slug_param <-
+      .generate_param_slug(params = params)
+
+    url <-
+      glue::glue("{URL}?{slug_param}") %>% as.character()
 
     resp <-
-      httr::GET(url = URL, query = params, nba_h) %>%
-      httr::content("text", encoding = "UTF-8")
+      url %>%
+      curl() %>%
+      readr::read_lines()
+
     json <-
       resp %>% jsonlite::fromJSON(simplifyVector = T)
 

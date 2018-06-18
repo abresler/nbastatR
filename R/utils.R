@@ -1,3 +1,13 @@
+.generate_param_slug <- function(params) {
+  params %>%
+    map(as.character) %>%
+    flatten_df() %>% mutate_all(as.character) %>% gather(item, value) %>%
+    mutate(value = value %>% map_chr(URLencode)) %>%
+    unite(slug, item, value, sep = '=') %>%
+    pull(slug) %>%
+    str_c(collapse = '&')
+}
+
 make_url <- function(datatype = NULL,
                      SeasonType = "",
                      LeagueID = "",

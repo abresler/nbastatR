@@ -24,3 +24,4 @@ get_beyond_the_numbers_articles(count_aricles = 10)
 Other news: \code{\link{get_players_roto_wire_news}},
   \code{\link{get_teams_roto_wire_news}}
 }
+\concept{news}

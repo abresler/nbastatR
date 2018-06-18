@@ -21,3 +21,4 @@ get_current_standings()
 \seealso{
 Other standings: \code{\link{get_seasons_standings}}
 }
+\concept{standings}

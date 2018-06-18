@@ -230,6 +230,7 @@ get_pst_result_url_df <-
       page %>%
       html_nodes('.center+ table td:nth-child(3) a') %>%
       html_text() %>%
+      as.character() %>%
       readr::parse_number()
 
     if (pages %>% length() == 0) {

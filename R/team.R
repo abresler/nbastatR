@@ -471,14 +471,16 @@ get_team_table_data <-
       names(params)[names(params) %>% str_detect("teamId")] <-
         "playerId"
     }
-    nba_h <- get_nba_headers()
+    slug_param <-
+      .generate_param_slug(params = params)
 
-    http_call <-
-      httr::GET(url = URL, query = params, nba_h)
-    url <- http_call$url
+    url <-
+      glue::glue("{URL}?{slug_param}") %>% as.character()
+
     resp <-
-      http_call %>%
-      httr::content("text", encoding = "UTF-8")
+      url %>%
+      curl() %>%
+      readr::read_lines()
 
     json <-
       resp %>% jsonlite::fromJSON(simplifyVector = T)
@@ -881,10 +883,16 @@ get_team_shot_chart <-
 
     #params <- utils::modifyList(params, list(...))
 
-    nba_hdrs <- get_nba_headers()
+    slug_param <-
+      .generate_param_slug(params = params)
+
+    url <-
+      glue::glue("{URL}?{slug_param}") %>% as.character()
+
     resp <-
-      httr::GET(url = URL, query = params, nba_hdrs) %>%
-      httr::content("text", encoding = "UTF-8")
+      url %>%
+      curl() %>%
+      readr::read_lines()
 
     json <-
       resp %>% jsonlite::fromJSON(simplifyVector = T)
@@ -916,7 +924,7 @@ get_team_shot_chart <-
                 funs(ifelse(. == "", NA, .))) %>%
       remove_na_columns() %>%
       mutate_at(c("locationX", "locationY"),
-                funs(. %>% readr::parse_number())) %>%
+                funs(. %>% as.character() %>% readr::parse_number())) %>%
       suppressWarnings() %>%
       suppressMessages() %>%
       select(matches("yearSeason", "slugSeason", "nameTeam"), everything()) %>%

@@ -34,3 +34,4 @@ get_teams_roto_wire_news(teams = "Brooklyn Nets")
 Other news: \code{\link{get_beyond_the_numbers_articles}},
   \code{\link{get_players_roto_wire_news}}
 }
+\concept{news}

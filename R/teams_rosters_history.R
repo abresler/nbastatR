@@ -221,7 +221,7 @@ get_team_season_roster <-
           "countSeasons",
           "idPlayer"
         ),
-        funs(. %>% readr::parse_number())
+        funs(. %>% as.character() %>% readr::parse_number())
       ) %>%
       mutate(
         dateBirth = lubridate::mdy(dateBirth),
@@ -396,7 +396,7 @@ get_team_coaches <-
           "idTeam",
           "yearSeason"
         ),
-        funs(. %>% readr::parse_number())
+        funs(. %>% as.character() %>%  readr::parse_number())
       ) %>%
       tidyr::separate(schoolCoach, into = c("typeSchoolCoach", "nameSchoolCoach"), sep = "\\ - ") %>%
       suppressMessages() %>%

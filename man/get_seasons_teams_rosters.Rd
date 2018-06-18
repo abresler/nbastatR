@@ -27,3 +27,4 @@ get_seasons_teams_rosters(seasons = 2010:2018, nest_data = F, return_message = T
 Other rosters: \code{\link{get_seasons_rosters}},
   \code{\link{get_team_season_roster}}
 }
+\concept{rosters}

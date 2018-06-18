@@ -95,7 +95,7 @@ get_year_draft_combine <-
     data <-
       data %>%
       mutate_at(num_names,
-                funs(. %>% readr::parse_number())) %>%
+                funs(. %>% as.character() %>% readr::parse_number())) %>%
       dplyr::rename(slugPosition = groupPosition)
 
     if (actual_names[actual_names %>% str_detect("set")] %>% length() > 0) {

@@ -15,3 +15,5 @@ Dictionary of NBA Headers and nbastatR names
 \examples{
 dictionary_nba_names()
 }
+\concept{Dictionary}
+\concept{nbastatR tool}

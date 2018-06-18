@@ -31,3 +31,4 @@ Other salaries: \code{\link{get_bref_players_bios}},
   \code{\link{get_nba_team_salaries}},
   \code{\link{get_teams_hoopshype_salaries}}
 }
+\concept{salaries}

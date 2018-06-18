@@ -32,3 +32,4 @@ get_players_roto_wire_news(players = c( "Jarrett Allen", "DeMarre Carroll", "All
 Other news: \code{\link{get_beyond_the_numbers_articles}},
   \code{\link{get_teams_roto_wire_news}}
 }
+\concept{news}

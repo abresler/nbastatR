@@ -1,13 +1,17 @@
 # seasons_players ---------------------------------------------------------
 get_seasons_teams <-
-  function(return_message = TRUE,
+  function(season = 2018,
+           return_message = TRUE,
            ...) {
+    season_slug <-
+      generate_season_slug(season = season)
+
     table_id <- 1
     URL <- gen_url("commonteamyears")
     params <- list(
       LeagueID = "00",
       SeasonType = "",
-      Season = "2017-18",
+      Season = season_slug,
       IsOnlyCurrentSeason = "0",
       PlayerID = "",
       TeamID = "",
@@ -32,11 +36,17 @@ get_seasons_teams <-
     )
     params <- utils::modifyList(params, list(...))
 
-    nba_h <- get_nba_headers()
+    slug_param <-
+      .generate_param_slug(params = params)
+
+    url <-
+      glue::glue("{URL}?{slug_param}") %>% as.character()
 
     resp <-
-      httr::GET(url = URL, query = params, nba_h) %>%
-      httr::content("text", encoding = "UTF-8")
+      url %>%
+      curl() %>%
+      readr::read_lines()
+
     json <-
       resp %>% jsonlite::fromJSON(simplifyVector = T)
 
@@ -89,11 +99,17 @@ get_team_id_season_roster <-
     )
     # params <- utils::modifyList(params, list(...))
 
-    nba_h <- get_nba_headers()
+    slug_param <-
+      .generate_param_slug(params = params)
+
+    url <-
+      glue::glue("{URL}?{slug_param}") %>% as.character()
 
     resp <-
-      httr::GET(url = URL, query = params, nba_h) %>%
-      httr::content("text", encoding = "UTF-8")
+      url %>%
+      curl() %>%
+      readr::read_lines()
+
     json <-
       resp %>% jsonlite::fromJSON(simplifyVector = T)
 

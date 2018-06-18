@@ -23,3 +23,5 @@ Other dictionary: \code{\link{assign_nba_teams}},
 
 Other NBA players: \code{\link{get_bref_player_dictionary}}
 }
+\concept{NBA players}
+\concept{dictionary}

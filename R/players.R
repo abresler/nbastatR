@@ -350,14 +350,16 @@ get_player_table_data <-
       names(params)[names(params) %>% str_detect("teamId")] <-
         "playerId"
     }
-    nba_h <- get_nba_headers()
+    slug_param <-
+      .generate_param_slug(params = params)
 
-    http_call <-
-      httr::GET(url = URL, query = params, nba_h)
-    url <- http_call$url
+    url <-
+      glue::glue("{URL}?{slug_param}") %>% as.character()
+
     resp <-
-      http_call %>%
-      httr::content("text", encoding = "UTF-8")
+      url %>%
+      curl() %>%
+      readr::read_lines()
 
     json <-
       resp %>% jsonlite::fromJSON(simplifyVector = T)

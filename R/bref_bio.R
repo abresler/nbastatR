@@ -59,7 +59,7 @@ parse.salary <-
       flatten_df() %>%
       purrr::set_names(c("slugSeason", "nameTeam", "slugLeague", "amountSalary")) %>%
       filter(!slugSeason %>% str_detect("Career")) %>%
-      mutate(amountSalary = readr::parse_number(amountSalary))
+      mutate(amountSalary = readr::parse_number(as.character(amountSalary)))
   }
 
 parse.contracts  <-
@@ -88,7 +88,7 @@ parse.contracts  <-
       flatten_df() %>%
       dplyr::rename(nameTeam = Team) %>%
       tidyr::gather(slugSeason, amountSalary, -nameTeam) %>%
-      mutate(amountSalary = amountSalary %>% readr::parse_number())
+      mutate(amountSalary = amountSalary %>% as.character() %>%  readr::parse_number())
     contract_details <- page %>% html_nodes(".bullets") %>% html_text()
     if (contract_details %>% length() > 0) {
       table <-
@@ -284,14 +284,14 @@ parse.bio <-
     if (all_data %>% tibble::has_name("weightLBS")) {
       all_data <-
         all_data %>%
-        mutate(weightLBS = readr::parse_number(weightLBS))
+        mutate(weightLBS = readr::parse_number(as.character(weightLBS)))
     }
 
 
     if (all_data %>% tibble::has_name("yearsExperience")) {
       all_data <-
         all_data %>%
-        mutate(yearsExperience = readr::parse_number(yearsExperience))
+        mutate(yearsExperience = readr::parse_number(as.character(yearsExperience)))
     }
 
 
@@ -356,7 +356,7 @@ parse.bio <-
           sep = "\\ "
         ) %>%
         mutate_at(c("yearHighSchool", "rankHighSchool"),
-                  funs(. %>% readr::parse_number()))
+                  funs(. %>% as.character() %>% readr::parse_number()))
 
     }
 

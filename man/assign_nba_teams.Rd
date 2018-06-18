@@ -21,3 +21,5 @@ Other dictionary: \code{\link{assign_nba_players}},
   \code{\link{get_bref_player_dictionary}},
   \code{\link{get_bref_team_dictionary}}
 }
+\concept{NBA teams}
+\concept{dictionary}

@@ -292,6 +292,7 @@ parse_agent_player_table <-
     page %>%
     html_nodes('td:nth-child(5)') %>%
     html_text() %>%
+    as.character() %>%
     readr::parse_number() %>%
     suppressWarnings()
 
@@ -306,6 +307,7 @@ parse_agent_player_table <-
     page %>%
     html_nodes('td:nth-child(7)') %>%
     html_text() %>%
+    as.character() %>%
     readr::parse_number() %>%
     suppressWarnings()
 
@@ -319,6 +321,7 @@ parse_agent_player_table <-
     page %>%
     html_nodes('td:nth-child(9)') %>%
     html_text() %>%
+    as.character() %>%
     readr::parse_number() %>%
     suppressWarnings()
 
@@ -574,6 +577,7 @@ get_players_agents <-
       page %>%
       html_nodes('td:nth-child(5)') %>%
       html_text() %>%
+      as.character() %>%
       readr::parse_number() %>%
       suppressWarnings()
 
@@ -588,6 +592,7 @@ get_players_agents <-
       page %>%
       html_nodes('td:nth-child(7)') %>%
       html_text() %>%
+      as.character() %>%
       readr::parse_number() %>%
       suppressWarnings()
 

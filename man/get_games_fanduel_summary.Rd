@@ -31,3 +31,5 @@ Other game: \code{\link{get_game_logs}},
   \code{\link{get_games_box_scores}},
   \code{\link{get_games_pbp_win_probablity}}
 }
+\concept{game}
+\concept{season}
