@@ -4,7 +4,8 @@
 \alias{get_hoops_hype_teams_salary_summary}
 \title{HoopsHype NBA teams summary salaries}
 \usage{
-get_hoops_hype_teams_salary_summary(spread_data = F, return_message = T)
+get_hoops_hype_teams_salary_summary(spread_data = F,
+  return_message = T)
 }
 \arguments{
 \item{spread_data}{if \code{TRUE} spreads data}

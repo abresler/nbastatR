@@ -4,7 +4,8 @@
 \alias{get_years_draft_combines}
 \title{NBA draft combine data}
 \usage{
-get_years_draft_combines(years = NULL, return_message = T, nest_data = F)
+get_years_draft_combines(years = NULL, return_message = T,
+  nest_data = F)
 }
 \arguments{
 \item{years}{vector of draft years}

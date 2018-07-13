@@ -5,7 +5,8 @@
 \title{Spread gathered data frame}
 \usage{
 spread_data(data, variable_name = "item", value_name = "value",
-  perserve_order = TRUE, unite_columns = NULL, separate_columns = NULL)
+  perserve_order = TRUE, unite_columns = NULL,
+  separate_columns = NULL)
 }
 \arguments{
 \item{data}{a \code{data_frame}}

@@ -8,10 +8,10 @@ get_bref_awards(awards = c("Most Valuable Player", "Rookie of the Year",
   "Defensive Player of the Year", "Sixth Man of the Year",
   "Most Improved Player", "Teammate of the Year",
   "J. Walter Kennedy Citizenship Award", "NBA Finals Most Valuable Player",
-  "ABA Playoffs Most Valuable Player", "All-Star Game Most Valuable Player",
-  "Comeback Player of the Year", "Sporting News MVP",
-  "Sporting News Rookie of the Year", "Coach of the Year",
-  "Executive of the Year"), return_message = T)
+  "ABA Playoffs Most Valuable Player",
+  "All-Star Game Most Valuable Player", "Comeback Player of the Year",
+  "Sporting News MVP", "Sporting News Rookie of the Year",
+  "Coach of the Year", "Executive of the Year"), return_message = T)
 }
 \arguments{
 \item{awards}{vector of awards options include \itemize{

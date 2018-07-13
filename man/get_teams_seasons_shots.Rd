@@ -5,9 +5,9 @@
 \title{Get teams seasons shot charts}
 \usage{
 get_teams_seasons_shots(teams = NULL, team_ids = NULL,
-  all_active_teams = F, season_types = "Regular Season", seasons = 2018,
-  measures = "FGA", periods = 0, months = 0, date_from = NA,
-  date_to = NA, nest_data = F, return_message = T)
+  all_active_teams = F, season_types = "Regular Season",
+  seasons = 2018, measures = "FGA", periods = 0, months = 0,
+  date_from = NA, date_to = NA, nest_data = F, return_message = T)
 }
 \arguments{
 \item{teams}{vector of team names}

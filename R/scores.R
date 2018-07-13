@@ -1,13 +1,15 @@
 
 # http://stats.nba.com/stats/scoreboardv2/?leagueId=00&gameDate=12%2F30%2F1990&dayOffset=0
 
-get_day_nba_scores <-
+
+.get_day_nba_scores <-
   function(game_date = Sys.Date() - 1,
            day_offset= 0,
            include_standings = F,
            return_message = TRUE) {
     game_date <-
       game_date %>%
+      as.character() %>%
       readr::parse_date()
 
     if (return_message) {
@@ -23,6 +25,7 @@ get_day_nba_scores <-
         "http://stats.nba.com/stats/scoreboardv2/?leagueId=00&gameDate={date_slug}&dayOffset={day_offset}"
       ) %>%
       as.character()
+
     json <-
       curl_json_to_vector(url = url)
 
@@ -117,15 +120,15 @@ get_days_nba_scores <-
                   stringsAsFactors = F) %>%
       as_data_frame()
 
-    get_day_nba_scores_safe <-
-      purrr::possibly(get_day_nba_scores, data_frame())
+    .get_day_nba_scores_safe <-
+      purrr::possibly(.get_day_nba_scores, data_frame())
 
     all_data <-
       1:nrow(input_df) %>%
       map_df(function(x) {
         df_row <- input_df %>% slice(x)
         df_row %$%
-          get_day_nba_scores_safe(
+          .get_day_nba_scores_safe(
             game_date = game_date,
             return_message = return_message,
             include_standings = include_standings,

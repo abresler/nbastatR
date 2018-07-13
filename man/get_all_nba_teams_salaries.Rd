@@ -5,7 +5,8 @@
 \title{NBA team salaries}
 \usage{
 get_all_nba_teams_salaries(assume_player_opt_out = T,
-  assume_team_doesnt_exercise = T, spread_data = F, return_message = T)
+  assume_team_doesnt_exercise = T, spread_data = F,
+  return_message = T)
 }
 \arguments{
 \item{assume_player_opt_out}{if `TRUE` assumes player opts out of a player option}

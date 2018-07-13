@@ -4,21 +4,24 @@
 \alias{get_teams_players_seasons_summary_stats}
 \title{NBA teams and player statistics}
 \usage{
-get_teams_players_seasons_summary_stats(seasons = 2018, types = c("player",
-  "team"), tables = c("defense"), season_types = "Regular Season",
-  measures = "Base", modes = "PerGame", defenses = "Overall",
-  is_plus_minus = F, is_pace_adjusted = F, periods = 0, is_rank = F,
-  game_segments = NA, divisions_against = NA, conferences_against = NA,
-  date_from = NA, date_to = NA, last_n_games = 0, locations = NA,
-  months = 0, season_segments = NA, opponents = NA, countries = NA,
+get_teams_players_seasons_summary_stats(seasons = 2018,
+  types = c("player", "team"), tables = c("defense"),
+  season_types = "Regular Season", measures = "Base",
+  modes = "PerGame", defenses = "Overall", is_plus_minus = F,
+  is_pace_adjusted = F, periods = 0, is_rank = F,
+  game_segments = NA, divisions_against = NA,
+  conferences_against = NA, date_from = NA, date_to = NA,
+  last_n_games = 0, locations = NA, months = 0,
+  season_segments = NA, opponents = NA, countries = NA,
   weights = NA, outcomes = NA, playoff_rounds = 0,
   players_experience = NA, players_positions = NA, colleges = NA,
-  draft_picks = NA, draft_years = NA, game_scopes = NA, heights = NA,
-  shot_clock_ranges = NA, clutch_times = "Last 5 Minutes",
-  ahead_or_behind = "Ahead or Behind", general_ranges = "Overall",
-  dribble_ranges = "0 Dribbles", shot_distance_ranges = "By Zone",
-  touch_time_ranges = NA, closest_defender_ranges = NA, point_diffs = 5,
-  starters_bench = NA, assign_to_environment = TRUE, add_mode_names = T,
+  draft_picks = NA, draft_years = NA, game_scopes = NA,
+  heights = NA, shot_clock_ranges = NA,
+  clutch_times = "Last 5 Minutes", ahead_or_behind = "Ahead or Behind",
+  general_ranges = "Overall", dribble_ranges = "0 Dribbles",
+  shot_distance_ranges = "By Zone", touch_time_ranges = NA,
+  closest_defender_ranges = NA, point_diffs = 5, starters_bench = NA,
+  assign_to_environment = TRUE, add_mode_names = T,
   return_message = TRUE)
 }
 \arguments{

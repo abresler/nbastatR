@@ -4,14 +4,16 @@
 \alias{get_teams_tables_data}
 \title{NBA Team table data by season}
 \usage{
-get_teams_tables_data(teams = NULL, team_ids = NULL, all_active_teams = F,
-  seasons = 2018, tables = NULL, measures = NULL, modes = NULL,
-  season_types = "Regular Season", playoff_rounds = NA, is_plus_minus = F,
-  is_rank = F, is_pace_adjusted = F, outcomes = NA, locations = NA,
-  months = NA, season_segments = NA, date_from = NA, date_to = NA,
+get_teams_tables_data(teams = NULL, team_ids = NULL,
+  all_active_teams = F, seasons = 2018, tables = NULL,
+  measures = NULL, modes = NULL, season_types = "Regular Season",
+  playoff_rounds = NA, is_plus_minus = F, is_rank = F,
+  is_pace_adjusted = F, outcomes = NA, locations = NA, months = NA,
+  season_segments = NA, date_from = NA, date_to = NA,
   opponent_ids = NA, vs_confs = NA, vs_divisions = NA,
-  game_segments = NA, periods = NA, shot_clocks = NA, last_n_games = NA,
-  assign_to_environment = TRUE, return_message = TRUE)
+  game_segments = NA, periods = NA, shot_clocks = NA,
+  last_n_games = NA, assign_to_environment = TRUE,
+  return_message = TRUE)
 }
 \arguments{
 \item{teams}{vector of NBA team names}

@@ -4,7 +4,8 @@
 \alias{get_drafts}
 \title{NBA drafts}
 \usage{
-get_drafts(draft_years = 1947:2018, nest_data = F, return_message = T)
+get_drafts(draft_years = 1947:2018, nest_data = F,
+  return_message = T)
 }
 \arguments{
 \item{draft_years}{\code{vector} of draft years}

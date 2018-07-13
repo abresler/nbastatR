@@ -5,8 +5,9 @@
 \title{Gather a data frame}
 \usage{
 gather_data(data, variable_name = "item", numeric_ids = c("^id"),
-  use_logical_keys = TRUE, use_factor_keys = TRUE, unite_columns = NULL,
-  separate_columns = NULL, use_date_keys = FALSE, remove_na = TRUE)
+  use_logical_keys = TRUE, use_factor_keys = TRUE,
+  unite_columns = NULL, separate_columns = NULL,
+  use_date_keys = FALSE, remove_na = TRUE)
 }
 \arguments{
 \item{data}{a \code{data_frame}}

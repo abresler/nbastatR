@@ -4,12 +4,14 @@
 \alias{get_synergy_categories_stats}
 \title{Get Synergy data for specified season}
 \usage{
-get_synergy_categories_stats(seasons = 2016:2018, result_types = c("player",
-  "team"), season_types = c("Regular Season"), set_types = c("offensive",
-  "defensive"), categories = c("Transition", "Isolation", "PRBallHandler",
-  "PRRollman", "Postup", "Spotup", "Handoff", "Cut", "OffScreen", "OffRebound",
-  "Misc"), results = 500, assign_to_environment = TRUE, spread_data = F,
-  nest_data = F, return_message = TRUE)
+get_synergy_categories_stats(seasons = 2016:2018,
+  result_types = c("player", "team"),
+  season_types = c("Regular Season"), set_types = c("offensive",
+  "defensive"), categories = c("Transition", "Isolation",
+  "PRBallHandler", "PRRollman", "Postup", "Spotup", "Handoff", "Cut",
+  "OffScreen", "OffRebound", "Misc"), results = 500,
+  assign_to_environment = TRUE, spread_data = F, nest_data = F,
+  return_message = TRUE)
 }
 \arguments{
 \item{seasons}{vector of seasons from 2016 onward}

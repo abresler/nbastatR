@@ -4,8 +4,8 @@
 \alias{get_bref_seasons_award_votes}
 \title{Basketball Reference award votes}
 \usage{
-get_bref_seasons_award_votes(seasons = 2017, assign_to_environment = TRUE,
-  return_message = TRUE)
+get_bref_seasons_award_votes(seasons = 2017,
+  assign_to_environment = TRUE, return_message = TRUE)
 }
 \arguments{
 \item{seasons}{vector of seasons starting in 1964}

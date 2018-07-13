@@ -3,7 +3,7 @@
 
 # csv ---------------------------------------------------------------------
 
-munge_seasons <-
+.munge_seasons <-
   function(season) {
     if (!season %>% str_detect("\\-")) {
       s <- as.numeric(season)
@@ -45,6 +45,7 @@ get_bref_coach_dictionary <-
     data <-
       "https://d2cwpp38twqe55.cloudfront.net/short/inc/coaches_search_list.csv" %>%
       read_csv(col_names = F) %>%
+      dplyr::select(1:4) %>%
       purrr::set_names(c(
         "slugCoachBREF",
         "nameCoach",
@@ -76,7 +77,7 @@ get_bref_coach_dictionary <-
     df_seasons <-
       seasons %>%
       map_df(function(season) {
-        munge_seasons(season = season)
+        .munge_seasons(season = season)
       })
 
     data <-
@@ -111,6 +112,7 @@ get_bref_team_dictionary <-
     data <-
       "https://d2cwpp38twqe55.cloudfront.net/short/inc/teams_search_list.csv" %>%
       read_csv(col_names = F) %>%
+      dplyr::select(1:4) %>%
       purrr::set_names(c(
         "slugTeamBREF",
         "nameTeamBREF",
@@ -142,7 +144,7 @@ get_bref_team_dictionary <-
     df_seasons <-
       seasons %>%
       map_df(function(season) {
-        munge_seasons(season = season)
+        .munge_seasons(season = season)
       })
 
     data <-
@@ -165,7 +167,7 @@ get_bref_team_dictionary <-
 
 
 
-dictionary_bref_tables <-
+.dictionary_bref_tables <-
   function() {
     data_frame(
       idTable = c(
@@ -385,7 +387,7 @@ widen_bref_data <-
 
   }
 
-assign.bref.teams <-
+.assign.bref.teams <-
   function(all_data,
            widen_data = TRUE,
            join_data = FALSE,
@@ -595,7 +597,7 @@ assign.bref.teams <-
     all_data
   }
 
-assign.bref.players <-
+.assign.bref.players <-
   function(all_data,
            widen_data = TRUE,
            join_data = FALSE,
@@ -605,7 +607,8 @@ assign.bref.players <-
       return(all_data)
     }
 
-    table_names <- all_data %>% pull(typeData) %>% unique()
+    table_names <-
+      all_data %>% pull(typeData) %>% unique()
 
 
     all_data <-
@@ -837,7 +840,7 @@ assign_bref_data <-
 
     if (type_slug == "players") {
       data <-
-        assign.bref.players(
+        .assign.bref.players(
           all_data = data,
           widen_data = widen_data,
           join_data = join_data,
@@ -848,7 +851,7 @@ assign_bref_data <-
 
     if (type_slug == "teams") {
       data <-
-        assign.bref.teams(
+        .assign.bref.teams(
           all_data = data,
           widen_data = widen_data,
           join_data = join_data,
@@ -909,6 +912,7 @@ get_bref_player_dictionary <-
         "https://d2cwpp38twqe55.cloudfront.net/short/inc/players_search_list.csv",
         col_names = F
       ) %>%
+      dplyr::select(1:4) %>%
       purrr::set_names(c("slugPlayerBREF", "namePlayerBREF", "yearsPlayer", "isActive")) %>%
       mutate(isActive = as.logical(isActive)) %>%
       suppressWarnings() %>%
@@ -1081,10 +1085,10 @@ all_nba <-
   }
 
 
-# parse_page -------------------------------------------------------
+# .parse_page -------------------------------------------------------
 
 
-parse_page <-
+.parse_page <-
   function(url = "http://www.basketball-reference.com/players/g/gillke01.html") {
     page <-
       url %>%
@@ -1095,9 +1099,9 @@ parse_page <-
   }
 
 
-# parse_page_season --------------------------------------------------------------
+# .parse_page_season --------------------------------------------------------------
 
-generate_years_urls <-
+.generate_years_urls <-
   function(table = "per_game",
            seasons = 1951:2017) {
     tables <-
@@ -1117,7 +1121,7 @@ generate_years_urls <-
     return(urls)
   }
 
-parse_player_season <-
+.parse_player_season <-
   function(url = "http://www.basketball-reference.com/leagues/NBA_1997_per_game.html",
            return_message = TRUE) {
     ## case_when
@@ -1333,19 +1337,19 @@ get_bref_all_nba_teams <-
   }
 
 
-get_data_bref_player_seasons <-
+.get_data_bref_player_seasons <-
   function(seasons = 1980:2017,
            table = "advanced",
            only_totals = TRUE,
            return_message = TRUE) {
     urls <-
-      generate_years_urls(table = table, seasons = seasons)
-    parse_player_season_safe <-
-      purrr::possibly(parse_player_season, data_frame())
+      .generate_years_urls(table = table, seasons = seasons)
+    .parse_player_season_safe <-
+      purrr::possibly(.parse_player_season, data_frame())
     all_data <-
       urls %>%
       map_df(function(x) {
-        parse_player_season_safe(url = x, return_message = return_message)
+        .parse_player_season_safe(url = x, return_message = return_message)
       })
 
     all_data <-
@@ -1405,7 +1409,7 @@ get_data_bref_player_seasons <-
 #' @examples
 #' get_bref_players_seasons(seasons = 2017:2018, tables = c("advanced", "totals"))
 get_bref_players_seasons <-
-  function(seasons = 2016:2018,
+  function(seasons = 2018,
            tables = c('advanced', 'totals'),
            include_all_nba = F,
            only_totals = TRUE,
@@ -1416,12 +1420,14 @@ get_bref_players_seasons <-
            return_message = TRUE) {
     tables <-
       tables %>% str_replace_all("\\ ", "_") %>% str_to_lower()
-    get_data_bref_player_seasons_safe <-
-      purrr::possibly(get_data_bref_player_seasons, data_frame())
+
+    .get_data_bref_player_seasons_safe <-
+      purrr::possibly(.get_data_bref_player_seasons, data_frame())
+
     all_data <-
       tables %>%
       purrr::map_df(function(x) {
-        get_data_bref_player_seasons_safe(
+        .get_data_bref_player_seasons_safe(
           table = x,
           seasons = seasons,
           only_totals = only_totals,
@@ -2145,7 +2151,7 @@ get_bref_teams_seasons <-
     all_data <-
       all_data %>%
       left_join(df_urls) %>%
-      left_join(dictionary_bref_tables()) %>%
+      left_join(.dictionary_bref_tables()) %>%
       select(slugTable, everything()) %>%
       suppressMessages()
 
@@ -2425,7 +2431,7 @@ dictionary_bref_awards <-
 
     table_css <-
       glue::glue("#{slug_award}NBA") %>% as.character()
-    page <- parse_page(url = url)
+    page <- .parse_page(url = url)
     tables <- page %>% html_table(header = F)
     data <-
       tables[[1]] %>% as_data_frame()

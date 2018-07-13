@@ -4,7 +4,8 @@
 \alias{get_seasons_rosters}
 \title{NBA teams seasons rosters}
 \usage{
-get_seasons_rosters(seasons = NULL, return_message = TRUE, nest_data = F)
+get_seasons_rosters(seasons = NULL, return_message = TRUE,
+  nest_data = F)
 }
 \arguments{
 \item{seasons}{vector of seasons}

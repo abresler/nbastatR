@@ -4,7 +4,8 @@
 \alias{get_nba_teams_ids}
 \title{NBA team ids}
 \usage{
-get_nba_teams_ids(teams = NULL, team_ids = NULL, all_active_teams = F)
+get_nba_teams_ids(teams = NULL, team_ids = NULL,
+  all_active_teams = F)
 }
 \arguments{
 \item{teams}{vector of team names}
