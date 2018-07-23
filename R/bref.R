@@ -614,6 +614,7 @@ widen_bref_data <-
     all_data <-
       table_names %>%
       purrr::map_df(function(table) {
+        table %>% message()
         df_table <-
           all_data %>%
           filter(typeData == table) %>%

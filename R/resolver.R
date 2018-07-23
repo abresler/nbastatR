@@ -109,7 +109,12 @@ dictionary.bref.nba.missing <-
         "T.J. Leaf",
         "Zhou Qi",
         "Dennis Smith",
-        "Derrick Walton"
+        "Derrick Walton",
+        "Andrew White",
+        "James Webb",
+        "Juan Hernangomez", "Marcus Williams",
+        "Matt Williams", "Mike Dunleavy", "Mike James", "Vince Hunter",
+        "Walt Lemon, Jr."
       )
       ,
       namePlayerNBA = c(
@@ -202,7 +207,13 @@ dictionary.bref.nba.missing <-
         "TJ Leaf",
         "Qi Qi",
         "Dennis Smith Jr",
-        "Derrick Walton Jr."
+        "Derrick Walton Jr.",
+        "Andrew White III",
+        "Juancho Hernangomez",
+        "James Webb III",
+        "Marcus Williams",
+        "Matt Williams Jr.", "Mike Dunleavy Jr.", "Mike James", "Vincent Hunter",
+        "Walter Lemon Jr."
       )
     )
 
@@ -249,7 +260,10 @@ resolve.players <-
                     urlPlayerThumbnail,
                     yearSeasonFirst) %>%
       mutate(namePlayerNBA = namePlayer) %>%
-      dplyr::select(namePlayerNBA, everything())
+      dplyr::select(namePlayerNBA, everything()) %>%
+      group_by(namePlayerNBA) %>%
+      filter(yearSeasonFirst == max(yearSeasonFirst)) %>%
+      ungroup()
 
     data_players <-
       data_players %>%
@@ -320,6 +334,7 @@ resolve.players <-
       data_players %>%
       filter(!is.na(namePlayerNBA))
     players_good <- df_good %>% pull(namePlayer)
+
     df_good <-
       df_good %>%
       mutate(!!name_site := players_good) %>%
@@ -346,10 +361,10 @@ resolve.players <-
 
     df_na_players <-
       df_na_players %>%
-      distinct() %>%
       select(namePlayer) %>%
+      distinct() %>%
       left_join(df_player_dict) %>%
-      mutate(!!name_site := players_na) %>%
+      mutate(!!name_site := unique(players_na)) %>%
       left_join(data) %>%
       dplyr::select(-namePlayer) %>%
       dplyr::rename(namePlayer = namePlayerNBA) %>%
