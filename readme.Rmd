@@ -8,7 +8,7 @@ knitr::opts_chunk$set(echo = TRUE)
 ```
 
 ## Installation
-```{r, eval=F}
+```{r eval=F}
 devtools::install_github("abresler/nbastatR")
 ```
 
