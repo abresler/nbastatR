@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>NBA teams yearly performance — get_teams_year_by_year_stats • nbastatR</title>
+<title>Summer League Teams — sl_teams • nbastatR</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
@@ -30,9 +30,9 @@
 
 
 
-<meta property="og:title" content="NBA teams yearly performance — get_teams_year_by_year_stats" />
+<meta property="og:title" content="Summer League Teams — sl_teams" />
 
-<meta property="og:description" content="NBA teams yearly performance" />
+<meta property="og:description" content="Summer League Teams" />
 <meta name="twitter:card" content="summary" />
 
 
@@ -112,73 +112,36 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>NBA teams yearly performance</h1>
-    <small class="dont-index">Source: <a href='https://github.com/abresler/nbastatR/blob/master/R/team_tables.R'><code>R/team_tables.R</code></a></small>
-    <div class="hidden name"><code>get_teams_year_by_year_stats.Rd</code></div>
+    <h1>Summer League Teams</h1>
+    <small class="dont-index">Source: <a href='https://github.com/abresler/nbastatR/blob/master/R/summer_league.R'><code>R/summer_league.R</code></a></small>
+    <div class="hidden name"><code>sl_teams.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
-    <p>NBA teams yearly performance</p>
+    <p>Summer League Teams</p>
     
     </div>
 
-    <pre class="usage"><span class='fu'>get_teams_year_by_year_stats</span>(<span class='kw'>teams</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>team_ids</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>all_active_teams</span> <span class='kw'>=</span> <span class='no'>T</span>, <span class='kw'>season_types</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>"Regular Season"</span>),
-  <span class='kw'>modes</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>"Totals"</span>), <span class='kw'>return_message</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>nest_data</span> <span class='kw'>=</span> <span class='no'>F</span>)</pre>
+    <pre class="usage"><span class='fu'>sl_teams</span>(<span class='kw'>assign_to_environment</span> <span class='kw'>=</span> <span class='no'>T</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>teams</th>
-      <td><p>vector of team names</p></td>
-    </tr>
-    <tr>
-      <th>team_ids</th>
-      <td><p>vector of team ids</p></td>
-    </tr>
-    <tr>
-      <th>all_active_teams</th>
-      <td><p>if <code>TRUE</code> returns all active teams</p></td>
-    </tr>
-    <tr>
-      <th>season_types</th>
-      <td><p>type of season options include</p><ul>
-<li><p>Pre Season</p></li>
-<li><p>Regular Season</p></li>
-<li><p>Playoffs</p></li>
-<li><p>All Star</p></li>
-</ul></td>
-    </tr>
-    <tr>
-      <th>modes</th>
-      <td><p>mode of search options include</p><ul>
-<li><p>PerGame</p></li>
-<li><p>Totals</p></li>
-</ul></td>
-    </tr>
-    <tr>
-      <th>return_message</th>
-      <td><p>if <code>TRUE</code> returns a message</p></td>
-    </tr>
-    <tr>
-      <th>nest_data</th>
-      <td><p>if <code>TRUE</code> returns a nested data_frame</p></td>
+      <th>assign_to_environment</th>
+      <td><p>if <code>TRUE</code> assings to environment</p></td>
     </tr>
     </table>
     
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>a <code>data_frame</code></p>
+    <p>a nested <code>data_frame</code></p>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><span class='co'># NOT RUN {</span>
-<span class='fu'>get_teams_year_by_year_stats</span>(<span class='kw'>all_active_teams</span> <span class='kw'>=</span> <span class='no'>T</span>,
-<span class='kw'>modes</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>"Totals"</span>),
-<span class='kw'>return_message</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
- <span class='kw'>nest_data</span> <span class='kw'>=</span><span class='no'>F</span>)
+<span class='fu'>sl_teams</span>()
 <span class='co'># }</span></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">

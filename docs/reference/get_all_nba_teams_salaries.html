@@ -21,14 +21,20 @@
 <!-- clipboard.js -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.7.1/clipboard.min.js" integrity="sha384-cV+rhyOuRHc9Ub/91rihWcGmMmCXDeksTtCihMupQHSsi8GIIRDG0ThDc3HGQFJ3" crossorigin="anonymous"></script>
 
+<!-- sticky kit -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/sticky-kit/1.1.3/sticky-kit.min.js" integrity="sha256-c4Rlo1ZozqTPE2RLuvbusY3+SU1pQaJC0TjuhygMipw=" crossorigin="anonymous"></script>
+
 <!-- pkgdown -->
 <link href="../pkgdown.css" rel="stylesheet">
-<script src="../jquery.sticky-kit.min.js"></script>
 <script src="../pkgdown.js"></script>
+
+
+
 <meta property="og:title" content="NBA team salaries — get_all_nba_teams_salaries" />
 
 <meta property="og:description" content="Gets information about NBA teams salaries" />
 <meta name="twitter:card" content="summary" />
+
 
 
 <!-- mathjax -->
@@ -38,8 +44,6 @@
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
 <![endif]-->
-
-
 
 
   </head>
@@ -57,7 +61,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">nbastatR</a>
-        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">0.1.11061</span>
+        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">0.1.110702</span>
       </span>
     </div>
 
@@ -105,19 +109,23 @@
       
       </header>
 
-      <div class="row">
+<div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>NBA team salaries</h1>
-    <small>Source: <a href='https://github.com/abresler/nbastatR/blob/master/R/basketball_insider_functions.R'><code>R/basketball_insider_functions.R</code></a></small>
+    <small class="dont-index">Source: <a href='https://github.com/abresler/nbastatR/blob/master/R/basketball_insider_functions.R'><code>R/basketball_insider_functions.R</code></a></small>
+    <div class="hidden name"><code>get_all_nba_teams_salaries.Rd</code></div>
     </div>
 
+    <div class="ref-description">
     
     <p>Gets information about NBA teams salaries</p>
     
+    </div>
 
     <pre class="usage"><span class='fu'>get_all_nba_teams_salaries</span>(<span class='kw'>assume_player_opt_out</span> <span class='kw'>=</span> <span class='no'>T</span>,
-  <span class='kw'>assume_team_doesnt_exercise</span> <span class='kw'>=</span> <span class='no'>T</span>, <span class='kw'>spread_data</span> <span class='kw'>=</span> <span class='no'>F</span>, <span class='kw'>return_message</span> <span class='kw'>=</span> <span class='no'>T</span>)</pre>
+  <span class='kw'>assume_team_doesnt_exercise</span> <span class='kw'>=</span> <span class='no'>T</span>, <span class='kw'>spread_data</span> <span class='kw'>=</span> <span class='no'>F</span>,
+  <span class='kw'>return_message</span> <span class='kw'>=</span> <span class='no'>T</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -146,10 +154,10 @@
     
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <p>Other salaries: <code><a href='get_bref_players_bios.html'>get_bref_players_bios</a></code>,
+    <div class='dont-index'><p>Other salaries: <code><a href='get_bref_players_bios.html'>get_bref_players_bios</a></code>,
   <code><a href='get_hoops_hype_teams_salary_summary.html'>get_hoops_hype_teams_salary_summary</a></code>,
   <code><a href='get_nba_team_salaries.html'>get_nba_team_salaries</a></code>,
-  <code><a href='get_teams_hoopshype_salaries.html'>get_teams_hoopshype_salaries</a></code></p>
+  <code><a href='get_teams_hoopshype_salaries.html'>get_teams_hoopshype_salaries</a></code></p></div>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>

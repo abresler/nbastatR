@@ -13,7 +13,7 @@ devtools::install_github("abresler/nbastatR")
 ```
 
 
-### nbastatR
+# nbastatR <img src="http://asbcllc.com/logos/nbastatR.png" align="right" />
 
 A package to help you master the NBA data universe in R.
 
