@@ -4,7 +4,7 @@
 \alias{get_games_box_scores}
 \title{NBA box scores}
 \usage{
-get_games_box_scores(game_ids = NULL,
+get_games_box_scores(game_ids = NULL, league = "NBA",
   box_score_types = c("Traditional", "Advanced", "Scoring", "Misc",
   "Usage", "Four Factors", "hustle", "tracking"),
   result_types = c("player", "team"), join_data = TRUE,

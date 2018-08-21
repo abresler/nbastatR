@@ -14,8 +14,9 @@ dictionary_boxscore_slugs <-
   }
 
 
-get_box_score_type <-
+.get_box_score_type <-
   function(game_id = 21700865,
+           league = "NBA",
            result_type = "player",
            boxscore = "traditional",
            return_message = T,
@@ -27,8 +28,19 @@ get_box_score_type <-
       case_when(type_slug %>% str_detect("player")~ 1,
                TRUE ~ 2)
 
+    league_slug <- case_when(league %>% str_to_upper() == "WNBA" ~ "10",
+                             league %>% str_to_upper() == "GLEAGUE" ~ "20",
+                             TRUE ~ "00")
+
     if (boxscore %>% str_to_lower() %>% str_detect("hustle")) {
       table_id <- 2
+    }
+
+    if (league == "WNBA") {
+      table_id <- case_when(
+        result_type == "player" ~ 2,
+        TRUE ~3
+      )
     }
 
     df_box_slugs <-
@@ -42,10 +54,12 @@ get_box_score_type <-
 
     game_slug <-
       pad_id(game_id)
+
     json_url <-
       make_url(
         datatype = box_score_slug,
         GameID = game_slug,
+        LeagueID = league_slug,
         StartPeriod = 0,
         EndPeriod = 12,
         StartRange = 0,
@@ -54,7 +68,11 @@ get_box_score_type <-
       )
 
     if (return_message) {
-      glue::glue("Getting {result_type} {boxscore} box score for game {game_id}") %>% message()
+      glue::glue("Getting {league} {result_type} {boxscore} box score for game {game_id}") %>% message()
+    }
+
+    if (league == "WNBA") {
+      json_url <- glue::glue("https://stats.nba.com/stats/wnbaadvancedboxscore?GameID={game_id}") %>% as.character()
     }
 
     json <-
@@ -81,7 +99,8 @@ get_box_score_type <-
       munge_nba_data()
 
 
-    if (table_id == 2 & data %>% tibble::has_name("nameTeam")) {
+    if (table_id == 2 &
+        data %>% tibble::has_name("nameTeam") & league %>% str_to_upper() == "NBA") {
       data <-
         data %>%
         munge_nba_data() %>%
@@ -93,24 +112,23 @@ get_box_score_type <-
     }
 
     if (boxscore %>% str_to_lower() %>% str_detect("defense")) {
-
       names(data)[names(data) %in% c(
         "fgm",
-                         "fga",
-                         "pctFG",
-                         "fg3m",
-                         "fg3a",
-                         "pctFG3",
-                         "fgmContested",
-                         "fgaContested",
-                         "pctFGContested",
-                         "fgm3mConested",
-                         "fgm3Contested",
-                         "pctFG3M",
-                         "fg2m",
-                         "fg2a",
-                         "ast",
-                         "ftm"
+        "fga",
+        "pctFG",
+        "fg3m",
+        "fg3a",
+        "pctFG3",
+        "fgmContested",
+        "fgaContested",
+        "pctFGContested",
+        "fgm3mConested",
+        "fgm3Contested",
+        "pctFG3M",
+        "fg2m",
+        "fg2a",
+        "ast",
+        "ftm"
       )] <-
         names(data)[names(data) %in% c(
           "fgm",
@@ -143,6 +161,35 @@ get_box_score_type <-
           dplyr::rename(possessionsDefense = possessions)
       }
     }
+    if (league == "WNBA" && table_id == 2) {
+      df_team <-
+        json$resultSets$rowSet[[3]] %>%
+        as_data_frame()
+
+
+      json_names <-
+        json$resultSets$headers[[3]]
+
+      actual_names <-
+        json_names %>% resolve_nba_names()
+
+      df_team <-
+        df_team %>%
+        purrr::set_names(actual_names) %>%
+        munge_nba_data()
+
+      data <- data %>%
+        left_join(
+          df_team %>% unite(nameTeam, nameCityTeam, teamName, sep = "") %>%
+            select(idTeam, nameTeam, slugTeam, locationGame)
+        ) %>%
+        select(-one_of(c("typeBoxScore", "typeDataSet", "orderBoxScore"))) %>%
+        select(idGame, slugTeam, nameTeam, locationGame, everything()) %>%
+        mutate(isStarter = !is.na(groupPosition)) %>%
+        suppressMessages()
+
+    }
+
 
     if (boxscore %>% str_to_lower() %>% str_detect("matchup")) {
       data <-
@@ -150,11 +197,12 @@ get_box_score_type <-
         unite(nameTeamOffense, cityTeamOffense, nicknameTeamOffense, sep = " ") %>%
         unite(nameTeamDefense, cityTeamDefense, nicknameTeamDefense, sep = " ") %>%
         dplyr::rename(pfShootingDrawn = pfShootingCommitted)
-      }
+    }
 
     data <-
       data %>%
-      nest(-c(idGame), .key = 'dataBoxScore') %>%
+      mutate(slugLeague = league) %>%
+      nest(-c(idGame, slugLeague), .key = 'dataBoxScore') %>%
       mutate(typeResult = result_type,
              typeBoxScore = boxscore) %>%
       mutate(cols = dataBoxScore %>% map_dbl(ncol)) %>%
@@ -201,6 +249,7 @@ get_box_score_type <-
 
 get_games_box_scores <-
   function(game_ids = NULL,
+           league = "NBA",
            box_score_types = c("Traditional", "Advanced", "Scoring","Misc", "Usage", "Four Factors",
                                "hustle", "tracking"),
            result_types = c("player", "team"),
@@ -209,6 +258,11 @@ get_games_box_scores <-
            return_message = TRUE) {
     if (game_ids %>% purrr::is_null()) {
       stop("Please enter game ids")
+    }
+
+    if (league == "WNBA") {
+      box_score_types <- "traditional"
+      result_types <- "player"
     }
     input_df <-
       expand.grid(game_id = game_ids,
@@ -220,30 +274,32 @@ get_games_box_scores <-
 
 
     get_box_score_type_safe <-
-      purrr::possibly(get_box_score_type, data_frame())
+      purrr::possibly(.get_box_score_type, data_frame())
 
     all_data <-
       1:nrow(input_df) %>%
       map_df(function(x) {
-      df_row <-
-        input_df %>% slice(x)
+        df_row <-
+          input_df %>% slice(x)
 
-      df_row %$%
-        get_box_score_type_safe(
-          game_id = game_id,
-          result_type = result_type,
-          boxscore = boxscore,
-          return_message = return_message
-        )
-    })
+        df_row %$%
+          get_box_score_type_safe(
+            game_id = game_id,
+            result_type = result_type,
+            boxscore = boxscore,
+            league = league,
+            return_message = return_message
+          )
+      })
 
-    if (join_data) {
+    if (join_data  &&
+        league == "NBA") {
       results <-
         all_data$typeResult %>% unique()
 
       all_data <-
         results %>%
-        map_df(function(result){
+        map_df(function(result) {
           df_results <-
             all_data %>%
             filter(typeResult == result)
@@ -251,7 +307,7 @@ get_games_box_scores <-
             df_results$typeBoxScore %>% unique()
           all_tables <-
             tables %>%
-            map(function(table){
+            map(function(table) {
               data <-
                 df_results %>%
                 filter(typeBoxScore == table) %>%
@@ -274,7 +330,9 @@ get_games_box_scores <-
               if (table == "Four Factors") {
                 data <-
                   data %>%
-                  dplyr::select(-one_of(c("pctOREB", "pctTOVTeam", "pctEFG")))
+                  dplyr::select(-one_of(c(
+                    "pctOREB", "pctTOVTeam", "pctEFG"
+                  )))
               }
               data
             })
@@ -290,52 +348,57 @@ get_games_box_scores <-
               mutate(isStarter = !groupStartPosition %>% is.na()) %>%
               dplyr::select(idGame:groupStartPosition, isStarter, everything())
           }
-          data_frame(typeResult = result, dataBoxScore = list(all_tables))
+          data_frame(typeResult = result,
+                     dataBoxScore = list(all_tables))
         })
 
       if (assign_to_environment) {
         all_data$typeResult %>%
-          walk(function(result){
+          walk(function(result) {
             table_name <-
-              glue::glue("dataBoxScore{str_to_title(result)}")
+              glue::glue("dataBoxScore{str_to_title(result)}{str_to_upper(league)}")
             df_table <-
               all_data %>%
               filter(typeResult == result) %>%
               select(-typeResult) %>%
               unnest()
 
-            assign(x = table_name, value = df_table, envir = .GlobalEnv)
+            assign(x = table_name,
+                   value = df_table,
+                   envir = .GlobalEnv)
           })
       }
-    } else {if (assign_to_environment) {
-      results <-
-        all_data$typeResult %>%
-        unique()
-    results %>%
-      walk(function(result){
-        df_tables <-
-          all_data %>%
-          filter(typeResult == result) %>%
-          select(-typeResult)
-        data <-
-          df_tables$typeBoxScore %>%
-          unique() %>%
-          map(function(type){
-            df_table <-
-              df_tables %>%
-              filter(typeBoxScore == type) %>%
-              tidyr::unnest(.drop = T) %>%
-              select(-typeBoxScore)
-            type_slug <-
-            type %>% str_split("\\ ") %>% flatten_chr() %>%
-              str_to_title() %>% str_c(collapse = "")
+    } else {
+      if (assign_to_environment) {
+        results <-
+          all_data$typeResult %>%
+          unique()
+        results %>%
+          walk(function(result) {
+            df_tables <-
+              all_data %>%
+              filter(typeResult == result) %>%
+              select(-typeResult)
+            data <-
+              df_tables$typeBoxScore %>%
+              unique() %>%
+              map(function(type) {
+                df_table <-
+                  df_tables %>%
+                  filter(typeBoxScore == type) %>%
+                  tidyr::unnest(.drop = T) %>%
+                  select(-typeBoxScore)
+                type_slug <-
+                  type %>% str_split("\\ ") %>% flatten_chr() %>%
+                  str_to_title() %>% str_c(collapse = "")
 
-            table_name <-
-              glue::glue('dataBoxScore{type_slug}{str_to_title(result)}') %>% as.character()
+                table_name <-
+                  glue::glue('dataBoxScore{type_slug}{str_to_title(result)}{str_to_upper(league)}') %>% as.character()
 
-            assign(x = table_name, df_table, envir = .GlobalEnv)
+                assign(x = table_name, df_table, envir = .GlobalEnv)
+              })
           })
-      })
-    }}
+      }
+    }
     all_data
   }

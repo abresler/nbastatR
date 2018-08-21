@@ -4,6 +4,7 @@
 # full_logs ---------------------------------------------------------------
 get_season_gamelog <-
   function(season = 2018,
+           league = "NBA",
            result_type  = "player",
            season_type = "Regular Season",
            date_from = NULL,
@@ -26,14 +27,24 @@ get_season_gamelog <-
       generate_season_slug(season = season)
 
     if (return_message) {
-      glue::glue("Acquiring basic {result_type} game logs for the {season_slug} {season_type}") %>% message()
+      glue::glue(
+        "Acquiring {league} basic {result_type} game logs for the {season_slug} {season_type}"
+      ) %>% message()
     }
 
-    URL <- gen_url("leaguegamelog")
+    call_slug <- case_when(league %>% str_to_upper() == "WNBA" ~ "wnbaseasonstats",
+                           TRUE ~ "leaguegamelog")
+
+    league_slug <- case_when(league %>% str_to_upper() == "WNBA" ~ "10",
+                             league %>% str_to_upper() == "GLEAGUE" ~ "20",
+                             TRUE ~ "00")
+
+
+    URL <- gen_url(call_slug)
 
     params <- list(
       Season = season_slug,
-      LeagueID = '00',
+      LeagueID = league_slug,
       PlayerOrTeam = table_slug,
       Direction = 'DESC',
       SeasonType = season_type,
@@ -52,104 +63,117 @@ get_season_gamelog <-
     url <-
       glue::glue("{URL}?{slug_param}") %>% as.character()
 
-    resp <-
-      url %>%
-      curl() %>%
-      readr::read_lines()
+    if (league %>% str_to_upper() == "WNBA") {
+      url <-
+        glue::glue(
+          "https://stats.nba.com/stats/wnbaseasonstats?College=&Conference=&Country=&DateFrom=&DateTo=&Division=&DraftPick=&DraftYear=&GameScope=&GameSegment=&Height=&LastNGames=0&LeagueID=10&Location=&MeasureType=Base&Month=0&OpponentTeamID=&Outcome=&PORound=&PaceAdjust=&PerMode=PerGame&Period=&PlayerExperience=&PlayerPosition=&PlusMinus=&Rank=&Season={season}&SeasonSegment=&SeasonType={URLencode(season_type)}&ShotClockRange=&StarterBench=&StatCategory=PTS&TeamID=0&VsConference=&VsDivision=&Weight="
+        ) %>%
+        URLencode() %>%
+        as.character()
 
-    json <-
-      resp %>% jsonlite::fromJSON(simplifyVector = T)
+    }
+      resp <-
+        url %>%
+        curl() %>%
+        readr::read_lines()
 
+      json <-
+        resp %>% jsonlite::fromJSON(simplifyVector = T)
     data <-
       json %>%
       nba_json_to_df() %>%
       mutate(slugSeason = season_slug,
              typeSeason = season_type,
-             typeResult = result_type) %>%
-      mutate(dateGame = dateGame %>% lubridate::ymd()) %>%
-      select(typeResult, typeSeason, slugSeason, everything()) %>%
-      arrange(dateGame)
+             typeResult = result_type)
 
-
-    data <-
-      data %>%
-      mutate(
-        slugTeamWinner = case_when(outcomeGame == "W" ~ slugTeam,
-                                   TRUE ~ slugOpponent),
-        slugTeamLoser = case_when(outcomeGame == "L" ~ slugTeam,
-                                  TRUE ~ slugOpponent)
-      )
+    if (data %>% tibble::has_name("dateGame")) {
+      data <-
+        data %>%
+        mutate(dateGame = dateGame %>% lubridate::ymd()) %>%
+        select(typeResult, typeSeason, slugSeason, everything()) %>%
+        arrange(dateGame)
+      data <-
+        data %>%
+        mutate(
+          slugTeamWinner = case_when(outcomeGame == "W" ~ slugTeam,
+                                     TRUE ~ slugOpponent),
+          slugTeamLoser = case_when(outcomeGame == "L" ~ slugTeam,
+                                    TRUE ~ slugOpponent)
+        )
+    }
 
     data <-
       data %>%
       clean_data_table_name() %>%
       mutate(yearSeason = season,
              typeResult = result_type) %>%
-      mutate(urlTeamSeasonLogo = generate_team_season_logo(season = yearSeason, slug_team = slugTeam))
+      mutate(urlTeamSeasonLogo = generate_team_season_logo(season = yearSeason, slug_team = slugTeam)
+      )
+
+    if (data %>% tibble::has_name("dateGame")) {
+      df_teams_games <-
+        data %>%
+        distinct(yearSeason, dateGame, idTeam, slugTeam) %>%
+        group_by(yearSeason, slugTeam) %>%
+        mutate(
+          numberGameTeamSeason = 1:n(),
+          countDaysRestTeam = ifelse(numberGameTeamSeason > 1,
+                                     (dateGame - lag(dateGame) - 1),
+                                     120),
+          countDaysNextGameTeam =
+            ifelse(numberGameTeamSeason < 82,
+                   ((
+                     lead(dateGame) - dateGame
+                   ) - 1),
+                   120)
+        ) %>%
+        mutate(
+          countDaysNextGameTeam = countDaysNextGameTeam %>% as.numeric(),
+          countDaysRestTeam = countDaysRestTeam %>% as.numeric(),
+          isB2B = ifelse(countDaysNextGameTeam == 0 |
+                           countDaysRestTeam == 0, TRUE, FALSE)
+        ) %>%
+        mutate(
+          isB2BFirst = ifelse(dplyr::lead(countDaysNextGameTeam) == 0, TRUE, FALSE),
+          isB2BSecond = ifelse(dplyr::lag(countDaysNextGameTeam) == 0, TRUE, FALSE)
+        ) %>%
+        ungroup() %>%
+        mutate_if(is.logical,
+                  funs(ifelse(. %>% is.na(), FALSE, .)))
+
+      data <-
+        data %>%
+        left_join(df_teams_games) %>%
+        dplyr::select(one_of(
+          c(
+            "typeResult",
+            "yearSeason",
+            "slugSeason",
+            "typeSeason",
+            "dateGame",
+            "idGame",
+            "numberGameTeamSeason",
+            "nameTeam",
+            "idTeam",
+            "isB2B",
+            "isB2BFirst",
+            "isB2BSecond",
+            "locationGame",
+            "slugMatchup",
+            "slugTeam",
+            "countDaysRestTeam",
+            "countDaysNextGameTeam",
+            "slugOpponent",
+            "slugTeamWinner",
+            "slugTeamLoser",
+            "outcomeGame"
+          )
+        ), everything()) %>%
+        suppressMessages()
+    }
 
 
-    df_teams_games <-
-      data %>%
-      distinct(yearSeason, dateGame, idTeam, slugTeam) %>%
-      group_by(yearSeason, slugTeam) %>%
-      mutate(
-        numberGameTeamSeason = 1:n(),
-        countDaysRestTeam = ifelse(numberGameTeamSeason > 1,
-                                    (dateGame - lag(dateGame) - 1),
-                                    120),
-        countDaysNextGameTeam =
-          ifelse(numberGameTeamSeason < 82,
-                  ((
-                    lead(dateGame) - dateGame
-                  ) - 1),
-                  120)
-      ) %>%
-      mutate(
-        countDaysNextGameTeam = countDaysNextGameTeam %>% as.numeric(),
-        countDaysRestTeam = countDaysRestTeam %>% as.numeric(),
-        isB2B = ifelse(countDaysNextGameTeam == 0 |
-                          countDaysRestTeam == 0, TRUE, FALSE)
-      ) %>%
-      mutate(
-        isB2BFirst = ifelse(dplyr::lead(countDaysNextGameTeam) == 0, TRUE, FALSE),
-        isB2BSecond = ifelse(dplyr::lag(countDaysNextGameTeam) == 0, TRUE, FALSE)
-      ) %>%
-      ungroup() %>%
-      mutate_if(is.logical,
-                funs(ifelse(. %>% is.na(), FALSE, .)))
-
-    data <-
-      data %>%
-      left_join(df_teams_games) %>%
-      dplyr::select(one_of(
-        c(
-          "typeResult",
-          "yearSeason",
-          "slugSeason",
-          "typeSeason",
-          "dateGame",
-          "idGame",
-          "numberGameTeamSeason",
-          "nameTeam",
-          "idTeam",
-          "isB2B",
-          "isB2BFirst",
-          "isB2BSecond",
-          "locationGame",
-          "slugMatchup",
-          "slugTeam",
-          "countDaysRestTeam",
-          "countDaysNextGameTeam",
-          "slugOpponent",
-          "slugTeamWinner",
-          "slugTeamLoser",
-          "outcomeGame"
-        )
-      ), everything()) %>%
-      suppressMessages()
-
-
-    if (result_type == "player") {
+    if (result_type == "player" && league %>% str_to_upper() == "NBA") {
       if (!'df_nba_player_dict' %>% exists()) {
         df_nba_player_dict <-
           get_nba_players()
@@ -208,8 +232,9 @@ get_season_gamelog <-
 
     data <-
       data %>%
+      mutate(slugLeague = league) %>%
       dplyr::select(typeResult, typeSeason, yearSeason, everything()) %>%
-      nest(-c(typeResult, slugSeason, yearSeason), .key = 'dataTables')
+      nest(-c(slugLeague, typeResult, slugSeason, yearSeason), .key = 'dataTables')
 
     data
   }
@@ -231,7 +256,9 @@ get_season_gamelog <-
 #' }
 #' @param nest_data if \code{TRUE} nests data
 #' @param assign_to_environment assigns individual table to environment
+#' @param league league name defaults to WNBA
 #' @param ...
+#' @param return_message
 #'
 #' @return a `data_frame`
 #' @family game
@@ -242,6 +269,7 @@ get_season_gamelog <-
 #' get_game_logs(seasons = 2017:2018, result_types = c("team", "player"))
 get_game_logs <-
   function(seasons = 2018,
+           league = "NBA",
            result_types  = "player",
            season_types = "Regular Season",
            nest_data = F,
@@ -290,12 +318,12 @@ get_game_logs <-
             result_type = result,
             season_type = season_type,
             return_message = return_message,
-            ...
+            league = league
           )
         data_row
       })
 
-    if (result_length == 1) {
+    if (result_length == 1 && all_data %>% tibble::has_name("typeResult")) {
       all_data <-
         all_data %>%
         select(-typeResult) %>%

@@ -3,6 +3,7 @@ curl_json_to_vector <-
   function(url = "https://data.nba.net/prod/v1/2017/coaches.json") {
   json <-
     url %>%
+    URLencode() %>%
     curl() %>%
     readr::read_lines() %>%
     jsonlite::fromJSON(simplifyVector = T)

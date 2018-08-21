@@ -5,12 +5,15 @@
 \title{NBA game logs
 NBA game logs for specified parameters}
 \usage{
-get_game_logs(seasons = 2018, result_types = "player",
-  season_types = "Regular Season", nest_data = F,
-  assign_to_environment = TRUE, return_message = TRUE, ...)
+get_game_logs(seasons = 2018, league = "NBA",
+  result_types = "player", season_types = "Regular Season",
+  nest_data = F, assign_to_environment = TRUE, return_message = TRUE,
+  ...)
 }
 \arguments{
 \item{seasons}{vector of seasons where season is year ending}
+
+\item{league}{league name defaults to WNBA}
 
 \item{result_types}{vector of result types \itemize{
 \item player
@@ -28,7 +31,7 @@ get_game_logs(seasons = 2018, result_types = "player",
 
 \item{assign_to_environment}{assigns individual table to environment}
 
-\item{...}{}
+\item{return_message}{}
 }
 \value{
 a `data_frame`

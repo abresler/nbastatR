@@ -498,6 +498,11 @@ pad_id <-
   function(id = 21601112) {
     zeros <-
       10 - nchar(id)
+
+    if (zeros == 0) {
+      return(id)
+    }
+
     start <-
       rep("0", times = zeros) %>% str_c(collapse = "")
     glue::glue("{start}{id}") %>% as.character()
@@ -778,7 +783,31 @@ dictionary_nba_names <-
                    "idPlayer",
                    "teamId",
                    "seasonStart",
-                   "seasonEnd"
+                   "seasonEnd",
+                   "PLAYER_JERSEY_NUM",
+                   "GAMES_PLAYED",
+                   "DBL_DBL",
+                   "TPL_DBL",
+                   "BOX_TYPE",
+                   "DATASET_TYPE",
+                   "BOX_ORDER",
+                   "PLAYERGAMESTATUS",
+                   "SECONDS",
+                   "ORTG",
+                   "DRTG",
+                   "NET_RTG",
+                   "TO_RATIO",
+                   "USAGE_PCT",
+                   "SHORT_NAME",
+                   "POSS_MINUTES",
+                   "POSS_SECONDS",
+                   "AVG_POSS_SEC",
+                   "OFF_PACE",
+                   "DEF_PACE",
+                   "TMPTS",
+                   "OPPPTS",
+                   "PLUSMINUS",
+                   "TOV_PCT"
                  ),
                nameActual =
                  c("idPlayer", "namePlayerLastFirst", "namePlayer",
@@ -1061,7 +1090,31 @@ dictionary_nba_names <-
                    "nameCountry",
                    "idPlayer",
                    "idTeam",
-                   "yearSeasonFirst","yearSeasonLast"
+                   "yearSeasonFirst","yearSeasonLast",
+                   "numberJersey",
+                   "countGames",
+                   "pctDoubleDouble",
+                   "pctTripleDouble",
+                   "typeBoxScore",
+                   "typeDataSet",
+                   "orderBoxScore",
+                   "statusPlayerGame",
+                   "seconds",
+                   "ortg",
+                   "drtg",
+                   "netrtg",
+                   "pctTOV",
+                   "pctUSG",
+                   "nameCityTeam",
+                   "minutesPossesions",
+                   "secondsPossesions",
+                   "secondsPossesionsAvg",
+                   "paceOffense",
+                   "paceDefense",
+                   "ptsTeam",
+                   "ptsOpponent",
+                   "plusminus",
+                   "pctTOVTeam"
 
                  )
     )

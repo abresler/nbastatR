@@ -3,7 +3,8 @@
 
 
 .get_day_nba_scores <-
-  function(game_date = Sys.Date() - 1,
+  function(game_date = Sys.Date() - 2,
+           league = "NBA",
            day_offset= 0,
            include_standings = F,
            return_message = TRUE) {
@@ -12,8 +13,16 @@
       as.character() %>%
       readr::parse_date()
 
+
+    league_slug <-
+      case_when(
+        league %>% str_to_upper() == "WNBA" ~ "10",
+        league %>% str_to_upper() == "GLEAGUE" ~ "20",
+        TRUE ~ "00"
+      )
+
     if (return_message) {
-      glue::glue("Getting NBA game details for {game_date}") %>%
+      glue::glue("Getting {league} game details for {game_date}") %>%
         message()
     }
 
@@ -22,7 +31,7 @@
 
     url <-
       glue::glue(
-        "http://stats.nba.com/stats/scoreboardv2/?leagueId=00&gameDate={date_slug}&dayOffset={day_offset}"
+        "http://stats.nba.com/stats/scoreboardv2/?leagueId={league_slug}&gameDate={date_slug}&dayOffset={day_offset}"
       ) %>%
       as.character()
 
@@ -94,6 +103,10 @@
 #' Returns nba score data for a given date
 #'
 #' @param game_dates vector of dates
+#' @param league League \itemize{
+#' \item WNBA
+#' \item NBA
+#' }
 #' @param day_offset day offset
 #' @param include_standings if \code{TRUE} includes standings as of the date
 #' @param assign_to_environment if \code{TRUE} assigns each table to environment with name containing dataScore
@@ -107,6 +120,7 @@
 #' get_days_nba_scores(game_dates = "2017-12-31", include_standings = F, return_message = T)
 get_days_nba_scores <-
   function(game_dates = NULL,
+           league = "NBA",
            day_offset= 0,
            include_standings = F,
            assign_to_environment = TRUE,
@@ -130,6 +144,7 @@ get_days_nba_scores <-
         df_row %$%
           .get_day_nba_scores_safe(
             game_date = game_date,
+            league = league,
             return_message = return_message,
             include_standings = include_standings,
             day_offset = day_offset
@@ -141,7 +156,7 @@ get_days_nba_scores <-
 
     all_data <-
       tables %>%
-      map_df(function(table){
+      map_df(function(table) {
         df_row <-
           all_data %>%
           filter(nameTable == table) %>%
@@ -153,9 +168,9 @@ get_days_nba_scores <-
 
     if (assign_to_environment) {
       tables %>%
-        walk(function(table){
+        walk(function(table) {
           table_name <-
-            glue::glue("dataScore{table}")
+            glue::glue("dataScore{table}{league}")
           df_row <-
             all_data %>%
             filter(nameTable == table) %>%
@@ -163,7 +178,7 @@ get_days_nba_scores <-
             select(-nameTable) %>%
             distinct()
 
-          assign(table_name, df_row,envir = .GlobalEnv)
+          assign(table_name, df_row, envir = .GlobalEnv)
         })
     }
     all_data
