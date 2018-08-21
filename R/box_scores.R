@@ -37,10 +37,8 @@ dictionary_boxscore_slugs <-
     }
 
     if (league == "WNBA") {
-      table_id <- case_when(
-        result_type == "player" ~ 2,
-        TRUE ~3
-      )
+      table_id <- case_when(result_type == "player" ~ 2,
+                            TRUE ~ 3)
     }
 
     df_box_slugs <-
@@ -72,12 +70,127 @@ dictionary_boxscore_slugs <-
     }
 
     if (league == "WNBA") {
-      json_url <- glue::glue("https://stats.nba.com/stats/wnbaadvancedboxscore?GameID={game_id}") %>% as.character()
+
+      json_url <- case_when(
+        boxscore %>% str_to_lower() == "advanced" ~ glue::glue(
+          "https://stats.nba.com/stats/wnbaadvancedboxscore?GameID={game_id}"
+        ),
+        TRUE ~ glue::glue(
+          "http://data.wnba.com/data/5s/v2015/json/mobile_teams/wnba/2018/scores/gamedetail/{game_id}_gamedetail.json"
+        )
+      ) %>%
+        URLencode() %>%
+        as.character()
     }
 
     json <-
       json_url  %>%
       curl_json_to_vector()
+
+    if (names(json) %>% str_detect( "g") %>% sum(na.rm = T) > 0) {
+      json_data <- json$g
+      df_classes <-
+        json_data %>% map_df(class) %>%
+        gather(column, class)
+
+      base_cols <-
+        df_classes %>%
+        filter(!class == "list") %>%
+        pull(column)
+
+      df_base <-
+        json_data[base_cols] %>% flatten_df()
+
+      df_base <-
+        df_base %>%
+        purrr::set_names(names(df_base) %>%
+        resolve_nba_names()) %>%
+        munge_nba_data() %>%
+        mutate(dateGame = lubridate::ymd(dateGame))
+
+      list_cols <-
+        df_classes %>%
+        filter(class == "list") %>%
+        pull(column)
+
+      list_cols <-
+        list_cols[list_cols %in% c("vls", "hls")]
+
+      all_data <-
+        list_cols %>%
+        map_df(function(col){
+          d <-
+            json_data[[col]]
+          if (col == "offs"){
+            d <- d %>% flatten_df()
+
+            d <-
+              d %>%
+              purrr::set_names(names(d) %>% resolve_nba_names()) %>%
+              unite(nameOfficial, nameFirst, nameLast, sep = " ") %>%
+              mutate(idGame = game_id) %>%
+              rename(numberJerseyOfficial = numberJersey) %>%
+              munge_nba_data()
+            return(d)
+          }
+            df_base <-
+              d[c("ta", "tn", "tid", "tc")] %>%
+              flatten_df()
+
+            df_base <-
+              df_base %>%
+              purrr::set_names(names(df_base) %>% resolve_nba_names()) %>%
+              unite(nameTeam, cityTeam, teamName, sep = " ") %>%
+              mutate(idGame = game_id)
+
+            df_stats <-
+              d$pstsg %>% as_data_frame()
+
+            df_stats <-
+              df_stats %>%
+              purrr::set_names(names(df_stats) %>% resolve_nba_names()) %>%
+              munge_nba_data() %>%
+              unite(namePlayer, nameFirst, nameLast, sep = " ") %>%
+              mutate(idGame = game_id)
+
+            df_stats <-
+              df_stats %>%
+              left_join(df_base) %>%
+              select(one_of(names(df_base)), everything()) %>%
+              suppressMessages() %>%
+              rename(slugPositionStarter = slugPosition)
+
+            df_stats
+
+
+
+        })
+
+      df_officials <-
+        json_data$offs %>% flatten_df() %>%
+        purrr::set_names(c("nameFirst", "nameLast", "numberJerseyRef")) %>%
+        unite(nameReferee, nameFirst, nameLast, sep = " ") %>%
+        mutate(idGame = game_id)
+
+      all_data <-
+        all_data %>%
+        left_join(df_officials) %>%
+        left_join(df_base) %>%
+        select(one_of(names(df_base)), everything()) %>%
+        suppressMessages()
+
+      data <-
+        all_data %>%
+        mutate(slugLeague = league) %>%
+        nest(-c(idGame, slugLeague), .key = 'dataBoxScore') %>%
+        mutate(typeResult = result_type,
+               typeBoxScore = boxscore) %>%
+        mutate(cols = dataBoxScore %>% map_dbl(ncol)) %>%
+        filter(cols > 1) %>%
+        select(-cols) %>%
+        select(typeBoxScore, typeResult, everything())
+      return(data)
+    }
 
     data <-
       json$resultSets$rowSet[[table_id]] %>%
@@ -100,7 +213,8 @@ dictionary_boxscore_slugs <-
 
 
     if (table_id == 2 &
-        data %>% tibble::has_name("nameTeam") & league %>% str_to_upper() == "NBA") {
+        data %>% tibble::has_name("nameTeam") &
+        league %>% str_to_upper() == "NBA") {
       data <-
         data %>%
         munge_nba_data() %>%
@@ -178,12 +292,15 @@ dictionary_boxscore_slugs <-
         purrr::set_names(actual_names) %>%
         munge_nba_data()
 
-      data <- data %>%
+      data <-
+        data %>%
         left_join(
           df_team %>% unite(nameTeam, nameCityTeam, teamName, sep = "") %>%
             select(idTeam, nameTeam, slugTeam, locationGame)
         ) %>%
-        select(-one_of(c("typeBoxScore", "typeDataSet", "orderBoxScore"))) %>%
+        select(-one_of(c(
+          "typeBoxScore", "typeDataSet", "orderBoxScore"
+        ))) %>%
         select(idGame, slugTeam, nameTeam, locationGame, everything()) %>%
         mutate(isStarter = !is.na(groupPosition)) %>%
         suppressMessages()
@@ -261,9 +378,11 @@ get_games_box_scores <-
     }
 
     if (league == "WNBA") {
-      box_score_types <- "traditional"
+      box_score_types <- str_to_lower(box_score_types)
       result_types <- "player"
+      box_score_types <- box_score_types[box_score_types %in% c("traditional", "advanced")]
     }
+
     input_df <-
       expand.grid(game_id = game_ids,
                   result_type = result_types,
