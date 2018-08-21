@@ -119,20 +119,14 @@ dictionary_boxscore_slugs <-
       all_data <-
         list_cols %>%
         map_df(function(col){
+          col %>% message()
           d <-
             json_data[[col]]
-          if (col == "offs"){
-            d <- d %>% flatten_df()
 
-            d <-
-              d %>%
-              purrr::set_names(names(d) %>% resolve_nba_names()) %>%
-              unite(nameOfficial, nameFirst, nameLast, sep = " ") %>%
-              mutate(idGame = game_id) %>%
-              rename(numberJerseyOfficial = numberJersey) %>%
-              munge_nba_data()
-            return(d)
+          if (d %>% names() %>% str_detect("pstsg") %>% sum(na.rm = T) == 0) {
+            return(invisible())
           }
+
             df_base <-
               d[c("ta", "tn", "tid", "tc")] %>%
               flatten_df()
@@ -165,6 +159,10 @@ dictionary_boxscore_slugs <-
 
 
         })
+
+      if (all_data %>% nrow() == 0) {
+        return(invisible())
+      }
 
       df_officials <-
         json_data$offs %>% flatten_df() %>%
