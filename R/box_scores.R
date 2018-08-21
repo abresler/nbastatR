@@ -295,7 +295,7 @@ dictionary_boxscore_slugs <-
       data <-
         data %>%
         left_join(
-          df_team %>% unite(nameTeam, nameCityTeam, teamName, sep = "") %>%
+          df_team %>% unite(nameTeam, nameCityTeam, teamName, sep = " ") %>%
             select(idTeam, nameTeam, slugTeam, locationGame)
         ) %>%
         select(-one_of(c(
@@ -402,7 +402,7 @@ get_games_box_scores <-
           input_df %>% slice(x)
 
         df_row %$%
-          get_box_score_type_safe(
+          .get_box_score_type(
             game_id = game_id,
             result_type = result_type,
             boxscore = boxscore,
