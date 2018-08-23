@@ -119,7 +119,6 @@ dictionary_boxscore_slugs <-
       all_data <-
         list_cols %>%
         map_df(function(col){
-          col %>% message()
           d <-
             json_data[[col]]
 
@@ -164,15 +163,9 @@ dictionary_boxscore_slugs <-
         return(invisible())
       }
 
-      df_officials <-
-        json_data$offs %>% flatten_df() %>%
-        purrr::set_names(c("nameFirst", "nameLast", "numberJerseyRef")) %>%
-        unite(nameReferee, nameFirst, nameLast, sep = " ") %>%
-        mutate(idGame = game_id)
 
       all_data <-
         all_data %>%
-        left_join(df_officials) %>%
         left_join(df_base) %>%
         select(one_of(names(df_base)), everything()) %>%
         suppressMessages()
@@ -400,7 +393,7 @@ get_games_box_scores <-
           input_df %>% slice(x)
 
         df_row %$%
-          .get_box_score_type(
+          get_box_score_type_safe(
             game_id = game_id,
             result_type = result_type,
             boxscore = boxscore,
