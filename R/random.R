@@ -108,7 +108,7 @@ get_players_roto_wire_news <-
             urlPlayerThumbnail,
             urlPlayerHeadshot
           ),
-          .key = 'dataRotoWireArticles'
+          .key = dataRotoWireArticles
         ) %>%
         mutate(countArticles = dataRotoWireArticles %>% map_dbl(nrow))
     }
@@ -178,7 +178,7 @@ get_players_roto_wire_news <-
             urlPlayerThumbnail,
             urlPlayerHeadshot
           ),
-          .key = 'dataRotoWireArticles'
+          .key = dataRotoWireArticles
         ) %>%
         mutate(countArticles = dataRotoWireArticles %>% map_dbl(nrow)) %>%
         arrange(nameTeam, namePlayer)

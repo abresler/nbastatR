@@ -248,7 +248,7 @@ get_games_play_by_play <-
     if (nest_data) {
       all_data <-
         all_data %>%
-        nest(-c(idGame), .key = 'dataPlayByPlay')
+        nest(-c(idGame), .key = dataPlayByPlay)
     }
       all_data
   }
@@ -292,7 +292,7 @@ get_games_fanduel_summary <-
     if (nest_data) {
       all_data <-
         all_data %>%
-        nest(-c(idGame), .key = 'dataFanDuel')
+        nest(-c(idGame), .key = dataFanDuel)
     }
     all_data
   }

@@ -92,7 +92,7 @@
         }
 
         data %>%
-          nest(-c(nameTable, dateGame), .key = 'dataTable')
+          nest(-c(nameTable, dateGame), .key = dataTable)
       })
     data
   }
@@ -163,7 +163,7 @@ get_days_nba_scores <-
           unnest() %>%
           distinct()
         df_row %>%
-          nest(-c(nameTable), .key = 'dataTable')
+          nest(-c(nameTable), .key = dataTable)
       })
 
     if (assign_to_environment) {

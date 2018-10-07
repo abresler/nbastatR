@@ -604,7 +604,7 @@ get_nbadraftnet_mock_drafts <-
     if (nest_data) {
       all_data <-
         all_data %>%
-        tidyr::nest(-c(yearDraft), .key = "dataDraft")
+        tidyr::nest(-c(yearDraft), .key = dataDraft)
     }
     all_data
   }

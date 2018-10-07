@@ -86,7 +86,7 @@ get_seasons_players <-
     if (nest_data) {
       all_data  <-
         all_data %>%
-        tidyr::nest(-c(slugSeason), .key = 'dataSeasonPlayers') %>%
+        tidyr::nest(-c(slugSeason), .key = dataSeasonPlayers) %>%
         mutate(countPlayers = dataSeasonPlayers %>% map_dbl(nrow) %>% as.integer())
     }
     all_data

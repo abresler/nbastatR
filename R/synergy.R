@@ -208,7 +208,7 @@ get_synergy_category_data <-
 
     data %>%
       nest(-c(slugSeason, typeResult, categorySynergy, typeSet),
-           .key = "dataSynergy")
+           .key = dataSynergy)
   }
 
 

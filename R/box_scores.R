@@ -173,7 +173,7 @@ dictionary_boxscore_slugs <-
       data <-
         all_data %>%
         mutate(slugLeague = league) %>%
-        nest(-c(idGame, slugLeague), .key = 'dataBoxScore') %>%
+        nest(-c(idGame, slugLeague), .key = dataBoxScore) %>%
         mutate(typeResult = result_type,
                typeBoxScore = boxscore) %>%
         mutate(cols = dataBoxScore %>% map_dbl(ncol)) %>%
@@ -310,7 +310,7 @@ dictionary_boxscore_slugs <-
     data <-
       data %>%
       mutate(slugLeague = league) %>%
-      nest(-c(idGame, slugLeague), .key = 'dataBoxScore') %>%
+      nest(-c(idGame, slugLeague), .key = dataBoxScore) %>%
       mutate(typeResult = result_type,
              typeBoxScore = boxscore) %>%
       mutate(cols = dataBoxScore %>% map_dbl(ncol)) %>%

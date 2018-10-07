@@ -71,7 +71,7 @@ sl_players <-
             resolve_nba_names()) %>%
             munge_nba_data()
 
-          df_teams <- df_teams %>% nest(-idPlayer, .key = 'dataTeams')
+          df_teams <- df_teams %>% nest(-idPlayer, .key = dataTeams)
 
           df <-
             df %>%

@@ -865,7 +865,7 @@ assign_bref_data <-
         data <-
           data %>%
           mutate(typeBREFData = type) %>%
-          nest(-c(slugSeason, typeBREFData, yearSeason), .key = 'dataSeason')
+          nest(-c(slugSeason, typeBREFData, yearSeason), .key = dataSeason)
       }
     }
     data
@@ -2809,7 +2809,7 @@ dictionary_award_css <-
 
     all_data <-
       all_data %>%
-      nest(-c(slugSeason, yearSeason, slugTable, urlBREF), .key = 'dataVotes')
+      nest(-c(slugSeason, yearSeason, slugTable, urlBREF), .key = dataVotes)
 
     all_data
   }

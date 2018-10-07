@@ -306,7 +306,7 @@ get_teams_seasons_info <-
     if (nest_data) {
       all_data <-
         all_data %>%
-        nest(-c(slugSeason), .key = "dataTeamSeasonPerformance")
+        nest(-c(slugSeason), .key = dataTeamSeasonPerformance)
     }
     all_data
   }
@@ -1014,7 +1014,7 @@ get_teams_seasons_shots <-
     if (nest_data) {
       all_data <-
         all_data %>%
-        nest(-c('yearSeason', "slugSeason", "idTeam", "nameTeam"), .key = 'dataShotChart')
+        nest(-c('yearSeason', "slugSeason", "idTeam", "nameTeam"), .key = dataShotChart)
     }
     all_data
     }

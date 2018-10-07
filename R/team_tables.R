@@ -51,7 +51,7 @@ get_team_details <- function(team_id = 1610612745, return_message = TRUE) {
         remove_na_columns()
 
       data %>%
-        nest(-c(nameTable, nameTeam, idTeam), .key = 'dataTable')
+        nest(-c(nameTable, nameTeam, idTeam), .key = dataTable)
     })
   data
 }
@@ -190,7 +190,7 @@ get_teams_details <-
 
 
         df_row %>%
-          nest(-c(nameTable), .key = 'dataTable')
+          nest(-c(nameTable), .key = dataTable)
       })
 
     if (assign_to_environment) {
@@ -329,7 +329,7 @@ get_teams_year_by_year_stats <-
     if (nest_data) {
       all_data <-
         all_data %>%
-        nest(-c(slugSeason), .key = "dataTeamSeasonPerformance")
+        nest(-c(slugSeason), .key = dataTeamSeasonPerformance)
     }
 
 
@@ -348,7 +348,7 @@ get_teams_year_by_year_stats <-
     if (nest_data) {
       all_data <-
         all_data %>%
-        nest(-idTeam, .key = 'dataTeamYearlyStats')
+        nest(-idTeam, .key = dataTeamYearlyStats)
     }
 
     all_data
