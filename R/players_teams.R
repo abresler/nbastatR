@@ -797,7 +797,7 @@ get_players_teams_season_summary_stats <-
           dplyr::select(-one_of("idLeague")) %>%
           dplyr::select(-matches("Group")) %>%
           nest(-c(nameTable, slugSeason, yearSeason, modeSearch, typeSeason),
-               .key = 'dataTable')
+               .key = dataTable)
         return(df_table)
       }) %>%
       mutate(nameTable = table,

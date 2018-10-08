@@ -160,7 +160,7 @@ get_years_draft_combines <-
     if (nest_data) {
       all_data <-
         all_data %>%
-        nest(-yearCombine, .key = 'dataCombine') %>%
+        nest(-yearCombine, .key = dataCombine) %>%
         mutate(countPlayers = dataCombine %>% map_dbl(nrow)) %>%
         select(yearCombine, countPlayers, dataCombine)
     }
