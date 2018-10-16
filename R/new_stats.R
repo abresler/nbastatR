@@ -1,3 +1,14 @@
+.get_slug_year <-
+  function() {
+    current_date <- Sys.Date()
+    current_year <- lubridate::year(current_date)
+    current_month <- lubridate::month(current_date)
+    slug_year <- dplyr::case_when(
+      current_month >= 10 ~  current_year,
+      TRUE ~ current_year -1
+    )
+    slug_year
+  }
 
 curl_json_to_vector <-
   function(url = "https://data.nba.net/prod/v1/2017/coaches.json") {
@@ -231,9 +242,12 @@ get.nba_headers <-
 #' get_nba_current_season_schedule()
 get_nba_current_season_schedule <-
   function() {
-  json <-
-    "https://data.nba.net/prod/v2/2018/schedule.json" %>%
-  curl_json_to_vector()
+    slug_year <-
+      .get_slug_year()
+    json <-
+    glue::glue("https://data.nba.net/prod/v2/{slug_year}/schedule.json") %>%
+      as.character() %>%
+      curl_json_to_vector()
 
   json_data <- json$league$standard
 
@@ -333,7 +347,11 @@ get_nba_current_season_schedule <-
 #' get_coaching_staffs()
 get_coaching_staffs <-
   function() {
-    json <- "https://data.nba.net/prod/v1/2017/coaches.json" %>%
+    slug_year <-
+      .get_slug_year()
+    json <-
+      glue::glue("https://data.nba.net/prod/v1/{slug_year}/coaches.json") %>%
+      as.character() %>%
       curl() %>%
       readr::read_lines() %>%
       jsonlite::fromJSON(simplifyVector = T)
@@ -360,16 +378,48 @@ get_coaching_staffs <-
 
   }
 
-get_dictionary_todays_parameters <-
-  function() {
+.nbastats_api_parameters <-
+  function(api_version = 3) {
     df <-
-      "https://data.nba.net/10s/prod/v3/today.json" %>%
+      glue::glue("https://data.nba.net/10s/prod/v{api_version}/today.json") %>%
+      as.character() %>%
       get.json_data(use_read_lines = T, is_data_frame = T) %>%
       flatten_df() %>%
       gather(item, value) %>%
       mutate(hasSlash = value %>% str_detect("/"),
-             urlNBA = ifelse(hasSlash, str_c("https://data.nba.net", value), ""))
+             urlNBA = ifelse(hasSlash, str_c("https://data.nba.net", value), ""),
+             versionAPI = api_version) %>%
+      select(versionAPI, everything())
+
+    df <-
+      df %>%
+      mutate(urlNBA = ifelse(urlNBA == "", NA, urlNBA))
+
     df
+  }
+
+#' NBA Stats API Parameters
+#'
+#' @param api_versions \itemize{
+#' \item 1  - V1
+#' \item 2 - V2
+#' \item 3 - V3
+#'
+#' }
+#'
+#' @return \code{data_frame()}
+#' @export
+#'
+#' @examples
+#' nbastats_api_parameters(1:3)
+nbastats_api_parameters <-
+  function(api_versions = 1:3) {
+    .nbastats_api_parameters_safe <-
+      purrr::possibly(.nbastats_api_parameters, data_frame())
+    api_versions %>%
+      map_df(function(api_version){
+        .nbastats_api_parameters_safe(api_version = api_version)
+      })
   }
 
 
@@ -629,7 +679,7 @@ get_nba_stats_api_items <-
 get_nba_players <-
   function() {
     con <-
-      "http://stats.nba.com/stats/commonallplayers?IsOnlyCurrentSeason=0&LeagueID=00&Season=2017-18" %>%
+      "http://stats.nba.com/stats/commonallplayers?IsOnlyCurrentSeason=0&LeagueID=00&Season=2018-19" %>%
       curl()
 
     json <-
