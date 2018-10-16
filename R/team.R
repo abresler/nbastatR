@@ -630,7 +630,7 @@ get_teams_tables_data <-
   function(teams = NULL,
            team_ids = NULL,
            all_active_teams = F,
-           seasons = 2018,
+           seasons = NULL,
            tables = NULL,
            measures = NULL,
            modes = NULL,
@@ -660,6 +660,10 @@ get_teams_tables_data <-
 
     if (modes %>% purrr::is_null()) {
       stop("Please enter modes")
+    }
+
+    if (seasons %>% purrr::is_null()) {
+      stop("Enter seasons")
     }
 
 

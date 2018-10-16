@@ -3,7 +3,7 @@
 
 # full_logs ---------------------------------------------------------------
 get_season_gamelog <-
-  function(season = 2018,
+  function(season = 2019,
            league = "NBA",
            result_type  = "player",
            season_type = "Regular Season",
@@ -270,7 +270,7 @@ get_season_gamelog <-
 #' @examples
 #' get_game_logs(seasons = 2017:2018, result_types = c("team", "player"))
 get_game_logs <-
-  function(seasons = 2018,
+  function(seasons = 2019,
            league = "NBA",
            result_types  = "player",
            season_types = "Regular Season",
@@ -526,7 +526,7 @@ get_season_schedule <-
 #' @examples
 #' get_seasons_schedule(seasons = c(2012, 2018))
 get_seasons_schedule <-
-  function(seasons = 2018,
+  function(seasons = 2019,
            season_types = "Regular Season",
            parse_boxscores = F,
            box_score_tables = c(

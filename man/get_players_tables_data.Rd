@@ -6,7 +6,7 @@
 \usage{
 get_players_tables_data(players = NULL, player_ids = NULL,
   tables = c("year over year", "passes", "game splits"),
-  measures = "Base", seasons = 2018, modes = c("PerGame", "Totals"),
+  measures = "Base", seasons = 2019, modes = c("PerGame", "Totals"),
   season_types = "Regular Season", playoff_rounds = NA,
   is_plus_minus = F, n_games = 20, is_rank = F,
   is_pace_adjusted = F, outcomes = NA, locations = NA, months = NA,

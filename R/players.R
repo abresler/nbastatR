@@ -507,7 +507,7 @@ get_players_tables_data <-
            player_ids = NULL,
            tables = c("year over year", "passes", "game splits"),
            measures = "Base",
-           seasons = 2018,
+           seasons = 2019,
            modes = c("PerGame", "Totals"),
            season_types = "Regular Season",
            playoff_rounds = NA,

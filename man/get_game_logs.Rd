@@ -5,7 +5,7 @@
 \title{NBA game logs
 NBA game logs for specified parameters}
 \usage{
-get_game_logs(seasons = 2018, league = "NBA",
+get_game_logs(seasons = 2019, league = "NBA",
   result_types = "player", season_types = "Regular Season",
   nest_data = F, assign_to_environment = TRUE, return_message = TRUE,
   ...)
