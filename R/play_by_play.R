@@ -208,7 +208,7 @@ get_games_pbp_win_probablity <-
     if (nest_data) {
       all_data <-
         all_data %>%
-        nest(-c(dateGame, idGame, nameTeamHome, idTeamHome, slugTeamHome, nameTeamAway, idTeamAway, slugTamAway), .key = dataWinProbability)
+        nest(-c(dateGame, idGame, nameTeamHome, idTeamHome, slugTeamHome, nameTeamAway, idTeamAway, slugTamAway), .key = 'dataWinProbability')
     }
     all_data
   }

@@ -2887,7 +2887,7 @@ get_bref_seasons_award_votes <-
     all_data <-
       all_data %>%
       unnest() %>%
-      nest(-c(slugTable), .key = dataTable)
+      nest(-c(slugTable), .key = 'dataTable')
 
     if (assign_to_environment) {
       tables <- all_data$slugTable
