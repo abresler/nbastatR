@@ -334,6 +334,13 @@ get_game_logs <-
       return(all_data)
     }
 
+    if (all_data %>% tibble::has_name("slugTeamWinner")) {
+    all_data <-
+      all_data %>%
+      mutate(isWin = slugTeamWinner == slugTeam) %>%
+      select(yearSeason:idTeam, isWin, everything())
+    }
+
     if (assign_to_environment) {
       results <-
         all_data$typeResult %>% unique()
