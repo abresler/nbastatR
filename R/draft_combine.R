@@ -9,7 +9,7 @@ parse_out_set <-
 
     all_data <-
       df_set %>% pull() %>%
-      map_df(function(x) {
+      future_map_dfr(function(x) {
         if (x %>% is.na()) {
           return(data_frame(UQ(set_column) := x))
         }
@@ -58,7 +58,7 @@ get_year_draft_combine <-
     }
 
     if (return_message) {
-      glue::glue("Acquiring {combine_year} NBA Draft Combine Data") %>% message()
+      glue::glue("Acquiring {combine_year} NBA Draft Combine Data") %>% cat(fill = T)
     }
     slugSeason <- generate_season_slug(season = combine_year)
     url <-
@@ -101,7 +101,7 @@ get_year_draft_combine <-
     if (actual_names[actual_names %>% str_detect("set")] %>% length() > 0) {
       data <-
         actual_names[actual_names %>% str_detect("set")] %>%
-        map(function(set) {
+        future_map(function(set) {
           parse_out_set(data = data, set_column = set)
         }) %>%
         suppressMessages()
@@ -151,7 +151,7 @@ get_years_draft_combines <-
 
     all_data <-
       years %>%
-      map_df(function(combine_year) {
+      future_map_dfr(function(combine_year) {
         get_year_draft_combine_safe(combine_year = combine_year,
                                     return_message = return_message)
       }) %>%

@@ -26,7 +26,7 @@ get_season_metric_league_leaders <-
       URLencode()
 
     if (return_message) {
-      glue::glue("Acquiring {metric} {mode} league leaders in the {slug_season} season") %>% message()
+      glue::glue("Acquiring {metric} {mode} league leaders in the {slug_season} season") %>% cat(fill = T)
     }
 
     json <-
@@ -127,7 +127,7 @@ get_seasons_metrics_league_leaders <-
 
    all_data <-
      1:nrow(input_df) %>%
-     map_df(function(x){
+     future_map_dfr(function(x){
        df_row <- input_df %>% slice(x)
        df_row %$%
          get_season_metric_league_leaders_safe(season = season,
@@ -174,7 +174,7 @@ get_franchise_leaders <-
 
 
     if (return_message) {
-      glue::glue("Acquiring {team_name} {mode} franchise leaders") %>% message()
+      glue::glue("Acquiring {team_name} {mode} franchise leaders") %>% cat(fill = T)
     }
 
     json <-
@@ -312,7 +312,7 @@ get_teams_franchise_leaders <-
 
     all_data <-
       1:nrow(input_df) %>%
-      map_df(function(x){
+      future_map_dfr(function(x){
         df_row <- input_df %>% slice(x)
         df_row %$%
           get_franchise_leaders_safe(team_id = team_id,

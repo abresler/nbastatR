@@ -15,7 +15,7 @@ get_pbp <-
       )
 
     if (return_message) {
-      glue::glue("Getting play by play for game {game_id}") %>% message()
+      glue::glue("Getting play by play for game {game_id}") %>% cat(fill = T)
     }
     json <-
       json_url  %>%
@@ -50,7 +50,7 @@ get_fanduel <-
       as.character()
 
     if (return_message) {
-      glue::glue("Getting fanduel summary for game {game_id}") %>% message()
+      glue::glue("Getting fanduel summary for game {game_id}") %>% cat(fill = T)
     }
     json <-
       json_url  %>%
@@ -91,7 +91,7 @@ get_win_prob <-
       as.character()
 
     if (return_message) {
-      glue::glue("Getting win probability and play-by-play for game {game_id}") %>% message()
+      glue::glue("Getting win probability and play-by-play for game {game_id}") %>% cat(fill = T)
     }
     json <-
       json_url  %>%
@@ -178,7 +178,7 @@ get_games_pbp_win_probablity <-
     all_data <-
       game_ids %>%
 
-      map_df(function(game_id){
+      future_map_dfr(function(game_id){
         get_win_prob_safe(game_id = game_id, return_message = return_message)
       })
 
@@ -241,7 +241,7 @@ get_games_play_by_play <-
 
     all_data <-
       game_ids %>%
-      map_df(function(game_id){
+      future_map_dfr(function(game_id){
         get_pbp_safe(game_id = game_id, return_message = return_message)
       })
 
@@ -285,7 +285,7 @@ get_games_fanduel_summary <-
 
     all_data <-
       game_ids %>%
-      map_df(function(game_id){
+      future_map_dfr(function(game_id){
         get_fanduel_safe(game_id = game_id, return_message = return_message)
       })
 

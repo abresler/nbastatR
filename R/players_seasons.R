@@ -46,7 +46,7 @@ get_nba_season_players <-
     if (return_message) {
       "You got all NBA players for the " %>%
         paste0(slugSeason, " Season") %>%
-        message()
+        cat(fill = T)
     }
 
     seasons_players
@@ -75,7 +75,7 @@ get_seasons_players <-
 
     all_data <-
       seasons %>%
-      map_df(function(year_season_start){
+      future_map_dfr(function(year_season_start){
         get_nba_season_players_safe(season = year_season_start,
                                return_message = return_message)
       })

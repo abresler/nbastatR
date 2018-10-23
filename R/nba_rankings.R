@@ -12,7 +12,7 @@ get_teams_season_rankings <-
     season_slug <- generate_season_slug(season = season)
 
     if (return_message) {
-      glue::glue("Getting {season_slug} team rankings") %>% message()
+      glue::glue("Getting {season_slug} team rankings") %>% cat(fill = T)
     }
 
 
@@ -25,7 +25,7 @@ get_teams_season_rankings <-
     teams <-
       json_data$regularSeason$teams[1] %>% pull(1) %>% as.numeric()
     col_nos <- 2:ncol(json_data$regularSeason$teams)
-    data <- col_nos %>%  map(function(x) {
+    data <- col_nos %>%  future_map(function(x) {
       var_data <- json_data$regularSeason$teams[x]
       var_name <- var_data %>% names() %>% str_to_upper()
       name_actual <-
@@ -96,7 +96,7 @@ get_teams_seasons_rankings <-
     }
     all_data <-
       seasons %>%
-      map_df(function(season){
+      future_map_dfr(function(season){
         get_teams_season_rankings_safe(season = season, return_message = return_message)
       })
 

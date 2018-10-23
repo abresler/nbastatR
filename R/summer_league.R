@@ -21,7 +21,7 @@ sl_players <-
 
     data <-
       leagues %>%
-      map_df(function(league){
+      future_map_dfr(function(league){
         data <-
           json_data[[league]] %>%
           as_data_frame()
@@ -136,7 +136,7 @@ sl_teams <-
 
     data <-
       leagues %>%
-      map_df(function(league){
+      future_map_dfr(function(league){
         data <-
           json_data[[league]] %>%
           as_data_frame()

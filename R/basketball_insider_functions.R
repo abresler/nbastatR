@@ -491,7 +491,7 @@ get_nba_team_salaries <-
     if (return_message) {
       "You got salary data for the " %>%
         paste0(team_name) %>%
-        message()
+        cat(fill = T)
     }
 
     all_data <-
@@ -574,7 +574,7 @@ get_all_nba_teams_salaries <-
 
     all_salaries <-
       all_teams %>%
-      purrr::map_df(
+      future_map_dfr(
         function(x)
           get_nba_team_salaries_safe(
             team_name = x,

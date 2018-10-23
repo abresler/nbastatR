@@ -56,7 +56,7 @@ get_player_award <-
       remove_na_columns()
 
     if (return_message) {
-      glue::glue("Acquired {nrow(data)} awards for {data$namePlayer %>% unique()}") %>% message()
+      glue::glue("Acquired {nrow(data)} awards for {data$namePlayer %>% unique()}") %>% cat(fill = T)
     }
     data
   }
@@ -97,7 +97,7 @@ get_players_awards <-
 
     all_data <-
       ids %>%
-      map_df(function(id) {
+      future_map_dfr(function(id) {
         get_player_award_safe(player_id = id, return_message = return_message)
       })
     if (all_data %>% tibble::has_name("datetimePublished")) {
@@ -190,7 +190,7 @@ get_player_bio <-
       dplyr::select(idPlayer, namePlayer, everything())
 
     if (return_message) {
-      glue::glue("Acquired {data$namePlayer} 2013-14 bio") %>% message()
+      glue::glue("Acquired {data$namePlayer} 2013-14 bio") %>% cat(fill = T)
     }
 
 
@@ -230,7 +230,7 @@ get_players_bios <-
 
     all_data <-
       ids %>%
-      map_df(function(id) {
+      future_map_dfr(function(id) {
         get_player_bio_safe(player_id = id, return_message = return_message)
       })
 
@@ -267,7 +267,7 @@ get_player_profile <-
       pull(namePlayer)
 
     if (return_message) {
-      glue::glue("Acquiring {player} NBA player profile") %>% message()
+      glue::glue("Acquiring {player} NBA player profile") %>% cat(fill = T)
     }
 
     url_json <-
@@ -285,7 +285,7 @@ get_player_profile <-
 
     all_data <-
       1:table_length %>%
-      map_df(function(table_id) {
+      future_map_dfr(function(table_id) {
         table_name <-
           json$resultSets$name[table_id]
 
@@ -361,7 +361,7 @@ get_players_profiles <- function(players = NULL,
     purrr::possibly(get_player_profile, data_frame())
   all_data <-
     player_ids %>%
-    map_df(function(player_id) {
+    future_map_dfr(function(player_id) {
       get_player_profile_safe(player_id = player_id)
     })
   tables <- all_data$nameTable %>% unique()
@@ -369,7 +369,7 @@ get_players_profiles <- function(players = NULL,
 
   data <-
     tables %>%
-    map(function(table) {
+    future_map(function(table) {
       all_data %>%
         filter(nameTable == table) %>%
         select(-nameTable) %>%

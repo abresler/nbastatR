@@ -54,7 +54,7 @@ generate_team_seasons_logos_data <-
       purrr::possibly(generate_team_season_logo, NULL)
 
     1:nrow(input_df) %>%
-      map_df(function(x){
+      future_map_dfr(function(x){
         df_row <-
           input_df %>% slice(x)
         season <- df_row$season
@@ -217,7 +217,7 @@ get.nba_headers <-
       generate.nba_slugs.definitions(table_type = table_type, table_slugs = table_slugs)
 
     df_tables <- df_urls$urlHeaderTable %>%
-      map_df(function(x){
+      future_map_dfr(function(x){
         parse.nba_headers.definitions(url = x)
       })
 
@@ -417,7 +417,7 @@ nbastats_api_parameters <-
     .nbastats_api_parameters_safe <-
       purrr::possibly(.nbastats_api_parameters, data_frame())
     api_versions %>%
-      map_df(function(api_version){
+      future_map_dfr(function(api_version){
         .nbastats_api_parameters_safe(api_version = api_version)
       })
   }
@@ -500,7 +500,7 @@ parse_for_seasons_data <-
 
     seasons <-
       1:length(json_seasons) %>%
-      map_df(function(x){
+      future_map_dfr(function(x){
         row <-
           json_seasons[[x]]
 
@@ -529,7 +529,7 @@ parse_for_teams <-
 
     df_teams <-
       1:length(json_teams) %>%
-      map_df(function(x) {
+      future_map_dfr(function(x) {
         values <-
           json_teams[[x]] %>%
           purrr::map_chr(function(z) {

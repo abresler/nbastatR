@@ -144,7 +144,7 @@ get_synergy_category_data <-
       glue::glue(
         "Acquiring {result_type} synergy data for {str_to_lower(set_type)} {str_to_lower(category)} in the {str_to_lower(season_type)} during the {slug_season}"
       ) %>%
-        message()
+        cat(fill = T)
     }
     json <-
       json_url %>%
@@ -291,7 +291,7 @@ get_synergy_categories_stats <-
 
     all_data <-
       1:nrow(input_df) %>%
-      map_df(function(x) {
+      future_map_dfr(function(x) {
         df_row <- input_df %>% slice(x)
         df_row %$%
           get_synergy_category_data_safe(

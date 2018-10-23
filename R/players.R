@@ -9,7 +9,7 @@ parse_player_json <- function(json, player = player, season = season, mode, meas
 
   all_data <-
     1:table_length %>%
-    map_df(function(x) {
+    future_map_dfr(function(x) {
       table_name <-
         json$resultSets$name[x]
 
@@ -264,7 +264,7 @@ get_player_table_data <-
       pull(namePlayer)
 
     if (return_message) {
-      glue::glue("Acquiring {player} {season} {season_type} {measure} {table} {mode} data") %>% message()
+      glue::glue("Acquiring {player} {season} {season_type} {measure} {table} {mode} data") %>% cat(fill = T)
     }
 
     table_slug <-
@@ -571,7 +571,7 @@ get_players_tables_data <-
 
     all_data <-
       1:nrow(input_df) %>%
-      map_df(function(x) {
+      future_map_dfr(function(x) {
         df_row <-
           input_df %>% slice(x)
         df_row %$%

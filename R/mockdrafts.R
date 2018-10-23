@@ -496,7 +496,7 @@ get_nba_draftnet_year_mock_draft <-
     if (return_message) {
       "You the got nbadraft.net mock draft for the " %>%
         paste0(draft_year, ' NBA Draft\nData last updated on ', last_update) %>%
-        message()
+        cat(fill = T)
     }
     draft_data
   }
@@ -533,7 +533,7 @@ get_nbadraftnet_mock_drafts <-
 
     all_data <-
       years %>%
-      map_df(function(draft_year){
+      future_map_dfr(function(draft_year){
         get_nba_draftnet_year_mock_draft_safe(draft_year = draft_year,
                                               return_message = return_message)
       })
@@ -550,7 +550,7 @@ get_nbadraftnet_mock_drafts <-
             nrow() == 0
 
           if (no_name) {
-            glue::glue("Missing {name} in dictionary") %>% message()
+            glue::glue("Missing {name} in dictionary") %>% cat(fill = T)
             return(name)
           }
           df_actual_names %>%

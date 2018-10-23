@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>NBA teams details — get_teams_details • nbastatR</title>
+<title>NBA Stats API Parameters — nbastats_api_parameters • nbastatR</title>
 
 <link rel="shortcut icon" type="image/x-icon" href="../favicon.ico">
 
@@ -32,9 +32,9 @@
 
 
 
-<meta property="og:title" content="NBA teams details — get_teams_details" />
+<meta property="og:title" content="NBA Stats API Parameters — nbastats_api_parameters" />
 
-<meta property="og:description" content="Gets information about NBA franchises" />
+<meta property="og:description" content="NBA Stats API Parameters" />
 <meta name="twitter:card" content="summary" />
 
 
@@ -115,55 +115,40 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>NBA teams details</h1>
-    <small class="dont-index">Source: <a href='https://github.com/abresler/nbastatR/blob/master/R/team_tables.R'><code>R/team_tables.R</code></a></small>
-    <div class="hidden name"><code>get_teams_details.Rd</code></div>
+    <h1>NBA Stats API Parameters</h1>
+    <small class="dont-index">Source: <a href='https://github.com/abresler/nbastatR/blob/master/R/new_stats.R'><code>R/new_stats.R</code></a></small>
+    <div class="hidden name"><code>nbastats_api_parameters.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
-    <p>Gets information about NBA franchises</p>
+    <p>NBA Stats API Parameters</p>
     
     </div>
 
-    <pre class="usage"><span class='fu'>get_teams_details</span>(<span class='kw'>teams</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>team_ids</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>all_teams</span> <span class='kw'>=</span> <span class='no'>F</span>,
-  <span class='kw'>assign_to_environment</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>return_message</span> <span class='kw'>=</span> <span class='no'>T</span>)</pre>
+    <pre class="usage"><span class='fu'>nbastats_api_parameters</span>(<span class='kw'>api_versions</span> <span class='kw'>=</span> <span class='fl'>1</span>:<span class='fl'>3</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>teams</th>
-      <td><p>vector of team names</p></td>
-    </tr>
-    <tr>
-      <th>team_ids</th>
-      <td><p>vector of team ids</p></td>
-    </tr>
-    <tr>
-      <th>all_teams</th>
-      <td><p>if <code>TRUE</code> returns all team names</p></td>
-    </tr>
-    <tr>
-      <th>assign_to_environment</th>
-      <td><p>if <code>TRUE</code> assigns each table to a data frame in
-your environment starting with data</p></td>
-    </tr>
-    <tr>
-      <th>return_message</th>
-      <td><p>if <code>TRUE</code> returns a message</p></td>
+      <th>api_versions</th>
+      <td><ul>
+<li><p>1  - V1</p></li>
+<li><p>2 - V2</p></li>
+<li><p>3 - V3</p></li>
+</ul></td>
     </tr>
     </table>
     
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>a `data_frame`</p>
+    <p><code>data_frame()</code></p>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><span class='co'># NOT RUN {</span>
-<span class='fu'>get_teams_details</span>(<span class='kw'>all_teams</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>assign_to_environment</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
-
+<span class='fu'>nbastats_api_parameters</span>(<span class='fl'>1</span>:<span class='fl'>3</span>)
 <span class='co'># }</span></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">

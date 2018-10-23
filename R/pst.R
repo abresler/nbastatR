@@ -140,7 +140,7 @@ parse.pst.page <-
                         "descriptionTransaction"))
    data <-
      1:5 %>%
-      map_df(function(x){
+      future_map_dfr(function(x){
         value <-
           page %>%
           html_nodes(css = glue::glue(".center td:nth-child({x})") %>% as.character()) %>%
@@ -197,7 +197,7 @@ parse_pst_urls <-
 
       if (return_message) {
         glue::glue("Parsing {url}") %>%
-          message()
+          cat(fill = T)
       }
       parse.pst.page.safe <-
         purrr::possibly(parse.pst.page, data_frame())
@@ -214,7 +214,7 @@ parse_pst_urls <-
       data_frame()
     }
     urls %>%
-      map(function(x) {
+      future_map(function(x) {
         curl_fetch_multi(url = x, success, failure)
       })
     multi_run()

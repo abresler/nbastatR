@@ -21,7 +21,7 @@ get_nba_player_career_stats <-
       pull(namePlayer)
 
     if (return_message) {
-      glue::glue("Acquiring {player} career {mode} statistic tables") %>% message()
+      glue::glue("Acquiring {player} career {mode} statistic tables") %>% cat(fill = T)
     }
     mode_options <-
       c('Totals', 'PerGame', "Per36") %>% str_to_upper()
@@ -46,7 +46,7 @@ get_nba_player_career_stats <-
 
     all_data <-
       1:table_length %>%
-      map_df(function(x) {
+      future_map_dfr(function(x) {
         table_name <-
           json$resultSets$name[x]
 
@@ -181,7 +181,7 @@ get_players_career_stats <-
 
     all_data <-
       1:nrow(df_input) %>%
-      map_df(function(x) {
+      future_map_dfr(function(x) {
         df_row <-
           df_input %>% slice(x)
 

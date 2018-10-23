@@ -602,7 +602,7 @@ get_players_teams_season_summary_stats <-
       generate_season_slug(season = season)
 
     if (return_message) {
-      glue::glue("Acquiring all {type} {mode} {table} {measure} split tables for the {slugSeason} season") %>% message()
+      glue::glue("Acquiring all {type} {mode} {table} {measure} split tables for the {slugSeason} season") %>% cat(fill = T)
     }
 
     url_json <-
@@ -665,7 +665,7 @@ get_players_teams_season_summary_stats <-
 
     data <-
       1:table_length %>%
-      map_df(function(table_id) {
+      future_map_dfr(function(table_id) {
 
         table_name <-
           json$resultSets$name[table_id]
@@ -1140,7 +1140,7 @@ get_teams_players_seasons_summary_stats <-
       purrr::possibly(get_players_teams_season_summary_stats, data_frame())
     all_data <-
       1:nrow(input_df) %>%
-      map_df(function(x) {
+      future_map_dfr(function(x) {
         df_row <-
           input_df %>% slice(x)
 

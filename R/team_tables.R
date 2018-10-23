@@ -17,7 +17,7 @@ get_team_details <- function(team_id = 1610612745, return_message = TRUE) {
     .[[1]]
 
   if (return_message) {
-    glue::glue("Acquiring team details for the {team_name}") %>% message()
+    glue::glue("Acquiring team details for the {team_name}") %>% cat(fill = T)
   }
 
   json <-
@@ -27,7 +27,7 @@ get_team_details <- function(team_id = 1610612745, return_message = TRUE) {
 
   data <-
     1:tables %>%
-    map_df(function(x){
+    future_map_dfr(function(x){
       json_names <-
         tables_data$headers[[x]]
       table_name <- tables_data$name[[x]]
@@ -138,7 +138,7 @@ get_teams_details <-
 
     all_data <-
       ids %>%
-      map_df(function(id) {
+      future_map_dfr(function(id) {
         get_team_details(team_id = id, return_message = return_message)
       })
 
@@ -146,7 +146,7 @@ get_teams_details <-
 
     all_data <-
       tables %>%
-      map_df(function(table){
+      future_map_dfr(function(table){
         df_row <-
           all_data %>%
           filter(nameTable == table) %>%
@@ -247,7 +247,7 @@ get_team_year_by_year_stats <-
   teams <- data$nameTeam %>% unique() %>% str_c(collapse = ", ")
 
   if (return_message) {
-    glue::glue("Acquired {teams} history") %>% message()
+    glue::glue("Acquired {teams} history") %>% cat(fill = T)
   }
 
   data <-
@@ -314,7 +314,7 @@ get_teams_year_by_year_stats <-
 
     all_data <-
       1:nrow(df_input) %>%
-      map_df(function(x) {
+      future_map_dfr(function(x) {
         df_row <- df_input %>% slice(x)
 
         df_row %$%

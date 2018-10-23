@@ -11,7 +11,7 @@ parse_record <-
 
     all_data <-
       df_set %>% pull() %>%
-      map_df(function(x) {
+      future_map_dfr(function(x) {
         if (x %>% is.na()) {
           return(data_frame(UQ(record_column) := x))
         }
@@ -42,7 +42,7 @@ parse_record <-
 parse_records <- function(data, record_names) {
   data <-
     record_names %>%
-    map(function(record) {
+    future_map(function(record) {
       parse_record(data = data, record_column = record)
     }) %>%
     suppressMessages()
@@ -75,7 +75,7 @@ get_current_standings <-
       curl_json_to_vector()
 
     if (return_message) {
-      "Acquring current NBA season standings" %>% message()
+      "Acquring current NBA season standings" %>% cat(fill = T)
     }
 
     if (!'df_dict_nba_teams' %>% exists()) {
@@ -121,7 +121,7 @@ get_season_playoff_picture <-
     season_id <- season - 1
 
     if (return_message) {
-      glue::glue("Getting {season_slug} NBA playoff picture") %>% message()
+      glue::glue("Getting {season_slug} NBA playoff picture") %>% cat(fill = T)
     }
     url <-
       glue::glue(
@@ -135,7 +135,7 @@ get_season_playoff_picture <-
 
     data <-
       1:tables %>%
-      map_df(function(x) {
+      future_map_dfr(function(x) {
         json_names <-
           tables_data$headers[[x]]
         table_name <- tables_data$name[[x]]
@@ -234,7 +234,7 @@ get_seasons_playoff_picture <-
 
     all_data <-
       1:nrow(input_df) %>%
-      map_df(function(x) {
+      future_map_dfr(function(x) {
         input_df %>%
           slice(x) %$%
           get_season_playoff_picture_safe(season = season,
@@ -282,7 +282,7 @@ get_season_standings <-
     }
     season_slug <- season %>% generate_season_slug()
     if (return_message) {
-      glue::glue("Getting {season_slug} {season_type} NBA standings data") %>% message()
+      glue::glue("Getting {season_slug} {season_type} NBA standings data") %>% cat(fill = T)
     }
     url <-
       glue::glue(
@@ -348,7 +348,7 @@ get_seasons_standings <-
 
     all_data <-
       1:nrow(input_df) %>%
-      map_df(function(x) {
+      future_map_dfr(function(x) {
         input_df %>%
           slice(x) %$%
           get_season_standings_safe(

@@ -11,7 +11,7 @@ resolve_bref_names <-
           nrow() == 0
 
         if (no_name) {
-          glue::glue("Missing {name} in dictionary") %>% message()
+          glue::glue("Missing {name} in dictionary") %>% cat(fill = T)
           return(name)
         }
         df_nba_names %>%
@@ -112,7 +112,7 @@ parse.bio <-
     bio_length <- 1:length(bio)
     all_data <-
       bio_length %>%
-      map_df(function(x){
+      future_map_dfr(function(x){
           node <-
             bio[x]
           node_text <-
@@ -416,7 +416,7 @@ parse_bref_player_data_url <-
   player <- page %>% html_nodes("h1") %>% html_text() %>% .[[1]]
 
   if (return_message) {
-    glue::glue("Parsing basketball reference biography data for {player}") %>% message()
+    glue::glue("Parsing basketball reference biography data for {player}") %>% cat(fill = T)
   }
 
 
@@ -499,7 +499,7 @@ parse_bref_player_data_urls <-
       data_frame()
     }
     urls %>%
-      map(function(x) {
+      future_map(function(x) {
         curl_fetch_multi(url = x, success, failure)
       })
     multi_run()

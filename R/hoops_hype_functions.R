@@ -202,7 +202,7 @@ get_hoops_hype_teams_salary_summary <-
     }
 
     if (return_message) {
-      "You got Hoops Hype NBA Team Salary Data" %>% message()
+      "You got Hoops Hype NBA Team Salary Data" %>% cat(fill = T)
     }
     salary_data
 
@@ -455,7 +455,7 @@ parse_hoops_hype_salary_urls <-
 
       if (return_message) {
         glue::glue("Parsing {url}") %>%
-          message()
+          cat(fill = T)
       }
       parse_hoops_hype_salary_url_safe <-
         purrr::possibly(parse_hoops_hype_salary_url, data_frame())
@@ -475,7 +475,7 @@ parse_hoops_hype_salary_urls <-
       data_frame()
     }
     urls %>%
-      map(function(x) {
+      future_map(function(x) {
         curl_fetch_multi(url = x, success, failure)
       })
     multi_run()

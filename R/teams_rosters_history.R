@@ -115,7 +115,7 @@ get_nba_franchise_history <-
 
     if (return_message) {
       "You got NBA franchise data" %>%
-        message()
+        cat(fill = T)
     }
    data
   }
@@ -234,7 +234,7 @@ get_team_season_roster <-
       suppressWarnings()
 
       if (return_message) {
-        glue::glue("You got the {team}'s roster for the {slugSeason}") %>% message()
+        glue::glue("You got the {team}'s roster for the {slugSeason}") %>% cat(fill = T)
       }
     data_roster
   }
@@ -253,7 +253,7 @@ get_season_teams_rosters <-
 
     all_data <-
       df_dict_team_history$nameTeam %>%
-      map_df(function(team) {
+      future_map_dfr(function(team) {
         get_team_season_roster_safe(team = team,
                                         season = season,
                                         return_message = return_message)
@@ -288,7 +288,7 @@ get_seasons_teams_rosters <-
            return_message = T) {
     all_data <-
       seasons %>%
-      map_df(function(season) {
+      future_map_dfr(function(season) {
         get_season_teams_rosters(season = season)
       })
 
@@ -403,7 +403,7 @@ get_team_coaches <-
       suppressWarnings()
 
     if (return_message) {
-      glue::glue("You got the {team}'s coaches for the {slugSeason} season") %>% message()
+      glue::glue("You got the {team}'s coaches for the {slugSeason} season") %>% cat(fill = T)
     }
     data_roster
   }
@@ -421,7 +421,7 @@ get_season_teams_coaches <-
 
     all_data <-
       df_dict_team_history$nameTeam %>%
-      map_df(function(team) {
+      future_map_dfr(function(team) {
         get_team_coaches_safe(team = team,
                                         season = season,
                                         return_message = return_message)
@@ -457,7 +457,7 @@ get_seasons_teams_coaches <-
            return_message = T) {
     all_data <-
       seasons %>%
-      map_df(function(season) {
+      future_map_dfr(function(season) {
         get_season_teams_coaches(season = season)
       })
 

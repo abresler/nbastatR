@@ -166,10 +166,10 @@ get_team_id_season_roster <-
 
     df_rosters <-
      team_ids  %>%
-      purrr::map_df(function(team_id) {
+      future_map_dfr(function(team_id) {
         if (return_message) {
           team_slug <- df_teams %>% filter(idTeam == team_id) %>% pull(slugTeam)
-          glue::glue("Acquiring {team_slug}'s team roster for the {season} season") %>% message()
+          glue::glue("Acquiring {team_slug}'s team roster for the {season} season") %>% cat(fill = T)
         }
         get_team_id_season_roster(season = season, team_id = team_id)
       })
@@ -226,7 +226,7 @@ get_seasons_rosters <-
       purrr::possibly(.get_season_roster, data_frame())
     all_data <-
       seasons %>%
-      map_df(function(season) {
+      future_map_dfr(function(season) {
         .get_season_roster_safe(season = season, return_message = return_message)
       })
 

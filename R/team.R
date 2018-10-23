@@ -22,7 +22,7 @@ parse_team_json <- function(json, team_id, season, season_type) {
 
   all_data <-
     1:table_length %>%
-    map_df(function(x) {
+    future_map_dfr(function(x) {
       table_name <-
         json$resultSets$name[x]
 
@@ -236,7 +236,7 @@ get_team_season_info <-
     names(data)[names(data) %in% no_teams] <-
       str_c(names(data)[names(data) %in% no_teams], "Team")
     if (return_message) {
-      glue::glue("Acquired {data$nameTeam %>% unique()} {season_slug} team information") %>% message()
+      glue::glue("Acquired {data$nameTeam %>% unique()} {season_slug} team information") %>% cat(fill = T)
     }
     data
 
@@ -291,7 +291,7 @@ get_teams_seasons_info <-
 
     all_data <-
       1:nrow(df_input) %>%
-      map_df(function(x) {
+      future_map_dfr(function(x) {
         df_row <- df_input %>% slice(x)
 
         df_row %$%
@@ -387,7 +387,7 @@ get_team_table_data <-
       dictionary_team_tables()
 
     if (return_message) {
-      glue::glue("Acquiring {team_id} {season} {season_type} {measure} {table} {mode} data") %>% message()
+      glue::glue("Acquiring {team_id} {season} {season_type} {measure} {table} {mode} data") %>% cat(fill = T)
     }
 
     table_slug <-
@@ -708,7 +708,7 @@ get_teams_tables_data <-
 
     all_data <-
       1:nrow(input_df) %>%
-      map_df(function(x) {
+      future_map_dfr(function(x) {
         df_row <-
           input_df %>% slice(x)
         df_row %$%
@@ -838,7 +838,7 @@ get_team_shot_chart <-
     player_id <- 0
     slugSeason <- generate_season_slug(season = season)
     if (return_message) {
-      glue::glue("{team} {slugSeason} shot data") %>% message()
+      glue::glue("{team} {slugSeason} shot data") %>% cat(fill = T)
     }
     URL <- gen_url("shotchartdetail")
 
@@ -1003,7 +1003,7 @@ get_teams_seasons_shots <-
 
     all_data <-
       1:nrow(input_df) %>%
-      map_df(function(x) {
+      future_map_dfr(function(x) {
         df_row <-
           input_df %>% slice(x)
         df_row %$%

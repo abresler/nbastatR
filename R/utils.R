@@ -1,6 +1,6 @@
 .generate_param_slug <- function(params) {
   params %>%
-    map(as.character) %>%
+    future_map(as.character) %>%
     flatten_df() %>% mutate_all(as.character) %>% gather(item, value) %>%
     mutate(value = value %>% map_chr(URLencode)) %>%
     unite(slug, item, value, sep = '=') %>%
@@ -297,7 +297,7 @@ remove_na_columns <-
 get_data_classes <- function(data) {
   df_classes <-
     data %>%
-    map(class) %>%
+    future_map(class) %>%
     as_data_frame() %>%
     gather(column,class) %>%
     mutate(idColumn = 1:n()) %>%
@@ -310,7 +310,7 @@ get_data_classes <- function(data) {
 
     df_nested_cols <-
       nested_cols %>%
-      map_df(function(x) {
+      future_map_dfr(function(x) {
         df_wide <- data %>%
           select(x) %>%
           purrr::set_names("listColumn") %>%

@@ -2,7 +2,7 @@
 
 
 # full_logs ---------------------------------------------------------------
-get_season_gamelog <-
+.get_season_gamelog <-
   function(season = 2019,
            league = "NBA",
            result_type  = "player",
@@ -29,7 +29,7 @@ get_season_gamelog <-
     if (return_message) {
       glue::glue(
         "Acquiring {league} basic {result_type} game logs for the {season_slug} {season_type}"
-      ) %>% message()
+      ) %>% cat(fill = T)
     }
 
     call_slug <- case_when(league %>% str_to_upper() == "WNBA" ~ "wnbaseasonstats",
@@ -307,17 +307,17 @@ get_game_logs <-
       as_data_frame() %>%
       arrange(season)
 
-    get_season_gamelog_safe <-
-      purrr::possibly(get_season_gamelog, data_frame())
+    .get_season_gamelog_safe <-
+      purrr::possibly(.get_season_gamelog, data_frame())
 
     all_data <-
       1:nrow(input_df) %>%
-      purrr::map_df(function(x) {
+      future_map_dfr(function(x) {
         df_row <-
           input_df %>% slice(x)
         data_row <-
           df_row %$%
-          get_season_gamelog_safe(
+          .get_season_gamelog_safe(
             season = season,
             result_type = result,
             season_type = season_type,
@@ -439,7 +439,7 @@ get_season_schedule <-
            ),
            return_message = TRUE) {
     data <-
-      get_season_gamelog(
+      .get_season_gamelog(
         season = season,
         result_type = "team",
         season_type = season_type,
@@ -549,7 +549,7 @@ get_seasons_schedule <-
 
     all_data <-
       1:nrow(input_df) %>%
-      purrr::map_df(function(x) {
+      future_map_dfr(function(x) {
         df_row <-
           input_df %>% slice(x)
         data_row <-

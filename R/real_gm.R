@@ -384,7 +384,7 @@ parse_agent_player_table <-
 
   df_status <-
     statuses %>%
-    map_df(function(status){
+    future_map_dfr(function(status){
       parse_status(status = status)
     })
 
@@ -442,7 +442,7 @@ parse_agent_urls <-
 
         if (return_message) {
           glue::glue("Parsing {url}") %>%
-            message()
+            cat(fill = T)
         }
         parse_agent_url_safe <-
           purrr::possibly(parse_agent_url, data_frame())
@@ -459,7 +459,7 @@ parse_agent_urls <-
         data_frame()
       }
       urls %>%
-        map(function(x) {
+        future_map(function(x) {
           curl_fetch_multi(url = x, success, failure)
         })
       multi_run()
@@ -675,7 +675,7 @@ get_players_agents <-
     df_status <-
       players_agents_df$statusContract %>%
       unique() %>%
-      map_df(function(status) {
+      future_map_dfr(function(status) {
         parse_status(status = status)
       })
 
@@ -686,7 +686,7 @@ get_players_agents <-
 
     if (return_message) {
       "You got all realGM contract data" %>%
-        message()
+        cat(fill = T)
     }
 
     if (nest_data) {

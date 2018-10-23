@@ -34,7 +34,7 @@ get_player_rotowire_news <-
                 funs(ifelse(. == "", NA_character_, .)))
 
     if (return_message) {
-      glue::glue("Acquired {nrow(data)} Roto Wire articles for {data$namePlayer %>% unique()}") %>% message()
+      glue::glue("Acquired {nrow(data)} Roto Wire articles for {data$namePlayer %>% unique()}") %>% cat(fill = T)
     }
     data
   }
@@ -77,7 +77,7 @@ get_players_roto_wire_news <-
 
     all_data <-
       ids %>%
-      map_df(function(id) {
+      future_map_dfr(function(id) {
         get_player_rotowire_news_safe(player_id = id, return_message = return_message)
       })
 

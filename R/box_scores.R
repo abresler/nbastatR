@@ -66,7 +66,7 @@ dictionary_boxscore_slugs <-
       )
 
     if (return_message) {
-      glue::glue("Getting {league} {result_type} {boxscore} box score for game {game_id}") %>% message()
+      glue::glue("Getting {league} {result_type} {boxscore} box score for game {game_id}") %>% cat(fill = T)
     }
 
     if (league == "WNBA") {
@@ -90,7 +90,7 @@ dictionary_boxscore_slugs <-
     if (names(json) %>% str_detect( "g") %>% sum(na.rm = T) > 0) {
       json_data <- json$g
       df_classes <-
-        json_data %>% map_df(class) %>%
+        json_data %>% future_map_dfr(class) %>%
         gather(column, class)
 
       base_cols <-
@@ -118,7 +118,7 @@ dictionary_boxscore_slugs <-
 
       all_data <-
         list_cols %>%
-        map_df(function(col){
+        future_map_dfr(function(col){
           d <-
             json_data[[col]]
 
@@ -388,7 +388,7 @@ get_games_box_scores <-
 
     all_data <-
       1:nrow(input_df) %>%
-      map_df(function(x) {
+      future_map_dfr(function(x) {
         df_row <-
           input_df %>% slice(x)
 
@@ -409,7 +409,7 @@ get_games_box_scores <-
 
       all_data <-
         results %>%
-        map_df(function(result) {
+        future_map_dfr(function(result) {
           df_results <-
             all_data %>%
             filter(typeResult == result)
@@ -417,7 +417,7 @@ get_games_box_scores <-
             df_results$typeBoxScore %>% unique()
           all_tables <-
             tables %>%
-            map(function(table) {
+            future_map(function(table) {
               data <-
                 df_results %>%
                 filter(typeBoxScore == table) %>%
@@ -492,7 +492,7 @@ get_games_box_scores <-
             data <-
               df_tables$typeBoxScore %>%
               unique() %>%
-              map(function(type) {
+              future_map(function(type) {
                 df_table <-
                   df_tables %>%
                   filter(typeBoxScore == type) %>%

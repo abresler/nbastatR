@@ -23,7 +23,7 @@
 
     if (return_message) {
       glue::glue("Getting {league} game details for {game_date}") %>%
-        message()
+        cat(fill = T)
     }
 
     date_slug <-
@@ -44,7 +44,7 @@
 
     data <-
       1:tables %>%
-      map_df(function(x) {
+      future_map_dfr(function(x) {
         json_names <-
           tables_data$headers[[x]]
         table_name <- tables_data$name[[x]]
@@ -139,7 +139,7 @@ get_days_nba_scores <-
 
     all_data <-
       1:nrow(input_df) %>%
-      map_df(function(x) {
+      future_map_dfr(function(x) {
         df_row <- input_df %>% slice(x)
         df_row %$%
           .get_day_nba_scores_safe(
@@ -156,7 +156,7 @@ get_days_nba_scores <-
 
     all_data <-
       tables %>%
-      map_df(function(table) {
+      future_map_dfr(function(table) {
         df_row <-
           all_data %>%
           filter(nameTable == table) %>%

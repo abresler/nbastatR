@@ -80,7 +80,7 @@ assign_nba_teams <-
 assign_nba_players <-
   function() {
     if (!'df_dict_nba_players' %>% exists()) {
-      "Assigning NBA player dictionary to df_dict_nba_players to your environment" %>% message()
+      "Assigning NBA player dictionary to df_dict_nba_players to your environment" %>% cat(fill = T)
       df_dict_nba_players <- get_nba_players()
       assign(x = 'df_dict_nba_players', df_dict_nba_players, envir = .GlobalEnv)
     }
@@ -122,7 +122,7 @@ assign_tables_modes <-
 
     tables %>%
       walk(function(table){
-        table %>% message()
+        table %>% cat(fill = T)
         df_table_names <-
           dict_tables %>%
           filter(nameTable == table)
@@ -162,7 +162,7 @@ assign_tables_modes <-
 
               table_map <-
                 measures %>%
-                map(function(measure){
+                future_map(function(measure){
                   df <-
                     df_table %>% filter(typeMeasure == measure) %>%
                     dplyr::select(which(colMeans(is.na(.)) < 1))
@@ -865,7 +865,12 @@ dictionary_nba_names <-
                    "cl",
                    "an",
                    "at",
-                   "dur"
+                   "dur",
+                   "E_OFF_RATING",
+                   "E_DEF_RATING",
+                   "E_NET_RATING",
+                   "E_USG_PCT",
+                   "E_PACE"
                  ),
                nameActual =
                  c("idPlayer", "namePlayerLastFirst", "namePlayer",
@@ -1231,7 +1236,12 @@ dictionary_nba_names <-
                    "timeRemaining",
                    "nameArena",
                    "countAttendance",
-                   "durationGame"
+                   "durationGame",
+                   "ortgE",
+                   "drtgE",
+                   "netrtgE",
+                   "pctUSGE",
+                   "paceE"
                  )
     )
   }
@@ -1248,7 +1258,7 @@ resolve_nba_names <- function(json_names) {
         nrow() == 0
 
       if (no_name) {
-        glue::glue("Missing {name} in dictionary") %>% message()
+        glue::glue("Missing {name} in dictionary") %>% cat(fill = T)
         return(name)
       }
       df_nba_names %>%

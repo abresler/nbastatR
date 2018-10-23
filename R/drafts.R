@@ -28,8 +28,8 @@ get_nba_draft_year <-
 
     all_data <-
       1:table_length %>%
-      map_df(function(table_id) {
-        # table_id %>% message()
+      future_map_dfr(function(table_id) {
+        # table_id %>% cat(fill = T)
         table_name <-
           json$resultSets$name[table_id]
 
@@ -45,7 +45,7 @@ get_nba_draft_year <-
 
     if (return_message) {
       glue::glue("Acquired {draft_year} NBA Draft data") %>%
-        message()
+        cat(fill = T)
     }
     all_data
 
@@ -85,7 +85,7 @@ get_drafts <-
 
     all_data <-
       draft_years %>%
-      map_df(function(draft_year){
+      future_map_dfr(function(draft_year){
         get_nba_draft_year_safe(draft_year = draft_year,
                                 return_message = return_message)
       })
