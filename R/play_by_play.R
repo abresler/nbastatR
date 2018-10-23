@@ -45,7 +45,7 @@ get_fanduel <-
       pad_id(game_id)
     json_url <-
       glue::glue(
-      "http://stats.nba.com/stats/infographicfanduelplayer/?gameId={game_slug}"
+      "https://stats.nba.com/stats/infographicfanduelplayer/?gameId={game_slug}"
       ) %>%
       as.character()
 
@@ -86,7 +86,7 @@ get_win_prob <-
       pad_id(game_id)
     json_url <-
       glue::glue(
-        "http://stats.nba.com/stats/winprobabilitypbp?SeasonType=&LeagueID=&Season=&IsOnlyCurrentSeason=&PlayerID=&TeamID=&GameID={game_slug}&ContextMeasure=&PlayerPosition=&DateFrom=&DateTo=&GameSegment=&LastNGames=&Location=&Month=&OpponentTeamID=&Outcome=&SeasonSegment=&VSConference=&VSDivision=&RookieYear=&Period=&StartPeriod=0&EndPeriod=12&StartRange=0&EndRange=12&RangeType=1&Runtype=each%20second"
+        "https://stats.nba.com/stats/winprobabilitypbp?SeasonType=&LeagueID=&Season=&IsOnlyCurrentSeason=&PlayerID=&TeamID=&GameID={game_slug}&ContextMeasure=&PlayerPosition=&DateFrom=&DateTo=&GameSegment=&LastNGames=&Location=&Month=&OpponentTeamID=&Outcome=&SeasonSegment=&VSConference=&VSDivision=&RookieYear=&Period=&StartPeriod=0&EndPeriod=12&StartRange=0&EndRange=12&RangeType=1&Runtype=each%20second"
       ) %>%
       as.character()
 

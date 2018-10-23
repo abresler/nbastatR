@@ -1,5 +1,5 @@
-# http://nbasense.com/nba-api/Stats/Stats/Standings/LeagueStandings#request-example
-# http://stats.nba.com/stats/leaguestandingsv3/?leagueId=00&season=1989-90&seasonType=Regular+Season
+# https://nbasense.com/nba-api/Stats/Stats/Standings/LeagueStandings#request-example
+# https://stats.nba.com/stats/leaguestandingsv3/?leagueId=00&season=1989-90&seasonType=Regular+Season
 
 
 parse_record <-
@@ -125,7 +125,7 @@ get_season_playoff_picture <-
     }
     url <-
       glue::glue(
-        "http://stats.nba.com/stats/playoffpicture/?leagueId=00&seasonId=2{season_id}"
+        "https://stats.nba.com/stats/playoffpicture/?leagueId=00&seasonId=2{season_id}"
       ) %>% as.character() %>% URLencode()
 
     json <-
@@ -286,7 +286,7 @@ get_season_standings <-
     }
     url <-
       glue::glue(
-        "http://stats.nba.com/stats/leaguestandingsv3/?leagueId=00&season={season_slug}&seasonType={season_type}"
+        "https://stats.nba.com/stats/leaguestandingsv3/?leagueId=00&season={season_slug}&seasonType={season_type}"
       ) %>% as.character() %>% URLencode()
 
     json <-

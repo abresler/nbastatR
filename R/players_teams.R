@@ -70,7 +70,7 @@ generate_dash_url <-
 
 
     base <-
-      glue::glue("http://stats.nba.com/stats/{query_slug}?") %>%
+      glue::glue("https://stats.nba.com/stats/{query_slug}?") %>%
       as.character()
 
     slug_type <-

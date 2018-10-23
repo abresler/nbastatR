@@ -63,7 +63,7 @@ get_year_draft_combine <-
     slugSeason <- generate_season_slug(season = combine_year)
     url <-
       glue::glue(
-        "http://stats.nba.com/stats/draftcombinestats?LeagueID=00&SeasonYear={slugSeason}"
+        "https://stats.nba.com/stats/draftcombinestats?LeagueID=00&SeasonYear={slugSeason}"
       ) %>%
       as.character()
 

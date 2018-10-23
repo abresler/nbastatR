@@ -7,7 +7,7 @@ get_player_award <-
   function(player_id = 76003,
            return_message = T) {
     url <-
-      glue::glue("http://stats.nba.com/stats/playerawards/?playerId={player_id}") %>%
+      glue::glue("https://stats.nba.com/stats/playerawards/?playerId={player_id}") %>%
       as.character()
 
     json <-
@@ -147,7 +147,7 @@ get_player_bio <-
   function(player_id = 101127,
            return_message = T) {
     url <-
-      glue::glue("http://data.nba.net/json/bios/player_{player_id}.json") %>%
+      glue::glue("https://data.nba.net/json/bios/player_{player_id}.json") %>%
       as.character()
 
 
@@ -272,7 +272,7 @@ get_player_profile <-
 
     url_json <-
       glue::glue(
-        'http://stats.nba.com/stats/commonplayerinfo?LeagueID=00&PlayerID={player_id}'
+        'https://stats.nba.com/stats/commonplayerinfo?LeagueID=00&PlayerID={player_id}'
       ) %>%
       as.character()
     ## Build URL

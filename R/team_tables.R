@@ -2,7 +2,7 @@
 
 get_team_details <- function(team_id = 1610612745, return_message = TRUE) {
   url <-
-    glue::glue("http://stats.nba.com/stats/teamdetails/?teamId={team_id}")
+    glue::glue("https://stats.nba.com/stats/teamdetails/?teamId={team_id}")
   if (!'df_dict_nba_teams_history' %>% exists()) {
     df_dict_nba_teams_history <- get_nba_franchise_history()
     assign(x = 'df_dict_nba_teams_history', df_dict_nba_teams_history, envir = .GlobalEnv)
@@ -223,7 +223,7 @@ get_team_year_by_year_stats <-
   season_slug <- season_type %>% clean_to_stem()
   json_url <-
     glue::glue(
-      "http://stats.nba.com/stats/{query_slug}/?teamId={team_id}&leagueId=00&seasonType={season_slug}&perMode={mode}"
+      "https://stats.nba.com/stats/{query_slug}/?teamId={team_id}&leagueId=00&seasonType={season_slug}&perMode={mode}"
     ) %>% as.character() %>% URLencode()
   json <-
     json_url %>%

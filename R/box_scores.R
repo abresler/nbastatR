@@ -76,7 +76,7 @@ dictionary_boxscore_slugs <-
           "https://stats.nba.com/stats/wnbaadvancedboxscore?GameID={game_id}"
         ),
         TRUE ~ glue::glue(
-          "http://data.wnba.com/data/5s/v2015/json/mobile_teams/wnba/2018/scores/gamedetail/{game_id}_gamedetail.json"
+          "https://data.wnba.com/data/5s/v2015/json/mobile_teams/wnba/2018/scores/gamedetail/{game_id}_gamedetail.json"
         )
       ) %>%
         URLencode() %>%

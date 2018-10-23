@@ -21,7 +21,7 @@ get_season_metric_league_leaders <-
     }
     scope_slug <- "S"
     json_url <-
-      glue::glue("http://stats.nba.com/stats/leagueLeaders?LeagueID=00&PerMode={mode}&Scope={scope_slug}&Season={slug_season}&SeasonType={season_type}&StatCategory={metric}") %>%
+      glue::glue("https://stats.nba.com/stats/leagueLeaders?LeagueID=00&PerMode={mode}&Scope={scope_slug}&Season={slug_season}&SeasonType={season_type}&StatCategory={metric}") %>%
       as.character() %>%
       URLencode()
 

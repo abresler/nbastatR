@@ -1,5 +1,5 @@
 
-# http://stats.nba.com/stats/scoreboardv2/?leagueId=00&gameDate=12%2F30%2F1990&dayOffset=0
+# https://stats.nba.com/stats/scoreboardv2/?leagueId=00&gameDate=12%2F30%2F1990&dayOffset=0
 
 
 .get_day_nba_scores <-
@@ -31,7 +31,7 @@
 
     url <-
       glue::glue(
-        "http://stats.nba.com/stats/scoreboardv2/?leagueId={league_slug}&gameDate={date_slug}&dayOffset={day_offset}"
+        "https://stats.nba.com/stats/scoreboardv2/?leagueId={league_slug}&gameDate={date_slug}&dayOffset={day_offset}"
       ) %>%
       as.character()
 

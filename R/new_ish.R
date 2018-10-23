@@ -1,4 +1,4 @@
-# http://nbasense.com/nba-api/Stats/Stats/Charts/InfographicFanDuelPlayer#request-example
+# https://nbasense.com/nba-api/Stats/Stats/Charts/InfographicFanDuelPlayer#request-example
 
 clean_to_stem <- function(x) {
   x <-
@@ -441,7 +441,7 @@ get_nba_teams_ids <-
 
 gen_url <- function(endpoint) {
   path <- paste('stats/', endpoint, sep = '')
-  url <- httr::modify_url("http://stats.nba.com/stats/", path = path)
+  url <- httr::modify_url("https://stats.nba.com/stats/", path = path)
   url
 }
 

@@ -14,7 +14,7 @@ get_nba_franchise_history <-
   function(return_message = T,
            only_active = F) {
     team_history_url <-
-      'http://stats.nba.com/stats/franchisehistory?LeagueID=00'
+      'https://stats.nba.com/stats/franchisehistory?LeagueID=00'
 
     team_data <-
       team_history_url %>%
@@ -165,7 +165,7 @@ get_team_season_roster <-
       unique()
 
     json_url <-
-      glue::glue('http://stats.nba.com/stats/commonteamroster?LeagueID=00&Season={slugSeason}&TeamID={team_id}') %>% as.character()
+      glue::glue('https://stats.nba.com/stats/commonteamroster?LeagueID=00&Season={slugSeason}&TeamID={team_id}') %>% as.character()
 
 
     json_data <-
@@ -347,7 +347,7 @@ get_team_coaches <-
       unique()
 
     json_url <-
-      glue::glue('http://stats.nba.com/stats/commonteamroster?LeagueID=00&Season={slugSeason}&TeamID={team_id}') %>% as.character()
+      glue::glue('https://stats.nba.com/stats/commonteamroster?LeagueID=00&Season={slugSeason}&TeamID={team_id}') %>% as.character()
 
 
     json_data <-

@@ -15,7 +15,7 @@ get_nba_draft_year <-
     }
     url <-
       glue::glue(
-        "http://stats.nba.com/stats/drafthistory?College=&LeagueID=00&OverallPick=&RoundNum=&RoundPick=&Season={draft_year}"
+        "https://stats.nba.com/stats/drafthistory?College=&LeagueID=00&OverallPick=&RoundNum=&RoundPick=&Season={draft_year}"
       )
 
 

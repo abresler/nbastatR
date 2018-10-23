@@ -190,7 +190,7 @@ get_team_season_info <-
       clean_to_stem()
     url <-
       glue::glue(
-        "http://stats.nba.com/stats/teaminfocommon/?leagueId=00&season={season_slug}&seasonType={season_type_slug}&teamId={team_id}"
+        "https://stats.nba.com/stats/teaminfocommon/?leagueId=00&season={season_slug}&seasonType={season_type_slug}&teamId={team_id}"
       ) %>%
       as.character()
 

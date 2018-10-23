@@ -41,9 +41,9 @@
         "Mozilla/5.0 (Windows Phone 10.0; Android 4.2.1; Xbox; Xbox One) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/46.0.2486.0 Mobile Safari/537.36 Edge/13.10586",
         "Mozilla/5.0 (PlayStation 4 3.11) AppleWebKit/537.73 (KHTML, like Gecko)",
         "Mozilla/5.0 (PlayStation Vita 3.61) AppleWebKit/537.73 (KHTML, like Gecko) Silk/3.2",
-        "Mozilla/5.0 (Nintendo 3DS; U; ; en) Version/1.7412.EU", "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)",
-        "Mozilla/5.0 (compatible; bingbot/2.0; +http://www.bing.com/bingbot.htm)",
-        "Mozilla/5.0 (compatible; Yahoo! Slurp; http://help.yahoo.com/help/us/ysearch/slurp)",
+        "Mozilla/5.0 (Nintendo 3DS; U; ; en) Version/1.7412.EU", "Mozilla/5.0 (compatible; Googlebot/2.1; +https://www.google.com/bot.html)",
+        "Mozilla/5.0 (compatible; bingbot/2.0; +https://www.bing.com/bingbot.htm)",
+        "Mozilla/5.0 (compatible; Yahoo! Slurp; https://help.yahoo.com/help/us/ysearch/slurp)",
         "Mozilla/5.0 (X11; U; Linux armv7l like Android; en-us) AppleWebKit/531.2+ (KHTML, like Gecko) Version/5.0 Safari/533.2+ Kindle/3.0+",
         "Mozilla/5.0 (Linux; U; en-US) AppleWebKit/528.5+ (KHTML, like Gecko, Safari/528.5+) Version/4.0 Kindle/3.0 (screen 600x800; rotate)"
       )
@@ -72,7 +72,7 @@
       paste0(collapse = '')
 
     url <-
-      list('http://', domain_slug, tl_domain) %>%
+      list('https://', domain_slug, tl_domain) %>%
       purrr::reduce(paste0)
     df <-
       data_frame(urlReferer = url,
@@ -136,7 +136,7 @@ generate_team_season_logo <-
       generate_season_slug(season = season)
 
     url <-
-      glue::glue("http://stats.nba.com/media/img/teams/logos/season/{slug_season}/{slug_team}_logo.svg") %>%
+      glue::glue("https://stats.nba.com/media/img/teams/logos/season/{slug_season}/{slug_team}_logo.svg") %>%
       as.character()
 
     url
@@ -172,7 +172,7 @@ generate_team_seasons_logos_data <-
 
 
 parse.nba.json_data <-
-  function(url = "http://stats.nba.com/stats/leaguedashplayerbiostats?College=&Conference=&Country=&DateFrom=&DateTo=&Division=&DraftPick=&DraftYear=&GameScope=&GameSegment=&Height=&LastNGames=0&LeagueID=00&Location=&Month=0&OpponentTeamID=0&Outcome=&PORound=0&PerMode=PerGame&Period=0&PlayerExperience=&PlayerPosition=&Season=2016-17&SeasonSegment=&SeasonType=Regular+Season&ShotClockRange=&StarterBench=&TeamID=0&VsConference=&VsDivision=&Weight=") {
+  function(url = "https://stats.nba.com/stats/leaguedashplayerbiostats?College=&Conference=&Country=&DateFrom=&DateTo=&Division=&DraftPick=&DraftYear=&GameScope=&GameSegment=&Height=&LastNGames=0&LeagueID=00&Location=&Month=0&OpponentTeamID=0&Outcome=&PORound=0&PerMode=PerGame&Period=0&PlayerExperience=&PlayerPosition=&Season=2016-17&SeasonSegment=&SeasonType=Regular+Season&ShotClockRange=&StarterBench=&TeamID=0&VsConference=&VsDivision=&Weight=") {
     json_data <- url %>%
       get.json_data(use_read_lines = TRUE, is_data_frame = TRUE, is_flattened = TRUE)
 
@@ -248,7 +248,7 @@ generate.nba_slugs.definitions <-
   ),
   table_type = "game") {
     urls <-
-      glue::glue("http://stats.nba.com/templates/angular/views/{table_type}/{table_type}-{table_slugs}.html") %>%
+      glue::glue("https://stats.nba.com/templates/angular/views/{table_type}/{table_type}-{table_slugs}.html") %>%
       as.character()
 
     data_frame(typeTable = table_type,
@@ -257,9 +257,9 @@ generate.nba_slugs.definitions <-
   }
 
 get.nba_api_parameters <-
-  function(url = "http://stats.nba.com/stats/leaguedashplayerbiostats?College=&Conference=&Country=&DateFrom=&DateTo=&Division=&DraftPick=&DraftYear=&GameScope=&GameSegment=&Height=&LastNGames=0&LeagueID=00&Location=&Month=0&OpponentTeamID=0&Outcome=&PORound=0&PerMode=PerGame&Period=0&PlayerExperience=&PlayerPosition=&Season=1996-97&SeasonSegment=&SeasonType=Regular+Season&ShotClockRange=&StarterBench=&TeamID=0&VsConference=&VsDivision=&Weight=") {
+  function(url = "https://stats.nba.com/stats/leaguedashplayerbiostats?College=&Conference=&Country=&DateFrom=&DateTo=&Division=&DraftPick=&DraftYear=&GameScope=&GameSegment=&Height=&LastNGames=0&LeagueID=00&Location=&Month=0&OpponentTeamID=0&Outcome=&PORound=0&PerMode=PerGame&Period=0&PlayerExperience=&PlayerPosition=&Season=1996-97&SeasonSegment=&SeasonType=Regular+Season&ShotClockRange=&StarterBench=&TeamID=0&VsConference=&VsDivision=&Weight=") {
   slug_nba <- url %>%
-    str_replace_all("http://stats.nba.com/stats/", "") %>%
+    str_replace_all("https://stats.nba.com/stats/", "") %>%
     str_split("\\?") %>%
     flatten_chr() %>%
     .[[1]]
@@ -277,7 +277,7 @@ get.nba_api_parameters <-
 }
 
 parse.nba_headers.definitions <-
-  function(url = "http://stats.nba.com/templates/angular/views/game/game-playertracking.html") {
+  function(url = "https://stats.nba.com/templates/angular/views/game/game-playertracking.html") {
     page <-
       url %>%
       read_html()
@@ -563,17 +563,17 @@ parse_for_players <-
         idTeam = ifelse(idTeam == 0, NA, idTeam),
         isRookie = ifelse(countSeasons == 0 &
                             yearSeasonFirst == most_recent, TRUE, FALSE),
-        urlPlayerStats = glue::glue("http://stats.nba.com/player/{idPlayer}") %>% as.character(),
+        urlPlayerStats = glue::glue("https://stats.nba.com/player/{idPlayer}") %>% as.character(),
         urlPlayerThumbnail = glue::glue(
-          "http://stats.nba.com/media/players/230x185/{idPlayer}.png"
+          "https://stats.nba.com/media/players/230x185/{idPlayer}.png"
         ) %>% as.character(),
         urlPlayerHeadshot = glue::glue(
             "https://ak-static.cms.nba.com/wp-content/uploads/headshots/nba/latest/260x190/{idPlayer}.png"
           ) %>% as.character()
         ) %>%
       mutate(
-        urlPlayerActionPhoto = ifelse(isRookie, "http://stats.nba.com/media/img/league/nba-headshot-fallback.png",
-                                      glue::glue("http://stats.nba.com/media/players/700/{idPlayer}.png")) %>% as.character())
+        urlPlayerActionPhoto = ifelse(isRookie, "https://stats.nba.com/media/img/league/nba-headshot-fallback.png",
+                                      glue::glue("https://stats.nba.com/media/players/700/{idPlayer}.png")) %>% as.character())
 
     df_players <-
       df_players %>%
@@ -664,8 +664,8 @@ parse_for_teams <-
       df_teams %>%
       mutate(nameTeam = nameTeam %>% str_replace_all("LA Clippers", "Los Angeles Clippers"),
                urlThumbnailTeam = if_else(isNonNBATeam == 0,
-                                        glue::glue("http://stats.nba.com/media/img/teams/logos/{slugTeam}_logo.svg") %>% as.character(),
-                                        "http://stats.nba.com/media/img/teams/logos/NBA_logo.svg"
+                                        glue::glue("https://stats.nba.com/media/img/teams/logos/{slugTeam}_logo.svg") %>% as.character(),
+                                        "https://stats.nba.com/media/img/teams/logos/NBA_logo.svg"
                                         ))
     df_teams
 
@@ -684,7 +684,7 @@ parse_for_teams <-
 #' get_nba_teams()
 get_nba_teams <-
   function() {
-    url <- "http://stats.nba.com/js/data/ptsd/stats_ptsd.js"
+    url <- "https://stats.nba.com/js/data/ptsd/stats_ptsd.js"
     json <-
       url %>%
       readr::read_lines() %>%
@@ -708,7 +708,7 @@ get_nba_teams <-
 #' @examples
 #' get_nba_teams_seasons()
 get_nba_teams_seasons <- function() {
-  json <- "http://stats.nba.com/stats/commonteamyears/?leagueId=00" %>%
+  json <- "https://stats.nba.com/stats/commonteamyears/?leagueId=00" %>%
     curl_json_to_vector()
   actual_names <-
     json$resultSets$headers[[1]] %>%
@@ -735,7 +735,7 @@ get_nba_teams_seasons <- function() {
 #' get_nba_stats_api_items()
 get_nba_stats_api_items <-
   function(){
-    url <- "http://stats.nba.com/js/data/ptsd/stats_ptsd.js"
+    url <- "https://stats.nba.com/js/data/ptsd/stats_ptsd.js"
     json <-
       url %>%
       readr::read_lines() %>%
@@ -778,7 +778,7 @@ get_nba_stats_api_items <-
 get_nba_players <-
   function() {
     con <-
-      "http://stats.nba.com/stats/commonallplayers?IsOnlyCurrentSeason=0&LeagueID=00&Season=2018-19" %>%
+      "https://stats.nba.com/stats/commonallplayers?IsOnlyCurrentSeason=0&LeagueID=00&Season=2018-19" %>%
       curl()
 
     json <-
@@ -833,9 +833,9 @@ get_nba_players <-
         idTeam = ifelse(idTeam == 0, NA, idTeam),
         isRookie = ifelse(countSeasons == 0 &
                             yearSeasonFirst == most_recent, TRUE, FALSE),
-        urlPlayerStats = glue::glue("http://stats.nba.com/player/{idPlayer}") %>% as.character(),
+        urlPlayerStats = glue::glue("https://stats.nba.com/player/{idPlayer}") %>% as.character(),
         urlPlayerThumbnail = glue::glue(
-          "http://stats.nba.com/media/players/230x185/{idPlayer}.png"
+          "https://stats.nba.com/media/players/230x185/{idPlayer}.png"
         ) %>% as.character(),
         urlPlayerHeadshot = glue::glue(
           "https://ak-static.cms.nba.com/wp-content/uploads/headshots/nba/latest/260x190/{idPlayer}.png"
@@ -844,8 +844,8 @@ get_nba_players <-
       mutate(
         urlPlayerActionPhoto = ifelse(
           isRookie,
-          "http://stats.nba.com/media/img/league/nba-headshot-fallback.png",
-          glue::glue("http://stats.nba.com/media/players/700/{idPlayer}.png") %>% as.character()
+          "https://stats.nba.com/media/img/league/nba-headshot-fallback.png",
+          glue::glue("https://stats.nba.com/media/players/700/{idPlayer}.png") %>% as.character()
         )
       )
 
@@ -903,16 +903,16 @@ get_nba_players <-
 ### https://data.nba.com/data/10s/v2015/json/mobile_teams/nba/2017/scores/pbp/0021700136_full_pbp.json
 
 ## Summary
-### http://stats.nba.com/stats/boxscoresummaryv2?GameID=0021700136
+### https://stats.nba.com/stats/boxscoresummaryv2?GameID=0021700136
 
 ## images
 ## https://api.nba.net/0/league/video?games=0021700136&count=36&accessToken=nbainternal%7C3830242580404678b2552bbdd03b73ee
 
 ### Box-score
-## advanced : http://stats.nba.com/stats/boxscoreadvancedv2?EndPeriod=10&EndRange=28800&GameID=0021700136&RangeType=0&Season=2017-18&SeasonType=Regular+Season&StartPeriod=1&StartRange=0
-## scoring : http://stats.nba.com/stats/boxscorescoringv2?EndPeriod=10&EndRange=28800&GameID=0021700136&RangeType=0&Season=2017-18&SeasonType=Regular+Season&StartPeriod=1&StartRange=0
+## advanced : https://stats.nba.com/stats/boxscoreadvancedv2?EndPeriod=10&EndRange=28800&GameID=0021700136&RangeType=0&Season=2017-18&SeasonType=Regular+Season&StartPeriod=1&StartRange=0
+## scoring : https://stats.nba.com/stats/boxscorescoringv2?EndPeriod=10&EndRange=28800&GameID=0021700136&RangeType=0&Season=2017-18&SeasonType=Regular+Season&StartPeriod=1&StartRange=0
 
 ### Game Book
-## http://www.nba.com/data/html/nbacom/2017/gameinfo/20171105/0021700136_Book.pdf
+## https://www.nba.com/data/html/nbacom/2017/gameinfo/20171105/0021700136_Book.pdf
 
 

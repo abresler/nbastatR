@@ -33,7 +33,7 @@ get_nba_player_career_stats <-
 
     url <-
       glue::glue(
-        "http://stats.nba.com/stats/playercareerstats?LeagueID=00&PerMode={mode}&PlayerID={player_id}"
+        "https://stats.nba.com/stats/playercareerstats?LeagueID=00&PerMode={mode}&PlayerID={player_id}"
       ) %>%
       as.character()
 
