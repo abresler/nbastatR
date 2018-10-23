@@ -197,6 +197,7 @@ get_team_season_info <-
     json <-
       url %>%
       curl_json_to_vector()
+
     names_md <-
       json$resultSets$headers[[1]] %>% resolve_nba_names()
 
