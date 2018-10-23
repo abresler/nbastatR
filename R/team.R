@@ -296,13 +296,16 @@ get_teams_seasons_info <-
       future_map_dfr(function(x) {
         df_row <- df_input %>% slice(x)
 
-        df_row %$%
+        data <-
+          df_row %$%
           get_team_season_info_safe(
             season = season,
             team_id = team_id,
             season_type = season_type,
             return_message = return_message
           )
+        Sys.sleep(time = 3)
+        data
       })
 
     if (nest_data) {
