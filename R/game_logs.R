@@ -40,28 +40,7 @@
                              TRUE ~ "00")
 
 
-    URL <- gen_url(call_slug)
-
-    params <- list(
-      Season = season_slug,
-      LeagueID = league_slug,
-      PlayerOrTeam = table_slug,
-      Direction = 'DESC',
-      SeasonType = season_type,
-      Sorter = 'FGM',
-      DateFrom = date_from,
-      DateTo = date_to,
-      Counter = 0
-    )
-
-    params <-
-      utils::modifyList(params, list(...))
-
-    slug_param <-
-      .generate_param_slug(params = params)
-
-    url <-
-      glue::glue("{URL}?{slug_param}") %>% as.character()
+    season_name_slug <- URLencode(season_type)
 
     if (league %>% str_to_upper() == "WNBA") {
       url <-
@@ -70,6 +49,10 @@
         ) %>%
         URLencode() %>%
         as.character()
+
+    } else {
+      url <-
+        glue::glue("https://stats.nba.com/stats/leaguegamelog?Counter=1000&Season={season_slug}&Direction=DESC&LeagueID={league_slug}&PlayerOrTeam={table_slug}&SeasonType={season_name_slug}&Sorter=DATE") %>% as.character()
 
     }
       resp <-
@@ -270,7 +253,7 @@
 #' @import dplyr jsonlite purrr stringr lubridate magrittr tidyr tibble httr
 #' @importFrom  glue glue
 #' @examples
-#' get_game_logs(seasons = 2017:2018, result_types = c("team", "player"))
+#' get_game_logs(seasons = 2019, result_types = c("team", "player"))
 get_game_logs <-
   function(seasons = 2019,
            league = "NBA",
@@ -312,12 +295,13 @@ get_game_logs <-
 
     all_data <-
       1:nrow(input_df) %>%
-      future_map_dfr(function(x) {
+      map_df(function(x) {
         df_row <-
           input_df %>% slice(x)
+
         data_row <-
           df_row %$%
-          .get_season_gamelog_safe(
+          .get_season_gamelog(
             season = season,
             result_type = result,
             season_type = season_type,
