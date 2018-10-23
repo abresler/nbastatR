@@ -5,7 +5,7 @@
 \title{NBA teams seasons information}
 \usage{
 get_teams_seasons_info(teams = NULL, team_ids = NULL,
-  all_active_teams = F, seasons = 1990:1995,
+  all_active_teams = T, seasons = 2019,
   season_types = "Regular Season", nest_data = F, return_message = T)
 }
 \arguments{

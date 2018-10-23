@@ -82,7 +82,7 @@
 
 .nba_headers <-
   function() {
-    structure(list("keep-alive", "no-cache", "no-cache", "1", "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.67 Safari/537.36",
+    structure(list("close", "no-cache", "no-cache", "1", "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.67 Safari/537.36",
                    "1", "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8",
                    "gzip, deflate, br", "en-US,en;q=0.9"), .Names = c("Connection",
                                                                       "Pragma", "Cache-Control", "Upgrade-Insecure-Requests", "User-Agent",
@@ -105,7 +105,12 @@ curl_json_to_vector <-
   function(url = "https://data.nba.net/prod/v1/2017/coaches.json") {
 
     df_call <- .generate_url_reference()
+
     headers <- .nba_headers()
+
+    headers <- headers %>%
+      append(list("Cookie" = "ak_bmsc=0CF1B83520CA5205BF9AE4E54E3DC08917C967D88C2000003E72CF5BD21C3F5C~plCPzgPPCGF52itMA/UhuEoEGLb6gGyKHm98ufxFpCzVLHhDLO4/URPcsYcWUnwzC4RedBHVxTUXQfILYj7cI77/Qis7YPIe/yLT9DqtSWRCoYGaRGjZIifoGORfeLKbM/2GL6hkkpFjjH4FXf5xnhm8KLOe/Q++OBltnosPdevU2G947I/rXnlJZLi5fNTYGrpH2YthuJO4SLepV/QLBhlZQDT0twhJ3TL8iXog5gzsA="))
+
     h <-
       new_handle(verbose = F,
                  useragent =  df_call$userAgent) %>%
@@ -113,6 +118,7 @@ curl_json_to_vector <-
 
     resp <-
       curl_fetch_memory(url = url, handle = h)
+
 
     json <-
       resp$content %>%

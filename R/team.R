@@ -179,7 +179,7 @@ parse_team_json <- function(json, team_id, season, season_type) {
 }
 
 get_team_season_info <-
-  function(season = 1992,
+  function(season = 2019,
            team_id = 1610612751,
            season_type = "Regular Season",
            return_message = T) {
@@ -188,6 +188,7 @@ get_team_season_info <-
     season_type_slug <-
       season_type %>%
       clean_to_stem()
+
     url <-
       glue::glue(
         "https://stats.nba.com/stats/teaminfocommon/?leagueId=00&season={season_slug}&seasonType={season_type_slug}&teamId={team_id}"
@@ -269,8 +270,8 @@ get_team_season_info <-
 get_teams_seasons_info <-
   function(teams = NULL,
            team_ids = NULL,
-           all_active_teams = F,
-           seasons = 1990:1995,
+           all_active_teams = T,
+           seasons = 2019,
            season_types = "Regular Season",
            nest_data = F,
            return_message = T) {
