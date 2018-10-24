@@ -18,7 +18,7 @@ dictionary_boxscore_slugs <-
   function(game_id = 21700865,
            league = "NBA",
            result_type = "player",
-           boxscore = "traditional",
+           boxscore = "tracking",
            return_message = T,
            ...) {
 
@@ -71,7 +71,8 @@ dictionary_boxscore_slugs <-
 
     if (league == "WNBA") {
 
-      json_url <- case_when(
+      json_url <-
+        case_when(
         boxscore %>% str_to_lower() == "advanced" ~ glue::glue(
           "https://stats.nba.com/stats/wnbaadvancedboxscore?GameID={game_id}"
         ),
@@ -81,6 +82,10 @@ dictionary_boxscore_slugs <-
       ) %>%
         URLencode() %>%
         as.character()
+    }
+
+    if (boxscore == "hustle") {
+      json_url <- glue::glue("https://stats.nba.com/stats/hustlestatsboxscore?GameID=00{game_id}") %>% as.character()
     }
 
     json <-
@@ -415,6 +420,7 @@ get_games_box_scores <-
             filter(typeResult == result)
           tables <-
             df_results$typeBoxScore %>% unique()
+
           all_tables <-
             tables %>%
             future_map(function(table) {
@@ -425,19 +431,32 @@ get_games_box_scores <-
                 unnest()
 
 
-              if (table == "Usage") {
+              if (table == "usage") {
                 data <-
                   data %>%
                   dplyr::select(-one_of("pctUSG"))
               }
 
-              if (table == "Tracking") {
+              if (table %in% c("tracking", "defense", "hustle")) {
+
                 data <-
                   data %>%
-                  dplyr::select(-one_of("pctFG"))
+                  dplyr::select(-one_of(
+                    c(
+                      "pctFG",
+                      "groupStartPosition",
+                      "cityTeam",
+                      "isStarter",
+                      "minExact",
+                      "idPlayer",
+                      "slugTeam",
+                      "idTeam",
+                      "descriptionComment"
+                    )
+                  ))
               }
 
-              if (table == "Four Factors") {
+              if (table == "four factors") {
                 data <-
                   data %>%
                   dplyr::select(-one_of(c(
@@ -445,7 +464,8 @@ get_games_box_scores <-
                   )))
               }
               data
-            })
+            }) %>%
+            suppressMessages()
 
           all_tables <-
             all_tables %>%

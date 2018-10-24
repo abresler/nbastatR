@@ -37,7 +37,7 @@ make_url <- function(datatype = NULL,
                      EndRange = "",
                      RangeType = "",
                      runType = "") {
-  prefix <- paste0("http://stats.nba.com/stats/", datatype, "?")
+  prefix <- paste0("https://stats.nba.com/stats/", datatype, "?")
   info <- list(
     SeasonType = SeasonType,
     LeagueID = LeagueID,
