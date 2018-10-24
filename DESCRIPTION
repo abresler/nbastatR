@@ -24,3 +24,4 @@ Imports:
 RoxygenNote: 6.1.0.9000
 URL: https://github.com/abresler/nbastatR
 BugReports: https://github.com/abresler/nbastatR/issues
+ByteCompile: yes

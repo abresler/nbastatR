@@ -427,7 +427,7 @@ get_nba_draftnet_year_mock_draft <-
       data_frame(
         date.data.updated = last_update,
         year.draft = draft_year,
-        id.pick = 1:length(name.player),
+        id.pick = seq_along(name.player),
         name.player,
         height,
         weight.lbs,

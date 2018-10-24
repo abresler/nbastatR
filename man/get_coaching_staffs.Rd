@@ -17,7 +17,7 @@ NBA teams
 get_coaching_staffs()
 }
 \seealso{
-Other Coaching: \code{\link{get_bref_coach_dictionary}}
+Other Coaching: \code{\link{dictionary_bref_coaches}}
 }
 \concept{Coaching}
 \concept{Current data}

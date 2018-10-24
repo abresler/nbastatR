@@ -612,7 +612,7 @@ get_players_agents <-
     all_agents <-
       data_frame()
 
-    for (a in 1:length(players.agents)) {
+    for (a in seq_along(players.agents)) {
       agents <-
         players.agents[a] %>%
         unlist() %>%

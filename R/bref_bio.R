@@ -109,7 +109,7 @@ parse.bio <-
     if (bio %>% length() == 0) {
       return(invisible())
     }
-    bio_length <- 1:length(bio)
+    bio_length <- seq_along(bio)
     all_data <-
       bio_length %>%
       future_map_dfr(function(x){
@@ -197,7 +197,7 @@ parse.bio <-
             items <- c("nameHighSchool", "locationHighSchool")
 
             data <-
-              data_frame(item = items[1:length(parts)],
+              data_frame(item = items[seq_along(parts)],
                        value = parts) %>%
               mutate_all(str_trim)
             return(data)

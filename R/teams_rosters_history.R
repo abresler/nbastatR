@@ -197,7 +197,7 @@ get_team_season_roster <-
       "countSeasons",
       "nameSchool",
       "idPlayer"
-    )[1:length(names(data_roster))]
+    )[seq_along(names(data_roster))]
 
      data_roster <-
       data_roster %>%
@@ -375,7 +375,7 @@ get_team_coaches <-
         "nameCoach", "slugCoach", "numberCoachType", "typeCoach", "schoolCoach",
         "remove")
 
-    )[1:length(names(data_roster))]
+    )[seq_along(names(data_roster))]
 
     data_roster <-
       data_roster %>%

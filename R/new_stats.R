@@ -617,7 +617,7 @@ parse_for_seasons_data <-
       json$data$seasons
 
     seasons <-
-      1:length(json_seasons) %>%
+      seq_along(json_seasons) %>%
       future_map_dfr(function(x){
         row <-
           json_seasons[[x]]
@@ -646,7 +646,7 @@ parse_for_teams <-
       json$data$teams
 
     df_teams <-
-      1:length(json_teams) %>%
+      seq_along(json_teams) %>%
       future_map_dfr(function(x) {
         values <-
           json_teams[[x]] %>%
@@ -658,7 +658,7 @@ parse_for_teams <-
           })
 
         items <-
-          str_c("V", 1:length(values))
+          str_c("V", seq_along(values))
 
         data_frame(items, values) %>%
           tidyr::spread(items, values)

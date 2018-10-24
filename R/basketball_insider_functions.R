@@ -318,7 +318,7 @@ get_nba_team_salaries <-
     year_1_df <-
       data_frame(slugSeason = names_salary_table[2],
                  color = year_1_salary_color,
-                 value = year_1_salary[1:length(year_1_salary_color)])
+                 value = year_1_salary[seq_along(year_1_salary_color)])
 
     year_2_salary <-
       page %>%
@@ -341,7 +341,7 @@ get_nba_team_salaries <-
     year_2_df <-
       data_frame(slugSeason = names_salary_table[3],
                  color = year_2_salary_color,
-                 value = year_2_salary[1:length(year_2_salary_color)])
+                 value = year_2_salary[seq_along(year_2_salary_color)])
 
     year_3_salary <-
       page %>%
@@ -364,7 +364,7 @@ get_nba_team_salaries <-
     year_3_df <-
       data_frame(slugSeason = names_salary_table[4],
                  color = year_3_salary_color,
-                 value = year_3_salary[1:length(year_3_salary_color)])
+                 value = year_3_salary[seq_along(year_3_salary_color)])
 
     year_4_salary <-
       page %>%
@@ -387,7 +387,7 @@ get_nba_team_salaries <-
     year_4_df <-
       data_frame(slugSeason = names_salary_table[5],
                  color = year_4_salary_color,
-                 value = year_4_salary[1:length(year_4_salary_color)])
+                 value = year_4_salary[seq_along(year_4_salary_color)])
 
     year_5_salary <-
       page %>%
@@ -419,7 +419,7 @@ get_nba_team_salaries <-
     year_5_df <-
       data_frame(slugSeason = names_salary_table[6],
                  color = year_5_salary_color,
-                 value = year_5_salary[1:length(year_5_salary_color)])
+                 value = year_5_salary[seq_along(year_5_salary_color)])
 
     contract_color_df <-
       year_1_df %>%

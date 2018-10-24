@@ -17,11 +17,11 @@ assign_nba_players()
 }
 \seealso{
 Other dictionary: \code{\link{assign_nba_teams}},
-  \code{\link{get_bref_coach_dictionary}},
-  \code{\link{get_bref_player_dictionary}},
-  \code{\link{get_bref_team_dictionary}}
+  \code{\link{dictionary_bref_coaches}},
+  \code{\link{dictionary_bref_players}},
+  \code{\link{dictionary_bref_teams}}
 
-Other NBA players: \code{\link{get_bref_player_dictionary}}
+Other NBA players: \code{\link{dictionary_bref_players}}
 }
 \concept{NBA players}
 \concept{dictionary}
