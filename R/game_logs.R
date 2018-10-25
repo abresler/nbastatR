@@ -161,7 +161,7 @@
     if (result_type == "player" && league %>% str_to_upper() == "NBA") {
       if (!'df_nba_player_dict' %>% exists()) {
         df_nba_player_dict <-
-          get_nba_players()
+          nba_players()
 
         assign(x = 'df_nba_player_dict', df_nba_player_dict, envir = .GlobalEnv)
       }
@@ -253,8 +253,8 @@
 #' @import dplyr jsonlite purrr stringr lubridate magrittr tidyr tibble httr
 #' @importFrom  glue glue
 #' @examples
-#' get_game_logs(seasons = 2019, result_types = c("team", "player"))
-get_game_logs <-
+#' game_logs(seasons = 2019, result_types = c("team", "player"))
+game_logs <-
   function(seasons = 2019,
            league = "NBA",
            result_types  = "player",
@@ -407,7 +407,7 @@ get_game_logs <-
 
 # schedule ----------------------------------------------------------------
 
-get_season_schedule <-
+.get_season_schedule <-
   function(season = 2018,
            season_type = "Regular Season",
            parse_boxscores = F,
@@ -509,8 +509,8 @@ get_season_schedule <-
 #' @import dplyr jsonlite purrr stringr lubridate magrittr tidyr tibble httr
 #' @importFrom  glue glue
 #' @examples
-#' get_seasons_schedule(seasons = c(2012, 2018))
-get_seasons_schedule <-
+#' seasons_schedule(seasons = c(2012, 2018))
+seasons_schedule <-
   function(seasons = 2019,
            season_types = "Regular Season",
            parse_boxscores = F,
@@ -528,8 +528,8 @@ get_seasons_schedule <-
       as_data_frame() %>%
       arrange(season)
 
-    get_season_schedule_safe <-
-      purrr::possibly(get_season_schedule, data_frame())
+    .get_season_schedule_safe <-
+      purrr::possibly(.get_season_schedule, data_frame())
 
     all_data <-
       1:nrow(input_df) %>%
@@ -538,7 +538,7 @@ get_seasons_schedule <-
           input_df %>% slice(x)
         data_row <-
           df_row %$%
-          get_season_schedule_safe(
+          .get_season_schedule_safe(
             season = season,
             season_type = season_type,
             parse_boxscores = parse_boxscores,

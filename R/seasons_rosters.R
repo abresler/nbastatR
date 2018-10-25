@@ -1,5 +1,5 @@
 # seasons_players ---------------------------------------------------------
-get_seasons_teams <-
+.get_seasons_teams <-
   function(season = 2018,
            return_message = TRUE,
            ...) {
@@ -61,7 +61,7 @@ get_seasons_teams <-
   }
 
 
-get_team_id_season_roster <-
+.get_team_id_season_roster <-
   function(season = 2018, team_id = 1610612751) {
     if (season < 1947) {
       stop("NBA data starts for the 1946-47 season")
@@ -158,7 +158,7 @@ get_team_id_season_roster <-
            return_message = TRUE) {
 
     df_teams <-
-      get_seasons_teams() %>%
+      .get_seasons_teams() %>%
       filter(isActive) %>%
       select(idTeam, slugTeam)
 
@@ -171,7 +171,7 @@ get_team_id_season_roster <-
           team_slug <- df_teams %>% filter(idTeam == team_id) %>% pull(slugTeam)
           glue::glue("Acquiring {team_slug}'s team roster for the {season} season") %>% cat(fill = T)
         }
-        get_team_id_season_roster(season = season, team_id = team_id)
+        .get_team_id_season_roster(season = season, team_id = team_id)
       })
 
     df_rosters <-
@@ -207,7 +207,7 @@ get_team_id_season_roster <-
 #' @examples
 #' library(nbastatR)
 #' library(dplyr)
-#' df_rosters <- get_seasons_rosters(2015:2018)
+#' df_rosters <- seasons_rosters(2015:2018)
 #'
 #' ### Mean Age by Season and Team
 #' df_rosters %>%
@@ -215,7 +215,7 @@ get_team_id_season_roster <-
 #' summarise(ageMean = mean(agePlayer)) %>%
 #' arrange(ageMean) %>%
 #' ungroup()
-get_seasons_rosters <-
+seasons_rosters <-
   function(seasons = NULL,
            return_message = TRUE,
            nest_data = F) {
@@ -230,7 +230,7 @@ get_seasons_rosters <-
         .get_season_roster_safe(season = season, return_message = return_message)
       })
 
-    df_dict_nba_players <- get_nba_players()
+    df_dict_nba_players <- nba_players()
 
     all_data <-
       all_data %>%

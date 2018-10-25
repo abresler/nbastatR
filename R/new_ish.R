@@ -23,7 +23,7 @@ get_nba_team_dict <-
                      "Brooklyn Nets", "Boston Celtics", "Atlanta Hawks")) {
 
     if (!'df_nba_team_dict' %>% exists()) {
-      df_nba_team_dict <- get_nba_teams()
+      df_nba_team_dict <- nba_teams()
 
       assign('df_nba_team_dict', df_nba_team_dict, envir = .GlobalEnv)
     }
@@ -61,7 +61,7 @@ generate_data_name <- function(x, result = "Team") {
 assign_nba_teams <-
   function() {
     if (!'df_dict_nba_teams' %>% exists()) {
-      df_dict_nba_teams <- get_nba_teams()
+      df_dict_nba_teams <- nba_teams()
       assign(x = 'df_dict_nba_teams', df_dict_nba_teams, envir = .GlobalEnv)
     }
   }
@@ -81,7 +81,7 @@ assign_nba_players <-
   function() {
     if (!'df_dict_nba_players' %>% exists()) {
       "Assigning NBA player dictionary to df_dict_nba_players to your environment" %>% cat(fill = T)
-      df_dict_nba_players <- get_nba_players()
+      df_dict_nba_players <- nba_players()
       assign(x = 'df_dict_nba_players', df_dict_nba_players, envir = .GlobalEnv)
     }
   }
@@ -118,7 +118,7 @@ assign_tables_modes <-
     tables <-
       all_data$nameTable %>% unique()
 
-    dict_tables <- dictionary_table_names()
+    dict_tables <- .dictionary_table_names()
 
     tables %>%
       walk(function(table){
@@ -278,7 +278,7 @@ assign_tables_modes <-
       })
   }
 
-dictionary_table_names <-
+.dictionary_table_names <-
   function() {
     data_frame(nameTable = c("CareerTotalsAllStarSeason", "CareerTotalsCollegeSeason", "CareerTotalsPostSeason",
                              "CareerTotalsRegularSeason", "SeasonRankingsPostSeason", "SeasonRankingsRegularSeason",
@@ -310,20 +310,6 @@ dictionary_table_names <-
                ))
   }
 
-get_nba_headers <- function() {
-  nba_hdrs <- httr::add_headers(
-    Connection = 'keep-alive',
-    'Cache-Control' = 'max-age=0',
-    Accept = 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
-    'User-Agent' = 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/48.0.2564.82 Safari/537.36',
-    'Upgrade-Insecure-Requests' = '1',
-    'Accept-Language' = 'en-US,en;q=0.8',
-    'Accept-Encoding' = 'gzip, deflate, sdch'
-  )
-
-  nba_hdrs
-
-}
 
 #' Players' NBA player ids
 #'
@@ -337,8 +323,8 @@ get_nba_headers <- function() {
 #' @import dplyr stringr jsonlite readr purrr tibble tidyr curl
 #' @family ids
 #' @examples
-#' get_nba_players_ids(players = c("Mitch Richmond", "Kyle Kuzma"))
-get_nba_players_ids <-
+#' nba_player_ids(players = c("Mitch Richmond", "Kyle Kuzma"))
+nba_player_ids <-
   function(players = NULL, player_ids = NULL) {
 
     if (player_ids %>% purrr::is_null() && players %>% purrr::is_null()) {
@@ -355,7 +341,7 @@ get_nba_players_ids <-
 
     if (!'df_nba_player_dict' %>% exists()) {
       df_nba_player_dict <-
-        get_nba_players()
+        nba_players()
 
       assign(x = 'df_nba_player_dict', df_nba_player_dict, envir = .GlobalEnv)
     }
@@ -390,8 +376,8 @@ get_nba_players_ids <-
 #' @export
 #'
 #' @examples
-#' get_nba_teams_ids(teams = c("Brooklyn Nets", "Denver Nuggets"))
-get_nba_teams_ids <-
+#' nba_teams_ids(teams = c("Brooklyn Nets", "Denver Nuggets"))
+nba_teams_ids <-
   function(teams = NULL,
            team_ids = NULL,
            all_active_teams = F) {
@@ -409,7 +395,7 @@ get_nba_teams_ids <-
     }
 
     if (!'df_nba_team_dict' %>% exists()) {
-      df_nba_team_dict <- get_nba_teams()
+      df_nba_team_dict <- nba_teams()
 
       assign('df_nba_team_dict', df_nba_team_dict, envir = .GlobalEnv)
     }
@@ -870,7 +856,9 @@ dictionary_nba_names <-
                    "E_DEF_RATING",
                    "E_NET_RATING",
                    "E_USG_PCT",
-                   "E_PACE"
+                   "E_PACE",
+                   "NBA_FLAG",
+                   "E_TM_TOV_PCT"
                  ),
                nameActual =
                  c("idPlayer", "namePlayerLastFirst", "namePlayer",
@@ -1241,7 +1229,9 @@ dictionary_nba_names <-
                    "drtgE",
                    "netrtgE",
                    "pctUSGE",
-                   "paceE"
+                   "paceE",
+                   "flagNBA",
+                   "pctTOVE"
                  )
     )
   }

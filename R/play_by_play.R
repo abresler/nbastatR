@@ -1,4 +1,4 @@
-get_pbp <-
+.get_pbp <-
   function(game_id = 21601112,
            period_start = 0,
            period_end = 12,
@@ -38,7 +38,7 @@ get_pbp <-
     data
   }
 
-get_fanduel <-
+.get_fanduel <-
   function(game_id = 21700003,
            return_message = TRUE) {
     game_slug <-
@@ -76,7 +76,7 @@ get_fanduel <-
 
   }
 
-get_win_prob <-
+.get_win_prob <-
   function(game_id = 21601112,
            period_start = 0,
            period_end = 12,
@@ -160,11 +160,11 @@ get_win_prob <-
 #' @export
 #'
 #' @examples
-#' get_games_pbp_win_probablity(game_ids = c(21700002, 21700005), filter_non_plays = T,
+#' win_probability(game_ids = c(21700002, 21700005), filter_non_plays = T,
 #' nest_data = FALSE,
 #' return_message = TRUE)
 
-get_games_pbp_win_probablity <-
+win_probability <-
   function(game_ids = c(21700002, 21700003),
            nest_data = FALSE,
            filter_non_plays = FALSE,
@@ -172,18 +172,18 @@ get_games_pbp_win_probablity <-
     if (game_ids %>% purrr::is_null()) {
       stop("Please enter game ids")
     }
-    get_win_prob_safe <-
-      purrr::possibly(get_win_prob, data_frame())
+    .get_win_prob_safe <-
+      purrr::possibly(.get_win_prob, data_frame())
 
     all_data <-
       game_ids %>%
 
       future_map_dfr(function(game_id){
-        get_win_prob_safe(game_id = game_id, return_message = return_message)
+        .get_win_prob_safe(game_id = game_id, return_message = return_message)
       })
 
     if (!'df_nba_team_dict' %>% exists()) {
-      df_nba_team_dict <- get_nba_teams()
+      df_nba_team_dict <- nba_teams()
 
       assign('df_nba_team_dict', df_nba_team_dict, envir = .GlobalEnv)
     }
@@ -228,21 +228,21 @@ get_games_pbp_win_probablity <-
 #' @import dplyr curl stringr lubridate readr magrittr tidyr httr purrr jsonlite
 #' @importFrom glue glue
 #' @examples
-#' get_games_play_by_play(game_ids = c(21700002, 21700003), nest_data = F, return_message = T)
-get_games_play_by_play <-
+#' play_by_play(game_ids = c(21700002, 21700003), nest_data = F, return_message = T)
+play_by_play <-
   function(game_ids = NULL,
            nest_data = FALSE,
            return_message = TRUE) {
     if (game_ids %>% purrr::is_null()) {
       stop("Please enter game ids")
     }
-    get_pbp_safe <-
-      purrr::possibly(get_pbp, data_frame())
+    .get_pbp_safe <-
+      purrr::possibly(.get_pbp, data_frame())
 
     all_data <-
       game_ids %>%
       future_map_dfr(function(game_id){
-        get_pbp_safe(game_id = game_id, return_message = return_message)
+        .get_pbp_safe(game_id = game_id, return_message = return_message)
       })
 
     if (nest_data) {
@@ -271,22 +271,22 @@ get_games_play_by_play <-
 #' @importFrom glue glue
 #'
 #' @examples
-#' get_games_fanduel_summary(game_ids = c(21700002, 21700003), nest_data = F, return_message = T)
+#' fanduel_summary(game_ids = c(21700002, 21700003), nest_data = F, return_message = T)
 
-get_games_fanduel_summary <-
+fanduel_summary <-
   function(game_ids = c(21700002, 21700003),
            nest_data = FALSE,
            return_message = TRUE) {
     if (game_ids %>% purrr::is_null()) {
       stop("Please enter game ids")
     }
-    get_fanduel_safe <-
-      purrr::possibly(get_fanduel, data_frame())
+    .get_fanduel_safe <-
+      purrr::possibly(.get_fanduel, data_frame())
 
     all_data <-
       game_ids %>%
       future_map_dfr(function(game_id){
-        get_fanduel_safe(game_id = game_id, return_message = return_message)
+        .get_fanduel_safe(game_id = game_id, return_message = return_message)
       })
 
     if (nest_data) {

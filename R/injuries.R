@@ -1,4 +1,5 @@
-get_player_names <- function(){
+.get_player_names <-
+  memoise::memoise(function(){
   data <-
     data_frame(
     namePlayer = c("J.J. Barea", "Amare Stoudemire", "C.J. Watson", "Nene Hilario", "Wes Johnson", "A.J. Hammons",
@@ -10,7 +11,7 @@ get_player_names <- function(){
   )
   return(data)
 
-}
+})
 
 
 #' NBA Injuries
@@ -25,8 +26,8 @@ get_player_names <- function(){
 #' @family injuries
 #' @import lubridate dplyr curl stringr purrr tidyr rvest
 #' @examples
-#' get_nba_player_injuries()
-get_nba_player_injuries <-
+#' nba_injuries()
+nba_injuries <-
   function(filter_returning_today = T) {
   url <-
     'http://www.rotoworld.com/teams/injuries/nba/all/'
@@ -86,10 +87,10 @@ get_nba_player_injuries <-
                injuryDetail)
 
   player_ids <-
-    get_nba_players()
+    nba_players()
 
   player_missing_df <-
-    get_player_names()
+    .get_player_names()
 
   injury_data <-
     injury_data %>%

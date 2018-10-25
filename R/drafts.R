@@ -1,4 +1,4 @@
-dictionary_organization_types <- function() {
+.dictionary_organization_types <- function() {
   data <-
     data_frame(
       typeOrganizationFrom = c(NA, "College/University", "High School", "Other Team/Club"),
@@ -7,7 +7,7 @@ dictionary_organization_types <- function() {
   data
 }
 
-get_nba_draft_year <-
+.get_nba_draft_year <-
   function(draft_year = 2015,
            return_message = T) {
     if (draft_year <= 1948) {
@@ -68,7 +68,7 @@ get_nba_draft_year <-
 #' @examples
 #' library(dplyr)
 #' df_drafts <-
-#' get_drafts(draft_years = 1983:2018, nest_data = FALSE, return_message = TRUE)
+#' drafts(draft_years = 1983:2018, nest_data = FALSE, return_message = TRUE)
 #'
 #' ## Where do top 5 picks since 1983 come from?
 #'
@@ -76,23 +76,23 @@ get_nba_draft_year <-
 #' filter(numberPickOverall <= 5) %>%
 #' count(nameOrganizationFrom, sort = T)
 
-get_drafts <-
+drafts <-
   function(draft_years = 1947:2018,
            nest_data = F,
            return_message = T) {
-    get_nba_draft_year_safe <-
-      purrr::possibly(get_nba_draft_year, data_frame())
+    .get_nba_draft_year_safe <-
+      purrr::possibly(.get_nba_draft_year, data_frame())
 
     all_data <-
       draft_years %>%
       future_map_dfr(function(draft_year){
-        get_nba_draft_year_safe(draft_year = draft_year,
+        .get_nba_draft_year_safe(draft_year = draft_year,
                                 return_message = return_message)
       })
 
     all_data <-
       all_data %>%
-      left_join(dictionary_organization_types()) %>%
+      left_join(.dictionary_organization_types()) %>%
       suppressMessages()
 
 

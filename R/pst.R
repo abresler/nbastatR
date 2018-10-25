@@ -1,6 +1,6 @@
 # http://www.prosportstransactions.com/basketball/Search/SearchResults.php?Player=&Team=&BeginDate=&EndDate=&PlayerMovementChkBx=yes&ILChkBx=yes&NBADLChkBx=yes&InjuriesChkBx=yes&PersonalChkBx=yes&DisciplinaryChkBx=yes&LegalChkBx=yes&Submit=Search
 
-fix_double_name <-
+.fix_double_name <-
   function(x) {
     if (x %>% is.na()) {
       return(x)
@@ -13,7 +13,7 @@ fix_double_name <-
     actual_name
   }
 
-munge_data <-
+.munge_data <-
   function(data) {
 
     data <-
@@ -47,15 +47,15 @@ munge_data <-
 
     data <-
       data %>%
-      mutate(namePlayerAcquired = namePlayerAcquired %>% map_chr(fix_double_name),
-             namePlayerRelinquished = namePlayerRelinquished %>% map_chr(fix_double_name))
+      mutate(namePlayerAcquired = namePlayerAcquired %>% map_chr(.fix_double_name),
+             namePlayerRelinquished = namePlayerRelinquished %>% map_chr(.fix_double_name))
 
    data
   }
 
 # generate ----------------------------------------------------------------
 
-generate_pst_url <-
+.generate_pst_url <-
   function(person = NULL,
          team = NULL,
          date_from = NULL,
@@ -128,7 +128,7 @@ generate_pst_url <-
 }
 
 # parse -------------------------------------------------------------------
-parse.pst.page <-
+.parse.pst.page <-
     function(url = "http://www.prosportstransactions.com/basketball/Search/SearchResults.php?Player=&Team=&BeginDate=&EndDate=&PlayerMovementChkBx=yes&ILChkBx=yes&NBADLChkBx=yes&InjuriesChkBx=yes&PersonalChkBx=yes&DisciplinaryChkBx=yes&LegalChkBx=yes&Submit=Search&start=110050") {
     page <-
       url %>%
@@ -180,7 +180,7 @@ parse.pst.page <-
    data
     }
 
-parse_pst_urls <-
+.parse_pst_urls <-
   function(urls = c("http://www.prosportstransactions.com/basketball/SearchSearchResults.php?Player=&Team=&BeginDate=&EndDate=&PlayerMovementChkBx=yes&ILChkBx=yes&NBADLChkBx=yes&InjuriesChkBx=yes&PersonalChkBx=yes&DisciplinaryChkBx=yes&LegalChkBx=yes&Submit=Search&start=97350",
                     "http://www.prosportstransactions.com/basketball/SearchSearchResults.php?Player=&Team=&BeginDate=&EndDate=&PlayerMovementChkBx=yes&ILChkBx=yes&NBADLChkBx=yes&InjuriesChkBx=yes&PersonalChkBx=yes&DisciplinaryChkBx=yes&LegalChkBx=yes&Submit=Search&start=2025",
                     "http://www.prosportstransactions.com/basketball/SearchSearchResults.php?Player=&Team=&BeginDate=&EndDate=&PlayerMovementChkBx=yes&ILChkBx=yes&NBADLChkBx=yes&InjuriesChkBx=yes&PersonalChkBx=yes&DisciplinaryChkBx=yes&LegalChkBx=yes&Submit=Search&start=106175",
@@ -199,11 +199,11 @@ parse_pst_urls <-
         glue::glue("Parsing {url}") %>%
           cat(fill = T)
       }
-      parse.pst.page.safe <-
-        purrr::possibly(parse.pst.page, data_frame())
+      .parse.pst.page.safe <-
+        purrr::possibly(.parse.pst.page, data_frame())
 
       all_data <-
-        parse.pst.page(url = url)
+        .parse.pst.page(url = url)
 
 
       df <<-
@@ -221,7 +221,7 @@ parse_pst_urls <-
     df
   }
 
-get_pst_result_url_df <-
+.get_pst_result_url_df <-
   function(url = "http://www.prosportstransactions.com/basketball/Search/SearchResults.php?Player=&Team=&BeginDate=&EndDate=&PlayerMovementChkBx=yes&ILChkBx=yes&NBADLChkBx=yes&InjuriesChkBx=yes&PersonalChkBx=yes&DisciplinaryChkBx=yes&LegalChkBx=yes&Submit=Search&start=110050") {
     page <-
       url %>%
@@ -270,8 +270,8 @@ get_pst_result_url_df <-
 #' @export
 #'
 #' @examples
-#' get_nba_pst_transaction(person = NULL, team = "Nets")
-get_nba_pst_transaction <-
+#' pst_transaction(person = NULL, team = "Nets")
+pst_transaction <-
   function(person = "Jarrett Jack",
            team = NULL,
            date_from = NULL,
@@ -285,7 +285,7 @@ get_nba_pst_transaction <-
            include_criminal_incidents = T,
            return_message = T) {
     url <-
-      generate_pst_url(person = person,
+      .generate_pst_url(person = person,
                      team = team,
                      date_from = date_from,
                      date_to = date_to,
@@ -297,10 +297,10 @@ get_nba_pst_transaction <-
                      include_discipline = include_discipline,
                      include_criminal_incidents = include_criminal_incidents)
     df_urls <-
-      get_pst_result_url_df(url = url)
+      .get_pst_result_url_df(url = url)
     data <-
-      parse_pst_urls(urls = df_urls$urlPST, return_message = return_message)
+      .parse_pst_urls(urls = df_urls$urlPST, return_message = return_message)
 
     data %>%
-      munge_data()
+      .munge_data()
   }

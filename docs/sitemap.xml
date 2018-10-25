@@ -4,6 +4,15 @@
     <loc>http://asbcllc.com/nbastatR//index.html</loc>
   </url>
   <url>
+    <loc>http://asbcllc.com/nbastatR//reference/agents_players.html</loc>
+  </url>
+  <url>
+    <loc>http://asbcllc.com/nbastatR//reference/all_nba_teams.html</loc>
+  </url>
+  <url>
+    <loc>http://asbcllc.com/nbastatR//reference/all_star_games.html</loc>
+  </url>
+  <url>
     <loc>http://asbcllc.com/nbastatR//reference/assign_bref_data.html</loc>
   </url>
   <url>
@@ -13,211 +22,112 @@
     <loc>http://asbcllc.com/nbastatR//reference/assign_nba_teams.html</loc>
   </url>
   <url>
+    <loc>http://asbcllc.com/nbastatR//reference/beyond_the_numbers.html</loc>
+  </url>
+  <url>
+    <loc>http://asbcllc.com/nbastatR//reference/box_scores.html</loc>
+  </url>
+  <url>
+    <loc>http://asbcllc.com/nbastatR//reference/bref_awards.html</loc>
+  </url>
+  <url>
+    <loc>http://asbcllc.com/nbastatR//reference/bref_awards_votes.html</loc>
+  </url>
+  <url>
+    <loc>http://asbcllc.com/nbastatR//reference/bref_bios.html</loc>
+  </url>
+  <url>
+    <loc>http://asbcllc.com/nbastatR//reference/bref_injuries.html</loc>
+  </url>
+  <url>
+    <loc>http://asbcllc.com/nbastatR//reference/bref_players_stats.html</loc>
+  </url>
+  <url>
+    <loc>http://asbcllc.com/nbastatR//reference/bref_teams_stats.html</loc>
+  </url>
+  <url>
+    <loc>http://asbcllc.com/nbastatR//reference/coaching_staffs.html</loc>
+  </url>
+  <url>
+    <loc>http://asbcllc.com/nbastatR//reference/current_schedule.html</loc>
+  </url>
+  <url>
+    <loc>http://asbcllc.com/nbastatR//reference/current_standings.html</loc>
+  </url>
+  <url>
+    <loc>http://asbcllc.com/nbastatR//reference/days_scores.html</loc>
+  </url>
+  <url>
     <loc>http://asbcllc.com/nbastatR//reference/dictionary_bref_awards.html</loc>
+  </url>
+  <url>
+    <loc>http://asbcllc.com/nbastatR//reference/dictionary_bref_coaches.html</loc>
+  </url>
+  <url>
+    <loc>http://asbcllc.com/nbastatR//reference/dictionary_bref_players.html</loc>
+  </url>
+  <url>
+    <loc>http://asbcllc.com/nbastatR//reference/dictionary_bref_teams.html</loc>
   </url>
   <url>
     <loc>http://asbcllc.com/nbastatR//reference/dictionary_nba_names.html</loc>
   </url>
   <url>
+    <loc>http://asbcllc.com/nbastatR//reference/draft_combines.html</loc>
+  </url>
+  <url>
+    <loc>http://asbcllc.com/nbastatR//reference/drafts.html</loc>
+  </url>
+  <url>
+    <loc>http://asbcllc.com/nbastatR//reference/fanduel_summary.html</loc>
+  </url>
+  <url>
+    <loc>http://asbcllc.com/nbastatR//reference/franchise_leaders.html</loc>
+  </url>
+  <url>
+    <loc>http://asbcllc.com/nbastatR//reference/game_logs.html</loc>
+  </url>
+  <url>
     <loc>http://asbcllc.com/nbastatR//reference/gather_data.html</loc>
   </url>
   <url>
-    <loc>http://asbcllc.com/nbastatR//reference/get_agents_players.html</loc>
+    <loc>http://asbcllc.com/nbastatR//reference/hoops_hype_salary_summary.html</loc>
   </url>
   <url>
-    <loc>http://asbcllc.com/nbastatR//reference/get_all_nba_teams_salaries.html</loc>
+    <loc>http://asbcllc.com/nbastatR//reference/hoopshype_salaries.html</loc>
   </url>
   <url>
-    <loc>http://asbcllc.com/nbastatR//reference/get_all_star_game_scores.html</loc>
+    <loc>http://asbcllc.com/nbastatR//reference/metrics_leaders.html</loc>
   </url>
   <url>
-    <loc>http://asbcllc.com/nbastatR//reference/get_beyond_the_numbers_articles.html</loc>
+    <loc>http://asbcllc.com/nbastatR//reference/nba_franchise_history.html</loc>
   </url>
   <url>
-    <loc>http://asbcllc.com/nbastatR//reference/get_bref_active_injuries.html</loc>
+    <loc>http://asbcllc.com/nbastatR//reference/nba_injuries.html</loc>
   </url>
   <url>
-    <loc>http://asbcllc.com/nbastatR//reference/get_bref_all_nba_teams.html</loc>
+    <loc>http://asbcllc.com/nbastatR//reference/nba_insider_salaries.html</loc>
   </url>
   <url>
-    <loc>http://asbcllc.com/nbastatR//reference/get_bref_awards.html</loc>
+    <loc>http://asbcllc.com/nbastatR//reference/nba_player_ids.html</loc>
   </url>
   <url>
-    <loc>http://asbcllc.com/nbastatR//reference/get_bref_coach_dictionary.html</loc>
+    <loc>http://asbcllc.com/nbastatR//reference/nba_players.html</loc>
   </url>
   <url>
-    <loc>http://asbcllc.com/nbastatR//reference/get_bref_player_dictionary.html</loc>
+    <loc>http://asbcllc.com/nbastatR//reference/nba_stats_api_items.html</loc>
   </url>
   <url>
-    <loc>http://asbcllc.com/nbastatR//reference/get_bref_players_bios.html</loc>
+    <loc>http://asbcllc.com/nbastatR//reference/nba_teams.html</loc>
   </url>
   <url>
-    <loc>http://asbcllc.com/nbastatR//reference/get_bref_players_seasons.html</loc>
+    <loc>http://asbcllc.com/nbastatR//reference/nba_teams_ids.html</loc>
   </url>
   <url>
-    <loc>http://asbcllc.com/nbastatR//reference/get_bref_seasons_award_votes.html</loc>
+    <loc>http://asbcllc.com/nbastatR//reference/nba_teams_seasons.html</loc>
   </url>
   <url>
-    <loc>http://asbcllc.com/nbastatR//reference/get_bref_team_dictionary.html</loc>
-  </url>
-  <url>
-    <loc>http://asbcllc.com/nbastatR//reference/get_bref_teams_seasons.html</loc>
-  </url>
-  <url>
-    <loc>http://asbcllc.com/nbastatR//reference/get_coaching_staffs.html</loc>
-  </url>
-  <url>
-    <loc>http://asbcllc.com/nbastatR//reference/get_current_standings.html</loc>
-  </url>
-  <url>
-    <loc>http://asbcllc.com/nbastatR//reference/get_days_nba_scores.html</loc>
-  </url>
-  <url>
-    <loc>http://asbcllc.com/nbastatR//reference/get_drafts.html</loc>
-  </url>
-  <url>
-    <loc>http://asbcllc.com/nbastatR//reference/get_game_logs.html</loc>
-  </url>
-  <url>
-    <loc>http://asbcllc.com/nbastatR//reference/get_games_box_scores.html</loc>
-  </url>
-  <url>
-    <loc>http://asbcllc.com/nbastatR//reference/get_games_fanduel_summary.html</loc>
-  </url>
-  <url>
-    <loc>http://asbcllc.com/nbastatR//reference/get_games_pbp_win_probablity.html</loc>
-  </url>
-  <url>
-    <loc>http://asbcllc.com/nbastatR//reference/get_games_play_by_play.html</loc>
-  </url>
-  <url>
-    <loc>http://asbcllc.com/nbastatR//reference/get_hoops_hype_teams_salary_summary.html</loc>
-  </url>
-  <url>
-    <loc>http://asbcllc.com/nbastatR//reference/get_nba_current_season_schedule.html</loc>
-  </url>
-  <url>
-    <loc>http://asbcllc.com/nbastatR//reference/get_nba_franchise_history.html</loc>
-  </url>
-  <url>
-    <loc>http://asbcllc.com/nbastatR//reference/get_nba_player_injuries.html</loc>
-  </url>
-  <url>
-    <loc>http://asbcllc.com/nbastatR//reference/get_nba_players.html</loc>
-  </url>
-  <url>
-    <loc>http://asbcllc.com/nbastatR//reference/get_nba_players_ids.html</loc>
-  </url>
-  <url>
-    <loc>http://asbcllc.com/nbastatR//reference/get_nba_pst_transaction.html</loc>
-  </url>
-  <url>
-    <loc>http://asbcllc.com/nbastatR//reference/get_nba_stats_api_items.html</loc>
-  </url>
-  <url>
-    <loc>http://asbcllc.com/nbastatR//reference/get_nba_team_salaries.html</loc>
-  </url>
-  <url>
-    <loc>http://asbcllc.com/nbastatR//reference/get_nba_teams.html</loc>
-  </url>
-  <url>
-    <loc>http://asbcllc.com/nbastatR//reference/get_nba_teams_ids.html</loc>
-  </url>
-  <url>
-    <loc>http://asbcllc.com/nbastatR//reference/get_nba_teams_seasons.html</loc>
-  </url>
-  <url>
-    <loc>http://asbcllc.com/nbastatR//reference/get_nba_transactions.html</loc>
-  </url>
-  <url>
-    <loc>http://asbcllc.com/nbastatR//reference/get_nbadraftnet_mock_drafts.html</loc>
-  </url>
-  <url>
-    <loc>http://asbcllc.com/nbastatR//reference/get_players_agents.html</loc>
-  </url>
-  <url>
-    <loc>http://asbcllc.com/nbastatR//reference/get_players_awards.html</loc>
-  </url>
-  <url>
-    <loc>http://asbcllc.com/nbastatR//reference/get_players_bios.html</loc>
-  </url>
-  <url>
-    <loc>http://asbcllc.com/nbastatR//reference/get_players_career_stats.html</loc>
-  </url>
-  <url>
-    <loc>http://asbcllc.com/nbastatR//reference/get_players_profiles.html</loc>
-  </url>
-  <url>
-    <loc>http://asbcllc.com/nbastatR//reference/get_players_roto_wire_news.html</loc>
-  </url>
-  <url>
-    <loc>http://asbcllc.com/nbastatR//reference/get_players_tables_data.html</loc>
-  </url>
-  <url>
-    <loc>http://asbcllc.com/nbastatR//reference/get_seasons_metrics_league_leaders.html</loc>
-  </url>
-  <url>
-    <loc>http://asbcllc.com/nbastatR//reference/get_seasons_players.html</loc>
-  </url>
-  <url>
-    <loc>http://asbcllc.com/nbastatR//reference/get_seasons_playoff_picture.html</loc>
-  </url>
-  <url>
-    <loc>http://asbcllc.com/nbastatR//reference/get_seasons_rosters.html</loc>
-  </url>
-  <url>
-    <loc>http://asbcllc.com/nbastatR//reference/get_seasons_schedule.html</loc>
-  </url>
-  <url>
-    <loc>http://asbcllc.com/nbastatR//reference/get_seasons_standings.html</loc>
-  </url>
-  <url>
-    <loc>http://asbcllc.com/nbastatR//reference/get_seasons_teams_coaches.html</loc>
-  </url>
-  <url>
-    <loc>http://asbcllc.com/nbastatR//reference/get_seasons_teams_rosters.html</loc>
-  </url>
-  <url>
-    <loc>http://asbcllc.com/nbastatR//reference/get_synergy_categories_stats.html</loc>
-  </url>
-  <url>
-    <loc>http://asbcllc.com/nbastatR//reference/get_team_coaches.html</loc>
-  </url>
-  <url>
-    <loc>http://asbcllc.com/nbastatR//reference/get_team_season_roster.html</loc>
-  </url>
-  <url>
-    <loc>http://asbcllc.com/nbastatR//reference/get_teams_details.html</loc>
-  </url>
-  <url>
-    <loc>http://asbcllc.com/nbastatR//reference/get_teams_franchise_leaders.html</loc>
-  </url>
-  <url>
-    <loc>http://asbcllc.com/nbastatR//reference/get_teams_hoopshype_salaries.html</loc>
-  </url>
-  <url>
-    <loc>http://asbcllc.com/nbastatR//reference/get_teams_players_seasons_summary_stats.html</loc>
-  </url>
-  <url>
-    <loc>http://asbcllc.com/nbastatR//reference/get_teams_roto_wire_news.html</loc>
-  </url>
-  <url>
-    <loc>http://asbcllc.com/nbastatR//reference/get_teams_seasons_info.html</loc>
-  </url>
-  <url>
-    <loc>http://asbcllc.com/nbastatR//reference/get_teams_seasons_rankings.html</loc>
-  </url>
-  <url>
-    <loc>http://asbcllc.com/nbastatR//reference/get_teams_seasons_shots.html</loc>
-  </url>
-  <url>
-    <loc>http://asbcllc.com/nbastatR//reference/get_teams_tables_data.html</loc>
-  </url>
-  <url>
-    <loc>http://asbcllc.com/nbastatR//reference/get_teams_year_by_year_stats.html</loc>
-  </url>
-  <url>
-    <loc>http://asbcllc.com/nbastatR//reference/get_years_draft_combines.html</loc>
+    <loc>http://asbcllc.com/nbastatR//reference/nbadraftnet_mock_drafts.html</loc>
   </url>
   <url>
     <loc>http://asbcllc.com/nbastatR//reference/nbastatR.html</loc>
@@ -226,7 +136,46 @@
     <loc>http://asbcllc.com/nbastatR//reference/nbastats_api_parameters.html</loc>
   </url>
   <url>
+    <loc>http://asbcllc.com/nbastatR//reference/play_by_play.html</loc>
+  </url>
+  <url>
+    <loc>http://asbcllc.com/nbastatR//reference/player_profiles.html</loc>
+  </url>
+  <url>
+    <loc>http://asbcllc.com/nbastatR//reference/players_agents.html</loc>
+  </url>
+  <url>
+    <loc>http://asbcllc.com/nbastatR//reference/players_awards.html</loc>
+  </url>
+  <url>
+    <loc>http://asbcllc.com/nbastatR//reference/players_bios.html</loc>
+  </url>
+  <url>
+    <loc>http://asbcllc.com/nbastatR//reference/players_careers.html</loc>
+  </url>
+  <url>
+    <loc>http://asbcllc.com/nbastatR//reference/players_rotowire.html</loc>
+  </url>
+  <url>
+    <loc>http://asbcllc.com/nbastatR//reference/players_tables.html</loc>
+  </url>
+  <url>
+    <loc>http://asbcllc.com/nbastatR//reference/playoff_pictures.html</loc>
+  </url>
+  <url>
+    <loc>http://asbcllc.com/nbastatR//reference/pst_transaction.html</loc>
+  </url>
+  <url>
     <loc>http://asbcllc.com/nbastatR//reference/scale_per_minute.html</loc>
+  </url>
+  <url>
+    <loc>http://asbcllc.com/nbastatR//reference/seasons_players.html</loc>
+  </url>
+  <url>
+    <loc>http://asbcllc.com/nbastatR//reference/seasons_rosters.html</loc>
+  </url>
+  <url>
+    <loc>http://asbcllc.com/nbastatR//reference/seasons_schedule.html</loc>
   </url>
   <url>
     <loc>http://asbcllc.com/nbastatR//reference/sl_players.html</loc>
@@ -238,9 +187,54 @@
     <loc>http://asbcllc.com/nbastatR//reference/spread_data.html</loc>
   </url>
   <url>
+    <loc>http://asbcllc.com/nbastatR//reference/standings.html</loc>
+  </url>
+  <url>
     <loc>http://asbcllc.com/nbastatR//reference/summarise_per_minute.html</loc>
   </url>
   <url>
+    <loc>http://asbcllc.com/nbastatR//reference/synergy.html</loc>
+  </url>
+  <url>
+    <loc>http://asbcllc.com/nbastatR//reference/team_season_roster.html</loc>
+  </url>
+  <url>
+    <loc>http://asbcllc.com/nbastatR//reference/teams_annual_stats.html</loc>
+  </url>
+  <url>
+    <loc>http://asbcllc.com/nbastatR//reference/teams_coaches.html</loc>
+  </url>
+  <url>
+    <loc>http://asbcllc.com/nbastatR//reference/teams_details.html</loc>
+  </url>
+  <url>
+    <loc>http://asbcllc.com/nbastatR//reference/teams_players_stats.html</loc>
+  </url>
+  <url>
+    <loc>http://asbcllc.com/nbastatR//reference/teams_rankings.html</loc>
+  </url>
+  <url>
+    <loc>http://asbcllc.com/nbastatR//reference/teams_rosters.html</loc>
+  </url>
+  <url>
+    <loc>http://asbcllc.com/nbastatR//reference/teams_rotowire.html</loc>
+  </url>
+  <url>
+    <loc>http://asbcllc.com/nbastatR//reference/teams_seasons_info.html</loc>
+  </url>
+  <url>
+    <loc>http://asbcllc.com/nbastatR//reference/teams_shots.html</loc>
+  </url>
+  <url>
+    <loc>http://asbcllc.com/nbastatR//reference/teams_tables.html</loc>
+  </url>
+  <url>
+    <loc>http://asbcllc.com/nbastatR//reference/transactions.html</loc>
+  </url>
+  <url>
     <loc>http://asbcllc.com/nbastatR//reference/widen_bref_data.html</loc>
+  </url>
+  <url>
+    <loc>http://asbcllc.com/nbastatR//reference/win_probability.html</loc>
   </url>
 </urlset>

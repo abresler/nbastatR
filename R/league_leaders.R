@@ -1,5 +1,5 @@
 
-get_season_metric_league_leaders <-
+.get_season_metric_league_leaders <-
   function(season = 2018,
            metric = "pts",
            season_type = "Regular Season",
@@ -102,13 +102,13 @@ get_season_metric_league_leaders <-
 #' @family players
 #' @family leaders
 #' @examples
-#' get_seasons_metrics_league_leaders(seasons = 2000:2005,
+#' metrics_leaders(seasons = 2000:2005,
 #' metric = "pts",
 #' season_types = "Regular Season",
 #'  modes = "PerGame",
 #'  return_message = T)
 
-get_seasons_metrics_league_leaders <-
+metrics_leaders <-
   function(seasons = 2017:2018,
            metric = "pts",
            season_types = "Regular Season",
@@ -122,15 +122,15 @@ get_seasons_metrics_league_leaders <-
                mode = modes,
                stringsAsFactors = F) %>%
       dplyr::as_data_frame()
-   get_season_metric_league_leaders_safe <-
-     purrr::possibly(get_season_metric_league_leaders, data_frame())
+   .get_season_metric_league_leaders_safe <-
+     purrr::possibly(.get_season_metric_league_leaders, data_frame())
 
    all_data <-
      1:nrow(input_df) %>%
      future_map_dfr(function(x){
        df_row <- input_df %>% slice(x)
        df_row %$%
-         get_season_metric_league_leaders_safe(season = season,
+         .get_season_metric_league_leaders_safe(season = season,
                                           metric = metric,
                                           season_type = season_type,
                                           mode = mode,
@@ -149,13 +149,13 @@ get_seasons_metrics_league_leaders <-
 
 # franchise ---------------------------------------------------------------
 
-get_franchise_leaders <-
+.get_franchise_leaders <-
   function(team_id = 1610612751,
            mode = "PerGame",
            season_type = "Regular Season",
            return_message = TRUE) {
     if (!'df_dict_nba_teams_history' %>% exists()) {
-      df_dict_nba_teams_history <- get_nba_franchise_history()
+      df_dict_nba_teams_history <- nba_franchise_history()
       assign(x = 'df_dict_nba_teams_history', df_dict_nba_teams_history, envir = .GlobalEnv)
     }
     json_url <-
@@ -238,9 +238,9 @@ get_franchise_leaders <-
 #' @importFrom glue glue
 
 #' @examples
-#' get_teams_franchise_leaders(teams = "Brooklyn Nets", modes = c("Totals"))
+#' franchise_leaders(teams = "Brooklyn Nets", modes = c("Totals"))
 
-get_teams_franchise_leaders <-
+franchise_leaders <-
   function(teams = NULL,
            all_teams = FALSE,
            remove_inactive_teams = F,
@@ -253,7 +253,7 @@ get_teams_franchise_leaders <-
       stop("Please enter a team or make all_teams = T")
     }
     if (!'df_dict_nba_teams_history' %>% exists()) {
-      df_dict_nba_teams_history <- get_nba_franchise_history()
+      df_dict_nba_teams_history <- nba_franchise_history()
       assign(x = 'df_dict_nba_teams_history', df_dict_nba_teams_history, envir = .GlobalEnv)
     }
 
@@ -307,15 +307,15 @@ get_teams_franchise_leaders <-
         stringsAsFactors = F
       ) %>%
       dplyr::as_data_frame()
-    get_franchise_leaders_safe <-
-      purrr::possibly(get_franchise_leaders, data_frame())
+    .get_franchise_leaders_safe <-
+      purrr::possibly(.get_franchise_leaders, data_frame())
 
     all_data <-
       1:nrow(input_df) %>%
       future_map_dfr(function(x){
         df_row <- input_df %>% slice(x)
         df_row %$%
-          get_franchise_leaders_safe(team_id = team_id,
+          .get_franchise_leaders_safe(team_id = team_id,
                                      mode = mode,
                                      season_type = season_type,
                                      return_message = return_message)
@@ -324,7 +324,7 @@ get_teams_franchise_leaders <-
 
     if (!'df_nba_player_dict' %>% exists()) {
       df_nba_player_dict <-
-        get_nba_players()
+        nba_players()
 
       assign(x = 'df_nba_player_dict', df_nba_player_dict, envir = .GlobalEnv)
     }

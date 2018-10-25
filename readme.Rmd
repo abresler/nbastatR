@@ -36,5 +36,5 @@ For example to use muiltiprocess.
 library(nbastatR)
 library(future)
 plan(multiprocess) 
-get_game_logs(seasons = 2010:2019)
+game_logs(seasons = 2010:2019)
 ```

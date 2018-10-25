@@ -1,7 +1,7 @@
 
 # rotoworld ---------------------------------------------------------------
 
-get_player_rotowire_news <-
+.get_player_rotowire_news <-
   function(player_id = 201935,
            return_message = TRUE,
            results = 50) {
@@ -56,8 +56,8 @@ get_player_rotowire_news <-
 #' @import dplyr curl readr lubridate purrr jsonlite tidyr
 #' @importFrom glue glue
 #' @examples
-#' get_players_roto_wire_news(players = c( "Jarrett Allen", "DeMarre Carroll", "Allen Crabbe"))
-get_players_roto_wire_news <-
+#' players_rotowire(players = c( "Jarrett Allen", "DeMarre Carroll", "Allen Crabbe"))
+players_rotowire <-
   function(players =  NULL,
            player_ids = NULL,
            nest_data = F,
@@ -65,15 +65,15 @@ get_players_roto_wire_news <-
            return_message = TRUE) {
     if (!'df_nba_player_dict' %>% exists()) {
       df_nba_player_dict <-
-        get_nba_players()
+        nba_players()
 
       assign(x = 'df_nba_player_dict', df_nba_player_dict, envir = .GlobalEnv)
     }
     ids <-
-      get_nba_players_ids(player_ids = player_ids,
+      nba_player_ids(player_ids = player_ids,
                           players = players)
     get_player_rotowire_news_safe <-
-      purrr::possibly(get_player_rotowire_news, data_frame())
+      purrr::possibly(.get_player_rotowire_news, data_frame())
 
     all_data <-
       ids %>%
@@ -132,8 +132,8 @@ get_players_roto_wire_news <-
 #' @import dplyr curl readr lubridate purrr jsonlite tidyr
 #' @importFrom glue glue
 #' @examples
-#' get_teams_roto_wire_news(teams = "Brooklyn Nets")
-  get_teams_roto_wire_news <-
+#' teams_rotowire(teams = "Brooklyn Nets")
+  teams_rotowire <-
   function(teams = NULL,
            team_ids = NULL,
            all_active_teams = F,
@@ -142,14 +142,14 @@ get_players_roto_wire_news <-
            return_message = TRUE) {
     if (!'df_nba_player_dict' %>% exists()) {
       df_nba_player_dict <-
-        get_nba_players()
+        nba_players()
 
       assign(x = 'df_nba_player_dict', df_nba_player_dict, envir = .GlobalEnv)
     }
 
     assign_nba_teams()
     team_ids <-
-      get_nba_teams_ids(teams = teams,
+      nba_teams_ids(teams = teams,
                         team_ids = team_ids,
                         all_active_teams = all_active_teams)
 
@@ -159,7 +159,7 @@ get_players_roto_wire_news <-
       pull(idPlayer) %>%
       unique()
 
-    all_data <- get_players_roto_wire_news(player_ids = ids, nest_data = F, results = results)
+    all_data <- get_players_rotowire(player_ids = ids, nest_data = F, results = results)
 
     all_data <-
       all_data %>%
@@ -190,7 +190,7 @@ get_players_roto_wire_news <-
 # transactions ------------------------------------------------------------
 
 
-nba_transactions_historic <-
+.nba_transactions_historic <-
   function() {
     json <-
       "http://stats.nba.com/feeds/NBAPlayerTransactions-559107/json.js" %>%
@@ -208,14 +208,14 @@ nba_transactions_historic <-
       suppressWarnings()
 
     if (!'df_nba_team_dict' %>% exists()) {
-      df_nba_team_dict <- get_nba_teams()
+      df_nba_team_dict <- nba_teams()
 
       assign('df_nba_team_dict', df_nba_team_dict, envir = .GlobalEnv)
     }
 
     if (!'df_nba_player_dict' %>% exists()) {
       df_nba_player_dict <-
-        get_nba_players()
+        nba_players()
 
       assign(x = 'df_nba_player_dict', df_nba_player_dict, envir = .GlobalEnv)
     }
@@ -250,8 +250,8 @@ nba_transactions_historic <-
 #' @family transactions
 #' @import dplyr purrr curl jsonlite readr lubridate tidyr tibble
 #' @examples
-#' get_nba_transactions()
-get_nba_transactions <-
+#' transactions()
+transactions <-
   function(include_history = T) {
     json <-
       "http://stats.nba.com/js/data/playermovement/NBA_Player_Movement.json" %>%
@@ -264,14 +264,14 @@ get_nba_transactions <-
     json_names <- json$NBA_Player_Movement$columns$Name
     actual_names <- json_names %>% resolve_nba_names()
     if (!'df_nba_team_dict' %>% exists()) {
-      df_nba_team_dict <- get_nba_teams()
+      df_nba_team_dict <- nba_teams()
 
       assign('df_nba_team_dict', df_nba_team_dict, envir = .GlobalEnv)
     }
 
     if (!'df_nba_player_dict' %>% exists()) {
       df_nba_player_dict <-
-        get_nba_players()
+        nba_players()
 
       assign(x = 'df_nba_player_dict', df_nba_player_dict, envir = .GlobalEnv)
     }
@@ -302,7 +302,7 @@ get_nba_transactions <-
 
     data <-
       data %>%
-      bind_rows(    nba_transactions_historic())
+      bind_rows(    .nba_transactions_historic())
 
     data <-
       data %>%
@@ -332,10 +332,10 @@ get_nba_transactions <-
 #' @importFrom glue glue
 #' @examples
 #'\dontrun{
-#' get_beyond_the_numbers_articles(count_aricles = 10)
+#' beyond_the_numbers(count_articles = 10)
 #' }
 
-get_beyond_the_numbers_articles <-
+beyond_the_numbers <-
   function(count_articles = 50) {
     if (count_articles > 500){
       stop("Articles can't exceed 500")

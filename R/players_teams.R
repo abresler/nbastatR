@@ -1,13 +1,13 @@
-dictionary_nba_queries <-
-  function() {
+.dictionary_nba_queries <-
+  memoise::memoise(function() {
     data_frame(typeQuery = c("splits", "splits", "general", "general", "defense", "defense", "clutch", "clutch",
                              "hustle", "hustle", "shots", "shots", "shot locations", "shot locations"),
                slugQuery = c("teamdashboardbygeneralsplits", "playerdashboardbygeneralsplits", "leaguedashteamstats", "leaguedashplayerstats" ,"leaguedashptdefend", "leaguedashptdefend", "leaguedashteamclutch", "leaguedashplayerclutch","leaguehustlestatsteam", "leaguehustlestatsplayer", "leaguedashteamptshot", "leaguedashplayerptshot",
                              "leaguedashteamshotlocations", "leaguedashplayershotlocations"),
                typeSearch = c("team", "player", "team", "player", "team", "player", "team", "player", "team", "player", "team", "player", "team", "player"))
-  }
+  })
 
-generate_dash_url <-
+.generate_dash_url <-
   function(query_type = "general",
            type = "team",
            id = "",
@@ -55,12 +55,12 @@ generate_dash_url <-
   ) {
 
     if (!'df_nba_team_dict' %>% exists()) {
-      df_nba_team_dict <- get_nba_teams()
+      df_nba_team_dict <- nba_teams()
 
       assign('df_nba_team_dict', df_nba_team_dict, envir = .GlobalEnv)
     }
     df_query_dict <-
-      dictionary_nba_queries()
+      .dictionary_nba_queries()
 
     query_slug <-
       df_query_dict %>%
@@ -547,7 +547,7 @@ generate_dash_url <-
 
   }
 
-get_players_teams_season_summary_stats <-
+.players_teams_season_summary <-
   function(season = 2017,
            type = "player",
            table = "general",
@@ -592,7 +592,7 @@ get_players_teams_season_summary_stats <-
            starter_bench = NA,
            return_message = TRUE) {
     if (!'df_nba_team_dict' %>% exists()) {
-      df_nba_team_dict <- get_nba_teams()
+      df_nba_team_dict <- nba_teams()
 
       assign('df_nba_team_dict', df_nba_team_dict, envir = .GlobalEnv)
     }
@@ -606,7 +606,7 @@ get_players_teams_season_summary_stats <-
     }
 
     url_json <-
-      generate_dash_url(
+      .generate_dash_url(
         type =type,
         query_type = table,
         id = "",
@@ -1035,11 +1035,12 @@ get_players_teams_season_summary_stats <-
 #' @export
 #'
 #' @examples
-#' get_teams_players_seasons_summary_stats(seasons = 2018, types = c("player", "team"),
+#' teams_players_stats(seasons = 2018, types = c("player", "team"),
 #'  modes = c("PerGame", "Totals"),
 #'  tables = c("general", "defense", "clutch", "hustle", "shots", "shot locations"))
+#'  )
 
-get_teams_players_seasons_summary_stats <-
+teams_players_stats <-
   function(seasons = 2018,
            types = c("player", "team"),
            tables = c("defense"),
@@ -1087,7 +1088,7 @@ get_teams_players_seasons_summary_stats <-
            return_message = TRUE) {
 
 
-    if (!types %>% str_to_lower()  %in% c("player", "team")) {
+    if (types %>% str_to_lower() %in% c("player", "team") %>% sum(na.rm = T) == 0) {
       stop("Result type can only be player and/or team")
     }
 
@@ -1136,8 +1137,8 @@ get_teams_players_seasons_summary_stats <-
                   starter_bench = starters_bench
                   ,stringsAsFactors = F) %>%
       dplyr::as_data_frame()
-    get_players_teams_season_summary_stats_safe <-
-      purrr::possibly(get_players_teams_season_summary_stats, data_frame())
+    players_teams_season_summary_safe <-
+      purrr::possibly(.players_teams_season_summary, data_frame())
     all_data <-
       1:nrow(input_df) %>%
       future_map_dfr(function(x) {
@@ -1145,7 +1146,7 @@ get_teams_players_seasons_summary_stats <-
           input_df %>% slice(x)
 
         df_row %$%
-          get_players_teams_season_summary_stats_safe(
+          players_teams_season_summary_safe(
             season = season,
             table = table,
             type = type,

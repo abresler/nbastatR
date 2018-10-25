@@ -1,12 +1,12 @@
 
 
-parse_team_json <- function(json, team_id, season, season_type) {
+.parse_team_json <- function(json, team_id, season, season_type) {
   table_length <-
     json$resultSets$rowSet %>% length()
   table_slug <- json$resource
 
   df_team_season <-
-    get_team_season_info(season = season,
+    .get_team_season_info(season = season,
                          team_id = team_id,
                          season_type = season_type) %>%
     select(one_of(
@@ -178,7 +178,7 @@ parse_team_json <- function(json, team_id, season, season_type) {
 
 }
 
-get_team_season_info <-
+.get_team_season_info <-
   function(season = 2019,
            team_id = 1610612751,
            season_type = "Regular Season",
@@ -265,9 +265,9 @@ get_team_season_info <-
 #' @export
 #'
 #' @examples
-#' get_teams_seasons_info(teams = "Brooklyn Nets", seasons = c(1984, 1990, 1995, 2018), season_types = "Regular Season")
+#' teams_seasons_info(teams = "Brooklyn Nets", seasons = c(1984, 1990, 1995, 2018), season_types = "Regular Season")
 
-get_teams_seasons_info <-
+teams_seasons_info <-
   function(teams = NULL,
            team_ids = NULL,
            all_active_teams = T,
@@ -277,11 +277,11 @@ get_teams_seasons_info <-
            return_message = T) {
     assign_nba_teams()
     team_ids <-
-      get_nba_teams_ids(teams = teams,
+      nba_teams_ids(teams = teams,
                         team_ids = team_ids,
                         all_active_teams = all_active_teams)
-    get_team_season_info_safe <-
-      purrr::possibly(get_team_season_info, data_frame())
+    .get_team_season_info_safe <-
+      purrr::possibly(.get_team_season_info, data_frame())
     df_input <-
       expand.grid(
         team_id = team_ids,
@@ -298,7 +298,7 @@ get_teams_seasons_info <-
 
         data <-
           df_row %$%
-          get_team_season_info_safe(
+          .get_team_season_info_safe(
             season = season,
             team_id = team_id,
             season_type = season_type,
@@ -316,8 +316,8 @@ get_teams_seasons_info <-
     all_data
   }
 
-dictionary_team_tables <-
-  function() {
+.dictionary_team_tables <-
+  memoise::memoise(function() {
     data_frame(
       nameTable = c(
         "passes",
@@ -355,12 +355,12 @@ dictionary_team_tables <-
         "teamdashboardbyyearoveryear"
       )
     )
-  }
+  })
 
 
 # general -----------------------------------------------------------------
 
-get_team_table_data <-
+.get_team_table_data <-
   function(team_id = 1610612751,
            table = "year over year",
            measure = "Base",
@@ -389,7 +389,7 @@ get_team_table_data <-
            last_n_games = NA,
            return_message = TRUE) {
     df_team_slug_tables <-
-      dictionary_team_tables()
+      .dictionary_team_tables()
 
     if (return_message) {
       glue::glue("Acquiring {team_id} {season} {season_type} {measure} {table} {mode} data") %>% cat(fill = T)
@@ -490,7 +490,7 @@ get_team_table_data <-
     json <-
       resp %>% jsonlite::fromJSON(simplifyVector = T)
     all_data <-
-      parse_team_json(
+      .parse_team_json(
         json = json,
         team_id = team_id,
         season = season,
@@ -628,10 +628,10 @@ get_team_table_data <-
 #' @export
 #'
 #' @examples
-#' get_teams_tables_data(teams = c("Brooklyn Nets", "New York Knicks"),
+#' teams_tables(teams = c("Brooklyn Nets", "New York Knicks"),
 #'  seasons = 2017:2018, tables = c("splits", "shooting"), measures = "Base", modes = c("PerGame", "Totals"))
 #'
-get_teams_tables_data <-
+teams_tables <-
   function(teams = NULL,
            team_ids = NULL,
            all_active_teams = F,
@@ -676,7 +676,7 @@ get_teams_tables_data <-
       stop("Please enter measures")
     }
     team_ids <-
-      get_nba_teams_ids(teams = teams,
+      nba_teams_ids(teams = teams,
                         team_ids = team_ids,
                         all_active_teams = all_active_teams)
 
@@ -708,8 +708,8 @@ get_teams_tables_data <-
         stringsAsFactors = F
       ) %>%
       dplyr::as_data_frame()
-    get_team_table_data_safe <-
-      purrr::possibly(get_team_table_data, data_frame())
+    .get_team_table_data_safe <-
+      purrr::possibly(.get_team_table_data, data_frame())
 
     all_data <-
       1:nrow(input_df) %>%
@@ -717,7 +717,7 @@ get_teams_tables_data <-
         df_row <-
           input_df %>% slice(x)
         df_row %$%
-          get_team_table_data_safe(
+          .get_team_table_data_safe(
             team_id = team_id,
             table = table,
             measure = measure,
@@ -748,7 +748,7 @@ get_teams_tables_data <-
           )
       })
     df_dict_table_names <-
-      dictionary_team_tables()
+      .dictionary_team_tables()
 
     table_names <-
       df_dict_table_names$nameTable %>% map_chr(function(x) {
@@ -822,7 +822,7 @@ get_teams_tables_data <-
 
 # Shot Chart --------------------------------------------------------------
 
-get_team_shot_chart <-
+.get_team_shot_chart <-
   function(season = 2018,
            team_id = 1610612739,
            season_type =  "Regular Season",
@@ -968,9 +968,9 @@ get_team_shot_chart <-
 #' @export
 #'
 #' @examples
-#' get_teams_seasons_shots(teams = "Brooklyn Nets",
+#' teams_shots(teams = "Brooklyn Nets",
 #' seasons = 2018)
-get_teams_seasons_shots <-
+teams_shots <-
   function(teams = NULL ,
            team_ids = NULL,
            all_active_teams = F,
@@ -985,7 +985,7 @@ get_teams_seasons_shots <-
            return_message = T
   ){
     team_ids <-
-      get_nba_teams_ids(teams = teams,
+      nba_teams_ids(teams = teams,
                         team_ids = team_ids,
                         all_active_teams = all_active_teams)
 
@@ -1003,8 +1003,8 @@ get_teams_seasons_shots <-
       ) %>%
       as_data_frame()
 
-    get_team_shot_chart_safe <-
-      purrr::possibly(get_team_shot_chart, data_frame())
+    .get_team_shot_chart_safe <-
+      purrr::possibly(.get_team_shot_chart, data_frame())
 
     all_data <-
       1:nrow(input_df) %>%
@@ -1012,7 +1012,7 @@ get_teams_seasons_shots <-
         df_row <-
           input_df %>% slice(x)
         df_row %$%
-          get_team_shot_chart_safe(
+          .get_team_shot_chart_safe(
             team_id = team_id,
             season_type = season_type,
             season = seasons,

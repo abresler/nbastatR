@@ -2,7 +2,7 @@ context("basic functionality")
 test_that("Check Names", {
   library(testthat)
   library(dplyr)
-  df_players <- get_nba_players()
+  df_players <- nba_players()
   names_players <-
     df_players %>% names()
   actual_names <- c("isActive", "isRookie", "namePlayer", "idPlayer", "countSeasons",

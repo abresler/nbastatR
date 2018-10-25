@@ -9,8 +9,8 @@
 #' @export
 #' @import dplyr stringr curl purrr jsonlite
 #' @examples
-#' get_nba_franchise_history()
-get_nba_franchise_history <-
+#' nba_franchise_history()
+nba_franchise_history <-
   function(return_message = T,
            only_active = F) {
     team_history_url <-
@@ -135,9 +135,9 @@ get_nba_franchise_history <-
 #' @import dplyr purrr stringr readr tidyr jsonlite curl lubridate
 #' @importFrom glue glue
 #' @examples
-#' get_team_season_roster(team = "Denver Nuggets", season = 1991)
+#' team_season_roster(team = "Denver Nuggets", season = 1991)
 
-get_team_season_roster <-
+team_season_roster <-
   function(team = "Denver Nuggets",
            season = 2015,
            return_message = T) {
@@ -154,7 +154,7 @@ get_team_season_roster <-
             sep = "-")
     if (!'df_dict_team_history' %>% exists()) {
       df_dict_team_history <-
-        get_nba_franchise_history(only_active = T)
+        nba_franchise_history(only_active = T)
       assign('df_dict_team_history', df_dict_team_history, envir = .GlobalEnv)
     }
 
@@ -240,21 +240,21 @@ get_team_season_roster <-
   }
 
 
-get_season_teams_rosters <-
+.season_teams_rosters <-
   function(season = 1994,
            return_message = T) {
     if (!'df_dict_team_history' %>% exists()) {
       df_dict_team_history <-
-        get_nba_franchise_history(only_active = T)
+        nba_franchise_history(only_active = T)
       assign('df_dict_team_history', df_dict_team_history, envir = .GlobalEnv)
     }
-    get_team_season_roster_safe <-
-      purrr::possibly(get_team_season_roster, data_frame())
+    team_season_roster_safe <-
+      purrr::possibly(team_season_roster, data_frame())
 
     all_data <-
       df_dict_team_history$nameTeam %>%
       future_map_dfr(function(team) {
-        get_team_season_roster_safe(team = team,
+        team_season_roster_safe(team = team,
                                         season = season,
                                         return_message = return_message)
       })
@@ -281,15 +281,15 @@ get_season_teams_rosters <-
 #' @import dplyr purrr stringr readr tidyr jsonlite curl lubridate
 #' @importFrom glue glue
 #' @examples
-#' get_seasons_teams_rosters(seasons = 2010:2018, nest_data = F, return_message = T)
-get_seasons_teams_rosters <-
+#' teams_rosters(seasons = 2010:2018, nest_data = F, return_message = T)
+teams_rosters <-
   function(seasons = 1990:2018,
            nest_data = F,
            return_message = T) {
     all_data <-
       seasons %>%
       future_map_dfr(function(season) {
-        get_season_teams_rosters(season = season)
+        .season_teams_rosters(season = season)
       })
 
     if (nest_data) {
@@ -302,24 +302,7 @@ get_seasons_teams_rosters <-
     all_data
   }
 
-
-#' Teams coaching staff
-#'
-#' Gets coaching staff for team and season
-#'
-#' @param team name of the team
-#' @param season season
-#' @param return_message if \code{TRUE} returns a message
-#'
-#' @return a `data_frame`
-#' @family coaches
-#' @export
-#' @import dplyr purrr stringr readr tidyr jsonlite curl lubridate
-#' @importFrom glue glue
-#' @examples
-#' get_team_coaches("Brooklyn Nets", 2016)
-
-get_team_coaches <-
+.team_coaches <-
   function(team = "Denver Nuggets",
            season = 2015,
            return_message = T) {
@@ -336,7 +319,7 @@ get_team_coaches <-
             sep = "-")
     if (!'df_dict_team_history' %>% exists()) {
       df_dict_team_history <-
-        get_nba_franchise_history(only_active = T)
+        nba_franchise_history(only_active = T)
       assign('df_dict_team_history', df_dict_team_history, envir = .GlobalEnv)
     }
 
@@ -408,21 +391,21 @@ get_team_coaches <-
     data_roster
   }
 
-get_season_teams_coaches <-
+.season_teams_coaches <-
   function(season = 2010,
            return_message = T) {
     if (!'df_dict_team_history' %>% exists()) {
       df_dict_team_history <-
-        get_nba_franchise_history(only_active = T)
+        nba_franchise_history(only_active = T)
       assign('df_dict_team_history', df_dict_team_history, envir = .GlobalEnv)
     }
-    get_team_coaches_safe <-
-      purrr::possibly(get_team_coaches, data_frame())
+    .team_coaches_safe <-
+      purrr::possibly(.team_coaches, data_frame())
 
     all_data <-
       df_dict_team_history$nameTeam %>%
       future_map_dfr(function(team) {
-        get_team_coaches_safe(team = team,
+        .team_coaches_safe(team = team,
                                         season = season,
                                         return_message = return_message)
       })
@@ -449,16 +432,16 @@ get_season_teams_coaches <-
 #' @import dplyr purrr stringr readr tidyr jsonlite curl lubridate
 #' @importFrom glue glue
 #' @examples
-#' get_seasons_teams_coaches(2018)
+#' teams_coaches(2018:2019)
 
-get_seasons_teams_coaches <-
+teams_coaches <-
   function(seasons = 1990:2018,
            nest_data = F,
            return_message = T) {
     all_data <-
       seasons %>%
       future_map_dfr(function(season) {
-        get_season_teams_coaches(season = season)
+        .season_teams_coaches(season = season)
       })
 
     if (nest_data) {

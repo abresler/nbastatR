@@ -1,7 +1,7 @@
-resolve_bref_names <-
+.resolve_bref_names <-
   function(json_names) {
     df_nba_names <-
-      dictionary_bref_bio_names()
+      .dictionary_bref_bio_names()
 
     json_names %>%
       map_chr(function(name){
@@ -22,8 +22,8 @@ resolve_bref_names <-
       })
   }
 
-dictionary_bref_bio_names <-
-  function() {
+.dictionary_bref_bio_names <-
+  memoise::memoise(function() {
     data_frame(nameBREF = c("twitter", "position", "shoots", "height", "weight", "team",
                "born", "birthplace", "college", "namehighschool", "locationhighschool",
                "nba debut", "experience", "playernicknames", "yearrankhighschool",
@@ -32,10 +32,10 @@ dictionary_bref_bio_names <-
                               "dateBirth", "locationBirthplace", "nameCollege", "nameHighSchool", "locationHighSchool",
                               "dateNBADebut", "yearsExperience", "playerNicknames", "yearRankHighSchool",
                               "namePronunciation", "descriptionHOF", "dateDeath", "descriptionRelatives"))
-  }
+  })
 
-check_table <-
-  function(page, css = "#div_all_salaries table") {
+.check_table <-
+  memoise::memoise(function(page, css = "#div_all_salaries table") {
     table <-
       page %>%
       html_nodes(css = css) %>%
@@ -45,11 +45,12 @@ check_table <-
       return(invisible())
     }
     table
-  }
-parse.salary <-
-  function(page) {
+  })
+
+.parse.salary <-
+  memoise::memoise(function(page) {
     table <-
-      check_table(page = page, css =  "#div_all_salaries table")
+      .check_table(page = page, css =  "#div_all_salaries table")
 
     if (table %>% length() == 0) {
       return(invisible())
@@ -60,10 +61,10 @@ parse.salary <-
       purrr::set_names(c("slugSeason", "nameTeam", "slugLeague", "amountSalary")) %>%
       filter(!slugSeason %>% str_detect("Career")) %>%
       mutate(amountSalary = readr::parse_number(as.character(amountSalary)))
-  }
+  })
 
-parse.contracts  <-
-  function(page) {
+.parse.contracts  <-
+  memoise::memoise(function(page) {
     ids <- page %>% html_nodes('div') %>% html_attr('id')
     ids <- ids[!ids %>% is.na()]
 
@@ -77,7 +78,7 @@ parse.contracts  <-
       glue::glue("#{contract_id} table") %>% as.character()
 
     table <-
-      check_table(page = page, css =  conract_css)
+      .check_table(page = page, css =  conract_css)
 
     if (table %>% length() == 0) {
       return(invisible())
@@ -98,10 +99,10 @@ parse.contracts  <-
     }
 
     table
-  }
+  })
 
-parse.bio <-
-  function(page) {
+.parse.bio <-
+  memoise::memoise(function(page) {
     bio <-
       page %>%
       html_nodes(".media-item+ div p")
@@ -260,13 +261,13 @@ parse.bio <-
     all_data <-
       all_data %>%
       left_join(
-        dictionary_bref_bio_names()
+        .dictionary_bref_bio_names()
       ) %>%
       suppressMessages()
 
     actual_names <-
       all_data$nameBREF %>%
-      resolve_bref_names()
+      .resolve_bref_names()
 
     all_data <-
       all_data %>%
@@ -364,11 +365,11 @@ parse.bio <-
 
 
     all_data
-  }
+  })
 
 
-parse.transactions <-
-  function(page) {
+.parse.transactions <-
+  memoise::memoise(function(page) {
     transactions <-
       page %>%
       html_nodes("#div_transactions .transaction") %>%
@@ -396,14 +397,14 @@ parse.transactions <-
       ) %>%
       select(-desl)
 
-  }
+  })
 
-parse_bref_player_data_url <-
-  function(url = "https://www.basketball-reference.com/players/d/dinwisp01.html",
+.parse_bref_player_data_url <-
+  memoise::memoise(function(url = "https://www.basketball-reference.com/players/d/dinwisp01.html",
            return_message = TRUE) {
   page <-
     url %>%
-    read_page()
+    .read_page()
 
   image <-
     page %>%
@@ -420,24 +421,24 @@ parse_bref_player_data_url <-
   }
 
 
-  parse.transactions.safe <-
-    purrr::possibly(parse.transactions, data_frame())
+  .parse.transactions.safe <-
+    purrr::possibly(.parse.transactions, data_frame())
 
-  parse.bio.safe <-
-    purrr::possibly(parse.bio, data_frame())
+  .parse.bio.safe <-
+    purrr::possibly(.parse.bio, data_frame())
 
-  parse.contracts.safe <-
-    purrr::possibly(parse.contracts, data_frame())
+  .parse.contracts.safe <-
+    purrr::possibly(.parse.contracts, data_frame())
 
-  parse.salary.safe <-
-    purrr::possibly(parse.salary, data_frame())
+  .parse.salary.safe <-
+    purrr::possibly(.parse.salary, data_frame())
   dataPlayerBio =
-    parse.bio.safe(page = page)
+    .parse.bio.safe(page = page)
   dataPlayerTransactions =
-    parse.transactions.safe(page = page)
+    .parse.transactions.safe(page = page)
   dataPlayerContracts =
-    parse.contracts.safe(page = page)
-  dataPlayerSalaries =  parse.salary.safe(page = page)
+    .parse.contracts.safe(page = page)
+  dataPlayerSalaries =  .parse.salary.safe(page = page)
 
   data <-
     data_frame(
@@ -472,48 +473,28 @@ parse_bref_player_data_url <-
   }
   data
 
+})
+
+.parse_bref_player_data_urls <-
+  function(urls, return_message = T){
+    .parse_bref_player_data_url_safe <-
+      purrr::possibly(.parse_bref_player_data_url, data_frame())
+    all_data <-
+    urls %>%
+    future_map_dfr(function(url){
+      .parse_bref_player_data_url_safe(url = url, return_message = return_message)
+    })
+  all_data
 }
 
-parse_bref_player_data_urls <-
-  function(urls = c("https://www.basketball-reference.com/players/d/dinwisp01.html" , "https://www.basketball-reference.com/players/h/hardeja01.html"),
-           return_message = TRUE) {
-    df <-
-      data_frame()
 
-    success <- function(res) {
-      url <-
-        res$url
-
-      parse_bref_player_data_url_safe <-
-        purrr::possibly(parse_bref_player_data_url, data_frame())
-
-      all_data <-
-        parse_bref_player_data_url_safe(url = url)
-
-
-      df <<-
-        df %>%
-        bind_rows(all_data)
-    }
-    failure <- function(msg) {
-      data_frame()
-    }
-    urls %>%
-      future_map(function(x) {
-        curl_fetch_multi(url = x, success, failure)
-      })
-    multi_run()
-    df
-  }
-
-
-get_bref_players_ids  <-
-  function(players = c("Aaron McKie", "Aaron Gordon"), player_ids = "bonnean01") {
+.get_bref_players_ids  <-
+  memoise::memoise(function(players = c("Aaron McKie", "Aaron Gordon"), player_ids = "bonnean01") {
     if (players %>% purrr::is_null() && player_ids %>% purrr::is_null()) {
       stop("Please Enter IDS")
     }
    ids <- c()
-   df_bref_player_dict <-  get_bref_player_dictionary() %>% suppressMessages()
+   df_bref_player_dict <-  dictionary_bref_players() %>% suppressMessages()
    if (!players %>% purrr::is_null()) {
      search_ids <-
        df_bref_player_dict %>%
@@ -533,7 +514,7 @@ get_bref_players_ids  <-
      unique() %>%
      sort()
 
-  }
+  })
 
 #' Basketball Reference players bios
 #'
@@ -552,29 +533,29 @@ get_bref_players_ids  <-
 #'
 #' @examples
 #' \dontrun{
-#' get_bref_players_bios( players = c("Jarrett Allen", "Mitch Richmond", "Michael Adams"),
+#' bref_bios( players = c("Jarrett Allen", "Mitch Richmond", "Michael Adams"),
 #' player_ids = NULL,
 #' assign_to_environment = TRUE)
 #' }
-get_bref_players_bios <-
+bref_bios <-
   function(players = NULL,
            player_ids = NULL,
            assign_to_environment = TRUE,
            return_message = T) {
     ids <-
-      get_bref_players_ids(players = players, player_ids = player_ids) %>%
+      .get_bref_players_ids(players = players, player_ids = player_ids) %>%
       suppressMessages()
 
-    df_bref_player_dict <-  get_bref_player_dictionary() %>% suppressMessages()
+    df_bref_player_dict <-  dictionary_bref_players() %>% suppressMessages()
     urls <-
       df_bref_player_dict %>%
       filter(slugPlayerBREF %in% ids) %>%
       pull(urlPlayerBioBREF)
-    parse_bref_player_data_urls_safe <-
-      purrr::possibly(parse_bref_player_data_urls, data_frame())
+    .parse_bref_player_data_urls_safe <-
+      purrr::possibly(.parse_bref_player_data_urls, data_frame())
 
     all_data <-
-      parse_bref_player_data_urls(urls = urls, return_message = T)
+      .parse_bref_player_data_urls(urls = urls, return_message = T)
 
     if (assign_to_environment) {
       tables <- all_data$nameTable

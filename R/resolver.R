@@ -1,23 +1,23 @@
 
 
 
-dictionary.sites <-
-  function() {
+.dictionary.sites <-
+  memoise::memoise(function() {
     df_formulas <-
       data_frame(
         nameSite = c("bref", "yahoo", "realgm", "hoopshype"),
         formulatDict = c(
-          "dictionary.bref.nba.missing()",
+          ".dictionary.bref.nba.missing()",
           "dictionary.yahoo.nba.missing()",
           "dictionary.realgm.nba.missing()",
           "dictionary.hoopshype.nba.missing()"
         )
       )
     df_formulas
-  }
+  })
 
-dictionary.bref.nba.missing <-
-  function() {
+.dictionary.bref.nba.missing <-
+  memoise::memoise(function() {
     data_frame(
       namePlayer = c(
         "J.J. Anderson",
@@ -217,11 +217,11 @@ dictionary.bref.nba.missing <-
       )
     )
 
-  }
+  })
 
 
-resolve.players <-
-  function(data, site = "bref") {
+.resolve.players <-
+  memoise::memoise(function(data, site = "bref") {
     data <-
       data %>%
       mutate(
@@ -231,6 +231,8 @@ resolve.players <-
           namePlayer %>% str_detect("Tim Hardaway") &
             yearSeason > 2002 ~ "Tim Hardaway Jr.",
           namePlayer %>% str_detect("Gary Payton") &
+            yearSeason > 2002 ~ "Gary Payton II",
+          namePlayer %>% str_detect("Jaren Jackson Jr.") &
             yearSeason > 2002 ~ "Gary Payton II",
           TRUE                      ~  namePlayer
 
@@ -258,6 +260,7 @@ resolve.players <-
       dplyr::select(namePlayer,
                     idPlayerNBA = idPlayer,
                     urlPlayerThumbnail,
+                    urlPlayerHeadshot,
                     yearSeasonFirst) %>%
       mutate(namePlayerNBA = namePlayer) %>%
       dplyr::select(namePlayerNBA, everything()) %>%
@@ -347,7 +350,7 @@ resolve.players <-
       suppressMessages()
 
     df_formulas <-
-      dictionary.sites()
+      .dictionary.sites()
 
     df_player_dict <-
       df_formulas %>%
@@ -385,4 +388,4 @@ resolve.players <-
     df
 
 
-  }
+  })

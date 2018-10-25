@@ -1,4 +1,4 @@
-parse_status <-
+.parse_status <-
   function(status){
     is_retired <- status %>% str_detect("Retired")
     is_ufa <- status %>% str_detect("Unrestricted Free Agent|Restricted Free Agent")
@@ -62,7 +62,8 @@ parse_status <-
 
 
   }
-get_player_resolution_df <- function() {
+.get_player_resolution_df <-
+  memoise::memoise(function() {
   player_df <-
     data_frame(
       namePlayer = c(
@@ -111,9 +112,9 @@ get_player_resolution_df <- function() {
       )
     )
   return(player_df)
-}
+})
 
-camelParse <- function (x, except = c("De", "Mc", "Mac"))  {
+.camelParse <- function (x, except = c("De", "Mc", "Mac"))  {
   x. <- strsplit(x, "")
   nx <- length(x)
   out <- vector("list", length = nx)
@@ -143,7 +144,8 @@ camelParse <- function (x, except = c("De", "Mc", "Mac"))  {
 }
 
 
-dictionary_contract_status <- function() {
+.dictionary_contract_status <-
+  memoise::memoise(function() {
   contract_df <-
     data_frame(statusContract = c(NA, "Unrestricted Free Agent", "Unsigned Draft Pick", "Draft Eligible",
                                   "Restricted Free Agent"),
@@ -151,9 +153,10 @@ dictionary_contract_status <- function() {
     )
 
   contract_df
-}
+})
 
-get_leagues_teams_df <- function() {
+.get_leagues_teams_df <-
+  memoise::memoise(function() {
   nba_teams <-
     data_frame(nameTeam = c("Atlanta Hawks", "Boston Celtics", "Brooklyn Nets", "Charlotte Hornets",
                             "Chicago Bulls", "Cleveland Cavaliers", "Dallas Mavericks", "Denver Nuggets",
@@ -182,9 +185,9 @@ get_leagues_teams_df <- function() {
     nba_teams %>%
     bind_rows(nba_dl_teams)
   return(team_df)
-}
+})
 
-get_agents_urls <- function() {
+.get_agents_urls <- function() {
   url <-
     'http://basketball.realgm.com/info/agent-relationships'
 
@@ -210,7 +213,7 @@ get_agents_urls <- function() {
   agent_df
 }
 
-parse_agent_metadata <-
+.parse_agent_metadata <-
   function(page) {
     nameAgent <-
       page %>%
@@ -244,7 +247,7 @@ parse_agent_metadata <-
 
     agent_metadata_df
   }
-parse_agent_player_table <-
+.parse_agent_player_table <-
   function(page) {
   player <-
     page %>%
@@ -326,12 +329,12 @@ parse_agent_player_table <-
     suppressWarnings()
 
   team_df <-
-    get_leagues_teams_df()
+    .get_leagues_teams_df()
   contract_status_df <-
-    dictionary_contract_status()
+    .dictionary_contract_status()
 
   player_df <-
-    get_player_resolution_df()
+    .get_player_resolution_df()
 
   player_agent_df <-
     data_frame(
@@ -385,7 +388,7 @@ parse_agent_player_table <-
   df_status <-
     statuses %>%
     future_map_dfr(function(status){
-      parse_status(status = status)
+      .parse_status(status = status)
     })
 
   player_agent_df <-
@@ -398,7 +401,7 @@ parse_agent_player_table <-
 
 }
 
-parse_agent_url <-
+.parse_agent_url <-
   function(url = "http://basketball.realgm.com/info/agent_clients/Aaron-Goodwin/1"){
     page <-
       url %>%
@@ -406,12 +409,12 @@ parse_agent_url <-
 
     metadata_df <-
       page %>%
-      parse_agent_metadata() %>%
+      .parse_agent_metadata() %>%
       mutate(urlAgentRealGM = url)
 
     agent_players_df <-
       page %>%
-      parse_agent_player_table() %>%
+      .parse_agent_player_table() %>%
       mutate(urlAgentRealGM = url) %>%
       suppressWarnings()
 
@@ -424,7 +427,7 @@ parse_agent_url <-
     agent_players_df
   }
 
-parse_agent_urls <-
+.parse_agent_urls <-
   function(urls = c("http://basketball.realgm.com/info/agent_clients/James-Dennis/754",
                     "http://basketball.realgm.com/info/agent_clients/Lance-Young/63",
                     "http://basketball.realgm.com/info/agent_clients/Lubomir-Rysavy/548",
@@ -444,11 +447,11 @@ parse_agent_urls <-
           glue::glue("Parsing {url}") %>%
             cat(fill = T)
         }
-        parse_agent_url_safe <-
-          purrr::possibly(parse_agent_url, data_frame())
+        .parse_agent_url_safe <-
+          purrr::possibly(.parse_agent_url, data_frame())
 
         all_data <-
-          parse_agent_url_safe(url = url)
+          .parse_agent_url_safe(url = url)
 
 
         df <<-
@@ -480,9 +483,9 @@ parse_agent_urls <-
 #' @family agents
 #' @import dplyr rvest stringr tidyr purrr xml2 readr magrittr
 #' @examples
-#' get_agents_players(agents = c("Jeff Schwartz"))
+#' agents_players(agents = c("Jeff Schwartz"))
 #'
-get_agents_players <-
+agents_players <-
   function(agents = "Jeff Schwartz",
            all_agents = F,
            return_message = FALSE) {
@@ -491,7 +494,7 @@ get_agents_players <-
     }
     if (!'df_all_agent_urls' %>% exists()) {
       df_all_agent_urls <-
-        get_agents_urls()
+        .get_agents_urls()
     }
 
     if (all_agents) {
@@ -504,7 +507,7 @@ get_agents_players <-
     }
 
     all_data <-
-      parse_agent_urls(urls = urls, return_message = return_message) %>%
+      .parse_agent_urls(urls = urls, return_message = return_message) %>%
       arrange(nameAgent)
 
     all_data
@@ -522,10 +525,10 @@ get_agents_players <-
 #' @examples
 #' library(dplyr)
 #' df_players_agents <-
-#'  get_players_agents()
+#'  players_agents()
 #' df_players_agents %>%
 #' glimpse()
-get_players_agents <-
+players_agents <-
   function(nest_data = F,
            return_message = T) {
 
@@ -607,7 +610,7 @@ get_players_agents <-
       html_attr('rel')
 
     players.agents <-
-      table$Agent %>% camelParse()
+      table$Agent %>% .camelParse()
 
     all_agents <-
       data_frame()
@@ -626,11 +629,11 @@ get_players_agents <-
     player.agents <-
       all_agents$nameAgent
     player_df <-
-      get_player_resolution_df()
+      .get_player_resolution_df()
     team_df <-
-      get_leagues_teams_df()
+      .get_leagues_teams_df()
     contract_status_df <-
-      dictionary_contract_status()
+      .dictionary_contract_status()
     players_agents_df <-
       data_frame(
         namePlayer = player,
@@ -676,7 +679,7 @@ get_players_agents <-
       players_agents_df$statusContract %>%
       unique() %>%
       future_map_dfr(function(status) {
-        parse_status(status = status)
+        .parse_status(status = status)
       })
 
     players_agents_df <-

@@ -1,6 +1,6 @@
 
 
-get_teams_season_rankings <-
+.get_teams_season_rankings <-
   function(season = 2018,
            return_message = T) {
     year <- season - 1
@@ -50,7 +50,7 @@ get_teams_season_rankings <-
       mutate(slugSeason = season_slug,
              yearSeason = year_season_start + 1,
              datetimePublished) %>%
-      left_join(get_nba_teams() %>% select(idTeam, nameTeam)) %>%
+      left_join(nba_teams() %>% select(idTeam, nameTeam)) %>%
       suppressMessages() %>%
       mutate(typeSeason = "Regular Season") %>%
       select(
@@ -84,20 +84,20 @@ get_teams_season_rankings <-
 #' @family teams
 #'
 #' @examples
-#' get_teams_seasons_rankings(seasons = 2018)
-get_teams_seasons_rankings <-
+#' teams_rankings(seasons = 2019)
+teams_rankings <-
   function(seasons = NULL,
            nest_data = F,
            return_message = T) {
-    get_teams_season_rankings_safe <-
-      purrr::possibly(get_teams_season_rankings, data_frame())
+    .get_teams_season_rankings_safe <-
+      purrr::possibly(.get_teams_season_rankings, data_frame())
     if (seasons %>% purrr::is_null()) {
       stop("Enter seasons")
     }
     all_data <-
       seasons %>%
       future_map_dfr(function(season){
-        get_teams_season_rankings_safe(season = season, return_message = return_message)
+        .get_teams_season_rankings_safe(season = season, return_message = return_message)
       })
 
     if (nest_data) {

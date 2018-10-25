@@ -31,6 +31,6 @@ For example to use muiltiprocess.
 ``` r
 library(nbastatR)
 library(future)
-plan(multiprocess)
-get_game_logs(seasons = 2010:2019)
+plan(multiprocess) 
+game_logs(seasons = 2010:2019)
 ```

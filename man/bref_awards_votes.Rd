@@ -26,15 +26,15 @@ bref_awards_votes(2017)
 }
 \seealso{
 Other BREF: \code{\link{bref_awards}},
-  \code{\link{bref_players_seasons}},
-  \code{\link{bref_teams_seasons}},
+  \code{\link{bref_bios}},
+  \code{\link{bref_players_stats}},
+  \code{\link{bref_teams_stats}},
   \code{\link{dictionary_bref_coaches}},
   \code{\link{dictionary_bref_players}},
-  \code{\link{dictionary_bref_teams}},
-  \code{\link{get_bref_players_bios}}
+  \code{\link{dictionary_bref_teams}}
 
 Other awards: \code{\link{bref_awards}},
-  \code{\link{get_players_awards}}
+  \code{\link{players_awards}}
 }
 \concept{BREF}
 \concept{awards}

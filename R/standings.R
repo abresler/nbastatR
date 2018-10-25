@@ -2,7 +2,7 @@
 # https://stats.nba.com/stats/leaguestandingsv3/?leagueId=00&season=1989-90&seasonType=Regular+Season
 
 
-parse_record <-
+.parse_record <-
   function(data, record_column = "recordTiedAtHalf") {
     df_set <-
       data %>%
@@ -39,11 +39,11 @@ parse_record <-
 
   }
 
-parse_records <- function(data, record_names) {
+.parse_records <- function(data, record_names) {
   data <-
     record_names %>%
     future_map(function(record) {
-      parse_record(data = data, record_column = record)
+      .parse_record(data = data, record_column = record)
     }) %>%
     suppressMessages()
 
@@ -67,8 +67,8 @@ parse_records <- function(data, record_names) {
 #' @export
 #' @family standings
 #' @examples
-#' get_current_standings()
-get_current_standings <-
+#' current_standings()
+current_standings <-
   function(return_message = TRUE) {
     json <-
       "https://data.nba.net/prod/v1/current/standings_all_no_sort_keys.json" %>%
@@ -110,7 +110,7 @@ get_current_standings <-
 # Playoff Picture ---------------------------------------------------------
 
 
-get_season_playoff_picture <-
+.get_season_playoff_picture <-
   function(season = 2015,
            return_message = T,
            include_numeric_records = F) {
@@ -171,7 +171,7 @@ get_season_playoff_picture <-
             names()
 
           if (record_names %>% length() > 0) {
-           data <- parse_records(data = data, record_names = record_names)
+           data <- .parse_records(data = data, record_names = record_names)
           }
         }
 
@@ -211,11 +211,11 @@ get_season_playoff_picture <-
 #' @import dplyr stringr curl jsonlite lubridate purrr tidyr rlang readr tibble
 #' @importFrom glue glue
 #' @examples
-#' get_seasons_playoff_picture(seasons = 2015:2018,
+#' playoff_pictures(seasons = 2015:2018,
 #' assign_to_environment = TRUE,
 #'  include_numeric_records = T)
 
-get_seasons_playoff_picture <-
+playoff_pictures <-
   function(seasons = NULL,
            assign_to_environment = TRUE,
            include_numeric_records = F,
@@ -229,15 +229,15 @@ get_seasons_playoff_picture <-
       expand.grid(season = seasons,
                   stringsAsFactors = F) %>%
       dplyr::as_data_frame()
-    get_season_playoff_picture_safe <-
-      purrr::possibly(get_season_playoff_picture, data_frame())
+    .get_season_playoff_picture_safe <-
+      purrr::possibly(.get_season_playoff_picture, data_frame())
 
     all_data <-
       1:nrow(input_df) %>%
       future_map_dfr(function(x) {
         input_df %>%
           slice(x) %$%
-          get_season_playoff_picture_safe(season = season,
+          .get_season_playoff_picture_safe(season = season,
                                           include_numeric_records = include_numeric_records,
                                           return_message = return_message)
       })
@@ -273,7 +273,7 @@ get_seasons_playoff_picture <-
 # standings ---------------------------------------------------------------
 
 
-get_season_standings <-
+.get_season_standings <-
   function(season = 2015,
            season_type = "Regular Season",
            return_message = T) {
@@ -328,8 +328,8 @@ get_season_standings <-
 #' @importFrom glue glue
 #' @family standings
 #' @examples
-#' get_seasons_standings(seasons = 2015:2018, season_types = "Regular Season", resolve_records = T, nest_data = F, return_message = T)
-get_seasons_standings <-
+#' standings(seasons = 2015:2018, season_types = "Regular Season", resolve_records = T, nest_data = F, return_message = T)
+standings <-
   function(seasons = 1950:2018,
            season_types = c("Regular Season"),
            resolve_records = TRUE,
@@ -343,15 +343,15 @@ get_seasons_standings <-
       ) %>%
       dplyr::as_data_frame()
 
-    get_season_standings_safe <-
-      purrr::possibly(get_season_standings, data_frame())
+    .get_season_standings_safe <-
+      purrr::possibly(.get_season_standings, data_frame())
 
     all_data <-
       1:nrow(input_df) %>%
       future_map_dfr(function(x) {
         input_df %>%
           slice(x) %$%
-          get_season_standings_safe(
+          .get_season_standings_safe(
             season = season,
             season_type = season_type,
             return_message = return_message
@@ -362,7 +362,7 @@ get_seasons_standings <-
       record_names <-
         all_data %>% select(matches("record[A-Z]")) %>% names()
 
-      all_data <- parse_records(data = all_data, record_names = record_names)
+      all_data <- .parse_records(data = all_data, record_names = record_names)
     }
 
     all_data <-

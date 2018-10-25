@@ -1,7 +1,7 @@
 # slugs -------------------------------------------------------------------
 
-dictionary_boxscore_slugs <-
-  function(){
+.dictionary_boxscore_slugs <-
+  memoise::memoise(function(){
     data_frame(nameSlug = c("traditional", "advanced", "scoring","misc", "usage", "four factors",
                             "hustle", "tracking", "winprob", "defense", "matchups"),
                slugNBA = c("boxscoretraditionalv2","boxscoreadvancedv2", "boxscorescoringv2", "boxscoremiscv2",
@@ -11,11 +11,11 @@ dictionary_boxscore_slugs <-
                slugBase = c("traditional", "advanced", "scoring", "misc", "usage", "fourfactors",
                             "hustlestats", "playertrack", "winprob", "defense", "matchups")) %>%
       mutate(typeStatsCall = "boxscore")
-  }
+  })
 
 
 .get_box_score_type <-
-  function(game_id = 21700865,
+  memoise::memoise(function(game_id = 21700865,
            league = "NBA",
            result_type = "player",
            boxscore = "tracking",
@@ -42,7 +42,7 @@ dictionary_boxscore_slugs <-
     }
 
     df_box_slugs <-
-      dictionary_boxscore_slugs()
+      .dictionary_boxscore_slugs()
 
     box_score_slug <-
       df_box_slugs %>%
@@ -324,7 +324,7 @@ dictionary_boxscore_slugs <-
       select(typeBoxScore, typeResult, everything())
     gc()
     data
-  }
+  })
 
 #' NBA box scores
 #'
@@ -358,9 +358,9 @@ dictionary_boxscore_slugs <-
 #' @import dplyr curl stringr lubridate readr magrittr tidyr httr purrr jsonlite
 #' @importFrom glue glue
 #' @examples
-#' get_games_box_scores(game_ids = c(21700002, 21700003), box_score_types = c("Traditional", "Advanced", "Scoring", "Misc", "Usage", "Four Factors", "Tracking"), result_types = c("player", "team"), join_data = TRUE, assign_to_environment = TRUE, return_message = TRUE)
+#' box_scores(game_ids = c(21700002, 21700003), box_score_types = c("Traditional", "Advanced", "Scoring", "Misc", "Usage", "Four Factors", "Tracking"), result_types = c("player", "team"), join_data = TRUE, assign_to_environment = TRUE, return_message = TRUE)
 
-get_games_box_scores <-
+box_scores <-
   function(game_ids = NULL,
            league = "NBA",
            box_score_types = c("Traditional", "Advanced", "Scoring","Misc", "Usage", "Four Factors",

@@ -1,5 +1,5 @@
-dictionary_nbadraft_names <-
-  function() {
+.dictionary_nbadraft_names <-
+  memoise::memoise(function() {
     data_frame(nameBad = c("date.data.updated", "year.draft", "id.round", "id.pick", "name.player",
                            "id.position", "id.position.secondary", "team", "slug.team",
                            "slug.team.current", "is.traded_pick", "height", "height.inches",
@@ -12,9 +12,10 @@ dictionary_nbadraft_names <-
                    "numberClass")
     )
 
-  }
+  })
 
-get_nba_player_resolver_df <- function() {
+.get_nba_player_resolver_df <-
+  memoise::memoise(function() {
   player_df <-
     data_frame(
       name.player = c(
@@ -105,9 +106,10 @@ get_nba_player_resolver_df <- function() {
       )
     )
   return(player_df)
-}
+})
 
-get_school_df  <- function() {
+.get_school_df  <-
+  memoise::memoise(function() {
   school_df <-
     data_frame(
       school = c(
@@ -130,9 +132,10 @@ get_school_df  <- function() {
       )
     )
   return(school_df)
-}
+})
 
-get_nba_draft_net_team_df <- function() {
+.get_nba_draft_net_team_df <-
+  memoise::memoise(function() {
   team_df <-
     data_frame(
       name.team.nbadraft_net = c(
@@ -313,10 +316,10 @@ get_nba_draft_net_team_df <- function() {
     )
 
   return(team_df)
-}
+})
 
 
-get_nba_draftnet_year_mock_draft <-
+.get_nba_draftnet_year_mock_draft <-
   function(draft_year = 2013,
            return_message = T) {
     if (!'draft_year' %>% exists()) {
@@ -416,12 +419,12 @@ get_nba_draftnet_year_mock_draft <-
       str_to_lower()
 
     team_df <-
-      get_nba_draft_net_team_df()
+      .get_nba_draft_net_team_df()
 
     player_df <-
-      get_nba_player_resolver_df()
+      .get_nba_player_resolver_df()
     school_df <-
-      get_school_df()
+      .get_school_df()
 
     draft_data <-
       data_frame(
@@ -518,28 +521,28 @@ get_nba_draftnet_year_mock_draft <-
 #' @importFrom glue glue
 #' @family draft
 #' @examples
-#' get_nbadraftnet_mock_drafts(years = 2012:2017,
+#' nbadraftnet_mock_drafts(years = 2012:2017,
 #' merge_nba_data = TRUE,
 #' nest_data = F,
 #' return_message = T)
 
-get_nbadraftnet_mock_drafts <-
+nbadraftnet_mock_drafts <-
   function(years = 2009:2018,
            merge_nba_data = T,
            nest_data = F,
            return_message = T) {
-    get_nba_draftnet_year_mock_draft_safe <-
-      purrr::possibly(get_nba_draftnet_year_mock_draft, data_frame())
+    .get_nba_draftnet_year_mock_draft_safe <-
+      purrr::possibly(.get_nba_draftnet_year_mock_draft, data_frame())
 
     all_data <-
       years %>%
       future_map_dfr(function(draft_year){
-        get_nba_draftnet_year_mock_draft_safe(draft_year = draft_year,
+        .get_nba_draftnet_year_mock_draft_safe(draft_year = draft_year,
                                               return_message = return_message)
       })
 
     df_actual_names <-
-        dictionary_nbadraft_names()
+        .dictionary_nbadraft_names()
 
       actual_names <-
         names(all_data) %>%
@@ -565,7 +568,7 @@ get_nbadraftnet_mock_drafts <-
       purrr::set_names(actual_names)
 
     if (merge_nba_data) {
-      df_nba_player_dict <- get_nba_players()
+      df_nba_player_dict <- nba_players()
 
       all_data <-
         all_data %>%

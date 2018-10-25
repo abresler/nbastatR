@@ -1,5 +1,5 @@
 
-get_nba_season_players <-
+.get_nba_season_players <-
   function(season = NULL,
            return_message = T) {
     if (season %>% purrr::is_null()) {
@@ -21,7 +21,7 @@ get_nba_season_players <-
       }
 
     all_players <-
-      get_nba_players()
+      nba_players()
 
     nba_year.from <-
       year_season_start
@@ -64,19 +64,19 @@ get_nba_season_players <-
 #' @import dplyr purrr readr jsonlite tidyr curl
 #' @importFrom glue glue
 #' @examples
-#' get_seasons_players(2010:2017, nest_data = T, return_message = T)
+#' seasons_players(2010:2017, nest_data = T, return_message = T)
 
-get_seasons_players <-
+seasons_players <-
   function(seasons = 1960:2018,
            nest_data = F,
            return_message = T) {
-    get_nba_season_players_safe <-
-      purrr::possibly(get_nba_season_players, data_frame())
+    .get_nba_season_players_safe <-
+      purrr::possibly(.get_nba_season_players, data_frame())
 
     all_data <-
       seasons %>%
       future_map_dfr(function(year_season_start){
-        get_nba_season_players_safe(season = year_season_start,
+        .get_nba_season_players_safe(season = year_season_start,
                                return_message = return_message)
       })
 

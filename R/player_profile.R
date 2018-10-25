@@ -3,7 +3,7 @@
 # awards ------------------------------------------------------------------
 
 
-get_player_award <-
+.get_player_award <-
   function(player_id = 76003,
            return_message = T) {
     url <-
@@ -78,22 +78,22 @@ get_player_award <-
 #' @export
 #'
 #' @examples
-#' get_players_awards(players = c( "Charles Oakley", "Gary Melchionni"),
+#' players_awards(players = c( "Charles Oakley", "Gary Melchionni"),
 #' player_ids = c(893, 76375),
 #' return_message = T,
 #'  nest_data = F)
 
-get_players_awards <-
+players_awards <-
   function(players =  NULL,
            player_ids = NULL,
            nest_data = F,
            return_message = TRUE) {
     assign_nba_players()
     ids <-
-      get_nba_players_ids(player_ids = player_ids,
+      nba_player_ids(player_ids = player_ids,
                           players = players)
     get_player_award_safe <-
-      purrr::possibly(get_player_award, data_frame())
+      purrr::possibly(.get_player_award, data_frame())
 
     all_data <-
       ids %>%
@@ -143,7 +143,7 @@ get_players_awards <-
 # bios --------------------------------------------------------------------
 
 
-get_player_bio <-
+.get_player_bio <-
   function(player_id = 101127,
            return_message = T) {
     url <-
@@ -216,17 +216,17 @@ get_player_bio <-
 #' @import dplyr curl purrr jsonlite tidyr readr
 #' @importFrom glue glue
 #' @examples
-#' get_players_bios(players = c("Carmelo Anthony", "Joe Johnson"))
-get_players_bios <-
+#' players_bios(players = c("Carmelo Anthony", "Joe Johnson"))
+players_bios <-
   function(players = NULL,
            player_ids = NULL,
            nest_data = F,
            return_message = TRUE) {
     ids <-
-      get_nba_players_ids(player_ids = player_ids,
+      nba_player_ids(player_ids = player_ids,
                           players = players)
     get_player_bio_safe <-
-      purrr::possibly(get_player_bio, data_frame())
+      purrr::possibly(.get_player_bio, data_frame())
 
     all_data <-
       ids %>%
@@ -248,7 +248,7 @@ get_players_bios <-
 # profiles ----------------------------------------------------------------
 
 
-get_player_profile <-
+.get_player_profile <-
   function(player_id = 1628378,
            return_message = T) {
     if (player_id %>% purrr::is_null()) {
@@ -256,7 +256,7 @@ get_player_profile <-
     }
     if (!'df_nba_player_dict' %>% exists()) {
       df_nba_player_dict <-
-        get_nba_players()
+        nba_players()
 
       assign(x = 'df_nba_player_dict', df_nba_player_dict, envir = .GlobalEnv)
     }
@@ -342,11 +342,11 @@ get_player_profile <-
 #' @import dplyr curl purrr jsonlite tidyr readr
 #' @importFrom glue glue
 #' @examples
-#' get_players_profiles(player_ids = c(203500, 1628384),
+#' player_profiles(player_ids = c(203500, 1628384),
 #' players = c("Michael Jordan", "Caris LeVert", "Jarrett Allen"),
 #' nest_data = FALSE,
 #' return_message = TRUE)
-get_players_profiles <- function(players = NULL,
+player_profiles <- function(players = NULL,
                                      player_ids = NULL,
                                      nest_data = F,
                                      return_message = TRUE) {
@@ -356,9 +356,9 @@ get_players_profiles <- function(players = NULL,
   }
 
   player_ids <-
-    get_nba_players_ids(player_ids = player_ids, players = players)
+    nba_player_ids(player_ids = player_ids, players = players)
   get_player_profile_safe <-
-    purrr::possibly(get_player_profile, data_frame())
+    purrr::possibly(.get_player_profile, data_frame())
   all_data <-
     player_ids %>%
     future_map_dfr(function(player_id) {

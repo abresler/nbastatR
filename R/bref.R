@@ -629,7 +629,7 @@ widen_bref_data <-
 
         df_table <-
           df_table %>%
-          resolve.players(site = "bref")
+          .resolve.players(site = "bref")
 
         if (!table == "Advanced") {
           df_table <-
@@ -1344,8 +1344,8 @@ all_nba_teams <-
 #' @export
 #' @import curl dplyr tidyr httr xml2 rvest tidyr stringr purrr readr
 #' @examples
-#' bref_players_seasons(seasons = 2017:2018, tables = c("advanced", "totals"))
-bref_players_seasons <-
+#' bref_players_stats(seasons = 2017:2018, tables = c("advanced", "totals"))
+bref_players_stats <-
   function(seasons = 2018,
            tables = c('advanced', 'totals'),
            include_all_nba = F,
@@ -1764,8 +1764,7 @@ bref_players_seasons <-
 
     all_data <-
       seq_along(xml_tables) %>%
-      map_dfr(function(x) {
-        x %>% message()
+      future_map_dfr(function(x) {
         table_id <-
           xml_tables[x] %>%
           html_attr("id")
@@ -2062,8 +2061,8 @@ bref_players_seasons <-
 #' @export
 #' @import purrr dplyr curl stringr tidyr readr glue rvest
 #' @examples
-#' bref_teams_seasons(seasons = 2017:2018)
-bref_teams_seasons <-
+#' bref_teams_stats(seasons = 2017:2018)
+bref_teams_stats <-
   function(seasons = 1950:2018,
            return_message = TRUE,
            assign_to_environment = TRUE,
@@ -2125,10 +2124,10 @@ bref_teams_seasons <-
 #' library(dplyr)
 #' library(nbastatR)
 #'df_asg <-
-#' bref_all_star_game_scores()
+#' all_star_games()
 #'df_asg %>% glimpse()
 #'df_asg %>% count(namePlayerMVP, sort = T)
-bref_all_star_game_scores <-
+all_star_games <-
   function(include_aba = T,
            return_message = T) {
     page <-

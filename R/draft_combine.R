@@ -1,7 +1,7 @@
 
 
-parse_out_set <-
-  function(data, set_column = "setSpot15CornerLeftCollege") {
+.parse_out_set <-
+  memoise::memoise(function(data, set_column = "setSpot15CornerLeftCollege") {
     df_set <-
       data %>%
       select(one_of(set_column)) %>%
@@ -35,13 +35,14 @@ parse_out_set <-
     data %>%
       left_join(all_data)
 
-  }
+  })
 
-get_shot_pct <- function(x) {
+.get_shot_pct <-
+  memoise::memoise(function(x) {
   shots <-
     x %>%
     str_split('\\-') %>%
-    unlist %>%
+    unlist() %>%
     as.numeric()
 
   shot.pct <-
@@ -49,9 +50,9 @@ get_shot_pct <- function(x) {
 
   return(shot.pct)
 
-}
-get_year_draft_combine <-
-  function(combine_year = 2014,
+})
+.get_year_draft_combine <-
+  memoise::memoise(function(combine_year = 2014,
            return_message = T) {
     if (combine_year < 2000) {
       stopifnot("Sorry data starts in the 2000-2001 season")
@@ -102,7 +103,7 @@ get_year_draft_combine <-
       data <-
         actual_names[actual_names %>% str_detect("set")] %>%
         future_map(function(set) {
-          parse_out_set(data = data, set_column = set)
+          .parse_out_set(data = data, set_column = set)
         }) %>%
         suppressMessages()
 
@@ -119,7 +120,7 @@ get_year_draft_combine <-
       remove_na_columns()
 
     data
-  }
+  })
 
 #' NBA draft combine data
 #'
@@ -136,23 +137,23 @@ get_year_draft_combine <-
 #' @import dplyr stringr curl jsonlite lubridate purrr tidyr rlang
 #' @importFrom glue glue
 #' @examples
-#' get_years_draft_combines(years = c(2001:2018),
+#' draft_combines(years = c(2001:2018),
 #' nest_data = T)
 
-get_years_draft_combines <-
+draft_combines <-
   function(years = NULL,
            return_message = T,
            nest_data = F) {
     if (years %>% purrr::is_null()) {
       stop("Please enter combine years")
     }
-    get_year_draft_combine_safe <-
-      purrr::possibly(get_year_draft_combine, data_frame())
+    .get_year_draft_combine_safe <-
+      purrr::possibly(.get_year_draft_combine, data_frame())
 
     all_data <-
       years %>%
       future_map_dfr(function(combine_year) {
-        get_year_draft_combine_safe(combine_year = combine_year,
+        .get_year_draft_combine_safe(combine_year = combine_year,
                                     return_message = return_message)
       }) %>%
       select(-yearSeasonStart)

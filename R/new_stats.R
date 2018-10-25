@@ -103,34 +103,6 @@
 
 curl_json_to_vector <-
   function(url = "https://data.nba.net/prod/v1/2017/coaches.json") {
-
-    # df_call <- .generate_url_reference()
-    #
-    # headers <- .nba_headers()
-    #
-    # word_length <- sample(x = 2:16, 1)
-    # string_length <- sample(1:4, 1)
-    # cookie_text <- stri_rand_strings(n = string_length, length = word_length)
-    #
-    #
-    # headers <- headers %>%
-    #   append(list("Cookie" = cookie_text)
-    #                 #"ak_bmsc=0CF1B83520CA5205BF9AE4E54E3DC08917C967D88C2000003E72CF5BD21C3F5C~plCPzgPPCGF52itMA/UhuEoEGLb6gGyKHm98ufxFpCzVLHhDLO4/URPcsYcWUnwzC4RedBHVxTUXQfILYj7cI77/Qis7YPIe/yLT9DqtSWRCoYGaRGjZIifoGORfeLKbM/2GL6hkkpFjjH4FXf5xnhm8KLOe/Q++OBltnosPdevU2G947I/rXnlJZLi5fNTYGrpH2YthuJO4SLepV/QLBhlZQDT0twhJ3TL8iXog5gzsA=")
-    #                 )
-    #
-    # h <-
-    #   new_handle(verbose = F,
-    #              useragent =  df_call$userAgent) %>%
-    #   handle_setheaders(.list = headers %>% as.list())
-    #
-    # resp <-
-    #   curl_fetch_memory(url = url, handle = h)
-    #
-    # json <-
-    #   resp$content %>%
-    #   rawToChar() %>%
-    #   fromJSON(simplifyVector = T)
-
     json <-
       curl::curl(url = url) %>%
       read_lines() %>%
@@ -254,7 +226,7 @@ generate.nba_api.items <-
 
 
 
-generate.nba_slugs.definitions <-
+.generate.nba_slugs.definitions <-
   function(table_slugs = c(
     "traditional",
     "advanced",
@@ -275,7 +247,7 @@ generate.nba_slugs.definitions <-
                urlHeaderTable = urls)
   }
 
-get.nba_api_parameters <-
+.get.nba_api_parameters <-
   function(url = "https://stats.nba.com/stats/leaguedashplayerbiostats?College=&Conference=&Country=&DateFrom=&DateTo=&Division=&DraftPick=&DraftYear=&GameScope=&GameSegment=&Height=&LastNGames=0&LeagueID=00&Location=&Month=0&OpponentTeamID=0&Outcome=&PORound=0&PerMode=PerGame&Period=0&PlayerExperience=&PlayerPosition=&Season=1996-97&SeasonSegment=&SeasonType=Regular+Season&ShotClockRange=&StarterBench=&TeamID=0&VsConference=&VsDivision=&Weight=") {
   slug_nba <- url %>%
     str_replace_all("https://stats.nba.com/stats/", "") %>%
@@ -295,7 +267,7 @@ get.nba_api_parameters <-
              urlNBAStatsAPI = url)
 }
 
-parse.nba_headers.definitions <-
+.parse.nba_headers.definitions <-
   function(url = "https://stats.nba.com/templates/angular/views/game/game-playertracking.html") {
     page <-
       url %>%
@@ -332,11 +304,11 @@ get.nba_headers <-
     "playertrack"
   )) {
     df_urls <-
-      generate.nba_slugs.definitions(table_type = table_type, table_slugs = table_slugs)
+      .generate.nba_slugs.definitions(table_type = table_type, table_slugs = table_slugs)
 
     df_tables <- df_urls$urlHeaderTable %>%
       future_map_dfr(function(x){
-        parse.nba_headers.definitions(url = x)
+        .parse.nba_headers.definitions(url = x)
       })
 
     df_tables %>%
@@ -357,8 +329,8 @@ get.nba_headers <-
 #'
 #' @import curl jsonlite readr purrr stringr lubridate
 #' @examples
-#' get_nba_current_season_schedule()
-get_nba_current_season_schedule <-
+#' current_schedule()
+current_schedule <-
   function() {
     slug_year <-
       .get_slug_year()
@@ -425,7 +397,7 @@ get_nba_current_season_schedule <-
     purrr::set_names(c('idTeamHome', 'scoreHome', 'isWinnerHome', 'isLoserHome')) %>%
     mutate_all(as.numeric) %>%
     mutate(idRow = 1:n()) %>%
-    left_join(get_nba_teams() %>% select(idTeamHome = idTeam, nameTeamHome = nameTeam)) %>%
+    left_join(nba_teams() %>% select(idTeamHome = idTeam, nameTeamHome = nameTeam)) %>%
     select(idTeamHome, nameTeamHome, everything()) %>%
     mutate(idRow = 1:n()) %>%
     suppressMessages()
@@ -435,7 +407,7 @@ get_nba_current_season_schedule <-
     purrr::set_names(c('idTeamAway', 'scoreAway', 'isWinnerAway', 'isLoserAway')) %>%
     mutate_all(as.numeric) %>%
     mutate(idRow = 1:n()) %>%
-    left_join(get_nba_teams() %>% select(idTeamAway = idTeam, nameTeamAway = nameTeam)) %>%
+    left_join(nba_teams() %>% select(idTeamAway = idTeam, nameTeamAway = nameTeam)) %>%
     select(idTeamAway, nameTeamAway, everything()) %>%
     mutate(idRow = 1:n()) %>%
     suppressMessages()
@@ -462,8 +434,8 @@ get_nba_current_season_schedule <-
 #' @family Coaching
 #' @family Roster information
 #' @examples
-#' get_coaching_staffs()
-get_coaching_staffs <-
+#' coaching_staffs()
+coaching_staffs <-
   function() {
     slug_year <-
       .get_slug_year()
@@ -486,7 +458,7 @@ get_coaching_staffs <-
 
     data <-
       data %>%
-      left_join(get_nba_teams() %>% select(nameTeam, idTeam)) %>%
+      left_join(nba_teams() %>% select(nameTeam, idTeam)) %>%
       tidyr::unite(nameCoach, nameFirst, nameLast, sep = " ") %>%
       select(nameTeam, everything()) %>%
       arrange(nameTeam) %>%
@@ -541,7 +513,7 @@ nbastats_api_parameters <-
   }
 
 
-parse_for_players <-
+.parse_for_players <-
   function(json) {
     df_players <-
       json$data$players %>%
@@ -640,7 +612,7 @@ parse_for_seasons_data <-
                 funs(. %>% as.numeric()))
   }
 
-parse_for_teams <-
+.parse_for_teams <-
   function(json) {
     json_teams <-
       json$data$teams
@@ -700,8 +672,8 @@ parse_for_teams <-
 #' @importFrom glue glue
 #' @import dplyr jsonlite stringr tidyr purrr
 #' @examples
-#' get_nba_teams()
-get_nba_teams <-
+#' nba_teams()
+nba_teams <-
   function() {
     url <- "https://stats.nba.com/js/data/ptsd/stats_ptsd.js"
     json <-
@@ -713,7 +685,7 @@ get_nba_teams <-
 
     df_teams <-
       json %>%
-      parse_for_teams()
+      .parse_for_teams()
     df_teams
   }
 
@@ -725,8 +697,8 @@ get_nba_teams <-
 #' @export
 #'
 #' @examples
-#' get_nba_teams_seasons()
-get_nba_teams_seasons <- function() {
+#' nba_teams_seasons()
+nba_teams_seasons <- function() {
   json <- "https://stats.nba.com/stats/commonteamyears/?leagueId=00" %>%
     curl_json_to_vector()
   actual_names <-
@@ -751,8 +723,8 @@ get_nba_teams_seasons <- function() {
 #' @export
 #' @import readr jsonlite dplyr purrr tibble tidyr stringr
 #' @examples
-#' get_nba_stats_api_items()
-get_nba_stats_api_items <-
+#' nba_stats_api_items()
+nba_stats_api_items <-
   function(){
     url <- "https://stats.nba.com/js/data/ptsd/stats_ptsd.js"
     json <-
@@ -764,7 +736,7 @@ get_nba_stats_api_items <-
 
     df_players <-
       json %>%
-      parse_for_players() %>%
+      .parse_for_players() %>%
       assign(x = "df_dict_nba_players", value = ., envir = .GlobalEnv)
 
     df_tables <-
@@ -774,7 +746,7 @@ get_nba_stats_api_items <-
 
     df_teams <-
       json %>%
-      parse_for_teams() %>%
+      .parse_for_teams() %>%
       assign(x = "df_dict_nba_teams", value = ., envir = .GlobalEnv)
 
     data_frame(
@@ -793,8 +765,8 @@ get_nba_stats_api_items <-
 #' @importFrom glue glue
 #' @importFrom readr read_lines
 #' @examples
-#' get_nba_players()
-get_nba_players <-
+#' nba_players()
+nba_players <-
   function() {
     con <-
       "https://stats.nba.com/stats/commonallplayers?IsOnlyCurrentSeason=0&LeagueID=00&Season=2018-19" %>%

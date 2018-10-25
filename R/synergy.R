@@ -1,5 +1,5 @@
-assign.synergy <-
-  function(all_data, nest_data = F, spread_data = F) {
+.assign.synergy <-
+  function(all_data, nest_data = F, return_wide = F) {
     result_types <-
       all_data$typeResult %>% unique()
 
@@ -23,7 +23,7 @@ assign.synergy <-
             filter(!is.na(idPlayer))
         }
 
-        if (spread_data) {
+        if (return_wide) {
           df_long <-
             df_result %>%
             gather_data(
@@ -38,7 +38,7 @@ assign.synergy <-
           df_result <-
             df_long %>%
             unite(item, item, categorySynergy, sep = "") %>%
-            spread_data()
+            return_wide()
         }
 
         if (nest_data) {
@@ -52,7 +52,7 @@ assign.synergy <-
       })
   }
 
-number_to_pct <-
+.number_to_pct <-
   function(data) {
     pct_cols <- data %>% select(matches("pct[A-Z]")) %>% names()
     data %>%
@@ -60,8 +60,8 @@ number_to_pct <-
                 funs(. %>% as.numeric() /  100))
   }
 
-dictionary_synergy_categories <-
-  function() {
+.dictionary_synergy_categories <-
+  memoise::memoise(function() {
     data_frame(
       nameSynergy = c(
         "Transition",
@@ -90,9 +90,9 @@ dictionary_synergy_categories <-
         "Misc"
       )
     )
-  }
+  })
 
-get_synergy_category_data <-
+.get_synergy_category_data <-
   function(season = 2018,
          result_type = "player",
          season_type = "Regular Season",
@@ -204,7 +204,7 @@ get_synergy_category_data <-
 
   data <-
       data %>%
-      number_to_pct()
+      .number_to_pct()
 
     data %>%
       nest(-c(slugSeason, typeResult, categorySynergy, typeSet),
@@ -245,7 +245,7 @@ get_synergy_category_data <-
 #' }
 #' @param results number of results
 #' @param assign_to_environment if \code{TRUE} assigns table to environment
-#' @param spread_data if \code{assign_to_environment} returns a spread \code{data_frame}
+#' @param return_wide if \code{return_wide} returns a spread \code{data_frame}
 #' @param return_message
 #'
 #' @return a \code{data_frame}
@@ -253,8 +253,8 @@ get_synergy_category_data <-
 #' @import dplyr stringr magrittr curl jsonlite readr magrittr purrr tidyr rlang
 #' @importFrom glue glue
 #' @examples
-#' get_synergy_categories_stats(seasons = 2016:2018, result_types = c("player", "team"), season_types = c("Regular Season"), set_types = c("offensive", "defensive"), categories = c("Transition", "Isolation", "PRBallHandler", "PRRollman", "Postup",  "Spotup", "Handoff", "Cut", "OffScreen", "OffRebound", "Misc"), results = 500, assign_to_environment = TRUE, spread_data = F, return_message = TRUE)
-get_synergy_categories_stats <-
+#' synergy(seasons = 2019, result_types = c("player", "team"), season_types = c("Regular Season"), set_types = c("offensive", "defensive"), categories = c("Transition", "Isolation", "PRBallHandler", "PRRollman", "Postup",  "Spotup", "Handoff", "Cut", "OffScreen", "OffRebound", "Misc"), results = 500, assign_to_environment = TRUE, return_wide = F, return_message = TRUE)
+synergy <-
   function(seasons = 2016:2018,
            result_types = c("player", "team"),
            season_types = c("Regular Season"),
@@ -264,14 +264,14 @@ get_synergy_categories_stats <-
            ),
            results = 500,
            assign_to_environment = TRUE,
-           spread_data = F,
+           return_wide = F,
            nest_data = F,
            return_message = TRUE) {
     if (seasons %>% purrr::is_null()) {
       stop("please enter season")
     }
 
-    if (!result_types %>% str_to_lower()  %in% c("player", "team")) {
+    if (types %>% str_to_lower() %in% c("player", "team") %>% sum(na.rm = T) == 0) {
       stop("Result type can only be player and/or team")
     }
     input_df <-
@@ -286,15 +286,15 @@ get_synergy_categories_stats <-
       as_data_frame() %>%
       distinct()
 
-    get_synergy_category_data_safe <-
-      purrr::possibly(get_synergy_category_data, data_frame())
+    .get_synergy_category_data_safe <-
+      purrr::possibly(.get_synergy_category_data, data_frame())
 
     all_data <-
       1:nrow(input_df) %>%
       future_map_dfr(function(x) {
         df_row <- input_df %>% slice(x)
         df_row %$%
-          get_synergy_category_data_safe(
+          .get_synergy_category_data_safe(
             season = season,
             result_type = result_type,
             season_type = season_type,
@@ -309,8 +309,8 @@ get_synergy_categories_stats <-
 
     if (assign_to_environment) {
       all_data %>%
-        assign.synergy(nest_data = nest_data,
-                      spread_data = spread_data)
+        .assign.synergy(nest_data = nest_data,
+                      return_wide = return_wide)
     }
 
     all_data

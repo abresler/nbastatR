@@ -1,4 +1,4 @@
-get_basketball_insider_team_ids <- function() {
+.get_basketball_insider_team_ids <- function() {
   data <-
     data_frame(
       nameTeam = c(
@@ -142,32 +142,15 @@ get_basketball_insider_team_ids <- function() {
   data
 }
 
-#' NBA team salary
-#'
-#' Returns information about an NBA teams salary
-#'
-#' @param team_name NBA team name
-#' @param team_slug NBA team slug
-#' @param assume_player_opt_out if `TRUE` assumes NBA player opts out
-#' @param assume_team_doesnt_exercise if `TRUE` assumes teams don't exercise team option
-#' @param spread_data if `TRUE` returns wide data
-#' @param return_message if `TRUE` returns a message
-#'
-#' @return a `data_frame`
-#' @export
-#' @import dplyr rvest stringr purrr tidyr readr
-#' @family salaries
-#' @examples
-#' get_nba_team_salaries(team_name = "Brooklyn Nets")
-get_nba_team_salaries <-
-  function(team_name = "Brooklyn Nets",
+nba_team_salaries <-
+  memoise::memoise(function(team_name = "Brooklyn Nets",
            team_slug = NA,
            assume_player_opt_out = T,
            assume_team_doesnt_exercise = T,
-           spread_data = FALSE,
+           return_wide = FALSE,
            return_message = T) {
     team_name_df <-
-      get_basketball_insider_team_ids()
+      .get_basketball_insider_team_ids()
 
     teams <-
       team_name_df$nameTeam %>%
@@ -500,14 +483,14 @@ get_nba_team_salaries <-
       slice(1) %>%
       ungroup()
 
-    if (spread_data) {
+    if (return_wide) {
       all_data <-
         all_data %>%
         select(nameTeam, namePlayer, slugSeason, value) %>%
         spread(slugSeason, value)
     }
     all_data
-  }
+  })
 
 #' NBA team salaries
 #'
@@ -515,7 +498,7 @@ get_nba_team_salaries <-
 #'
 #' @param assume_player_opt_out if `TRUE` assumes player opts out of a player option
 #' @param assume_team_doesnt_exercise if `TRUE` assumes teams do not exercise team option
-#' @param spread_data if `TRUE` spreads data
+#' @param return_wide if `TRUE` spreads data
 #' @param return_message if `TRUE` returns a message
 #'
 #' @return a `data_frame`
@@ -523,12 +506,12 @@ get_nba_team_salaries <-
 #' @family salaries
 #' @import dplyr rvest stringr purrr tidyr readr
 #' @examples
-#' get_all_nba_teams_salaries(assume_player_opt_out = T, assume_team_doesnt_exercise = T, return_message = TRUE)
+#' nba_insider_salaries(assume_player_opt_out = T, assume_team_doesnt_exercise = T, return_message = TRUE)
 
-get_all_nba_teams_salaries <-
+nba_insider_salaries <-
   function(assume_player_opt_out = T,
            assume_team_doesnt_exercise = T,
-           spread_data = F,
+           return_wide = F,
            return_message = T) {
     apo <-
       assume_player_opt_out
@@ -569,18 +552,18 @@ get_all_nba_teams_salaries <-
         "Washington Wizards"
       )
 
-    get_nba_team_salaries_safe <-
-      purrr::possibly(get_nba_team_salaries, data_frame())
+    nba_team_salaries_safe <-
+      purrr::possibly(nba_team_salaries, data_frame())
 
     all_salaries <-
       all_teams %>%
       future_map_dfr(
         function(x)
-          get_nba_team_salaries_safe(
+          nba_team_salaries_safe(
             team_name = x,
             assume_player_opt_out = apo,
             assume_team_doesnt_exercise = atde,
-            spread_data = spread_data,
+            return_wide = return_wide,
             return_message = return_message
           )
       )

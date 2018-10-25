@@ -1,5 +1,5 @@
 
-parse_player_json <- function(json, player = player, season = season, mode, measure, season_type) {
+.parse_player_json <- function(json, player = player, season = season, mode, measure, season_type) {
   table_length <-
     json$resultSets$rowSet %>% length()
   table_slug <- json$resource
@@ -187,8 +187,8 @@ parse_player_json <- function(json, player = player, season = season, mode, meas
 
 }
 
-dictionary_player_tables <-
-  function() {
+.dictionary_player_tables <-
+  memoise::memoise(function() {
     data_frame(
       nameTable = c(
         "passes",
@@ -224,9 +224,9 @@ dictionary_player_tables <-
         "playerfantasyprofile"
       )
     )
-  }
+  })
 
-get_player_table_data <-
+.get_player_table_data <-
   function(player_id = 1627747,
            table = "year over year",
            measure = "Base",
@@ -255,7 +255,7 @@ get_player_table_data <-
            last_n_games = NA,
            return_message = TRUE) {
     df_player_slug_tables <-
-      dictionary_player_tables()
+      .dictionary_player_tables()
     assign_nba_players()
 
     player <-
@@ -364,7 +364,7 @@ get_player_table_data <-
     json <-
       resp %>% jsonlite::fromJSON(simplifyVector = T)
     all_data <-
-      parse_player_json(
+      .parse_player_json(
         json = json,
         player = player,
         season = season,
@@ -501,8 +501,8 @@ get_player_table_data <-
 #' @export
 #' @family player
 #' @examples
-#' get_players_tables_data(players = c("Caris LeVert", "Joe Harris"), tables =  c("year over year", "passes", "game splits"),   modes = c("PerGame", "Totals"), measures = c("Base", "Advanced"), assign_to_environment = TRUE)
-get_players_tables_data <-
+#' players_tables(players = c("Caris LeVert", "Joe Harris"), tables =  c("year over year", "passes", "game splits"),   modes = c("PerGame", "Totals"), measures = c("Base", "Advanced"), assign_to_environment = TRUE)
+players_tables <-
   function(players = NULL,
            player_ids = NULL,
            tables = c("year over year", "passes", "game splits"),
@@ -534,7 +534,7 @@ get_players_tables_data <-
     assign_nba_players()
 
     ids <-
-      get_nba_players_ids(player_ids = player_ids,
+      nba_player_ids(player_ids = player_ids,
                           players = players)
 
     input_df <-
@@ -567,7 +567,7 @@ get_players_tables_data <-
       ) %>%
       dplyr::as_data_frame()
     get_player_table_data_safe <-
-      purrr::possibly(get_player_table_data, data_frame())
+      purrr::possibly(.get_player_table_data, data_frame())
 
     all_data <-
       1:nrow(input_df) %>%
@@ -605,7 +605,7 @@ get_players_tables_data <-
           )
       })
     df_dict_table_names <-
-      dictionary_player_tables()
+      .dictionary_player_tables()
 
     table_names <-
       df_dict_table_names$nameTable %>% map_chr(function(x) {

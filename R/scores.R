@@ -117,8 +117,8 @@
 #' @import dplyr stringr curl jsonlite lubridate purrr tidyr rlang readr tibble
 #' @importFrom glue glue
 #' @examples
-#' get_days_nba_scores(game_dates = "2017-12-31", include_standings = F, return_message = T)
-get_days_nba_scores <-
+#' days_scores(game_dates = "2017-12-31", include_standings = F, return_message = T)
+days_scores <-
   function(game_dates = NULL,
            league = "NBA",
            day_offset= 0,

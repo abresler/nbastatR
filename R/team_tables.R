@@ -1,10 +1,10 @@
 # http://nbasense.com/nba-api/Stats/Stats/Teams/TeamsYearByYearStats#request-example
 
-get_team_details <- function(team_id = 1610612745, return_message = TRUE) {
+.get_team_details <- function(team_id = 1610612745, return_message = TRUE) {
   url <-
     glue::glue("https://stats.nba.com/stats/teamdetails/?teamId={team_id}")
   if (!'df_dict_nba_teams_history' %>% exists()) {
-    df_dict_nba_teams_history <- get_nba_franchise_history()
+    df_dict_nba_teams_history <- nba_franchise_history()
     assign(x = 'df_dict_nba_teams_history', df_dict_nba_teams_history, envir = .GlobalEnv)
   }
 
@@ -72,10 +72,10 @@ get_team_details <- function(team_id = 1610612745, return_message = TRUE) {
 #' @import dplyr stringr curl jsonlite lubridate purrr tidyr rlang readr tibble
 #' @importFrom glue glue
 #' @examples
-#' get_teams_details(all_teams = TRUE, assign_to_environment = TRUE)
+#' teams_details(all_teams = TRUE, assign_to_environment = TRUE)
 #'
 
-get_teams_details <-
+teams_details <-
   function(teams = NULL,
            team_ids = NULL,
            all_teams = F,
@@ -87,7 +87,7 @@ get_teams_details <-
       stop("Please enter a team or make all_teams = T")
     }
     if (!'df_dict_nba_teams_history' %>% exists()) {
-      df_dict_nba_teams_history <- get_nba_franchise_history()
+      df_dict_nba_teams_history <- nba_franchise_history()
       assign(x = 'df_dict_nba_teams_history', df_dict_nba_teams_history, envir = .GlobalEnv)
     }
 
@@ -133,13 +133,13 @@ get_teams_details <-
       ids %>%
       unique() %>%
       sort()
-    get_team_details_safe <-
-      purrr::possibly(get_team_details, data_frame())
+    .get_team_details_safe <-
+      purrr::possibly(.get_team_details, data_frame())
 
     all_data <-
       ids %>%
       future_map_dfr(function(id) {
-        get_team_details(team_id = id, return_message = return_message)
+        .get_team_details(team_id = id, return_message = return_message)
       })
 
     tables <- all_data$nameTable %>% unique()
@@ -214,7 +214,7 @@ get_teams_details <-
 
   }
 
-get_team_year_by_year_stats <-
+.get_team_year_by_year_stats <-
   function(team_id = 1610612751,
          season_type = "Regular Season",
          mode = "Totals",
@@ -283,11 +283,11 @@ get_team_year_by_year_stats <-
 #' @export
 #'
 #' @examples
-#' get_teams_year_by_year_stats(all_active_teams = T,
+#' teams_annual_stats(all_active_teams = T,
 #' modes = c("Totals"),
 #' return_message = TRUE,
 #'  nest_data =F)
-get_teams_year_by_year_stats <-
+teams_annual_stats <-
   function(teams = NULL,
            team_ids = NULL,
            all_active_teams = T,
@@ -296,16 +296,34 @@ get_teams_year_by_year_stats <-
            return_message = TRUE,
            nest_data = F) {
     assign_nba_teams()
-    team_ids <-
-      get_nba_teams_ids(teams = teams,
-                        team_ids = team_ids,
-                        all_active_teams = all_active_teams)
+    df_teams <- nba_teams()
 
-    get_team_year_by_year_stats_safe <-
-      purrr::possibly(get_team_year_by_year_stats, data_frame())
+    teams_ids <- c()
+
+    if (!purrr::is_null(teams)) {
+      teams_ids <-
+        teams_ids %>% append(df_teams %>%
+        filter(nameTeam %>% str_detect(str_c(teams, sep = " | "))) %>%
+        pull(idTeam))
+    }
+
+    if (!purrr::is_null(team_ids)) {
+      teams_ids <-
+        teams_ids %>% append(team_ids)
+    }
+
+    if (all_active_teams) {
+      teams_ids <- teams_ids %>%
+        append(df_teams %>% filter(isNonNBATeam == 0) %>% pull(idTeam))
+    }
+
+    teams_ids <- teams_ids  %>% unique()
+
+    .get_team_year_by_year_stats_safe <-
+      purrr::possibly(.get_team_year_by_year_stats, data_frame())
     df_input <-
       expand.grid(
-        team_id = team_ids,
+        team_id = teams_ids,
         season_type =  season_types,
         mode = modes,
         stringsAsFactors = F
@@ -318,7 +336,7 @@ get_teams_year_by_year_stats <-
         df_row <- df_input %>% slice(x)
 
         df_row %$%
-          get_team_year_by_year_stats_safe(
+          .get_team_year_by_year_stats_safe(
             team_id = team_id,
             season_type = season_type,
             mode = mode,

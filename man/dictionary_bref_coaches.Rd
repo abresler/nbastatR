@@ -22,14 +22,13 @@ Other dictionary: \code{\link{assign_nba_players}},
   \code{\link{dictionary_bref_teams}}
 
 Other BREF: \code{\link{bref_awards_votes}},
-  \code{\link{bref_awards}},
-  \code{\link{bref_players_seasons}},
-  \code{\link{bref_teams_seasons}},
+  \code{\link{bref_awards}}, \code{\link{bref_bios}},
+  \code{\link{bref_players_stats}},
+  \code{\link{bref_teams_stats}},
   \code{\link{dictionary_bref_players}},
-  \code{\link{dictionary_bref_teams}},
-  \code{\link{get_bref_players_bios}}
+  \code{\link{dictionary_bref_teams}}
 
-Other Coaching: \code{\link{get_coaching_staffs}}
+Other Coaching: \code{\link{coaching_staffs}}
 }
 \concept{BREF}
 \concept{Coaching}

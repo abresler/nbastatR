@@ -1,6 +1,6 @@
 
 
-get_nba_player_career_stats <-
+.get_nba_player_career_stats <-
   function(player_id = 1628386,
            mode = "Totals",
            return_message = TRUE) {
@@ -10,7 +10,7 @@ get_nba_player_career_stats <-
 
     if (!'df_nba_player_dict' %>% exists()) {
       df_nba_player_dict <-
-        get_nba_players()
+        nba_players()
 
       assign(x = 'df_nba_player_dict', df_nba_player_dict, envir = .GlobalEnv)
     }
@@ -133,10 +133,10 @@ get_nba_player_career_stats <-
 #' @family summary stats
 #' @import jsonlite dplyr purrr tibble stringr tidyr curl
 #' @examples
-#' get_players_career_stats(players = c("Joe Harris", "Myles Turner", "Spencer Dinwiddie"),
+#' players_careers(players = c("Joe Harris", "Myles Turner", "Spencer Dinwiddie"),
 #' modes = c("Totals", "PerGame"))
 
-get_players_career_stats <-
+players_careers <-
   function(players = NULL,
            player_ids = NULL,
            modes = c("PerGame", "Totals"),
@@ -156,7 +156,7 @@ get_players_career_stats <-
 
     if (!players %>% purrr::is_null()) {
       players_search <-
-        get_nba_players_ids(players = players)
+        nba_player_ids(players = players)
 
       ids <-
         ids %>%
@@ -177,7 +177,7 @@ get_players_career_stats <-
 
 
     get_nba_player_career_stats_safe <-
-      purrr::possibly(get_nba_player_career_stats, data_frame())
+      purrr::possibly(.get_nba_player_career_stats, data_frame())
 
     all_data <-
       1:nrow(df_input) %>%

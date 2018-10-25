@@ -1,6 +1,6 @@
 
-get_hoopshype_teams_ids <-
-  function() {
+.get_hoopshype_teams_ids <-
+  memoise::memoise(function() {
     data <-
       data_frame(
         nameTeam = c(
@@ -136,13 +136,13 @@ get_hoopshype_teams_ids <-
 
       )
     return(data)
-  }
+  })
 
 #' HoopsHype NBA teams summary salaries
 #'
 #' Gets all team salary summaries from HoopsHype
 #'
-#' @param spread_data if \code{TRUE} spreads data
+#' @param return_wide if \code{TRUE} returns wide data
 #' @param return_message if \code{TRUE} returns a message
 #'
 #' @return a \code{data_frame()}
@@ -151,9 +151,9 @@ get_hoopshype_teams_ids <-
 #' @export
 #' @import dplyr purrr stringr rvest xml2 tidyr readr
 #' @examples
-#' get_hoops_hype_teams_salary_summary(spread_data = TRUE)
-get_hoops_hype_teams_salary_summary <-
-  function(spread_data = F,
+#' hoops_hype_salary_summary(spread_data = TRUE)
+hoops_hype_salary_summary <-
+  function(return_wide = T,
            return_message = T) {
     url <-
       'http://hoopshype.com/salaries/'
@@ -168,7 +168,7 @@ get_hoops_hype_teams_salary_summary <-
       tbl_df()
 
     team_name_df <-
-      get_hoopshype_teams_ids()
+      .get_hoopshype_teams_ids()
 
     salary_table_df <-
       table_df %>%
@@ -194,7 +194,7 @@ get_hoops_hype_teams_salary_summary <-
         amountSalary = amountSalary %>% as.character() %>% readr::parse_number()
       )
 
-    if (spread_data) {
+    if (return_wide) {
       salary_data <-
         salary_data %>%
         mutate(slugSeason = "X" %>% paste0(slugSeason)) %>%
@@ -208,7 +208,7 @@ get_hoops_hype_teams_salary_summary <-
 
   }
 
-parse_hoops_hype_salary_url <-
+.parse_hoops_hype_salary_url <-
   function(url = "http://hoopshype.com/salaries/charlotte_hornets/",
            assume_player_opt_out = T,
            assume_team_doesnt_exercise = T) {
@@ -437,7 +437,7 @@ parse_hoops_hype_salary_url <-
       suppressMessages()
   }
 
-parse_hoops_hype_salary_urls <-
+.parse_hoops_hype_salary_urls <-
   function(urls = c(
     "http://hoopshype.com/salaries/indiana_pacers/",
     "http://hoopshype.com/salaries/washington_wizards/",
@@ -457,11 +457,11 @@ parse_hoops_hype_salary_urls <-
         glue::glue("Parsing {url}") %>%
           cat(fill = T)
       }
-      parse_hoops_hype_salary_url_safe <-
-        purrr::possibly(parse_hoops_hype_salary_url, data_frame())
+      .parse_hoops_hype_salary_url_safe <-
+        purrr::possibly(.parse_hoops_hype_salary_url, data_frame())
 
       all_data <-
-        parse_hoops_hype_salary_url_safe(url = url,
+        .parse_hoops_hype_salary_url_safe(url = url,
                                          assume_player_opt_out = assume_player_opt_out,
                                          assume_team_doesnt_exercise = assume_team_doesnt_exercise) %>%
         suppressWarnings()
@@ -502,7 +502,7 @@ parse_hoops_hype_salary_urls <-
 #' @examples
 #' library(dplyr)
 #' df_salaries <-
-#' get_teams_hoopshype_salaries(all_teams = TRUE,
+#' hoopshype_salaries(all_teams = TRUE,
 #'  nest_data = F, return_message = T)
 #'  ## By Expiring Salary Type and Team
 #'  df_salaries %>% group_by(slugSeason,  nameTeam, isFinalSeason) %>%
@@ -510,7 +510,7 @@ parse_hoops_hype_salary_urls <-
 #'  arrange(nameTeam)
 
 
-get_teams_hoopshype_salaries <-
+hoopshype_salaries <-
   function(teams = NULL,
            all_teams = TRUE,
            assume_player_opt_out = T,
@@ -519,7 +519,7 @@ get_teams_hoopshype_salaries <-
            return_message = TRUE) {
 
     if (!'df_hoopshype_team_salaries' %>% exists()) {
-      df_hoopshype_team_salaries <- get_hoops_hype_teams_salary_summary()
+      df_hoopshype_team_salaries <- hoops_hype_salary_summary()
 
       assign( 'df_hoopshype_team_salaries', df_hoopshype_team_salaries, envir = .GlobalEnv)
     }
@@ -551,7 +551,7 @@ get_teams_hoopshype_salaries <-
 
     all_data <-
       urls %>%
-      parse_hoops_hype_salary_urls(assume_player_opt_out = assume_player_opt_out,
+      .parse_hoops_hype_salary_urls(assume_player_opt_out = assume_player_opt_out,
                                    assume_team_doesnt_exercise = assume_team_doesnt_exercise,
                                    return_message = return_message)
 
