@@ -479,7 +479,7 @@ box_scores <-
           if (result == "player" & all_data %>% tibble::has_name("groupStartPosition")) {
             all_tables <-
               all_tables %>%
-              mutate(isStarter = !groupStartPosition %>% is.na()) %>%
+              mutate(isStarter = ifelse(is.na(groupStartPosition), F, T)) %>%
               dplyr::select(idGame:groupStartPosition, isStarter, everything())
           }
           data_frame(typeResult = result,
@@ -496,6 +496,13 @@ box_scores <-
               filter(typeResult == result) %>%
               select(-typeResult) %>%
               unnest()
+
+            if (df_table %>% tibble::has_name("groupStartPosition")) {
+              df_table <-
+                df_table %>%
+                mutate(isStarter = ifelse(is.na(groupStartPosition), F, T)) %>%
+                dplyr::select(idGame:groupStartPosition, isStarter, everything())
+            }
 
             assign(x = table_name,
                    value = df_table,
