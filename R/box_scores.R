@@ -190,6 +190,7 @@
 
     data <-
       json$resultSets$rowSet[[table_id]] %>%
+      data.frame(stringsAsFactors = F) %>%
       as_data_frame()
 
     if (data %>% nrow() == 0) {
@@ -274,6 +275,7 @@
     if (league == "WNBA" && table_id == 2) {
       df_team <-
         json$resultSets$rowSet[[3]] %>%
+        data.frame(stringsAsFactors = F) %>%
         as_data_frame()
 
 
@@ -418,12 +420,14 @@ box_scores <-
           df_results <-
             all_data %>%
             filter(typeResult == result)
+
           tables <-
             df_results$typeBoxScore %>% unique()
 
           all_tables <-
             tables %>%
             future_map(function(table) {
+              table_slug <- table %>% str_to_lower()
               data <-
                 df_results %>%
                 filter(typeBoxScore == table) %>%
@@ -431,13 +435,13 @@ box_scores <-
                 unnest()
 
 
-              if (table == "usage") {
+              if (table_slug == "usage") {
                 data <-
                   data %>%
                   dplyr::select(-one_of("pctUSG"))
               }
 
-              if (table %in% c("tracking", "defense", "hustle")) {
+              if (table_slug %in% c("tracking", "defense", "hustle")) {
 
                 data <-
                   data %>%
@@ -456,7 +460,7 @@ box_scores <-
                   ))
               }
 
-              if (table == "four factors") {
+              if (table_slug == "four factors") {
                 data <-
                   data %>%
                   dplyr::select(-one_of(c(
@@ -472,7 +476,7 @@ box_scores <-
             purrr::reduce(left_join) %>%
             suppressMessages()
 
-          if (result == "player") {
+          if (result == "player" & all_data %>% tibble::has_name("groupStartPosition")) {
             all_tables <-
               all_tables %>%
               mutate(isStarter = !groupStartPosition %>% is.na()) %>%

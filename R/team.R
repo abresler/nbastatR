@@ -51,6 +51,7 @@
 
       data <-
         json$resultSets$rowSet[[x]] %>%
+        data.frame(stringsAsFactors = F) %>%
         dplyr::as_data_frame()
 
       if (data %>% nrow() == 0) {
@@ -204,6 +205,7 @@
 
     df_md <-
       json$resultSets$rowSet[[1]] %>%
+      data.frame(stringsAsFactors = F) %>%
       dplyr::as_data_frame() %>%
       purrr::set_names(names_md) %>%
       munge_nba_data()
@@ -213,6 +215,7 @@
 
     df_md2 <-
       json$resultSets$rowSet[[2]] %>%
+      data.frame(stringsAsFactors = F) %>%
       dplyr::as_data_frame() %>%
       purrr::set_names(names_md) %>%
       munge_nba_data() %>%

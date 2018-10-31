@@ -43,7 +43,9 @@
       mutate(numberTable = 1)
 
     data <-
-      json$resultSet$rowSet %>% dplyr::as_data_frame() %>%
+      json$resultSet$rowSet %>%
+      data.frame(stringsAsFactors = F) %>%
+      dplyr::as_data_frame() %>%
       purrr::set_names(actual_names) %>%
       munge_nba_data() %>%
       mutate(numberTable = 1)

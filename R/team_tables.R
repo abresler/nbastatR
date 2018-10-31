@@ -32,7 +32,9 @@
         tables_data$headers[[x]]
       table_name <- tables_data$name[[x]]
       data <-
-        tables_data$rowSet[[x]] %>% as_data_frame()
+        tables_data$rowSet[[x]] %>%
+        data.frame(stringsAsFactors = F) %>%
+        as_data_frame()
 
       if (data %>% nrow() == 0) {
         return(invisible())
@@ -231,6 +233,7 @@ teams_details <-
 
   data <-
     json$resultSets$rowSet[[1]] %>%
+    data.frame(stringsAsFactors = F) %>%
     dplyr::as_data_frame()
 
   actual_names <-

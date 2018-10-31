@@ -23,6 +23,7 @@
 
     data <-
       json$resultSets$rowSet[[1]] %>%
+      data.frame(stringsAsFactors = F) %>%
       as_data_frame()
 
     json_names <-
@@ -58,6 +59,7 @@
 
     data <-
       json$resultSets$rowSet[[1]] %>%
+      data.frame(stringsAsFactors = F) %>%
       as_data_frame()
 
     json_names <-
@@ -99,6 +101,7 @@
 
     data <-
       json$resultSets$rowSet[[1]] %>%
+      data.frame(stringsAsFactors = F) %>%
       as_data_frame()
 
     json_names <-
@@ -109,6 +112,7 @@
 
     df_metadata <-
       json$resultSets$rowSet[[2]] %>%
+      data.frame(stringsAsFactors = F) %>%
       as_data_frame()
 
     names_md <-

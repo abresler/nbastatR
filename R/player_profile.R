@@ -16,6 +16,7 @@
 
     data <-
       json$resultSets$rowSet[[1]] %>%
+      data.frame(stringsAsFactors = F) %>%
       dplyr::as_data_frame()
 
     if (data %>% ncol() == 0) {

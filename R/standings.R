@@ -140,7 +140,9 @@ current_standings <-
           tables_data$headers[[x]]
         table_name <- tables_data$name[[x]]
         data <-
-          tables_data$rowSet[[x]] %>% as_data_frame()
+          tables_data$rowSet[[x]] %>%
+          data.frame(stringsAsFactors = F) %>%
+          as_data_frame()
 
         if (data %>% nrow() == 0) {
           return(invisible())

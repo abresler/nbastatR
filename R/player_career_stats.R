@@ -56,6 +56,7 @@
 
         data <-
           json$resultSets$rowSet[[x]] %>%
+          data.frame(stringsAsFactors = F) %>%
           as_data_frame()
         if (data %>% nrow() == 0) {
           return(invisible())

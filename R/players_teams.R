@@ -689,6 +689,7 @@
           if (type %>% str_to_lower() == "player") {
             df_table <-
               json$resultSets$rowSet %>%
+              data.frame(stringsAsFactors = F) %>%
               as_data_frame()
 
             actual_names <-
@@ -731,6 +732,7 @@
           } else {
             df_table <-
               json$resultSets$rowSet %>%
+              data.frame(stringsAsFactors = F) %>%
               as_data_frame()
             actual_names <-
               c(

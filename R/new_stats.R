@@ -707,6 +707,7 @@ nba_teams_seasons <- function() {
 
   data <-
     json$resultSets$rowSet[[1]] %>%
+    data.frame(stringsAsFactors = F) %>%
     as_data_frame() %>%
     purrr::set_names(actual_names) %>%
     munge_nba_data() %>%
