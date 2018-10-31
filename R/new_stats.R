@@ -776,14 +776,15 @@ nba_players <-
       con %>%
       read_lines() %>%
       jsonlite::fromJSON(flatten = TRUE, simplifyDataFrame = T)
-
-    data <-
-      json$resultSets$rowSet[[1]] %>%
-      dplyr::as_data_frame()
-
     names_nba <-
       json$resultSets$headers %>%
       flatten_chr()
+
+    data <-
+      json$resultSets$rowSet[[1]] %>%
+      data.frame(stringsAsFactors = F) %>%
+      as_data_frame()
+
 
     df_names <-
       dictionary_nba_names()

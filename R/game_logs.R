@@ -62,12 +62,13 @@
 
       json <-
         resp %>% jsonlite::fromJSON(simplifyVector = T)
-    data <-
-      json %>%
-      nba_json_to_df() %>%
-      mutate(slugSeason = season_slug,
-             typeSeason = season_type,
-             typeResult = result_type)
+
+      data <-
+        json %>%
+        nba_json_to_df() %>%
+        mutate(slugSeason = season_slug,
+               typeSeason = season_type,
+               typeResult = result_type)
 
     if (data %>% tibble::has_name("dateGame")) {
       data <-
@@ -87,13 +88,12 @@
         select(typeSeason:idTeam, isWin, everything())
     }
 
-    data <-
-      data %>%
-      clean_data_table_name() %>%
-      mutate(yearSeason = season,
-             typeResult = result_type) %>%
-      mutate(urlTeamSeasonLogo = generate_team_season_logo(season = yearSeason, slug_team = slugTeam)
-      )
+      data <-
+        data %>%
+        clean_data_table_name() %>%
+        mutate(yearSeason = season,
+               typeResult = result_type) %>%
+        mutate(urlTeamSeasonLogo = generate_team_season_logo(season = yearSeason, slug_team = slugTeam))
 
     if (data %>% tibble::has_name("dateGame")) {
       df_teams_games <-
