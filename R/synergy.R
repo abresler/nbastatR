@@ -54,7 +54,7 @@
 
 .number_to_pct <-
   function(data) {
-    pct_cols <- data %>% select(matches("pct[A-Z]")) %>% names()
+    pct_cols <- data %>% select(dplyr::matches("pct[A-Z]")) %>% names()
     data %>%
       mutate_at(pct_cols,
                 funs(. %>% as.numeric() /  100))
@@ -187,14 +187,14 @@
         dplyr::rename(pctTOV = tov)
     }
 
-  num_cols <- data %>% select(-matches(char_words())) %>% names()
+  num_cols <- data %>% select(-dplyr::matches(char_words())) %>% names()
 
   data <-
     data %>%
     mutate_at(num_cols,
              funs(. %>% as.character() %>% readr::parse_number()))
 
-  ppp_names <- data %>% dplyr::select(matches("PPP")) %>% names()
+  ppp_names <- data %>% dplyr::select(dplyr::matches("PPP")) %>% names()
 
   if (ppp_names %>% length() >0) {
     data <- data %>%

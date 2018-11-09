@@ -341,7 +341,7 @@
     df_good <-
       df_good %>%
       mutate(!!name_site := players_good) %>%
-      dplyr::select(matches("idPlayer|namePlayer"), everything())
+      dplyr::select(dplyr::matches("idPlayer|namePlayer"), everything())
 
     df_good <-
       df_good %>%

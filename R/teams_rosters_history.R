@@ -64,7 +64,7 @@ nba_franchise_history <-
     num_cols <-
       data %>%
       dplyr::select(-isActive) %>%
-      dplyr::select(-matches("team")) %>%
+      dplyr::select(-dplyr::matches("team")) %>%
       names()
 
     data <-

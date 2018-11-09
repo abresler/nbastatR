@@ -234,7 +234,7 @@ seasons_rosters <-
 
     all_data <-
       all_data %>%
-      left_join(df_dict_nba_players %>% select(idPlayer, matches("url"))) %>%
+      left_join(df_dict_nba_players %>% select(idPlayer, dplyr::matches("url"))) %>%
       suppressMessages()
 
     if (nest_data) {

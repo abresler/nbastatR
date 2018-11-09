@@ -168,7 +168,7 @@
 
       data <-
         data %>%
-        left_join(df_nba_player_dict %>% select(idPlayer, matches("url"))) %>%
+        left_join(df_nba_player_dict %>% select(idPlayer, dplyr::matches("url"))) %>%
         suppressMessages()
 
 

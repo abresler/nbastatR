@@ -91,7 +91,7 @@ players_rotowire <-
     all_data <-
       all_data %>%
       left_join(
-        df_nba_player_dict %>% dplyr::select(nameTeam, idPlayer, matches("url"))
+        df_nba_player_dict %>% dplyr::select(nameTeam, idPlayer, dplyr::matches("url"))
       ) %>%
       suppressMessages()
 
@@ -308,7 +308,7 @@ transactions <-
       data %>%
       dplyr::select(yearTransaction, monthTransaction,
                     dateTransaction, idTransaction, descriptionTransaction,
-                    matches("name|id"), everything()) %>%
+                    dplyr::matches("name|id"), everything()) %>%
       arrange(desc(dateTransaction)) %>%
       distinct()
 

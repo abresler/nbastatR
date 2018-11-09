@@ -158,7 +158,7 @@ gather_data <-
       numeric_names <-
         numeric_ids %>% str_c(collapse = "|")
       base_numerics <-
-        data %>% dplyr::select(matches(numeric_names)) %>% names()
+        data %>% dplyr::select(dplyr::matches(numeric_names)) %>% names()
 
       gather_cols <-
         base_numerics %>%
@@ -398,12 +398,12 @@ summarise_per_minute <-
       suppressWarnings()
 
     min_var <-
-      data %>% select(matches("^min|^minutes")) %>% names() %>% .[[1]]
+      data %>% select(dplyr::matches("^min|^minutes")) %>% names() %>% .[[1]]
 
     min_totals <- data %>% pull(min_var)
 
     munge_cols <-
-      data %>% dplyr::select(matches(cols_to_match)) %>% names()
+      data %>% dplyr::select(dplyr::matches(cols_to_match)) %>% names()
     data <-
       data %>%
       dplyr::select(one_of(c(id_columns, min_var, munge_cols)))
@@ -454,14 +454,14 @@ scale_per_minute <-
       names(data) %>% str_detect("urlBREFTeamData") %>% sum(na.rm = T) > 0
 
     min_var <-
-      data %>% select(matches("^min|^minutes")) %>% names() %>% .[[1]]
+      data %>% select(dplyr::matches("^min|^minutes")) %>% names() %>% .[[1]]
 
 
     min_totals <-
       data %>% pull(min_var)
 
     munge_cols <-
-      data %>% dplyr::select(matches(cols_to_match)) %>% names()
+      data %>% dplyr::select(dplyr::matches(cols_to_match)) %>% names()
 
     data <-
       data %>%

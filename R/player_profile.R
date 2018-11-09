@@ -109,7 +109,7 @@ players_awards <-
 
     all_data <-
       all_data %>%
-      left_join(df_nba_player_dict %>% dplyr::select(idPlayer, matches("url"))) %>%
+      left_join(df_nba_player_dict %>% dplyr::select(idPlayer, dplyr::matches("url"))) %>%
       suppressMessages()
 
     all_data <-
@@ -316,7 +316,7 @@ players_bios <-
         df_table <-
           df_table %>%
           dplyr::select(-one_of("idLeague")) %>%
-          dplyr::select(-matches("Group")) %>%
+          dplyr::select(-dplyr::matches("Group")) %>%
           nest(-c(nameTable, idPlayer, namePlayer),
                .key = 'dataTable') %>%
           suppressWarnings()
@@ -423,7 +423,7 @@ player_profiles <- function(players = NULL,
 
   all_data <-
     all_data %>%
-    left_join(df_dict_nba_players %>% dplyr::select(idPlayer, matches("url"))) %>%
+    left_join(df_dict_nba_players %>% dplyr::select(idPlayer, dplyr::matches("url"))) %>%
     suppressMessages()
 
   if (all_data %>% tibble::has_name("datetimeBirth")) {

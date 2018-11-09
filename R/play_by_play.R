@@ -127,7 +127,7 @@
       mutate_at(c("idGame", "idTeamHome", "idTeamAway", "ptsTotalTeamHome", "ptsTotalTeamAway"),
                 funs(. %>% as.integer())
       ) %>%
-      select(-matches("pts"))
+      select(-dplyr::matches("pts"))
 
     names_md <- names(df_metadata)
 
@@ -200,7 +200,7 @@ win_probability <-
       left_join(
         df_nba_team_dict %>% select(idTeamAway = idTeam, nameTeamAway = nameTeam)
       ) %>%
-      select(idGame, dateGame, matches("nameTeam"), everything()) %>%
+      select(idGame, dateGame, dplyr::matches("nameTeam"), everything()) %>%
       suppressMessages()
 
     if (filter_non_plays) {

@@ -469,7 +469,7 @@
     data <-
       data %>%
       mutate(urlPlayerImageBREF) %>%
-      select(matches("^id|name|url"), everything())
+      select(dplyr::matches("^id|name|url"), everything())
   }
   data
 

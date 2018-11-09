@@ -193,7 +193,7 @@ assign_tables_modes <-
                   remove_rank <- names(df) %>% str_detect("Rank") %>% sum(na.rm = T) > 0 & (!df %>% tibble::has_name("isRank") & !table %>% str_detect("LeagueDash"))
 
                   if (remove_rank){
-                    df <- df %>% select(-matches("Rank"))
+                    df <- df %>% select(-dplyr::matches("Rank"))
                   }
                   df <-
                     df %>% select(-one_of(c("modeSearch", "typeMeasure")))
@@ -452,7 +452,7 @@ clean_data_table_name <-
       dplyr::select(-typeResult)
 
     num_names <-
-      data %>% select_if(is.numeric) %>% select(-matches("id")) %>% names()
+      data %>% select_if(is.numeric) %>% select(-dplyr::matches("id")) %>% names()
 
     num_new <-
       glue::glue("{num_names}Team") %>% as.character()
@@ -1302,7 +1302,7 @@ munge_nba_data <- function(data) {
     }
   }
 
-  char_names <- data %>% dplyr::select(matches(char_words())) %>% names()
+  char_names <- data %>% dplyr::select(dplyr::matches(char_words())) %>% names()
 
   num_names <-
     data %>% dplyr::select(-one_of(char_names)) %>% names()
@@ -1344,7 +1344,7 @@ munge_nba_data <- function(data) {
     data <-
       data %>%
       mutate(isStarter = !is.na(groupStartPosition)) %>%
-      dplyr::select(matches("id|name|slug|city|is"), everything())
+      dplyr::select(dplyr::matches("id|name|slug|city|is"), everything())
   }
 
   if (data %>% tibble::has_name("dateGame")) {
@@ -1433,7 +1433,7 @@ munge_nba_data <- function(data) {
               funs(ifelse(. == "", NA, .)))
 
   logicial_names <-
-    data %>% dplyr::select(matches("^has[A-Z]|^is[A-Z]")) %>% names()
+    data %>% dplyr::select(dplyr::matches("^has[A-Z]|^is[A-Z]")) %>% names()
 
   if (logicial_names %>% length() > 0) {
     data <-
@@ -1443,7 +1443,7 @@ munge_nba_data <- function(data) {
   }
 
   id_names <-
-    data %>% dplyr::select(matches("idTeam", "idPlayer")) %>% names()
+    data %>% dplyr::select(dplyr::matches("idTeam", "idPlayer")) %>% names()
 
   if (id_names %>% length() > 0) {
     data <-
@@ -1467,7 +1467,7 @@ munge_nba_data <- function(data) {
         df_dict_nba_players %>% select(idPlayerOnOff = idPlayer,
                                        namePlayerOnOff = namePlayer)
       ) %>%
-      dplyr::select(matches("type[A-Z]|id[A-Z]|name[A-Z]"),
+      dplyr::select(dplyr::matches("type[A-Z]|id[A-Z]|name[A-Z]"),
                     everything()) %>%
       suppressMessages()
 
@@ -1496,7 +1496,7 @@ munge_nba_data <- function(data) {
         df_dict_nba_players %>% select(idPlayerPasserPassTo = idPlayer,
                                        namePlayerPasserPassTo = namePlayer)
       ) %>%
-      dplyr::select(matches("type[A-Z]|id[A-Z]|name[A-Z]"),
+      dplyr::select(dplyr::matches("type[A-Z]|id[A-Z]|name[A-Z]"),
                     everything()) %>%
       suppressMessages()
   }
@@ -1511,7 +1511,7 @@ munge_nba_data <- function(data) {
         df_dict_nba_players %>% select(idPlayerPasserPassTo = idPlayer,
                                        namePlayerPasserPassTo = namePlayer)
       ) %>%
-      dplyr::select(matches("type[A-Z]|id[A-Z]|name[A-Z]"),
+      dplyr::select(dplyr::matches("type[A-Z]|id[A-Z]|name[A-Z]"),
                     everything()) %>%
       suppressMessages()
   }
@@ -1519,7 +1519,7 @@ munge_nba_data <- function(data) {
 
   data <-
     data %>%
-    dplyr::select(-matches("CIF")) %>%
+    dplyr::select(-dplyr::matches("CIF")) %>%
     dplyr::select(-one_of(c("orderSort", "idLeague", "namePlayerLastFirst", "dateGameLastPlayed"))) %>%
     suppressWarnings()
 
@@ -1539,7 +1539,7 @@ munge_nba_data <- function(data) {
   data <-
     data %>%
     mutate_at(
-      .vars = data %>% select(matches("^pts|^blk")) %>% names(),
+      .vars = data %>% select(dplyr::matches("^pts|^blk")) %>% names(),
       funs(. %>% as.numeric())
     )
 
@@ -1554,7 +1554,7 @@ munge_nba_data <- function(data) {
     data %>%
     dplyr::select(one_of(char_names), everything()) %>%
     dplyr::select(
-      matches(
+      dplyr::matches(
         "slugTable|group[A-Z]|type[A-Z]|mode[A-Z]|id[A-Z]|name[A-Z]|year|slug[A-Z]|number[A-Z]|date|outcome|^url|gp|gs|minutes[A-Z]|passes|^fg|^pct[A-Z]"
       ),
       everything()

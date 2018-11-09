@@ -678,7 +678,7 @@
         df_parameters <-
           df_parameters %>%
           mutate_at(
-            df_parameters %>% dplyr::select(matches("is[A-Z]")) %>% names(),
+            df_parameters %>% dplyr::select(dplyr::matches("is[A-Z]")) %>% names(),
             funs(ifelse(. == "Y", 1, 0) %>% as.logical())
           ) %>%
           mutate(numberTable = table_id) %>%
@@ -797,7 +797,7 @@
         df_table <-
           df_table %>%
           dplyr::select(-one_of("idLeague")) %>%
-          dplyr::select(-matches("Group")) %>%
+          dplyr::select(-dplyr::matches("Group")) %>%
           nest(-c(nameTable, slugSeason, yearSeason, modeSearch, typeSeason),
                .key = 'dataTable')
         return(df_table)

@@ -21,7 +21,7 @@
         munge_nba_data()
       df_parameters <-
         df_parameters %>%
-        mutate_at(df_parameters %>% dplyr::select(matches("is[A-Z]")) %>% names(),
+        mutate_at(df_parameters %>% dplyr::select(dplyr::matches("is[A-Z]")) %>% names(),
                   funs(ifelse(. == "Y", 1, 0) %>% as.logical())) %>%
         mutate(numberTable = x,) %>%
         select(one_of(c("numberTable", "typeMeasure", "modeSearch")), everything()) %>%
@@ -167,7 +167,7 @@
 
         data <-
           data %>%
-          dplyr::select(matches("type|mode|^is|^id|^name"),
+          dplyr::select(dplyr::matches("type|mode|^is|^id|^name"),
                         everything())
       }
 
@@ -621,7 +621,7 @@ players_tables <-
 
     all_data <-
       all_data %>%
-      left_join(df_dict_nba_players %>% select(idPlayer, matches("url"))) %>%
+      left_join(df_dict_nba_players %>% select(idPlayer, dplyr::matches("url"))) %>%
       suppressWarnings() %>%
       suppressMessages()
 

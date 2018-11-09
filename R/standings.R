@@ -92,11 +92,11 @@ current_standings <-
     data <-
       data %>%
       purrr::set_names(actual_names) %>%
-      dplyr::select(-matches("Remove")) %>%
+      dplyr::select(-dplyr::matches("Remove")) %>%
       munge_nba_data() %>%
       mutate_at(c("pctLosses", "pctWins"),
                 funs(. / 100)) %>%
-      left_join(df_dict_nba_teams %>% select(idTeam, slugTeam, nameTeam, matches("url"))) %>%
+      left_join(df_dict_nba_teams %>% select(idTeam, slugTeam, nameTeam, dplyr::matches("url"))) %>%
       mutate(dateData = Sys.Date(),
              rankTeam = 1:n()) %>%
       select(dateData, rankTeam, idTeam, nameTeam, everything()) %>%
@@ -169,7 +169,7 @@ current_standings <-
         if (include_numeric_records) {
           record_names <-
             data %>%
-            dplyr::select(matches("record")) %>%
+            dplyr::select(dplyr::matches("record")) %>%
             names()
 
           if (record_names %>% length() > 0) {
@@ -257,7 +257,7 @@ playoff_pictures <-
             filter(nameTable %>% str_detect(slug)) %>%
             unnest() %>%
             remove_na_columns() %>%
-            dplyr::select(matches("slugSeason|^id|^name"), everything()) %>%
+            dplyr::select(dplyr::matches("slugSeason|^id|^name"), everything()) %>%
             select(-nameTable)
 
           if (nest_data) {
@@ -362,7 +362,7 @@ standings <-
 
     if (resolve_records) {
       record_names <-
-        all_data %>% select(matches("record[A-Z]")) %>% names()
+        all_data %>% select(dplyr::matches("record[A-Z]")) %>% names()
 
       all_data <- .parse_records(data = all_data, record_names = record_names)
     }

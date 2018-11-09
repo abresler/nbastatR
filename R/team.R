@@ -36,7 +36,7 @@
       df_parameters <-
         df_parameters %>%
         mutate_at(
-          df_parameters %>% dplyr::select(matches("is[A-Z]")) %>% names(),
+          df_parameters %>% dplyr::select(dplyr::matches("is[A-Z]")) %>% names(),
           funs(ifelse(. == "Y", 1, 0) %>% as.logical())
         ) %>%
         mutate(numberTable = x) %>%
@@ -154,7 +154,7 @@
 
         data <-
           data %>%
-          dplyr::select(matches("type|mode|^is|^id|^name"),
+          dplyr::select(dplyr::matches("type|mode|^is|^id|^name"),
                         everything())
       }
 
@@ -235,7 +235,7 @@
       mutate(urlTeamSeasonLogo = generate_team_season_logo(season = yearSeason, slug_team = slugTeam))
 
     num_names <-
-      data %>% select_if(is.numeric) %>% dplyr::select(-matches("^id|^year")) %>% names()
+      data %>% select_if(is.numeric) %>% dplyr::select(-dplyr::matches("^id|^year")) %>% names()
     no_teams <-
       num_names[!num_names %>% str_detect("Team")]
     names(data)[names(data) %in% no_teams] <-
@@ -939,7 +939,7 @@ teams_tables <-
                 funs(. %>% as.character() %>% readr::parse_number())) %>%
       suppressWarnings() %>%
       suppressMessages() %>%
-      select(matches("yearSeason", "slugSeason", "nameTeam"), everything()) %>%
+      select(dplyr::matches("yearSeason", "slugSeason", "nameTeam"), everything()) %>%
       tidyr::separate(zoneArea, into = c("nameZone", "slugZone"), sep = "\\(") %>%
       mutate(slugZone = slugZone %>% str_replace_all("\\)", ""))
 

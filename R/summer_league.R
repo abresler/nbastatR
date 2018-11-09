@@ -35,12 +35,12 @@ sl_players <-
         data <-
           data %>% purrr::set_names(actual_names)
 
-        height_cols <- data %>% select(matches("height")) %>% names()
+        height_cols <- data %>% select(dplyr::matches("height")) %>% names()
 
         df <-
           data %>%
           unite(namePlayer, nameFirst, nameLast, sep = " ") %>%
-          select(-matches("data")) %>%
+          select(-dplyr::matches("data")) %>%
           munge_nba_data()
 
         if (df %>% tibble::has_name("dateBirth")) {

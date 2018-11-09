@@ -367,7 +367,7 @@ widen_bref_data <-
   memoise::memoise(function(data) {
     gather_cols <-
       names(data)[!names(data) %in% (data %>% select(
-        matches(
+        dplyr::matches(
           "slugSeason|yearSeasonEnd|urlSeasonBREF|typeData|timeframeData|name|isPlayoffTeam|url[A-Z]"
         )
       ) %>% names())]
@@ -1195,7 +1195,7 @@ all_nba_teams <-
       .[[1]] %>%
       data.frame(stringsAsFactors = FALSE) %>%
       tbl_df() %>%
-      dplyr::select(-matches("Var"))
+      dplyr::select(-dplyr::matches("Var"))
 
     df <-
       df %>%
@@ -1205,7 +1205,7 @@ all_nba_teams <-
       funs(. %>% as.numeric())) %>%
       filter(!Rk %>% is.na()) %>%
       suppressWarnings() %>%
-      dplyr::select(-matches("Rk"))
+      dplyr::select(-dplyr::matches("Rk"))
 
     df_names <-
       get_bref_name_df()
@@ -1258,7 +1258,7 @@ all_nba_teams <-
 
     df <-
       df %>%
-      mutate_at(df %>% dplyr::select(matches("pct")) %>% names(),
+      mutate_at(df %>% dplyr::select(dplyr::matches("pct")) %>% names(),
                 funs(ifelse(. >= 1, . / 100, .))) %>%
       mutate(typeData = name_slug) %>%
       dplyr::select(typeData, everything())
@@ -1291,7 +1291,7 @@ all_nba_teams <-
 
     all_data <-
       all_data %>%
-      dplyr::select(-matches("urlData")) %>%
+      dplyr::select(-dplyr::matches("urlData")) %>%
       tidyr::unite(idPlayerSeason, idPlayer, yearSeason, remove = F)
 
 
@@ -1556,7 +1556,7 @@ bref_players_stats <-
       dplyr::select(-one_of("idRank"))
 
     numeric_names <-
-      data %>% dplyr::select(-matches("name|arena")) %>% names()
+      data %>% dplyr::select(-dplyr::matches("name|arena")) %>% names()
 
     data %>%
       mutate(
@@ -1619,7 +1619,7 @@ bref_players_stats <-
       dplyr::select(-one_of("idRank"))
 
     numeric_names <-
-      data %>% dplyr::select(-matches("name|arena")) %>% names()
+      data %>% dplyr::select(-dplyr::matches("name|arena")) %>% names()
 
     data %>%
       mutate(
@@ -1679,7 +1679,7 @@ bref_players_stats <-
       dplyr::select(-one_of("idRank"))
 
     numeric_names <-
-      data %>% dplyr::select(-matches("nameTeam|nameArena")) %>% names()
+      data %>% dplyr::select(-dplyr::matches("nameTeam|nameArena")) %>% names()
 
     data %>%
       mutate(nameArena = ifelse(nameArena == "", NA, nameArena)) %>%
@@ -1737,7 +1737,7 @@ bref_players_stats <-
       dplyr::select(-one_of("idRank"))
 
     numeric_names <-
-      data %>% dplyr::select(-matches("nameTeam|nameArena")) %>% names()
+      data %>% dplyr::select(-dplyr::matches("nameTeam|nameArena")) %>% names()
 
     data %>%
       mutate(
