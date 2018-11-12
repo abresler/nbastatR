@@ -417,8 +417,8 @@ nba_team_salaries <-
       left_join(color_df) %>%
       mutate(
         isWaived = ifelse(namePlayer %>% str_detect('waived'), T, F),
-        isNonGuaranted = ifelse(typeContractDetail == 'Non-Guaranteed', T, F),
-        isNonGuaranted = ifelse(isNonGuaranted %>% is.na(), F, isNonGuaranted),
+        isNonGuaranteed = ifelse(typeContractDetail == 'Non-Guaranteed', T, F),
+        isNonGuaranteed = ifelse(isNonGuaranteed %>% is.na(), F, isNonGuaranteed),
         isTeamOption = ifelse(typeContractDetail == 'Team Option', T, F),
         isTeamOption = ifelse(isTeamOption %>% is.na(), F, isTeamOption),
         isPlayerOption = ifelse(typeContractDetail == 'Player Option', T, F),
@@ -427,7 +427,7 @@ nba_team_salaries <-
       dplyr::select(
         slugSeason,
         nameTeam:isOnRoster,
-        isNonGuaranted,
+        isNonGuaranteed,
         isTeamOption,
         isPlayerOption,
         typeContractDetail,
@@ -574,5 +574,11 @@ nba_insider_salaries <-
         isWaived = namePlayer %>% str_detect('waived'),
         namePlayer = namePlayer %>% str_replace('waived', '') %>% str_trim()
       )
+
+    all_salaries <-
+      all_salaries %>%
+      tidyr::replace_na(list(isFinalSeason = F)) %>%
+      replace_na(list(typeContractDetail = "Guaranteed"))
+
     all_salaries
   }
