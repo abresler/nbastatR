@@ -580,5 +580,12 @@ nba_insider_salaries <-
       tidyr::replace_na(list(isFinalSeason = F)) %>%
       replace_na(list(typeContractDetail = "Guaranteed"))
 
+    all_salaries <-
+      mutate(typeOption = case_when(
+      isTeamOption ~ "Team Option",
+      isPlayerOption ~ "Player Option",
+      TRUE ~ "None"
+    ))
+
     all_salaries
   }

@@ -213,7 +213,7 @@ hoops_hype_salary_summary <-
            assume_player_opt_out = T,
            assume_team_doesnt_exercise = T) {
     types <-
-      c(NA,
+      c("None",
         'Player Option',
         'Team Option',
         'Qualifying Offer',
@@ -398,16 +398,24 @@ hoops_hype_salary_summary <-
                     namePlayer:isPlayerOption,
                     type:isTeamOption,
                     amountContract) %>%
+      suppressMessages() %>%
+      rename(typeOption = type)
+
+    all_data <-
+      all_data %>%
+      left_join(
+        data_frame(namePlayer, urlHoopsHypePlayer)
+      ) %>%
       suppressMessages()
 
-   all_data <-
-     all_data %>%
+    all_data <-
+      all_data %>%
       dplyr::filter(amountContract > 0)
 
     if (assume_player_opt_out) {
       player_final_seasons <-
         all_data %>%
-        dplyr::filter(isPlayerOption %>% is.na())
+        dplyr::filter(isPlayerOption)
     }  else {
       player_final_seasons <-
         all_data
@@ -417,23 +425,26 @@ hoops_hype_salary_summary <-
     if (assume_team_doesnt_exercise) {
       player_final_seasons <-
         player_final_seasons %>%
-        dplyr::filter(isTeamOption %>% is.na())
+        dplyr::filter(isTeamOption)
     }
-   player_final_seasons <-
-     player_final_seasons %>%
+
+    player_final_seasons <-
+      player_final_seasons %>%
       group_by(namePlayer) %>%
       dplyr::select(namePlayer, slugSeason) %>%
       dplyr::filter(slugSeason == max(slugSeason)) %>%
       mutate(isFinalSeason = T) %>%
-     ungroup()
+      ungroup()
 
     all_data %>%
       left_join(player_final_seasons) %>%
       mutate(namePlayerLower = namePlayer %>% str_to_lower()) %>%
       left_join(players_urls_df) %>%
       dplyr::select(-namePlayerLower) %>%
-      mutate(isFinalSeason = ifelse(isFinalSeason %>% is.na(), F, T),
-             urlTeamSalaryHoopsHype = url) %>%
+      mutate(
+        isFinalSeason = ifelse(isFinalSeason %>% is.na(), F, T),
+        urlTeamSalaryHoopsHype = url
+      ) %>%
       suppressMessages()
   }
 
