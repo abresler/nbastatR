@@ -509,7 +509,7 @@ nba_team_salaries <-
 #' nba_insider_salaries(assume_player_opt_out = T, assume_team_doesnt_exercise = T, return_message = TRUE)
 
 nba_insider_salaries <-
-  function(assume_player_opt_out = T,
+  function(assume_player_opt_out = F,
            assume_team_doesnt_exercise = T,
            return_wide = F,
            return_message = T) {
@@ -579,13 +579,6 @@ nba_insider_salaries <-
       all_salaries %>%
       tidyr::replace_na(list(isFinalSeason = F)) %>%
       replace_na(list(typeContractDetail = "Guaranteed"))
-
-    all_salaries <-
-      mutate(typeOption = case_when(
-      isTeamOption ~ "Team Option",
-      isPlayerOption ~ "Player Option",
-      TRUE ~ "None"
-    ))
 
     all_salaries
   }

@@ -4,7 +4,7 @@
 \alias{nba_insider_salaries}
 \title{NBA team salaries}
 \usage{
-nba_insider_salaries(assume_player_opt_out = T,
+nba_insider_salaries(assume_player_opt_out = F,
   assume_team_doesnt_exercise = T, return_wide = F,
   return_message = T)
 }
