@@ -229,11 +229,15 @@
           namePlayer %>% str_detect("Larry Nance") &
             yearSeason > 1993 ~ "Larry Nance Jr.",
           namePlayer %>% str_detect("Tim Hardaway") &
-            yearSeason > 2002 ~ "Tim Hardaway Jr.",
+            yearSeason > 2005 ~ "Tim Hardaway Jr.",
           namePlayer %>% str_detect("Gary Payton") &
-            yearSeason > 2002 ~ "Gary Payton II",
+            yearSeason > 2010 ~ "Gary Payton II",
+          namePlayer %>% str_detect("Glenn Robinson") &
+            yearSeason > 2012 ~ "Glenn Robinson III",
           namePlayer %>% str_detect("Jaren Jackson Jr.") &
-            yearSeason > 2002 ~ "Gary Payton II",
+            yearSeason > 2017 ~ "Jaren Jackson",
+          namePlayer %>% str_detect("Gary Trent") &
+            yearSeason > 2017 ~ "Gary Trent Jr.",
           TRUE                      ~  namePlayer
 
         )

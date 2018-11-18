@@ -858,7 +858,13 @@ dictionary_nba_names <-
                    "E_USG_PCT",
                    "E_PACE",
                    "NBA_FLAG",
-                   "E_TM_TOV_PCT"
+                   "E_TM_TOV_PCT",
+                   "OFF_BOXOUTS",
+                   "DEF_BOXOUTS",
+                   "OFF_LOOSE_BALLS_RECOVERED",
+                   "DEF_LOOSE_BALLS_RECOVERED",
+                   "BOX_OUT_PLAYER_TEAM_REBS",
+                   "BOX_OUT_PLAYER"
                  ),
                nameActual =
                  c("idPlayer", "namePlayerLastFirst", "namePlayer",
@@ -1231,7 +1237,13 @@ dictionary_nba_names <-
                    "pctUSGE",
                    "paceE",
                    "flagNBA",
-                   "pctTOVE"
+                   "pctTOVE",
+                   "boxOutsOffense",
+                   "boxOutsDefense",
+                   "looseBallsRecoveredOffense",
+                   "looseBallsRecoveredDefense",
+                   "boxOutsPlayerTeamRebound",
+                   "boxOutPlayerRebound"
                  )
     )
   }
