@@ -1550,10 +1550,15 @@ bref_players_stats <-
 
       })
 
+    df_names <- data_frame(nameActual = actual_names) %>% mutate(idColumn = 1:n())
+
+    df_names <- df_names %>% group_by(nameActual) %>% filter(idColumn == min(idColumn)) %>% ungroup() %>% arrange(idColumn)
+
     data <-
-      data %>%
-      purrr::set_names(actual_names) %>%
+      data[,df_names$idColumn] %>%
+      purrr::set_names(df_names$nameActual) %>%
       dplyr::select(-one_of("idRank"))
+
 
     numeric_names <-
       data %>% dplyr::select(-dplyr::matches("name|arena")) %>% names()
@@ -1789,6 +1794,7 @@ bref_players_stats <-
                      trim = T,
                      fill = F) %>%
           tibble::as_data_frame()
+
         team_nodes <-
           xml_tables[x] %>%
           html_nodes("a") %>%
@@ -2063,7 +2069,7 @@ bref_players_stats <-
 #' @examples
 #' bref_teams_stats(seasons = 2017:2018)
 bref_teams_stats <-
-  function(seasons = 1950:2018,
+  function(seasons = 2019,
            return_message = TRUE,
            assign_to_environment = TRUE,
            nest_data = FALSE,

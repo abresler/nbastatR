@@ -4,7 +4,7 @@
 \alias{bref_teams_stats}
 \title{Basketball Reference teams seasons data}
 \usage{
-bref_teams_stats(seasons = 1950:2018, return_message = TRUE,
+bref_teams_stats(seasons = 2019, return_message = TRUE,
   assign_to_environment = TRUE, nest_data = FALSE, join_data = TRUE,
   widen_data = TRUE)
 }
