@@ -864,7 +864,9 @@ dictionary_nba_names <-
                    "OFF_LOOSE_BALLS_RECOVERED",
                    "DEF_LOOSE_BALLS_RECOVERED",
                    "BOX_OUT_PLAYER_TEAM_REBS",
-                   "BOX_OUT_PLAYER"
+                   "BOX_OUT_PLAYER",
+                   "SCREEN_AST_PTS",
+                   "BOX_OUT_PLAYER_REBS"
                  ),
                nameActual =
                  c("idPlayer", "namePlayerLastFirst", "namePlayer",
@@ -1243,7 +1245,9 @@ dictionary_nba_names <-
                    "looseBallsRecoveredOffense",
                    "looseBallsRecoveredDefense",
                    "boxOutsPlayerTeamRebound",
-                   "boxOutPlayerRebound"
+                   "boxOutPlayerRebound",
+                   "ptsScreenAssist",
+                   "boxOutsPlayerTREB"
                  )
     )
   }
