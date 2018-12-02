@@ -79,7 +79,8 @@ current_standings <-
     }
 
     if (!'df_dict_nba_teams' %>% exists()) {
-      df_dict_nba_teams <- get_nba_teams()
+      df_dict_nba_teams <-
+        nba_teams()
       assign(x = 'df_dict_nba_teams', df_dict_nba_teams, envir = .GlobalEnv)
     }
 

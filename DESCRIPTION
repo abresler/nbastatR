@@ -1,7 +1,7 @@
 Package: nbastatR
 Type: Package
 Title: R's interface to NBA data
-Version: 0.1.12010403
+Version: 0.1.12010404
 Authors@R: c(person("Alex", "Bresler", email = "abresler@asbcllc.com", role = c("aut", "cre")))
 Description: NBA data tools for R
 License: MIT + file LICENSE
