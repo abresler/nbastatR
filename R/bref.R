@@ -1661,6 +1661,7 @@ bref_players_stats <-
         "ratingSimpleSystem",
         "ortgTeam",
         "drtgTeam",
+        "nrtgTeam",
         "paceTeam",
         "pctFTRate",
         "pct3PRate",
@@ -1773,7 +1774,6 @@ bref_players_stats <-
         table_id <-
           xml_tables[x] %>%
           html_attr("id")
-
         table_name <-
           xml_tables[[x]] %>%
           xml_nodes("caption") %>%
