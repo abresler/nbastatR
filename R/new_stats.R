@@ -666,6 +666,8 @@ parse_for_seasons_data <-
 #'
 #' Returns team dictionary
 #'
+#' @param join_blg if \code{TRUE} joins BLG team features data
+#'
 #' @return a `data_frame`
 #' @export
 #' @importFrom readr read_lines
@@ -674,7 +676,7 @@ parse_for_seasons_data <-
 #' @examples
 #' nba_teams()
 nba_teams <-
-  function() {
+  function(join_blg = T) {
     url <- "https://stats.nba.com/js/data/ptsd/stats_ptsd.js"
     json <-
       url %>%
@@ -686,6 +688,13 @@ nba_teams <-
     df_teams <-
       json %>%
       .parse_for_teams()
+
+    if (join_blg) {
+      df_teams <-
+        df_teams %>%
+        left_join(.blg_teams() %>% select(-one_of(c( "teamName", "cityTeam")))) %>%
+        suppressMessages()
+    }
     df_teams
   }
 
