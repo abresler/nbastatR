@@ -76,7 +76,7 @@ dictionary_bref_coaches <-
 
     df_seasons <-
       seasons %>%
-      future_map_dfr(function(season) {
+      map_df(function(season) {
         .munge_seasons(season = season)
       })
 
@@ -143,7 +143,7 @@ dictionary_bref_teams <-
 
     df_seasons <-
       seasons %>%
-      future_map_dfr(function(season) {
+      map_df(function(season) {
         .munge_seasons(season = season)
       })
 
@@ -614,7 +614,7 @@ widen_bref_data <-
 
     all_data <-
       table_names %>%
-      future_map_dfr(function(table) {
+      map_df(function(table) {
         table %>% cat(fill = T)
         df_table <-
           all_data %>%
@@ -942,7 +942,7 @@ dictionary_bref_players <-
 
     df_years <-
       all_years %>%
-      future_map_dfr(function(years){
+      map_df(function(years){
         .parse_years_player(years = years)
       })
 
@@ -1041,7 +1041,7 @@ all_nba_teams <-
 
     df_people <-
       seq_along(slugs) %>%
-      future_map_dfr(function(x) {
+      map_df(function(x) {
         namePlayer <-
           player_names[[x]]
         urlPlayerBREF <-
@@ -1285,7 +1285,7 @@ all_nba_teams <-
       purrr::possibly(.parse_player_season, data_frame())
     all_data <-
       urls %>%
-      future_map_dfr(function(x) {
+      map_df(function(x) {
         .parse_player_season_safe(url = x, return_message = return_message)
       })
 
@@ -1363,7 +1363,7 @@ bref_players_stats <-
 
     all_data <-
       tables %>%
-      future_map_dfr(function(x) {
+      map_df(function(x) {
         .get_data_bref_player_seasons_safe(
           table = x,
           seasons = seasons,
@@ -1770,7 +1770,7 @@ bref_players_stats <-
 
     all_data <-
       seq_along(xml_tables) %>%
-      future_map_dfr(function(x) {
+      map_df(function(x) {
         table_id <-
           xml_tables[x] %>%
           html_attr("id")
@@ -2084,7 +2084,7 @@ bref_teams_stats <-
 
     all_data <-
       df_urls$urlSeasonBREF %>%
-      future_map_dfr(function(x) {
+      map_df(function(x) {
         if (return_message) {
           glue::glue("Parsing {x}") %>% cat(fill = T)
         }
@@ -2391,7 +2391,7 @@ dictionary_bref_awards <-
 
     df_players <-
       player_links %>%
-      future_map_dfr(function(player_link) {
+      map_df(function(player_link) {
         player <- player_link %>% html_text()
         slug_player <-
           player_link %>% html_attr('href')
@@ -2413,7 +2413,7 @@ dictionary_bref_awards <-
                           "roy", "smoy")) {
       data <-
         data %>%
-        dplyr::slice(3:nrow(data)) %>%
+        slice(3:nrow(data)) %>%
         dplyr::select(c(1:3, 5:6))
 
       data <-
@@ -2431,7 +2431,7 @@ dictionary_bref_awards <-
     if (slug_award == "all_star_mvp") {
       data <-
         data %>%
-        dplyr::slice(3:nrow(data)) %>%
+        slice(3:nrow(data)) %>%
         dplyr::select(c(1:4)) %>%
         purrr::set_names(c(
           "slugSeason",
@@ -2445,7 +2445,7 @@ dictionary_bref_awards <-
                 "playoffs_mvp")) {
       data <-
         data %>%
-        dplyr::slice(3:nrow(data)) %>%
+        slice(3:nrow(data)) %>%
         dplyr::select(c(1:5)) %>%
         purrr::set_names(c(
           "slugSeason",
@@ -2458,7 +2458,7 @@ dictionary_bref_awards <-
 
     if (slug_award == "coy") {
       data <- data %>%
-        dplyr::slice(3:nrow(data)) %>%
+        slice(3:nrow(data)) %>%
         select(1:4) %>%
         purrr::set_names(c(
           "slugSeason",
@@ -2470,7 +2470,7 @@ dictionary_bref_awards <-
 
     if (slug_award == "eoy") {
       data <- data %>%
-        dplyr::slice(3:nrow(data)) %>%
+        slice(3:nrow(data)) %>%
         select(1:4) %>%
         purrr::set_names(c(
           "slugSeason",
@@ -2622,7 +2622,7 @@ bref_awards <-
     }
     df_urls <-
       awards %>%
-      future_map_dfr(function(award) {
+      map_df(function(award) {
         .generate_award_url(award = award)
       })
 
@@ -2680,7 +2680,7 @@ bref_awards <-
 
     all_data <-
       match_ids %>%
-      future_map_dfr(function(id){
+      map_df(function(id){
         id_css <- glue::glue("#{id} table")
 
         table_node <-
@@ -2689,7 +2689,7 @@ bref_awards <-
 
         df_items <-
           2:8 %>%
-          future_map_dfr(function(x){
+          map_df(function(x){
             no_css <-
               table_node %>%
               html_nodes(glue::glue("td:nth-child({x})"))
@@ -2727,7 +2727,7 @@ bref_awards <-
 
     df_players <-
       seq_along(player_nodes) %>%
-      future_map_dfr(function(x){
+      map_df(function(x){
         player <- player_nodes[[x]] %>% html_text()
         slug <- player_nodes[[x]] %>% html_attr('href') %>%
           str_replace_all("/players/|.html", "") %>%
@@ -2821,7 +2821,7 @@ bref_awards_votes <-
            return_message = TRUE) {
     df_urls <-
       seasons %>%
-      future_map_dfr(function(season) {
+      map_df(function(season) {
         .generate_vote_url(season = season)
       })
 

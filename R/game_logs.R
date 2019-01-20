@@ -119,8 +119,8 @@
                            countDaysRestTeam == 0, TRUE, FALSE)
         ) %>%
         mutate(
-          isB2BFirst = ifelse(dplyr::lead(countDaysNextGameTeam) == 0, TRUE, FALSE),
-          isB2BSecond = ifelse(dplyr::lag(countDaysNextGameTeam) == 0, TRUE, FALSE)
+          isB2BFirst = ifelse(lead(countDaysNextGameTeam) == 0, TRUE, FALSE),
+          isB2BSecond = ifelse(lag(countDaysNextGameTeam) == 0, TRUE, FALSE)
         ) %>%
         ungroup() %>%
         mutate_if(is.logical,
@@ -129,7 +129,7 @@
       data <-
         data %>%
         left_join(df_teams_games) %>%
-        dplyr::select(one_of(
+        select(one_of(
           c(
             "typeResult",
             "yearSeason",
@@ -168,7 +168,7 @@
 
       data <-
         data %>%
-        left_join(df_nba_player_dict %>% select(idPlayer, dplyr::matches("url"))) %>%
+        left_join(df_nba_player_dict %>% select(idPlayer, matches("url"))) %>%
         suppressMessages()
 
 
@@ -203,7 +203,7 @@
 
       data <-
         data %>%
-        dplyr::select(
+        select(
           typeResult:namePlayer,
           numberGamePlayerSeason,
           countDaysRestPlayer,
@@ -218,7 +218,7 @@
     data <-
       data %>%
       mutate(slugLeague = league) %>%
-      dplyr::select(typeResult, typeSeason, yearSeason, everything()) %>%
+      select(typeResult, typeSeason, yearSeason, everything()) %>%
       nest(-c(slugLeague, typeResult, slugSeason, yearSeason), .key = dataTables)
 
 
@@ -381,7 +381,7 @@ game_logs <-
 
           df_table <-
             df_table %>%
-            dplyr::select(one_of(col_order), everything()) %>%
+            select(one_of(col_order), everything()) %>%
             suppressWarnings()
 
 
@@ -486,7 +486,7 @@ game_logs <-
         ) %>%
         mutate(isTeamWinner = ifelse(slugTeamWinner == slugTeam, TRUE, FALSE)) %>%
         suppressMessages() %>%
-        dplyr::select(typeSeason, slugSeason, dateGame, idGame, numberGameDay,
+        select(typeSeason, slugSeason, dateGame, idGame, numberGameDay,
                       slugTeam, isTeamWinner, everything())
     }
 

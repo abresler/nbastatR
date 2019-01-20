@@ -1,4 +1,4 @@
-url: http://asbcllc.com/nbastatR/
+url: https://asbcllc.com/nbastatR/
 
 template:
   params:
@@ -7,7 +7,7 @@ template:
 navbar:
   left:
   - text: ASBC LLC
-    href: http://asbcllc.com/
+    href: https://asbcllc.com/
   - text: Reference
     href: reference/index.html
   right:
