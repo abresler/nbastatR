@@ -78,7 +78,7 @@ players_rotowire <-
     all_data <-
       ids %>%
       future_map_dfr(function(id) {
-        get_player_rotowire_news_safe(player_id = id, return_message = return_message)
+        get_player_rotowire_news_safe(player_id = id, return_message = return_message, results = results)
       })
 
     all_data <-
