@@ -222,6 +222,7 @@
 
 .resolve.players <-
   memoise::memoise(function(data, site = "bref") {
+
     data <-
       data %>%
       mutate(
@@ -239,13 +240,14 @@
           namePlayer %>% str_detect("Gary Trent") &
             yearSeason > 2017 ~ "Gary Trent Jr.",
           TRUE                      ~  namePlayer
-
         )
       )
 
     data_players <-
       data %>%
-      dplyr::select(one_of(c("namePlayer", "idPlayer", "yearSeason"))) %>%
+      dplyr::select(one_of(c(
+        "namePlayer", "slugPlayerBREF", "yearSeason"
+      ))) %>%
       distinct()
 
 
@@ -261,14 +263,19 @@
 
     df_nba_stats_players <-
       df_dict_nba_players %>%
-      dplyr::select(namePlayer,
-                    idPlayerNBA = idPlayer,
-                    urlPlayerThumbnail,
-                    urlPlayerHeadshot,
-                    yearSeasonFirst) %>%
+      dplyr::select(
+        namePlayer,
+        yearSeasonFirst,
+        idPlayerNBA = idPlayer,
+        urlPlayerThumbnail,
+        urlPlayerHeadshot,
+        urlPlayerPhoto,
+        urlPlayerStats,
+        urlPlayerActionPhoto,
+      ) %>%
       mutate(namePlayerNBA = namePlayer) %>%
       dplyr::select(namePlayerNBA, everything()) %>%
-      group_by(namePlayerNBA) %>%
+      group_by(idPlayerNBA, namePlayerNBA) %>%
       filter(yearSeasonFirst == max(yearSeasonFirst)) %>%
       ungroup()
 
@@ -277,10 +284,237 @@
       left_join(df_nba_stats_players) %>%
       suppressMessages()
 
+    data_players <-
+      data_players %>%
+      mutate(
+        idPlayerNBA = as.integer(idPlayerNBA),
+        idPlayerNBA = case_when(
+          slugPlayerBREF == "jonesma02" ~ 90000L,
+          slugPlayerBREF == "jonesma03" ~ 2891L,
+          slugPlayerBREF == "mitchto02" ~ 203502L,
+          slugPlayerBREF == "mitchto03" ~ 203183L,
+          slugPlayerBREF == "jonesbo01" ~ 77193L,
+          slugPlayerBREF == "jonesbo02" ~ 200784L,
+          slugPlayerBREF == "hendece01" ~ 76990L,
+          slugPlayerBREF == "hendece02" ~ 1538L,
+          slugPlayerBREF == "jonesch01" ~ 279L,
+          slugPlayerBREF == "jonesch02" ~ 77178L,
+          slugPlayerBREF == "jonesch03" ~ 1869L,
+          slugPlayerBREF == "smithch01" ~ 293L,
+          slugPlayerBREF == "smithch02" ~ 78179L,
+          slugPlayerBREF == "smithch04" ~ 1520L,
+          slugPlayerBREF == "johnsch03" ~ 202419L,
+          slugPlayerBREF == "johnsch04" ~ 203187L,
+          slugPlayerBREF == "smithch03" ~ 1814L,
+          slugPlayerBREF == "smithch05" ~ 203147L,
+          slugPlayerBREF == "brownde01" ~ 244L,
+          slugPlayerBREF == "brownde03" ~ 200793L,
+          slugPlayerBREF == "johnsed02" ~ 77144L,
+          slugPlayerBREF == "johnsed03" ~ 698L,
+          slugPlayerBREF == "johnsge02" ~ 77149L,
+          slugPlayerBREF == "johnsge03" ~ 77148L,
+          slugPlayerBREF == "kingge03" ~ 1628994L,
+          slugPlayerBREF == "hendege01" ~ 76993L,
+          slugPlayerBREF == "hendege02" ~ 201945L,
+          slugPlayerBREF == "smithgr02" ~ 202962L,
+          slugPlayerBREF == "paxsoji02" ~ 77819L,
+          slugPlayerBREF == "johnske01" ~ 77154L,
+          slugPlayerBREF == "johnske03" ~ 2256L,
+          slugPlayerBREF == "johnsla02" ~ 913L,
+          slugPlayerBREF == "willima03" ~ 200766L,
+          slugPlayerBREF == "willima04" ~ 201173L,
+          slugPlayerBREF == "davisma01" ~ 76528L,
+          slugPlayerBREF == "davisma02" ~ 707L,
+          slugPlayerBREF == "smithmi01" ~ 78197L,
+          slugPlayerBREF == "smithmi02" ~ 63L,
+          slugPlayerBREF == "dunlemi01" ~ 76616L,
+          slugPlayerBREF == "dunlemi02" ~ 2399L,
+          slugPlayerBREF == "jamesmi01" ~ 2229L,
+          slugPlayerBREF == "jamesmi02" ~ 1628455L,
+          slugPlayerBREF == "ewingpa01" ~ 121L,
+          slugPlayerBREF == "ewingpa02" ~ 201607L,
+          slugPlayerBREF == "willire01" ~ 199L,
+          slugPlayerBREF == "willire02" ~ 202130L,
+          slugPlayerBREF == "smithst03" ~ 200848L,
+          slugPlayerBREF == "russewa01" ~ 78048L,
+          slugPlayerBREF == "russewa02" ~ 201041L,
+          slugPlayerBREF == "wrighch01" ~ 202874L,
+          slugPlayerBREF == "wrighch02" ~ 203203L,
+          slugPlayerBREF == "wilsobu01" ~ 78587L,
+          slugPlayerBREF == "hawkiro01" ~ 76975L,
+          slugPlayerBREF == "johnsch01" ~ 77133L,
+          slugPlayerBREF == "johnsch02" ~ 77159L,
+          slugPlayerBREF == "houseda01" ~ 1627863L,
+          slugPlayerBREF == "brittda01" ~ 76261L,
+          slugPlayerBREF == "willidu01" ~ 78545L,
+          slugPlayerBREF == "lawreed01" ~ 77348L,
+          slugPlayerBREF == "heardga01" ~ 76985L,
+          slugPlayerBREF == "gilesha01" ~ 1628385L,
+          slugPlayerBREF == "whitnha02" ~ 78519L,
+          slugPlayerBREF == "vanbrja01" ~ 78400L,
+          slugPlayerBREF == "whitejo01" ~ 78510L,
+          slugPlayerBREF == "walkelo01" ~ 1629022L,
+          slugPlayerBREF == "dampilo01" ~ 76499L,
+          slugPlayerBREF == "baglema01" ~ 1628963L,
+          slugPlayerBREF == "frazime01" ~ 1628982L,
+          slugPlayerBREF == "creekmi01" ~ 1628249L,
+          slugPlayerBREF == "bambamo01" ~ 1628964L,
+          slugPlayerBREF == "williro04" ~ 1629057L,
+          slugPlayerBREF == "valenro01" ~ 78396L,
+          slugPlayerBREF == "hamilro01" ~ 76928L,
+          slugPlayerBREF == "smithsa02" ~ 78205L,
+          slugPlayerBREF == "mykhasv01" ~ 1629004L,
+          slugPlayerBREF == "mcclate01" ~ 77510L,
+          slugPlayerBREF == "greento01" ~ 76879L,
+          slugPlayerBREF == "browntr01" ~ 1628972L,
+          slugPlayerBREF == "edwarvi01" ~ 1629053L,
+          slugPlayerBREF == "lemonwa01" ~ 1627215L,
+          slugPlayerBREF == "cartewe01" ~ 1628976L,
+          slugPlayerBREF == "davisch01" ~ 76519L,
+          slugPlayerBREF == "duffybo02" ~ 76610L,
+          slugPlayerBREF == "guokama02" ~ 76908L,
+          slugPlayerBREF == "johnsge01" ~ 77147L,
+          slugPlayerBREF == "johnsla01" ~ 77156L,
+          slugPlayerBREF == "joneswi01" ~ 77202L,
+          slugPlayerBREF == "kingge01" ~ 77268L,
+          slugPlayerBREF == "paxsoji01" ~ 77818L,
+          slugPlayerBREF == "smithbi01" ~ 78209L,
+          slugPlayerBREF == "smithgr01" ~ 78209L,
+          slugPlayerBREF == "turneja01" ~ 78380L,
+          slugPlayerBREF == "turneja02" ~ 78382L,
+          slugPlayerBREF == "ackerdo01" ~ 76008L,
+          slugPlayerBREF == "actonbu01" ~ 76010L,
+          slugPlayerBREF == "anderda02" ~ 76036L,
+          slugPlayerBREF == "armstcu01" ~ 76060L,
+          slugPlayerBREF == "athadi01" ~ 76069L,
+          slugPlayerBREF == "attleal01" ~ 76070L,
+          slugPlayerBREF == "austijo01" ~ 76073L,
+          slugPlayerBREF == "averibi01" ~ 76076L,
+          slugPlayerBREF == "barrmo01" ~ 76113L,
+          slugPlayerBREF == "bellwh01" ~ 76143L,
+          slugPlayerBREF == "bockhbu01" ~ 76191L,
+          slugPlayerBREF == "bonsage01" ~ 76203L,
+          slugPlayerBREF == "borsaik01" ~ 76209L,
+          slugPlayerBREF == "boydfr01" ~ 76222L,
+          slugPlayerBREF == "brianfr01" ~ 76250L,
+          slugPlayerBREF == "bryanem01" ~ 76289L,
+          slugPlayerBREF == "budkowa01" ~ 76298L,
+          slugPlayerBREF == "burdeti01" ~ 76303L,
+          slugPlayerBREF == "clemeba01" ~ 76403L,
+          slugPlayerBREF == "crossch01" ~ 76479L,
+          slugPlayerBREF == "darcepe01" ~ 76506L,
+          slugPlayerBREF == "davisdw01" ~ 76521L,
+          slugPlayerBREF == "davismi02"  ~ 76522L,
+          slugPlayerBREF == "davisre01" ~ 76524L,
+          slugPlayerBREF ==  "devlico01" ~ 76561L,
+          slugPlayerBREF ==  "dilloho01" ~ 76571L,
+          slugPlayerBREF ==  "doveso01" ~ 76592L,
+          slugPlayerBREF ==  "eddledi01" ~ 76636L,
+          slugPlayerBREF ==  "eichhdi01" ~ 76651L,
+          slugPlayerBREF ==  "ellisbo01" ~ 76658L,
+          slugPlayerBREF ==  "gaborbi01" ~ 76768L,
+          slugPlayerBREF ==  "gaineel01" ~ 76769L,
+          slugPlayerBREF ==  "garredi01" ~ 76788L,
+          slugPlayerBREF ==  "gibsoho01" ~ 76811L,
+          slugPlayerBREF ==  "glickno01" ~ 76823L,
+          slugPlayerBREF ==  "hahnro01" ~ 76914L,
+          slugPlayerBREF ==  "halbech01" ~ 76918L,
+          slugPlayerBREF ==  "halbrsw01" ~ 76919L,
+          slugPlayerBREF ==   "hermskl01" ~ 77007L,
+          slugPlayerBREF ==   "hertzso01" ~ 77011L,
+          slugPlayerBREF ==   "hoffmpa01" ~ 77036L,
+          slugPlayerBREF ==   "holtaw01" ~ 77046L,
+          slugPlayerBREF ==   "hoskebi01" ~ 77061L,
+          slugPlayerBREF ==   "hundlho01" ~ 77082L,
+          slugPlayerBREF ==   "ingramc01" ~ 77095L,
+          slugPlayerBREF ==   "johnsra01" ~ 77139L,
+          slugPlayerBREF ==  "joneswa01" ~ 77199L,
+          slugPlayerBREF ==   "kearnmi01" ~ 77230L,
+          slugPlayerBREF ==   "kennego01" ~ 77243L,
+          slugPlayerBREF ==   "kennepi01" ~ 77245L,
+          slugPlayerBREF ==   "kenvibi01" ~ 77247L,
+          slugPlayerBREF ==   "kerrre01" ~ 77248L,
+          slugPlayerBREF ==   "killuea01" ~ 77257L,
+          slugPlayerBREF ==   "kingma01" ~ 77272L,
+          slugPlayerBREF ==   "kronto01" ~ 77313L,
+          slugPlayerBREF ==   "kupeccj01" ~ 77325L,
+          slugPlayerBREF ==   "laytomo01" ~ 77350L,
+          slugPlayerBREF ==  "leaksma01" ~ 77351L,
+          slugPlayerBREF ==   "leeru01" ~ 77365L,
+          slugPlayerBREF ==   "leonasl01" ~ 77371L,
+          slugPlayerBREF ==   "loganjo01" ~ 77403L,
+          slugPlayerBREF ==   "lowerch01" ~ 77416L,
+          slugPlayerBREF ==   "mahonmo01" ~ 77444L,
+          slugPlayerBREF ==  "marshri01" ~ 77465L,
+          slugPlayerBREF ==  "martila01" ~ 77475L,
+          slugPlayerBREF ==  "martiwh01" ~ 77479L,
+          slugPlayerBREF ==  "mcconbu01" ~ 77514L,
+          slugPlayerBREF ==  "mcguial01" ~ 77536L,
+          slugPlayerBREF ==  "mckinbo01" ~ 77546L,
+          slugPlayerBREF ==  "mclemmc01" ~ 77548L,
+          slugPlayerBREF == "mcmulma01" ~ 77556L,
+          slugPlayerBREF ==   "meinemo01" ~ 77573L,
+          slugPlayerBREF ==   "morrire01" ~ 77648L,
+          slugPlayerBREF == "nashco01" ~ 77687L,
+          slugPlayerBREF == "niemiri01" ~ 77717L,
+          slugPlayerBREF == "nordmbe01" ~ 77727L,
+          slugPlayerBREF == "obriera01" ~ 77743L,
+          slugPlayerBREF == "ogdenbu01" ~ 77747L,
+          slugPlayerBREF == "oldhajo01" ~ 77758L,
+          slugPlayerBREF == "olsenbu01" ~ 77765L,
+          slugPlayerBREF == "owensre01" ~ 77783L,
+          slugPlayerBREF == "parhaea01" ~ 77797L,
+          slugPlayerBREF == "parkme01" ~ 77799L,
+          slugPlayerBREF == "patteto01" ~ 77813L,
+          slugPlayerBREF == "phelaja02" ~ 77849L,
+          slugPlayerBREF == "rackllu01" ~ 77894L,
+          slugPlayerBREF == "reisech01" ~ 77938L,
+          slugPlayerBREF == "rittete01" ~ 77968L,
+          slugPlayerBREF == "sandeto01" ~ 78060L,
+          slugPlayerBREF == "saulpe01" ~ 78063L,
+          slugPlayerBREF == "scolafr01" ~ 78094L,
+          slugPlayerBREF == "searske01" ~ 78106L,
+          slugPlayerBREF == "sharech01" ~ 78125L,
+          slugPlayerBREF == "shippch01" ~ 78653L,
+          slugPlayerBREF == "skinnta01" ~ 78168L,
+          slugPlayerBREF == "smithwi01" ~ 78207L,
+          slugPlayerBREF == "sobekch01" ~ 78214L,
+          slugPlayerBREF == "stallbu01" ~ 78239L,
+          slugPlayerBREF == "taylofa01" ~ 78302L,
+          slugPlayerBREF == "todormi01" ~ 78346L,
+          slugPlayerBREF == "towerbl01" ~ 78363L,
+          slugPlayerBREF == "vanbrbu01" ~ 78401L,
+          slugPlayerBREF == "vaughch01" ~ 78409L,
+          slugPlayerBREF == "walthis01" ~ 78448L,
+          slugPlayerBREF == "warrejo01" ~ 1969L,
+          slugPlayerBREF == "whitask01" ~ 78506L,
+          slugPlayerBREF == "williar01" ~ 78539L,
+          slugPlayerBREF == "zawolze01" ~ 78639L,
+          TRUE ~ as.integer(idPlayerNBA)
+        )
+      ) %>%
+      select(yearSeasonFirst, namePlayer:idPlayerNBA) %>%
+      distinct()
+
+    remove_names <- df_nba_stats_players %>%
+      select(-c(
+      namePlayer, idPlayerNBA
+    )) %>% names()
+
+    data_players <-
+      data_players %>%
+      select(-one_of(remove_names)) %>%
+      left_join(
+        df_nba_stats_players %>% select(-namePlayer)
+      ) %>%
+      suppressMessages() %>%
+      suppressWarnings()
+
+
     has_double <-
       data_players %>% select(one_of(c(
-        "namePlayer", "namePlayerNBA", "idPlayer", "idPlayerNBA"
-      ))) %>% distinct() %>% count(idPlayer) %>%
+        "namePlayer", "namePlayerNBA", "slugPlayerBREF", "idPlayerNBA"
+      ))) %>% distinct() %>% count(slugPlayerBREF) %>%
       filter(n > 1) %>% nrow() > 0
 
     if (has_double) {
@@ -340,6 +574,7 @@
     df_good <-
       data_players %>%
       filter(!is.na(namePlayerNBA))
+
     players_good <- df_good %>% pull(namePlayer)
 
     df_good <-

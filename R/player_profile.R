@@ -132,6 +132,7 @@ players_awards <-
             urlPlayerActionPhoto,
             urlPlayerStats,
             urlPlayerThumbnail,
+            urlPlayerPhoto,
             urlPlayerHeadshot
           ),
           .key = 'dataPlayerAwards'

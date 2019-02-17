@@ -283,10 +283,10 @@ get_bref_name_df <-
     nameActual = c(
       "slugSeason",
       "yearSeason",
-      "idRank",
-      "idPlayer",
+      "numberPlayer",
+      "slugPlayerBREF",
       "namePlayer",
-      "idPosition",
+      "slugPosition",
       "agePlayer",
       "slugTeamBREF",
       "countGames",
@@ -610,7 +610,6 @@ widen_bref_data <-
 
     table_names <-
       all_data %>% pull(typeData) %>% unique()
-
 
     all_data <-
       table_names %>%
@@ -1135,7 +1134,8 @@ all_nba_teams <-
   })
 
 .parse_player_season <-
-  memoise::memoise(function(url = "http://www.basketball-reference.com/leagues/NBA_1997_per_game.html",
+  memoise::memoise(
+    function(url = "http://www.basketball-reference.com/leagues/NBA_1997_per_game.html",
            return_message = TRUE) {
     ## case_when
 
@@ -1186,8 +1186,10 @@ all_nba_teams <-
       })
 
     df_players <-
-      data_frame(idPlayer = player_ids, namePlayer = players) %>%
-      distinct()
+      data_frame(slugPlayerBREF = player_ids, namePlayer = players) %>%
+      distinct() %>%
+      mutate(numberPlayer = 1:n()) %>%
+      select(numberPlayer, everything())
 
     df <-
       page %>%
@@ -1204,8 +1206,16 @@ all_nba_teams <-
       ))) %>% names(),
       funs(. %>% as.numeric())) %>%
       filter(!Rk %>% is.na()) %>%
-      suppressWarnings() %>%
-      dplyr::select(-dplyr::matches("Rk"))
+      suppressWarnings()
+
+    # df_players_unique <-
+    #   df %>% group_by(Rk) %>% slice(1) %>%
+    #   select(numberPlayer = Rk, namePlayer = Player) %>%
+    #   ungroup()
+    #
+    # df <-
+    #   df %>%
+    #   dplyr::select(-dplyr::matches("Rk"))
 
     df_names <-
       get_bref_name_df()
@@ -1246,7 +1256,10 @@ all_nba_teams <-
       mutate(
         isHOFPlayer = namePlayer %>% str_detect('\\*'),
         namePlayer = namePlayer %>% str_replace_all('\\*', '')
-      ) %>%
+      )
+
+    df <-
+      df %>%
       left_join(df_players) %>%
       distinct() %>%
       suppressMessages() %>%
@@ -1254,7 +1267,7 @@ all_nba_teams <-
              yearSeason = year_season_end,
              urlData = url) %>%
       dplyr::select(slugSeason, yearSeason,
-                    idPlayer, everything())
+                    slugPlayerBREF, everything())
 
     df <-
       df %>%
@@ -1268,14 +1281,22 @@ all_nba_teams <-
         purrr::reduce(paste0) %>%
         cat(fill = T)
     }
+    df <- df %>%
+      select(-one_of("numberPlayer"))
+
+    df <- df %>%
+      mutate_if(is.numeric, list(function(x){
+        ifelse(is.na(x), 0, x)
+      }))
     gc()
-    return(df)
-  })
+    df
+  }
+    )
 
 # player seasons -----------------------------------------------------------------
 
 .get_data_bref_player_seasons <-
-  function(seasons = 1980:2017,
+  function(seasons = 1979:2017,
            table = "advanced",
            only_totals = TRUE,
            return_message = TRUE) {
@@ -1283,6 +1304,7 @@ all_nba_teams <-
       .generate_years_urls(table = table, seasons = seasons)
     .parse_player_season_safe <-
       purrr::possibly(.parse_player_season, data_frame())
+
     all_data <-
       urls %>%
       map_df(function(x) {
@@ -1292,7 +1314,7 @@ all_nba_teams <-
     all_data <-
       all_data %>%
       dplyr::select(-dplyr::matches("urlData")) %>%
-      tidyr::unite(idPlayerSeason, idPlayer, yearSeason, remove = F)
+      tidyr::unite(slugPlayerSeason, slugPlayerBREF, yearSeason, remove = F)
 
 
     all_data <-
@@ -1304,10 +1326,20 @@ all_nba_teams <-
       all_data %>%
       arrange(yearSeason)
 
+    df_players_teams <- all_data %>%
+      filter(slugTeamBREF != "TOT") %>%
+      group_by(slugPlayerBREF, slugSeason) %>%
+      dplyr::summarise(slugTeamsBREF = str_c(slugTeamBREF, collapse = " | ")) %>%
+      ungroup()
+
+    all_data <-
+      all_data %>%
+      left_join(df_players_teams,  by = c("slugSeason", "slugPlayerBREF"))
+
     if (only_totals) {
       all_data <-
         all_data %>%
-        group_by(yearSeason, idPlayer) %>%
+        group_by(yearSeason, slugPlayerBREF) %>%
         filter(countGames == max(countGames)) %>%
         ungroup()
     }
@@ -1359,12 +1391,12 @@ bref_players_stats <-
       tables %>% str_replace_all("\\ ", "_") %>% str_to_lower()
 
     .get_data_bref_player_seasons_safe <-
-      purrr::possibly(.get_data_bref_player_seasons, data_frame())
+      purrr::possibly(.get_data_bref_player_seasons, tibble())
 
     all_data <-
       tables %>%
       map_df(function(x) {
-        .get_data_bref_player_seasons_safe(
+        .get_data_bref_player_seasons(
           table = x,
           seasons = seasons,
           only_totals = only_totals,
