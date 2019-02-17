@@ -73,6 +73,9 @@
     <loc>https://asbcllc.com/nbastatR//reference/dictionary_nba_names.html</loc>
   </url>
   <url>
+    <loc>https://asbcllc.com/nbastatR//reference/dictionary_player_photos.html</loc>
+  </url>
+  <url>
     <loc>https://asbcllc.com/nbastatR//reference/draft_combines.html</loc>
   </url>
   <url>
@@ -101,9 +104,6 @@
   </url>
   <url>
     <loc>https://asbcllc.com/nbastatR//reference/nba_franchise_history.html</loc>
-  </url>
-  <url>
-    <loc>https://asbcllc.com/nbastatR//reference/nba_injuries.html</loc>
   </url>
   <url>
     <loc>https://asbcllc.com/nbastatR//reference/nba_insider_salaries.html</loc>
@@ -230,6 +230,9 @@
   </url>
   <url>
     <loc>https://asbcllc.com/nbastatR//reference/transactions.html</loc>
+  </url>
+  <url>
+    <loc>https://asbcllc.com/nbastatR//reference/validate_nba_player_photos.html</loc>
   </url>
   <url>
     <loc>https://asbcllc.com/nbastatR//reference/widen_bref_data.html</loc>

@@ -30,7 +30,6 @@ players_bios(players = c("Carmelo Anthony", "Joe Johnson"))
 }
 \seealso{
 Other players: \code{\link{metrics_leaders}},
-  \code{\link{nba_injuries}},
   \code{\link{teams_players_stats}}
 }
 \concept{biography}

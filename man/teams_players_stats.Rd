@@ -299,7 +299,7 @@ teams_players_stats(seasons = 2018, types = c("player", "team"),
 }
 \seealso{
 Other players: \code{\link{metrics_leaders}},
-  \code{\link{nba_injuries}}, \code{\link{players_bios}}
+  \code{\link{players_bios}}
 
 Other teams: \code{\link{drafts}},
   \code{\link{franchise_leaders}},

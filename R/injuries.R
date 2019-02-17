@@ -14,19 +14,6 @@
 })
 
 
-#' NBA Injuries
-#'
-#' Returns information about NBA injured players
-#'
-#' @param filter_returning_today if \code{TRUE} filter players returning today
-#'
-#' @return a `data_frame`
-#' @export
-#' @family players
-#' @family injuries
-#' @import lubridate dplyr curl stringr purrr tidyr rvest
-#' @examples
-#' nba_injuries()
 nba_injuries <-
   function(filter_returning_today = T) {
   url <-

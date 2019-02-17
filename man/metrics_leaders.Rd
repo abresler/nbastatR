@@ -61,8 +61,7 @@ season_types = "Regular Season",
  return_message = T)
 }
 \seealso{
-Other players: \code{\link{nba_injuries}},
-  \code{\link{players_bios}},
+Other players: \code{\link{players_bios}},
   \code{\link{teams_players_stats}}
 
 Other leaders: \code{\link{franchise_leaders}}

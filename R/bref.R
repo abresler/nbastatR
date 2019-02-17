@@ -407,7 +407,8 @@ widen_bref_data <-
         df_table <-
           all_data %>%
           filter(slugTable == table) %>%
-          select(slugSeason,
+          select(isSeasonCurrent,
+                 slugSeason,
                  yearSeasonStart,
                  slugTable,
                  urlSeasonBREF,
@@ -973,9 +974,9 @@ dictionary_bref_players <-
 all_nba_teams <-
   memoise::memoise(function(return_message = TRUE) {
   if (return_message) {
-    "Acquiring ALL NBA Teams" %>% cat(fill = T)
+    "Acquiring All NBA Teams" %>% cat(fill = T)
   }
-  page <-
+    page <-
       "http://www.basketball-reference.com/awards/all_league.html" %>%
       read_html()
 
@@ -986,12 +987,12 @@ all_nba_teams <-
       data.frame(stringsAsFactors = F) %>%
       tbl_df() %>%
       dplyr::rename(slugSeason = Season,
-                    slugLeague = Lg,
-                    classAllNBA = Tm) %>%
+        slugLeague = Lg,
+        classAllNBA = Tm) %>%
       filter(!slugSeason == '') %>%
       tidyr::gather(value,
-                    namePlayerPosition,
-                    -c(slugSeason, slugLeague, classAllNBA)) %>%
+        namePlayerPosition,
+        -c(slugSeason, slugLeague, classAllNBA)) %>%
       select(-value) %>%
       tidyr::separate(
         slugSeason,
@@ -1020,14 +1021,14 @@ all_nba_teams <-
         )
       ) %>%
       tidyr::separate(namePlayer,
-                      into = c('namePlayer', 'namePlayer2'),
-                      sep = '\\, ') %>%
+        into = c('namePlayer', 'namePlayer2'),
+        sep = '\\, ') %>%
       select(slugLeague,
-             slugSeason,
-             yearSeason,
-             groupPosition,
-             numberAllNBATeam,
-             namePlayer) %>%
+        slugSeason,
+        yearSeason,
+        groupPosition,
+        numberAllNBATeam,
+        namePlayer) %>%
       filter(slugLeague == "NBA") %>%
       arrange(desc(yearSeason), numberAllNBATeam) %>%
       suppressMessages() %>%
@@ -1054,22 +1055,22 @@ all_nba_teams <-
           slugs[[x]] %>% str_detect('/players/')
 
         if (is_player) {
-          idPlayer <-
+          slugPlayerBREF <-
             slugs[[x]] %>% str_replace_all('.html', '') %>% str_split('/players/') %>% flatten_chr() %>% .[[2]] %>% str_split('/') %>% flatten_chr() %>% .[[2]]
         } else {
-          idPlayer <-
+          slugPlayerBREF <-
             slugs[[x]] %>% str_replace_all('.html', '') %>% str_split('/leagues/') %>% flatten_chr() %>% .[[2]] %>% str_split('_') %>% flatten_chr() %>% .[[1]]
         }
-        data_frame(idPlayer, namePlayer, urlPlayerBREF)
+        data_frame(slugPlayerBREF, namePlayer, urlPlayerBREF)
       }) %>%
       distinct() %>%
       mutate_all(str_trim)
 
     df_people <-
       df_people %>%
-      select(namePlayer, idPlayer, urlPlayerBREF) %>%
+      select(namePlayer, slugPlayerBREF, urlPlayerBREF) %>%
       distinct() %>%
-      filter(!idPlayer %>% is.na())
+      filter(!slugPlayerBREF %>% is.na())
 
     df <-
       df %>%
@@ -1077,7 +1078,7 @@ all_nba_teams <-
       left_join(df_people) %>%
       suppressMessages() %>%
       mutate(
-        idPlayerSeason = list(idPlayer, '_', yearSeason) %>% purrr::reduce(paste0),
+        slugPlayerSeason = list(slugPlayerBREF, '_', yearSeason) %>% purrr::reduce(paste0),
         isAllNBA = TRUE
       )
 
@@ -1090,15 +1091,12 @@ all_nba_teams <-
       )
 
     if (return_message) {
-      list(
-        "Returned All-NBA teams from ",
-        df$yearSeason %>% min() %>% unique(),
-        ' to ',
-        df$yearSeason %>% max() %>% unique()
-      ) %>% purrr::reduce(paste0)
-    }
+      min_year <- df$yearSeason %>% min() %>% unique()
+      max_year <- df$yearSeason %>% max() %>% unique()
+      glue::glue("Returned All-NBA teams from {min_year} to {max_year}") %>% message()
 
-    return(df)
+    }
+    df
   })
 
 
@@ -1301,14 +1299,15 @@ all_nba_teams <-
 # player seasons -----------------------------------------------------------------
 
 .get_data_bref_player_seasons <-
-  function(seasons = 1979:2017,
+  function(seasons = 2019,
            table = "advanced",
            only_totals = TRUE,
            return_message = TRUE) {
+    current_season <- .get_current_season()
     urls <-
       .generate_years_urls(table = table, seasons = seasons)
     .parse_player_season_safe <-
-      purrr::possibly(.parse_player_season, data_frame())
+      purrr::possibly(.parse_player_season, tibble())
 
     all_data <-
       urls %>%
@@ -1324,6 +1323,11 @@ all_nba_teams <-
 
     all_data <-
       all_data %>%
+      mutate(isSeasonCurrent = slugSeason == current_season) %>%
+      select(typeData, slugSeason, isSeasonCurrent, everything())
+
+    all_data <-
+      all_data %>%
       mutate(yearSeason = slugSeason %>% substr(1, 4) %>% as.numeric() + 1)
 
 
@@ -1331,10 +1335,12 @@ all_nba_teams <-
       all_data %>%
       arrange(yearSeason)
 
-    df_players_teams <- all_data %>%
+    df_players_teams <-
+      all_data %>%
       filter(slugTeamBREF != "TOT") %>%
       group_by(slugPlayerBREF, slugSeason) %>%
-      dplyr::summarise(slugTeamsBREF = str_c(slugTeamBREF, collapse = " | ")) %>%
+      dplyr::summarise(slugTeamsBREF = str_c(slugTeamBREF, collapse = " | "),
+                       countTeamsPlayerSeason = length(slugTeamsBREF)) %>%
       ungroup()
 
     all_data <-
@@ -2019,6 +2025,8 @@ bref_players_stats <-
           left_join(df_urls) %>%
           suppressMessages()
 
+        table_data
+
         data_frame(
           idTable = table_id,
           nameTable = table_name,
@@ -2063,7 +2071,7 @@ bref_players_stats <-
           cat(fill = T)
       }
       .parse_season_url.safe <-
-        purrr::possibly(.parse_season_url, data_frame())
+        purrr::possibly(.parse_season_url, tibble())
 
       all_data <-
         .parse_season_url.safe(url = url)
@@ -2112,8 +2120,16 @@ bref_teams_stats <-
       .generate_season_urls(seasons = seasons) %>%
       mutate(urlSeasonBREF = as.character(urlSeasonBREF))
 
+    current_season <-
+      .get_current_season()
+
+    df_urls <-
+      df_urls %>%
+      mutate(isSeasonCurrent = slugSeason == current_season) %>%
+      select(slugSeason, isSeasonCurrent, everything())
+
     .parse_season_url.safe <-
-      purrr::possibly(.parse_season_url, data_frame())
+      purrr::possibly(.parse_season_url, tibble())
 
     all_data <-
       df_urls$urlSeasonBREF %>%
@@ -2569,7 +2585,7 @@ dictionary_bref_awards <-
           cat(fill = T)
       }
       .parse_bref_award_url.safe <-
-        purrr::possibly(.parse_bref_award_url, data_frame())
+        purrr::possibly(.parse_bref_award_url, tibble())
 
       all_data <-
         .parse_bref_award_url.safe(url = url)
@@ -2810,7 +2826,7 @@ bref_awards <-
           cat(fill = T)
       }
       .parse_vote_url_safe <-
-        purrr::possibly(.parse_vote_url, data_frame())
+        purrr::possibly(.parse_vote_url, tibble())
 
       all_data <-
         .parse_vote_url_safe(url = url)

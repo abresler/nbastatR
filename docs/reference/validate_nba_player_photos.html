@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>NBA Injuries — nba_injuries • nbastatR</title>
+<title>Validate NBA Player photos — validate_nba_player_photos • nbastatR</title>
 
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
@@ -30,9 +30,9 @@
 
 
 
-<meta property="og:title" content="NBA Injuries — nba_injuries" />
+<meta property="og:title" content="Validate NBA Player photos — validate_nba_player_photos" />
 
-<meta property="og:description" content="Returns information about NBA injured players" />
+<meta property="og:description" content="Validate NBA Player photos" />
 <meta name="twitter:card" content="summary" />
 
 
@@ -63,7 +63,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">nbastatR</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.1202</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.120203</span>
       </span>
     </div>
 
@@ -114,43 +114,33 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>NBA Injuries</h1>
-    <small class="dont-index">Source: <a href='https://github.com/abresler/nbastatR/blob/master/R/injuries.R'><code>R/injuries.R</code></a></small>
-    <div class="hidden name"><code>nba_injuries.Rd</code></div>
+    <h1>Validate NBA Player photos</h1>
+    <small class="dont-index">Source: <a href='https://github.com/abresler/nbastatR/blob/master/R/new_stats.R'><code>R/new_stats.R</code></a></small>
+    <div class="hidden name"><code>validate_nba_player_photos.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
-    <p>Returns information about NBA injured players</p>
+    <p>Validate NBA Player photos</p>
     
     </div>
 
-    <pre class="usage"><span class='fu'>nba_injuries</span>(<span class='kw'>filter_returning_today</span> <span class='kw'>=</span> <span class='no'>T</span>)</pre>
+    <pre class="usage"><span class='fu'>validate_nba_player_photos</span>(<span class='kw'>sleep_time</span> <span class='kw'>=</span> <span class='fl'>2</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>filter_returning_today</th>
-      <td><p>if <code>TRUE</code> filter players returning today</p></td>
+      <th>sleep_time</th>
+      <td><p>if not <code>NULL</code> sleep time</p></td>
     </tr>
     </table>
     
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>a `data_frame`</p>
-    
-    <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
-
-    <div class='dont-index'><p>Other players: <code><a href='metrics_leaders.html'>metrics_leaders</a></code>,
-  <code><a href='players_bios.html'>players_bios</a></code>,
-  <code><a href='teams_players_stats.html'>teams_players_stats</a></code></p></div>
+    <p><code>data_frame</code></p>
     
 
-    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><span class='co'># NOT RUN {</span>
-<span class='fu'>nba_injuries</span>()
-<span class='co'># }</span></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
@@ -158,11 +148,7 @@
       <li><a href="#arguments">Arguments</a></li>
       
       <li><a href="#value">Value</a></li>
-
-      <li><a href="#see-also">See also</a></li>
-      
-      <li><a href="#examples">Examples</a></li>
-    </ul>
+          </ul>
 
   </div>
 </div>

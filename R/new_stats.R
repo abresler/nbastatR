@@ -1,3 +1,15 @@
+.get_current_season <-
+  function() {
+    current_year <- lubridate::year(Sys.Date())
+    current_month <- lubridate::month(Sys.Date())
+
+    season_slug <- case_when(
+      current_month %>% between(6, 12) ~ str_c(current_year, "-", substr(current_year + 1, 3, 4)),
+      TRUE ~ str_c(current_year - 1, "-", substr(current_year, 3, 4))
+    )
+    season_slug
+  }
+
 #' Cached player photo dictionary
 #'
 #' @return \code{data_frame}
@@ -2653,13 +2665,7 @@ nba_stats_api_items <-
 nba_players <-
   function() {
 
-    current_year <- lubridate::year(Sys.Date())
-    current_month <- lubridate::month(Sys.Date())
-
-    season_slug <- case_when(
-      current_month %>% between(6, 12) ~ str_c(current_year, "-", substr(current_year + 1, 3, 4)),
-      TRUE ~ str_c(current_year - 1, "-", substr(current_year, 3, 4))
-    )
+    season_slug <- .get_current_season()
 
     url <-
       glue::glue("https://stats.nba.com/stats/commonallplayers?IsOnlyCurrentSeason=0&LeagueID=00&Season={season_slug}") %>% as.character()
