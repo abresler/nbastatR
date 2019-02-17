@@ -731,9 +731,9 @@ widen_bref_data <-
           dplyr::select(yearSeason,
                         slugSeason,
                         namePlayer,
-                        idPosition,
+                        slugPosition,
                         everything())
-      } else {
+      }  else {
         all_data <-
           all_data %>%
           purrr::reduce(bind_rows) %>%
@@ -751,15 +751,15 @@ widen_bref_data <-
         all_data %>%
         mutate(
           groupPosition = ifelse(
-            idPosition %>% nchar() == 1,
-            idPosition,
-            idPosition %>% substr(2, 2)
+            slugPosition %>% nchar() == 1,
+            slugPosition,
+            slugPosition %>% substr(2, 2)
           ),
           isHOFPlayer = ifelse(isHOFPlayer %>% is.na(), FALSE, isHOFPlayer)
         ) %>%
         mutate(groupPosition = ifelse(
           groupPosition == "-",
-          substr(idPosition, 1, 1),
+          substr(slugPosition, 1, 1),
           groupPosition
         )) %>%
         dplyr::select(slugSeason:namePlayer, groupPosition, everything())
@@ -800,12 +800,17 @@ widen_bref_data <-
         mutate(
           urlPlayerBREF = list(
             'http://www.basketball-reference.com/players/',
-            idPlayer %>% substr(start = 1, stop = 1),
+            slugPlayerBREF %>% substr(start = 1, stop = 1),
             '/',
-            idPlayer,
+            slugPlayerBREF,
             '.html'
           ) %>% purrr::reduce(paste0)
         )
+
+      all_data <-
+        all_data %>%
+        mutate_if(is.numeric,
+          list(function(x){ifelse(is.na(x), 0, x)}))
     }
     all_data
   })
