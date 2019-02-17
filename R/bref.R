@@ -1424,10 +1424,6 @@ bref_players_stats <-
       all_data %>%
       mutate(yearSeason = slugSeason %>% substr(1, 4) %>% as.numeric() + 1)
 
-    all_data <-
-      all_data %>%
-      dplyr::rename(slugPlayerBREF = idPlayer)
-
     all_data
   }
 
