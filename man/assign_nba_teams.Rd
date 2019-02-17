@@ -7,7 +7,7 @@
 assign_nba_teams()
 }
 \value{
-a `data_frame`
+a `tibble`
 }
 \description{
 Assign NBA teams to environment

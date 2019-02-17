@@ -10,7 +10,7 @@ validate_nba_player_photos(sleep_time = 2)
 \item{sleep_time}{if not \code{NULL} sleep time}
 }
 \value{
-\code{data_frame}
+\code{tibble}
 }
 \description{
 Validate NBA Player photos

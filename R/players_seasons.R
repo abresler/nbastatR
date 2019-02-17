@@ -56,10 +56,10 @@
 #' Seasons players
 #'
 #' @param seasons numeric vector of seasons
-#' @param nest_data  if \code{TRUE} returns a nested data_frame
+#' @param nest_data  if \code{TRUE} returns a nested tibble
 #' @param return_message  if \code{TRUE} return message
 #'
-#' @return a `data_frame`
+#' @return a `tibble`
 #' @export
 #' @import dplyr purrr readr jsonlite tidyr curl
 #' @importFrom glue glue
@@ -71,7 +71,7 @@ seasons_players <-
            nest_data = F,
            return_message = T) {
     .get_nba_season_players_safe <-
-      purrr::possibly(.get_nba_season_players, data_frame())
+      purrr::possibly(.get_nba_season_players, tibble())
 
     all_data <-
       seasons %>%

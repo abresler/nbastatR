@@ -12,7 +12,7 @@ sl_players(year = 2018, assign_to_environment = T)
 \item{assign_to_environment}{if \code{true assigns to environment}}
 }
 \value{
-a nested \code{data_frame}
+a nested \code{tibble}
 }
 \description{
 Summer League Players

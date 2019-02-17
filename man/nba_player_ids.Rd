@@ -12,7 +12,7 @@ nba_player_ids(players = NULL, player_ids = NULL)
 \item{player_ids}{vector of player ids}
 }
 \value{
-a `data_frame`
+a `tibble`
 }
 \description{
 Resolve player ids for specified players

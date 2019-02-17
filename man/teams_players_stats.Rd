@@ -286,7 +286,7 @@ teams_players_stats(seasons = 2018, types = c("player", "team"),
 \item{return_message}{if `TRUE` returns a message}
 }
 \value{
-a `data_frame`
+a `tibble`
 }
 \description{
 Gets NBA summary statistics tables

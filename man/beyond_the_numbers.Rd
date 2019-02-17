@@ -10,7 +10,7 @@ beyond_the_numbers(count_articles = 50)
 \item{count_articles}{numeric vector of counts}
 }
 \value{
-a \code{data_frame}
+a \code{tibble}
 }
 \description{
 Returns articles from beyond the numbers

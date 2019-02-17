@@ -4,7 +4,7 @@
 .dictionary.sites <-
   memoise::memoise(function() {
     df_formulas <-
-      data_frame(
+      tibble(
         nameSite = c("bref", "yahoo", "realgm", "hoopshype"),
         formulatDict = c(
           ".dictionary.bref.nba.missing()",
@@ -18,7 +18,7 @@
 
 .dictionary.bref.nba.missing <-
   memoise::memoise(function() {
-    data_frame(
+    tibble(
       namePlayer = c(
         "J.J. Anderson",
         "Tiny Archibald",

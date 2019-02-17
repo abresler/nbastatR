@@ -7,7 +7,7 @@
 dictionary_nba_names()
 }
 \value{
-a \code{data_frame}
+a \code{tibble}
 }
 \description{
 Dictionary of NBA Headers and nbastatR names

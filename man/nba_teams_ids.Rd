@@ -12,7 +12,7 @@ nba_teams_ids(teams = NULL, team_ids = NULL, all_active_teams = F)
 \item{team_ids}{vector of team ids}
 }
 \value{
-a `data_frame`
+a `tibble`
 }
 \description{
 Resolve NBA team ID

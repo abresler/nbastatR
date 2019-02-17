@@ -15,7 +15,7 @@ play_by_play(game_ids = NULL, nest_data = FALSE,
 \item{return_message}{if \code{T} returns message}
 }
 \value{
-a \code{data_frame}
+a \code{tibble}
 }
 \description{
 Returns play-by-play data

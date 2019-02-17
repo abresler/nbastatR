@@ -15,7 +15,7 @@ team_season_roster(team = "Denver Nuggets", season = 2015,
 \item{return_message}{}
 }
 \value{
-a `data_frame`
+a `tibble`
 }
 \description{
 Gets teams roster from a specified seasons

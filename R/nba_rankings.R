@@ -76,7 +76,7 @@
 #' @param nest_data  if `TRUE` nests data by season
 #' @param return_message `TRUE` returns a message
 #'
-#' @return a `data_frame`
+#' @return a `tibble`
 #' @export
 #' @import curl dplyr stringr readr purrr jsonlite
 #' @importFrom lubridate ymd_hms
@@ -90,7 +90,7 @@ teams_rankings <-
            nest_data = F,
            return_message = T) {
     .get_teams_season_rankings_safe <-
-      purrr::possibly(.get_teams_season_rankings, data_frame())
+      purrr::possibly(.get_teams_season_rankings, tibble())
     if (seasons %>% purrr::is_null()) {
       stop("Enter seasons")
     }

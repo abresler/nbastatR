@@ -33,7 +33,7 @@ game_logs(seasons = 2019, league = "NBA", result_types = "player",
 \item{return_message}{}
 }
 \value{
-a `data_frame`
+a `tibble`
 }
 \description{
 NBA game logs

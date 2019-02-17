@@ -62,7 +62,7 @@
 
 .dictionary_synergy_categories <-
   memoise::memoise(function() {
-    data_frame(
+    tibble(
       nameSynergy = c(
         "Transition",
         "Isolation",
@@ -156,7 +156,7 @@
 
     data <-
       json$results %>%
-      as_data_frame() %>%
+      as_tibble() %>%
       purrr::set_names(actual_names) %>%
       mutate(
         categorySynergy = category,
@@ -245,10 +245,10 @@
 #' }
 #' @param results number of results
 #' @param assign_to_environment if \code{TRUE} assigns table to environment
-#' @param return_wide if \code{return_wide} returns a spread \code{data_frame}
+#' @param return_wide if \code{return_wide} returns a spread \code{tibble}
 #' @param return_message
 #'
-#' @return a \code{data_frame}
+#' @return a \code{tibble}
 #' @export
 #' @import dplyr stringr magrittr curl jsonlite readr magrittr purrr tidyr rlang
 #' @importFrom glue glue
@@ -283,11 +283,11 @@ synergy <-
         category = categories,
         stringsAsFactors = F
       ) %>%
-      as_data_frame() %>%
+      as_tibble() %>%
       distinct()
 
     .get_synergy_category_data_safe <-
-      purrr::possibly(.get_synergy_category_data, data_frame())
+      purrr::possibly(.get_synergy_category_data, tibble())
 
     all_data <-
       1:nrow(input_df) %>%

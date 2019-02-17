@@ -15,7 +15,7 @@ fanduel_summary(game_ids = c(21700002, 21700003), nest_data = FALSE,
 \item{return_message}{if \code{T} returns message}
 }
 \value{
-a \code{data_frame}
+a \code{tibble}
 }
 \description{
 Returns fanduel summary for specified

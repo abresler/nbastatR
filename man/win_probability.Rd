@@ -17,9 +17,9 @@ win_probability(game_ids = c(21700002, 21700003), nest_data = FALSE,
 \item{return_message}{if \code{T} returns message}
 }
 \value{
-a \code{data_frame}
+a \code{tibble}
 
-a `data_frame`
+a `tibble`
 }
 \description{
 Gets nba in-game win probabilities

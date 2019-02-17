@@ -11,10 +11,10 @@ draft_combines(years = NULL, return_message = T, nest_data = F)
 
 \item{return_message}{if \code{TRUE} return message}
 
-\item{nest_data}{if \code{TRUE} returns nested data_frame}
+\item{nest_data}{if \code{TRUE} returns nested tibble}
 }
 \value{
-a \code{data_frame()}
+a \code{tibble()}
 }
 \description{
 Acquires NBA draft combine data

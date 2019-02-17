@@ -2,7 +2,7 @@
 .get_hoopshype_teams_ids <-
   memoise::memoise(function() {
     data <-
-      data_frame(
+      tibble(
         nameTeam = c(
           "Atlanta Hawks",
           "Boston Celtics",
@@ -145,7 +145,7 @@
 #' @param return_wide if \code{TRUE} returns wide data
 #' @param return_message if \code{TRUE} returns a message
 #'
-#' @return a \code{data_frame()}
+#' @return a \code{tibble()}
 #' @family hoopshype
 #' @family salaries
 #' @export
@@ -225,7 +225,7 @@ hoops_hype_salary_summary <-
         'rgb(0, 153, 0)',
         'rgb(168, 0, 212)')
     color_df <-
-      data_frame(color = colors,
+      tibble(color = colors,
                  type = types)
 
     page <-
@@ -247,7 +247,7 @@ hoops_hype_salary_summary <-
       urlHoopsHypePlayer[!urlHoopsHypePlayer %>% is.na()]
 
     players_urls_df <-
-      data_frame(urlHoopsHypePlayer) %>%
+      tibble(urlHoopsHypePlayer) %>%
       mutate(
         namePlayerLower = urlHoopsHypePlayer %>% str_replace_all("http://hoopshype.com/player/|/salary/", "") %>% str_replace_all("\\-", " ")
       )
@@ -348,7 +348,7 @@ hoops_hype_salary_summary <-
       str_replace("color:", '')
 
     player_salary_df <-
-      data_frame(namePlayer,
+      tibble(namePlayer,
                  salary.1,
                  salary.2,
                  salary.3,
@@ -359,7 +359,7 @@ hoops_hype_salary_summary <-
       table_headers
 
     player_contract_df <-
-      data_frame(
+      tibble(
         namePlayer,
         salary.1.colors,
         salary.2.colors,
@@ -404,7 +404,7 @@ hoops_hype_salary_summary <-
     all_data <-
       all_data %>%
       left_join(
-        data_frame(namePlayer, urlHoopsHypePlayer)
+        tibble(namePlayer, urlHoopsHypePlayer)
       ) %>%
       suppressMessages()
 
@@ -458,7 +458,7 @@ hoops_hype_salary_summary <-
   assume_team_doesnt_exercise = T,
   return_message = TRUE) {
     df <-
-      data_frame()
+      tibble()
 
     success <- function(res) {
       url <-
@@ -469,7 +469,7 @@ hoops_hype_salary_summary <-
           cat(fill = T)
       }
       .parse_hoops_hype_salary_url_safe <-
-        purrr::possibly(.parse_hoops_hype_salary_url, data_frame())
+        purrr::possibly(.parse_hoops_hype_salary_url, tibble())
 
       all_data <-
         .parse_hoops_hype_salary_url_safe(url = url,
@@ -483,7 +483,7 @@ hoops_hype_salary_summary <-
         bind_rows(all_data)
     }
     failure <- function(msg) {
-      data_frame()
+      tibble()
     }
     urls %>%
       future_map(function(x) {
@@ -505,7 +505,7 @@ hoops_hype_salary_summary <-
 #' @param nest_data if \code{TRUE} nests data
 #' @param return_message if \code{TRUE} returns a message
 #'
-#' @return a `data_frame`
+#' @return a `tibble`
 #' @family hoopshype
 #' @family salaries
 #' @export

@@ -52,7 +52,7 @@
       data <-
         json$resultSets$rowSet[[x]] %>%
         data.frame(stringsAsFactors = F) %>%
-        dplyr::as_data_frame()
+        dplyr::as_tibble()
 
       if (data %>% nrow() == 0) {
         return(invisible())
@@ -206,7 +206,7 @@
     df_md <-
       json$resultSets$rowSet[[1]] %>%
       data.frame(stringsAsFactors = F) %>%
-      dplyr::as_data_frame() %>%
+      dplyr::as_tibble() %>%
       purrr::set_names(names_md) %>%
       munge_nba_data()
 
@@ -216,7 +216,7 @@
     df_md2 <-
       json$resultSets$rowSet[[2]] %>%
       data.frame(stringsAsFactors = F) %>%
-      dplyr::as_data_frame() %>%
+      dplyr::as_tibble() %>%
       purrr::set_names(names_md) %>%
       munge_nba_data() %>%
       dplyr::rename(idSeason = slugSeason) %>%
@@ -264,7 +264,7 @@
 #' @param nest_data if `TRUE` nests data
 #' @param return_message if `TRUE` returns a message
 #'
-#' @return a `data_frame`
+#' @return a `tibble`
 #' @export
 #'
 #' @examples
@@ -284,7 +284,7 @@ teams_seasons_info <-
                         team_ids = team_ids,
                         all_active_teams = all_active_teams)
     .get_team_season_info_safe <-
-      purrr::possibly(.get_team_season_info, data_frame())
+      purrr::possibly(.get_team_season_info, tibble())
     df_input <-
       expand.grid(
         team_id = team_ids,
@@ -292,7 +292,7 @@ teams_seasons_info <-
         season = seasons,
         stringsAsFactors = F
       ) %>%
-      as_data_frame()
+      as_tibble()
 
     all_data <-
       1:nrow(df_input) %>%
@@ -321,7 +321,7 @@ teams_seasons_info <-
 
 .dictionary_team_tables <-
   memoise::memoise(function() {
-    data_frame(
+    tibble(
       nameTable = c(
         "passes",
         "clutch",
@@ -627,7 +627,7 @@ teams_seasons_info <-
 #' @param assign_to_environment if \code{TRUE} assigns data to environment
 #' @param return_messages if \code{TRUE} returns message
 #'
-#' @return a \code{data_frame}
+#' @return a \code{tibble}
 #' @export
 #'
 #' @examples
@@ -710,9 +710,9 @@ teams_tables <-
         last_n_games = last_n_games,
         stringsAsFactors = F
       ) %>%
-      dplyr::as_data_frame()
+      dplyr::as_tibble()
     .get_team_table_data_safe <-
-      purrr::possibly(.get_team_table_data, data_frame())
+      purrr::possibly(.get_team_table_data, tibble())
 
     all_data <-
       1:nrow(input_df) %>%
@@ -909,7 +909,7 @@ teams_tables <-
     json <-
       resp %>% jsonlite::fromJSON(simplifyVector = T)
 
-    df_params <- json$parameters %>% flatten_df() %>% as_data_frame()
+    df_params <- json$parameters %>% flatten_df() %>% as_tibble()
     param_names <- names(df_params) %>% resolve_nba_names()
 
     df_params <-
@@ -967,7 +967,7 @@ teams_tables <-
 #' @param nest_data if `TRUE` nests data
 #' @param return_message if `TRUE` returns a message
 #'
-#' @return a \code{data_frame}
+#' @return a \code{tibble}
 #' @export
 #'
 #' @examples
@@ -1004,10 +1004,10 @@ teams_shots <-
         date_to  = NA,
         stringsAsFactors = F
       ) %>%
-      as_data_frame()
+      as_tibble()
 
     .get_team_shot_chart_safe <-
-      purrr::possibly(.get_team_shot_chart, data_frame())
+      purrr::possibly(.get_team_shot_chart, tibble())
 
     all_data <-
       1:nrow(input_df) %>%

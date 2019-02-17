@@ -37,7 +37,7 @@ pst_transaction(person = "Jarrett Jack", team = NULL,
 \item{return_message}{if \code{TRUE} returns a message}
 }
 \value{
-a \code{data_frame}
+a \code{tibble}
 }
 \description{
 Returns data matching specified

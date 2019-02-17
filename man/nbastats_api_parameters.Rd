@@ -15,7 +15,7 @@ nbastats_api_parameters(api_versions = 1:3)
 }}
 }
 \value{
-\code{data_frame()}
+\code{tibble()}
 }
 \description{
 NBA Stats API Parameters

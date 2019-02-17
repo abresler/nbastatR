@@ -40,7 +40,7 @@ teams_shots(teams = NULL, team_ids = NULL, all_active_teams = F,
 \item{return_message}{if `TRUE` returns a message}
 }
 \value{
-a \code{data_frame}
+a \code{tibble}
 }
 \description{
 Get teams seasons shot charts

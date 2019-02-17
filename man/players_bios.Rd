@@ -12,12 +12,12 @@ players_bios(players = NULL, player_ids = NULL, nest_data = F,
 
 \item{player_ids}{vector of player ids}
 
-\item{nest_data}{if \code{TRUE} returns nested data_frame}
+\item{nest_data}{if \code{TRUE} returns nested tibble}
 
 \item{return_message}{if \code{TRUE} returns a message}
 }
 \value{
-a `data_frame`
+a `tibble`
 }
 \description{
 Player biographies.

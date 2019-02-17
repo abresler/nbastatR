@@ -7,7 +7,7 @@
 current_schedule()
 }
 \value{
-a `data_frame`
+a `tibble`
 }
 \description{
 Get NBA schedule for most current season

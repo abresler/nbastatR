@@ -14,7 +14,7 @@ teams_rosters(seasons = 1990:2018, nest_data = F, return_message = T)
 \item{return_message}{if \code{TRUE} returns a message}
 }
 \value{
-a \code{data_frame}
+a \code{tibble}
 }
 \description{
 Gets NBA teams rosters for specified seasons

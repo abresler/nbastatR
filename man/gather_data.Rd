@@ -10,7 +10,7 @@ gather_data(data, variable_name = "item", numeric_ids = c("^id"),
   use_date_keys = FALSE, remove_na = TRUE)
 }
 \arguments{
-\item{data}{a \code{data_frame}}
+\item{data}{a \code{tibble}}
 
 \item{variable_name}{variable column name}
 
@@ -53,7 +53,7 @@ gather_data(data, variable_name = "item", numeric_ids = c("^id"),
 }}
 }
 \value{
-a \code{data_frame}
+a \code{tibble}
 }
 \description{
 Gather a data frame

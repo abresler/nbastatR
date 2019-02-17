@@ -29,10 +29,10 @@ teams_annual_stats(teams = NULL, team_ids = NULL,
 
 \item{return_message}{if \code{TRUE} returns a message}
 
-\item{nest_data}{if \code{TRUE} returns a nested data_frame}
+\item{nest_data}{if \code{TRUE} returns a nested tibble}
 }
 \value{
-a \code{data_frame}
+a \code{tibble}
 }
 \description{
 NBA teams yearly performance

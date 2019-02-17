@@ -7,7 +7,7 @@
 nba_stats_api_items()
 }
 \value{
-a `data_frame`
+a `tibble`
 }
 \description{
 NBA stats API parameters, teams and items

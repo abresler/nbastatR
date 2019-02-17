@@ -10,7 +10,7 @@ players_agents(nest_data = F, return_message = T)
 \item{return_message}{if \code{TRUE} returns player url}
 }
 \value{
-a `data_frame()`
+a `tibble()`
 }
 \description{
 Get NBA Players Agents

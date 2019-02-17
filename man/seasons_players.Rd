@@ -10,12 +10,12 @@ seasons_players(seasons = 1960:2018, nest_data = F,
 \arguments{
 \item{seasons}{numeric vector of seasons}
 
-\item{nest_data}{if \code{TRUE} returns a nested data_frame}
+\item{nest_data}{if \code{TRUE} returns a nested tibble}
 
 \item{return_message}{if \code{TRUE} return message}
 }
 \value{
-a `data_frame`
+a `tibble`
 }
 \description{
 Seasons players

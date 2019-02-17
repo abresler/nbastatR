@@ -47,7 +47,7 @@ metrics_leaders(seasons = 2017:2018, metric = "pts",
 \item{nest_data}{if \code{TRUE} returns a nested data frame}
 }
 \value{
-a \code{data_frame}
+a \code{tibble}
 }
 \description{
 Gets league leader data by

@@ -10,7 +10,7 @@ current_standings(return_message = TRUE)
 \item{return_message}{if \code{TRUE} returns a message}
 }
 \value{
-a `data_frame`
+a `tibble`
 }
 \description{
 Acquires current season's standings

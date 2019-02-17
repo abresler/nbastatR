@@ -20,7 +20,7 @@ playoff_pictures(seasons = NULL, assign_to_environment = TRUE,
 \item{include_include_numeric_records}{if \code{TRUE} parses records}
 }
 \value{
-a `data_frame`
+a `tibble`
 }
 \description{
 Returns playoff picture for specified seasons

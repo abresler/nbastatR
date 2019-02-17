@@ -2,7 +2,7 @@
 
 .dictionary_boxscore_slugs <-
   memoise::memoise(function(){
-    data_frame(nameSlug = c("traditional", "advanced", "scoring","misc", "usage", "four factors",
+    tibble(nameSlug = c("traditional", "advanced", "scoring","misc", "usage", "four factors",
                             "hustle", "tracking", "winprob", "defense", "matchups"),
                slugNBA = c("boxscoretraditionalv2","boxscoreadvancedv2", "boxscorescoringv2", "boxscoremiscv2",
                            "boxscoreusagev2", "boxscorefourfactorsv2", "hustlestatsboxscore",
@@ -142,7 +142,7 @@
               mutate(idGame = game_id)
 
             df_stats <-
-              d$pstsg %>% as_data_frame()
+              d$pstsg %>% as_tibble()
 
             df_stats <-
               df_stats %>%
@@ -191,7 +191,7 @@
     data <-
       json$resultSets$rowSet[[table_id]] %>%
       data.frame(stringsAsFactors = F) %>%
-      as_data_frame()
+      as_tibble()
 
     if (data %>% nrow() == 0) {
       return(invisible())
@@ -276,7 +276,7 @@
       df_team <-
         json$resultSets$rowSet[[3]] %>%
         data.frame(stringsAsFactors = F) %>%
-        as_data_frame()
+        as_tibble()
 
 
       json_names <-
@@ -354,7 +354,7 @@
 #' starting with data
 #' @param return_message if \code{TRUE} returns a message
 #'
-#' @return a \code{data_frame}
+#' @return a \code{tibble}
 #' @family game
 #' @export
 #' @import dplyr curl stringr lubridate readr magrittr tidyr httr purrr jsonlite
@@ -386,12 +386,12 @@ box_scores <-
                   result_type = result_types,
                   boxscore = box_score_types,
                   stringsAsFactors = F) %>%
-      dplyr::as_data_frame()
+      dplyr::as_tibble()
 
 
 
     get_box_score_type_safe <-
-      purrr::possibly(.get_box_score_type, data_frame())
+      purrr::possibly(.get_box_score_type, tibble())
 
     all_data <-
       1:nrow(input_df) %>%
@@ -482,7 +482,7 @@ box_scores <-
               mutate(isStarter = ifelse(is.na(groupStartPosition), F, T)) %>%
               dplyr::select(idGame:groupStartPosition, isStarter, everything())
           }
-          data_frame(typeResult = result,
+          tibble(typeResult = result,
                      dataBoxScore = list(all_tables))
         })
 

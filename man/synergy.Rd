@@ -48,12 +48,12 @@ synergy(seasons = 2016:2018, result_types = c("player", "team"),
 
 \item{assign_to_environment}{if \code{TRUE} assigns table to environment}
 
-\item{return_wide}{if \code{return_wide} returns a spread \code{data_frame}}
+\item{return_wide}{if \code{return_wide} returns a spread \code{tibble}}
 
 \item{return_message}{}
 }
 \value{
-a \code{data_frame}
+a \code{tibble}
 }
 \description{
 Get Synergy data for specified result type,

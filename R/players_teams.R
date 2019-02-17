@@ -1,6 +1,6 @@
 .dictionary_nba_queries <-
   memoise::memoise(function() {
-    data_frame(typeQuery = c("splits", "splits", "general", "general", "defense", "defense", "clutch", "clutch",
+    tibble(typeQuery = c("splits", "splits", "general", "general", "defense", "defense", "clutch", "clutch",
                              "hustle", "hustle", "shots", "shots", "shot locations", "shot locations"),
                slugQuery = c("teamdashboardbygeneralsplits", "playerdashboardbygeneralsplits", "leaguedashteamstats", "leaguedashplayerstats" ,"leaguedashptdefend", "leaguedashptdefend", "leaguedashteamclutch", "leaguedashplayerclutch","leaguehustlestatsteam", "leaguehustlestatsplayer", "leaguedashteamptshot", "leaguedashplayerptshot",
                              "leaguedashteamshotlocations", "leaguedashplayershotlocations"),
@@ -690,7 +690,7 @@
             df_table <-
               json$resultSets$rowSet %>%
               data.frame(stringsAsFactors = F) %>%
-              as_data_frame()
+              as_tibble()
 
             actual_names <-
               c(
@@ -733,7 +733,7 @@
             df_table <-
               json$resultSets$rowSet %>%
               data.frame(stringsAsFactors = F) %>%
-              as_data_frame()
+              as_tibble()
             actual_names <-
               c(
                 "idTeam",
@@ -1033,7 +1033,7 @@
 #' @family players
 #' @family teams
 #' @family summary statistics
-#' @return a `data_frame`
+#' @return a `tibble`
 #' @export
 #'
 #' @examples
@@ -1138,9 +1138,9 @@ teams_players_stats <-
                   shot_clock_range = shot_clock_ranges,
                   starter_bench = starters_bench
                   ,stringsAsFactors = F) %>%
-      dplyr::as_data_frame()
+      dplyr::as_tibble()
     players_teams_season_summary_safe <-
-      purrr::possibly(.players_teams_season_summary, data_frame())
+      purrr::possibly(.players_teams_season_summary, tibble())
     all_data <-
       1:nrow(input_df) %>%
       future_map_dfr(function(x) {

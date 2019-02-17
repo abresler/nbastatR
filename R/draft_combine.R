@@ -11,7 +11,7 @@
       df_set %>% pull() %>%
       future_map_dfr(function(x) {
         if (x %>% is.na()) {
-          return(data_frame(UQ(set_column) := x))
+          return(tibble(UQ(set_column) := x))
         }
         names_set <-
           c(
@@ -23,7 +23,7 @@
         values <-
           x %>% str_split("\\-") %>% flatten_chr() %>% as.numeric()
 
-        data_frame(
+        tibble(
           X1 = x,
           X2 = values[1],
           X3 = values[2],
@@ -128,9 +128,9 @@
 #'
 #' @param years vector of draft years
 #' @param return_message if \code{TRUE} return message
-#' @param nest_data if \code{TRUE} returns nested data_frame
+#' @param nest_data if \code{TRUE} returns nested tibble
 #'
-#' @return a \code{data_frame()}
+#' @return a \code{tibble()}
 #' @family draft
 #' @family player
 #' @export
@@ -148,7 +148,7 @@ draft_combines <-
       stop("Please enter combine years")
     }
     .get_year_draft_combine_safe <-
-      purrr::possibly(.get_year_draft_combine, data_frame())
+      purrr::possibly(.get_year_draft_combine, tibble())
 
     all_data <-
       years %>%

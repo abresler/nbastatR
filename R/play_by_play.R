@@ -24,7 +24,7 @@
     data <-
       json$resultSets$rowSet[[1]] %>%
       data.frame(stringsAsFactors = F) %>%
-      as_data_frame()
+      as_tibble()
 
     json_names <-
       json$resultSets$headers[[1]]
@@ -60,7 +60,7 @@
     data <-
       json$resultSets$rowSet[[1]] %>%
       data.frame(stringsAsFactors = F) %>%
-      as_data_frame()
+      as_tibble()
 
     json_names <-
       json$resultSets$headers[[1]]
@@ -102,7 +102,7 @@
     data <-
       json$resultSets$rowSet[[1]] %>%
       data.frame(stringsAsFactors = F) %>%
-      as_data_frame()
+      as_tibble()
 
     json_names <-
       json$resultSets$headers[[1]]
@@ -113,7 +113,7 @@
     df_metadata <-
       json$resultSets$rowSet[[2]] %>%
       data.frame(stringsAsFactors = F) %>%
-      as_data_frame()
+      as_tibble()
 
     names_md <-
       json$resultSets$headers[[2]]
@@ -154,13 +154,13 @@
 #' @param filter_non_plays if \code{TRUE} filters out non plays
 #' @param nest_data if \code{TRUE} nests data
 #' @param return_message if \code{T} returns message
-#' @return a \code{data_frame}
+#' @return a \code{tibble}
 #' @export
 #' @import dplyr curl stringr lubridate readr magrittr tidyr httr purrr jsonlite
 #' @importFrom glue glue
 #' @family game
 #' @family season
-#' @return a `data_frame`
+#' @return a `tibble`
 #' @export
 #'
 #' @examples
@@ -177,7 +177,7 @@ win_probability <-
       stop("Please enter game ids")
     }
     .get_win_prob_safe <-
-      purrr::possibly(.get_win_prob, data_frame())
+      purrr::possibly(.get_win_prob, tibble())
 
     all_data <-
       game_ids %>%
@@ -227,7 +227,7 @@ win_probability <-
 #' @param nest_data if \code{TRUE} nests data
 #' @param return_message if \code{T} returns message
 #'
-#' @return a \code{data_frame}
+#' @return a \code{tibble}
 #' @export
 #' @import dplyr curl stringr lubridate readr magrittr tidyr httr purrr jsonlite
 #' @importFrom glue glue
@@ -241,7 +241,7 @@ play_by_play <-
       stop("Please enter game ids")
     }
     .get_pbp_safe <-
-      purrr::possibly(.get_pbp, data_frame())
+      purrr::possibly(.get_pbp, tibble())
 
     all_data <-
       game_ids %>%
@@ -267,7 +267,7 @@ play_by_play <-
 #' @param nest_data if \code{TRUE} nests data
 #' @param return_message if \code{T} returns message
 #'
-#' @return a \code{data_frame}
+#' @return a \code{tibble}
 #' @export
 #' @family season
 #' @family game
@@ -285,7 +285,7 @@ fanduel_summary <-
       stop("Please enter game ids")
     }
     .get_fanduel_safe <-
-      purrr::possibly(.get_fanduel, data_frame())
+      purrr::possibly(.get_fanduel, tibble())
 
     all_data <-
       game_ids %>%

@@ -10,7 +10,7 @@ sl_teams(assign_to_environment = T)
 \item{assign_to_environment}{if \code{TRUE} assings to environment}
 }
 \value{
-a nested \code{data_frame}
+a nested \code{tibble}
 }
 \description{
 Summer League Teams

@@ -21,7 +21,7 @@ teams_rotowire(teams = NULL, team_ids = NULL, all_active_teams = F,
 \item{return_message}{if `TRUE` returns a message}
 }
 \value{
-a `data_frame`
+a `tibble`
 }
 \description{
 Returns roto wire news for specified teams.

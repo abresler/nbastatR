@@ -602,8 +602,8 @@ widen_bref_data <-
 .assign.bref.players <-
   memoise::memoise(function(all_data,
            widen_data = TRUE,
-           join_data = FALSE,
-           include_all_nba = F,
+           join_data = T,
+           include_all_nba = T,
            assign_to_environment = TRUE) {
     if (!all_data %>% tibble::has_name("typeData")) {
       return(all_data)
@@ -1430,15 +1430,16 @@ bref_players_stats <-
         )
       })
 
-    assign_bref_data(
-      data = all_data,
-      type = "Players",
-      widen_data = widen_data,
-      include_all_nba = include_all_nba,
-      join_data = join_data,
-      nest_data = nest_data,
-      assign_to_environment = assign_to_environment
-    )
+    all_data <-
+      assign_bref_data(
+        data = all_data,
+        type = "Players",
+        widen_data = widen_data,
+        include_all_nba = include_all_nba,
+        join_data = join_data,
+        nest_data = nest_data,
+        assign_to_environment = assign_to_environment
+      )
 
     all_data <-
       all_data %>%

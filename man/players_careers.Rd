@@ -27,7 +27,7 @@ with a name starting with data}
 \item{return_message}{if \code{TRUE} returns a message}
 }
 \value{
-a \code{data_frame}
+a \code{tibble}
 }
 \description{
 NBA player career statistics for

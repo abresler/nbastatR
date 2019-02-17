@@ -7,7 +7,7 @@
 transactions(include_history = T)
 }
 \value{
-a `data_frame`
+a `tibble`
 }
 \description{
 Acquires all NBA transactions since 2012

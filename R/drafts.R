@@ -1,6 +1,6 @@
 .dictionary_organization_types <- function() {
   data <-
-    data_frame(
+    tibble(
       typeOrganizationFrom = c(NA, "College/University", "High School", "Other Team/Club"),
       slugOrganizationTypeFrom = c("UNK", "COL", "HS", "PRO")
     )
@@ -59,7 +59,7 @@
 #' @param return_message if \code{TRUE} returns message
 #' @param nest_data if \code{TRUE} returns nested data frame
 #'
-#' @return a `data_frame`
+#' @return a `tibble`
 #' @family draft
 #' @family teams
 #' @export
@@ -81,7 +81,7 @@ drafts <-
            nest_data = F,
            return_message = T) {
     .get_nba_draft_year_safe <-
-      purrr::possibly(.get_nba_draft_year, data_frame())
+      purrr::possibly(.get_nba_draft_year, tibble())
 
     all_data <-
       draft_years %>%

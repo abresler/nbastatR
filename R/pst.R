@@ -134,7 +134,7 @@
       url %>%
         read_page()
     df_items <-
-      data_frame(idNode = 1:5,
+      tibble(idNode = 1:5,
                item = c("dateTransaction","nicknameTeam",
                         "namePlayerAcquired", "namePlayerRelinquished",
                         "descriptionTransaction"))
@@ -166,7 +166,7 @@
           df_items %>% filter(idNode == x) %>% pull(item)
 
 
-        data_frame(item, value) %>%
+        tibble(item, value) %>%
           mutate(idRow = 1:n())
       })
 
@@ -189,7 +189,7 @@
   ),
            return_message = T) {
     df <-
-      data_frame()
+      tibble()
 
     success <- function(res) {
       url <-
@@ -200,7 +200,7 @@
           cat(fill = T)
       }
       .parse.pst.page.safe <-
-        purrr::possibly(.parse.pst.page, data_frame())
+        purrr::possibly(.parse.pst.page, tibble())
 
       all_data <-
         .parse.pst.page(url = url)
@@ -211,7 +211,7 @@
         bind_rows(all_data)
     }
     failure <- function(msg) {
-      data_frame()
+      tibble()
     }
     urls %>%
       future_map(function(x) {
@@ -234,7 +234,7 @@
       readr::parse_number()
 
     if (pages %>% length() == 0) {
-      return(data_frame(idPage = 1,
+      return(tibble(idPage = 1,
                  urlPST = url))
     }
 
@@ -244,7 +244,7 @@
       html_attr('href') %>%
       str_c("http://www.prosportstransactions.com/basketball/Search/", .)
 
-    data_frame(idPage = pages,
+    tibble(idPage = pages,
                urlPST = urls)
   }
 
@@ -266,7 +266,7 @@
 #' @param include_criminal_incidents if \code{TRUE} include criminal incidents
 #' @param return_message if \code{TRUE} returns a message
 #'
-#' @return a \code{data_frame}
+#' @return a \code{tibble}
 #' @export
 #'
 #' @examples

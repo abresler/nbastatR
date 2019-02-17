@@ -12,7 +12,7 @@ nba_franchise_history(return_message = T, only_active = F)
 \item{only_active}{if \code{TRUE} only active teams}
 }
 \value{
-a \code{data_frame()}
+a \code{tibble()}
 }
 \description{
 Acquires history for all NBA franchises

@@ -12,7 +12,7 @@
 
 #' Cached player photo dictionary
 #'
-#' @return \code{data_frame}
+#' @return \code{tibble}
 #' @export
 #'
 #' @examples
@@ -1845,7 +1845,7 @@ dictionary_player_photos <-
 #'
 #' @param sleep_time if not \code{NULL} sleep time
 #'
-#' @return \code{data_frame}
+#' @return \code{tibble}
 #' @export
 #'
 #' @examples
@@ -1961,7 +1961,7 @@ validate_nba_player_photos <-
       list('https://', domain_slug, tl_domain) %>%
       purrr::reduce(paste0)
     df <-
-      data_frame(urlReferer = url,
+      tibble(urlReferer = url,
                  userAgent = user_agent)
     df
   }
@@ -2025,7 +2025,7 @@ generate_team_seasons_logos_data <-
       expand.grid(season = seasons,
                 slug_team = slug_teams,
                 stringsAsFactors = F) %>%
-      as_data_frame()
+      as_tibble()
     generate_team_season_logo_safe <-
       purrr::possibly(generate_team_season_logo, NULL)
 
@@ -2042,7 +2042,7 @@ generate_team_seasons_logos_data <-
           return(invisible())
         }
 
-        data_frame(yearSeason = season, slugTeam = slug_team, urlTeamLogoSeason = url)
+        tibble(yearSeason = season, slugTeam = slug_team, urlTeamLogoSeason = url)
 
       })
   }
@@ -2051,7 +2051,7 @@ generate_team_seasons_logos_data <-
 parse.nba.json_data <-
   function(url = "https://stats.nba.com/stats/leaguedashplayerbiostats?College=&Conference=&Country=&DateFrom=&DateTo=&Division=&DraftPick=&DraftYear=&GameScope=&GameSegment=&Height=&LastNGames=0&LeagueID=00&Location=&Month=0&OpponentTeamID=0&Outcome=&PORound=0&PerMode=PerGame&Period=0&PlayerExperience=&PlayerPosition=&Season=2016-17&SeasonSegment=&SeasonType=Regular+Season&ShotClockRange=&StarterBench=&TeamID=0&VsConference=&VsDivision=&Weight=") {
     json_data <- url %>%
-      get.json_data(use_read_lines = TRUE, is_data_frame = TRUE, is_flattened = TRUE)
+      get.json_data(use_read_lines = TRUE, is_tibble = TRUE, is_flattened = TRUE)
 
     js_names <-
       names(json_data)[!names(json_data) %in% "resource"]
@@ -2061,7 +2061,7 @@ parse.nba.json_data <-
 
 
     df_parameters <-
-      data_frame(item = json_data[["parameters"]] %>% names(),
+      tibble(item = json_data[["parameters"]] %>% names(),
                  value = json_data[["parameters"]] %>% as.character()) %>%
       mutate(value = ifelse(value == "NULL", NA, value)) %>%
       filter(!value %>% is.na(),
@@ -2078,7 +2078,7 @@ parse.nba.json_data <-
     data <-
       json_data$resultSets$rowSet %>%
       data.frame(stringsAsFactors = F) %>%
-      dplyr::as_data_frame() %>%
+      dplyr::as_tibble() %>%
       purrr::set_names(names_actual)
 
 
@@ -2098,7 +2098,7 @@ generate.nba_api.items <-
       flatten_chr() %>%
       str_replace_all("\\(|\\)", "")
 
-    data_frame(apiItem = nba_slug, values, isBlankAllowed = allow_blank) %>%
+    tibble(apiItem = nba_slug, values, isBlankAllowed = allow_blank) %>%
       mutate_if(is.numeric,
                 as.character())
   }
@@ -2128,7 +2128,7 @@ generate.nba_api.items <-
       glue::glue("https://stats.nba.com/templates/angular/views/{table_type}/{table_type}-{table_slugs}.html") %>%
       as.character()
 
-    data_frame(typeTable = table_type,
+    tibble(typeTable = table_type,
                slugBase = table_slugs,
                urlHeaderTable = urls)
   }
@@ -2148,7 +2148,7 @@ generate.nba_api.items <-
     names()
   gc()
 
-  data_frame(slugBase = slug_nba,
+  tibble(slugBase = slug_nba,
              parameterOption = api_options,
              urlNBAStatsAPI = url)
 }
@@ -2169,7 +2169,7 @@ generate.nba_api.items <-
       html_nodes("dd") %>%
       html_text()
 
-    data_frame(
+    tibble(
       nameNBA = name_nba,
       descriptionItem = description_nba,
       urlHeaderTable = url
@@ -2210,7 +2210,7 @@ get.nba_headers <-
 #'
 #' Get NBA schedule for most current season
 #'
-#' @return a `data_frame`
+#' @return a `tibble`
 #' @export
 #'
 #' @import curl jsonlite readr purrr stringr lubridate
@@ -2229,7 +2229,7 @@ current_schedule <-
 
   df_season_games <-
     json_data[!json_data %>% names() %in% c("period", "nugget", "hTeam", "vTeam", "watch", "playoffs")] %>%
-    dplyr::as_data_frame()
+    dplyr::as_tibble()
 
   df_season_games <-
     df_season_games %>%
@@ -2264,7 +2264,7 @@ current_schedule <-
 
   df_periods <-
     json_data$period %>%
-    as_data_frame() %>%
+    as_tibble() %>%
     purrr::set_names(c("quarterMaxPlayed", "idSeasonType", "maxQuartersRegular")) %>%
     mutate(
       hasOvertime = quarterMaxPlayed > 4,
@@ -2274,12 +2274,12 @@ current_schedule <-
     mutate(idRow = 1:n())
 
   df_descriptions <-
-    data_frame(descriptionGame = json_data$nugget$text) %>%
+    tibble(descriptionGame = json_data$nugget$text) %>%
     mutate(idRow = 1:n()) %>%
     mutate_all(funs(ifelse(. == "", NA, .)))
 
   df_home <-
-    json_data$hTeam %>% flatten() %>% dplyr::as_data_frame() %>%
+    json_data$hTeam %>% flatten() %>% dplyr::as_tibble() %>%
     purrr::set_names(c('idTeamHome', 'scoreHome', 'isWinnerHome', 'isLoserHome')) %>%
     mutate_all(as.numeric) %>%
     mutate(idRow = 1:n()) %>%
@@ -2289,7 +2289,7 @@ current_schedule <-
     suppressMessages()
 
   df_away <-
-    json_data$vTeam %>% flatten() %>% dplyr::as_data_frame() %>%
+    json_data$vTeam %>% flatten() %>% dplyr::as_tibble() %>%
     purrr::set_names(c('idTeamAway', 'scoreAway', 'isWinnerAway', 'isLoserAway')) %>%
     mutate_all(as.numeric) %>%
     mutate(idRow = 1:n()) %>%
@@ -2313,7 +2313,7 @@ current_schedule <-
 #' Gets active coaching staff information for all
 #' NBA teams
 #'
-#' @return a \code{data_frames}
+#' @return a \code{tibbles}
 #' @export
 #' @import tidyr curl jsonlite dplyr stringr
 #' @family Current data
@@ -2359,7 +2359,7 @@ coaching_staffs <-
     df <-
       glue::glue("https://data.nba.net/10s/prod/v{api_version}/today.json") %>%
       as.character() %>%
-      get.json_data(use_read_lines = T, is_data_frame = T) %>%
+      get.json_data(use_read_lines = T, is_tibble = T) %>%
       flatten_df() %>%
       gather(item, value) %>%
       mutate(hasSlash = value %>% str_detect("/"),
@@ -2383,7 +2383,7 @@ coaching_staffs <-
 #'
 #' }
 #'
-#' @return \code{data_frame()}
+#' @return \code{tibble()}
 #' @export
 #'
 #' @examples
@@ -2391,7 +2391,7 @@ coaching_staffs <-
 nbastats_api_parameters <-
   function(api_versions = 1:3) {
     .nbastats_api_parameters_safe <-
-      purrr::possibly(.nbastats_api_parameters, data_frame())
+      purrr::possibly(.nbastats_api_parameters, tibble())
     api_versions %>%
       future_map_dfr(function(api_version){
         .nbastats_api_parameters_safe(api_version = api_version)
@@ -2403,7 +2403,7 @@ nbastats_api_parameters <-
   function(json) {
     df_players <-
       json$data$players %>%
-      dplyr::as_data_frame() %>%
+      dplyr::as_tibble() %>%
       purrr::set_names(
         c(
           "idPlayer",
@@ -2487,7 +2487,7 @@ parse_for_seasons_data <-
         items <-
           c("nameParameter", "slugLeague", "yearDataEnd", "idLeagueSeasonType", "yearDataStart")
 
-        data_frame(items, values) %>%
+        tibble(items, values) %>%
           mutate(values = values %>% as.character()) %>%
           tidyr::spread(items, values)
       })
@@ -2518,7 +2518,7 @@ parse_for_seasons_data <-
         items <-
           str_c("V", seq_along(values))
 
-        data_frame(items, values) %>%
+        tibble(items, values) %>%
           tidyr::spread(items, values)
 
       }) %>%
@@ -2554,7 +2554,7 @@ parse_for_seasons_data <-
 #'
 #' @param join_blg if \code{TRUE} joins BLG team features data
 #'
-#' @return a `data_frame`
+#' @return a `tibble`
 #' @export
 #' @importFrom readr read_lines
 #' @importFrom glue glue
@@ -2588,7 +2588,7 @@ nba_teams <-
 #'
 #'
 #'
-#' @return a \code{data_frame()}
+#' @return a \code{tibble()}
 #' @export
 #'
 #' @examples
@@ -2603,7 +2603,7 @@ nba_teams_seasons <- function() {
   data <-
     json$resultSets$rowSet[[1]] %>%
     data.frame(stringsAsFactors = F) %>%
-    as_data_frame() %>%
+    as_tibble() %>%
     purrr::set_names(actual_names) %>%
     munge_nba_data() %>%
     mutate(isActiveTeam = yearSeasonLast == max(yearSeasonLast)) %>%
@@ -2615,7 +2615,7 @@ nba_teams_seasons <- function() {
 #'
 #'
 #'
-#' @return a `data_frame`
+#' @return a `tibble`
 #' @export
 #' @import readr jsonlite dplyr purrr tibble tidyr stringr
 #' @examples
@@ -2645,7 +2645,7 @@ nba_stats_api_items <-
       .parse_for_teams() %>%
       assign(x = "df_dict_nba_teams", value = ., envir = .GlobalEnv)
 
-    data_frame(
+    tibble(
       nameTable = c("Players", "Teams", "API Parameters"),
       dataTable = list(df_players, df_teams, df_tables)
     )
@@ -2654,7 +2654,7 @@ nba_stats_api_items <-
 #' NBA player dictionary
 #'
 #'
-#' @return a \code{data_frame}
+#' @return a \code{tibble}
 #' @export
 #'
 #' @import dplyr purrr jsonlite curl stringr lubridate
@@ -2686,7 +2686,7 @@ nba_players <-
     data <-
       json$resultSets$rowSet[[1]] %>%
       data.frame(stringsAsFactors = F) %>%
-      as_data_frame()
+      as_tibble()
 
 
     df_names <-

@@ -60,7 +60,7 @@
         data <-
           tables_data$rowSet[[x]] %>%
           data.frame(stringsAsFactors = F) %>%
-          as_data_frame()
+          as_tibble()
 
         if (data %>% nrow() == 0) {
           return(invisible())
@@ -114,7 +114,7 @@
 #' @param assign_to_environment if \code{TRUE} assigns each table to environment with name containing dataScore
 #' @param return_message if \code{TRUE} returns a message
 #'
-#' @return a \code{data_frame}
+#' @return a \code{tibble}
 #' @export
 #' @import dplyr stringr curl jsonlite lubridate purrr tidyr rlang readr tibble
 #' @importFrom glue glue
@@ -134,10 +134,10 @@ days_scores <-
       expand.grid(game_date = game_dates,
                   day_offset = day_offset,
                   stringsAsFactors = F) %>%
-      as_data_frame()
+      as_tibble()
 
     .get_day_nba_scores_safe <-
-      purrr::possibly(.get_day_nba_scores, data_frame())
+      purrr::possibly(.get_day_nba_scores, tibble())
 
     all_data <-
       1:nrow(input_df) %>%

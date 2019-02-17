@@ -9,7 +9,7 @@
 
     if (is_dead) {
       parts <- status %>% str_split("\\(") %>% flatten_chr() %>% str_replace_all("\\)", "") %>% str_trim()
-      return(data_frame(statusContract = status,
+      return(tibble(statusContract = status,
                         dateDeath = parts[[2]] %>% lubridate::mdy(),
                         isActivePlayer = F))
     }
@@ -18,28 +18,28 @@
         status %>% str_split("\\(") %>% flatten_chr() %>% str_replace_all("\\)", "") %>% str_trim()
 
       if (parts %>% length() == 1) {
-        return(data_frame(statusContract = status, isActivePlayer = TRUE))
+        return(tibble(statusContract = status, isActivePlayer = TRUE))
       }
 
-      return(data_frame(statusContract = parts[1], nameTeamDraftRights = parts[2], isActivePlayer = T))
+      return(tibble(statusContract = parts[1], nameTeamDraftRights = parts[2], isActivePlayer = T))
     }
 
     if (is_de) {
       data <-
-        data_frame(statusContract = status,
+        tibble(statusContract = status,
                    yearDraftEligible = parse_number(status)) %>% suppressWarnings()
       return(data)
     }
 
     if (is_retired) {
       parts <- status %>% str_split("\\(") %>% flatten_chr() %>% str_replace_all("\\)", "") %>% str_trim()
-      return(data_frame(statusContract = status,
+      return(tibble(statusContract = status,
                         dateRetired = parts[[2]] %>% lubridate::mdy(),
                         isActivePlayer = F))
     }
 
     if (is_ufa) {
-      return(data_frame(statusContract = status, isActivePlayer = TRUE))
+      return(tibble(statusContract = status, isActivePlayer = TRUE))
     }
 
     parts <-
@@ -54,7 +54,7 @@
 
 
 
-    data_frame(statusContract = status,
+    tibble(statusContract = status,
                isActivePlayer = TRUE,
                nameTeamContract = parts[1],
                dateContract = parts[[2]] %>% lubridate::mdy(),
@@ -65,7 +65,7 @@
 .get_player_resolution_df <-
   memoise::memoise(function() {
   player_df <-
-    data_frame(
+    tibble(
       namePlayer = c(
         "Edy Tavares",
         "R.J. Hunter",
@@ -147,7 +147,7 @@
 .dictionary_contract_status <-
   memoise::memoise(function() {
   contract_df <-
-    data_frame(statusContract = c(NA, "Unrestricted Free Agent", "Unsigned Draft Pick", "Draft Eligible",
+    tibble(statusContract = c(NA, "Unrestricted Free Agent", "Unsigned Draft Pick", "Draft Eligible",
                                   "Restricted Free Agent"),
                slugStatusContract = c('OT', 'UFA', 'UDP', 'DE', 'RFA')
     )
@@ -158,7 +158,7 @@
 .get_leagues_teams_df <-
   memoise::memoise(function() {
   nba_teams <-
-    data_frame(nameTeam = c("Atlanta Hawks", "Boston Celtics", "Brooklyn Nets", "Charlotte Hornets",
+    tibble(nameTeam = c("Atlanta Hawks", "Boston Celtics", "Brooklyn Nets", "Charlotte Hornets",
                             "Chicago Bulls", "Cleveland Cavaliers", "Dallas Mavericks", "Denver Nuggets",
                             "Detroit Pistons", "Golden State Warriors", "Houston Rockets",
                             "Indiana Pacers", "Los Angeles Clippers", "Los Angeles Lakers",
@@ -172,7 +172,7 @@
     )
 
   nba_dl_teams <-
-    data_frame(nameTeam = c("Delaware 87ers", "Erie BayHawks", "Maine Red Claws", "Raptors 905",
+    tibble(nameTeam = c("Delaware 87ers", "Erie BayHawks", "Maine Red Claws", "Raptors 905",
                             "Westchester Knicks", "Canton Charge", "Fort Wayne Mad Ants",
                             "Grand Rapids Drive", "Iowa Energy", "Sioux Falls Skyforce",
                             "Austin Spurs", "Oklahoma City Blue", "Rio Grande Valley Vipers",
@@ -207,7 +207,7 @@
     paste0('http://basketball.realgm.com',. )
 
   agent_df <-
-    data_frame(nameAgent = name.agent, urlAgentRealGM = url.agent.realgm) %>%
+    tibble(nameAgent = name.agent, urlAgentRealGM = url.agent.realgm) %>%
     distinct() %>%
     arrange(nameAgent)
   agent_df
@@ -231,7 +231,7 @@
       html_attr('href')
 
     agent_metadata_df <-
-      data_frame(nameAgent)
+      tibble(nameAgent)
 
     if (nameAgency %>% length() > 0) {
       agent_metadata_df <-
@@ -337,7 +337,7 @@
     .get_player_resolution_df()
 
   player_agent_df <-
-    data_frame(
+    tibble(
       namePlayer = player,
       nameTeam = teams,
       slugPosition = positions,
@@ -437,7 +437,7 @@
   return_message = TRUE
   ) {
     df <-
-        data_frame()
+        tibble()
 
       success <- function(res) {
         url <-
@@ -448,7 +448,7 @@
             cat(fill = T)
         }
         .parse_agent_url_safe <-
-          purrr::possibly(.parse_agent_url, data_frame())
+          purrr::possibly(.parse_agent_url, tibble())
 
         all_data <-
           .parse_agent_url_safe(url = url)
@@ -459,7 +459,7 @@
           bind_rows(all_data)
       }
       failure <- function(msg) {
-        data_frame()
+        tibble()
       }
       urls %>%
         future_map(function(x) {
@@ -478,7 +478,7 @@
 #' @param all_agents if \code{TRUE} scrapes all agents
 #' @param return_message if \code{TRUE} returns a message
 #'
-#' @return a  \code{data_frame}
+#' @return a  \code{tibble}
 #' @export
 #' @family agents
 #' @import dplyr rvest stringr tidyr purrr xml2 readr magrittr
@@ -518,7 +518,7 @@ agents_players <-
 #'
 #' @param return_message if \code{TRUE} returns player url
 #'
-#' @return a `data_frame()`
+#' @return a `tibble()`
 #' @export
 #' @family agents
 #' @import dplyr rvest stringr tidyr purrr xml2 readr magrittr curl
@@ -613,7 +613,7 @@ players_agents <-
       table$Agent %>% .camelParse()
 
     all_agents <-
-      data_frame()
+      tibble()
 
     for (a in seq_along(players.agents)) {
       agents <-
@@ -621,7 +621,7 @@ players_agents <-
         unlist() %>%
         paste0(collapse = ', ')
 
-      agent_df <- data_frame(nameAgent = agents)
+      agent_df <- tibble(nameAgent = agents)
       all_agents <-
         all_agents %>%
         bind_rows(agent_df)
@@ -635,7 +635,7 @@ players_agents <-
     contract_status_df <-
       .dictionary_contract_status()
     players_agents_df <-
-      data_frame(
+      tibble(
         namePlayer = player,
         nameAgent = player.agents,
         nameTeam,

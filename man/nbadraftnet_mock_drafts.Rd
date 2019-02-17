@@ -17,7 +17,7 @@ nbadraftnet_mock_drafts(years = 2009:2018, merge_nba_data = T,
 \item{return_message}{if \code{TRUE} returns a message}
 }
 \value{
-a \code{data_frame()}
+a \code{tibble()}
 }
 \description{
 Returns mock drafts from nbadraft.net

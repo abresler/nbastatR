@@ -96,7 +96,7 @@ fix_name <- function(data, fix_name = "Weeks12") {
 
 #' Gather a data frame
 #'
-#' @param data a \code{data_frame}
+#' @param data a \code{tibble}
 #' @param numeric_ids vector of numeric ids
 #' @param use_logical_keys if \code{TRUE} uses logicals as keys
 #' @param use_factor_keys if \code{TRUE} uses factors as a key
@@ -127,7 +127,7 @@ fix_name <- function(data, fix_name = "Weeks12") {
 #' \item sep : separator
 #' }
 #' @param remove_na removes NA columns
-#' @return a \code{data_frame}
+#' @return a \code{tibble}
 #' @export
 #' @import dplyr stringr
 #' @importFrom rlang UQ
@@ -201,13 +201,13 @@ gather_data <-
 
     data <-
       data %>%
-      gather(rlang::UQ(variable_name), value, -gather_cols)
+      gather(UQ(variable_name), value, -gather_cols)
 
     if (!unite_columns %>% purrr::is_null()) {
       df_unite <- unite_columns %>% flatten_df()
       data <-
         data %>%
-        unite(col = rlang::UQ(df_unite$new_column), df_unite$column_1, df_unite$column_2, sep = df_unite$sep) %>%
+        unite(col = UQ(df_unite$new_column), df_unite$column_1, df_unite$column_2, sep = df_unite$sep) %>%
         suppressWarnings()
     }
 
@@ -216,7 +216,7 @@ gather_data <-
         separate_columns %>% flatten_df()
       data <-
         data %>%
-        separate(col = rlang::UQ(df_sep$column), into = c(df_sep$new_column_1, df_sep$new_column_2), sep = df_sep$sep) %>%
+        separate(col = UQ(df_sep$column), into = c(df_sep$new_column_1, df_sep$new_column_2), sep = df_sep$sep) %>%
         suppressWarnings()
     }
 
@@ -233,14 +233,14 @@ gather_data <-
 
 #' Spread gathered data frame
 #'
-#' @param data a \code{data_frame}
+#' @param data a \code{tibble}
 #' @param variable_name name of variable vector
 #' @param value_name name of value vector
 #' @param perserve_order if \code{TRUE} preserve order
 #' @param unite_columns
 #' @param separate_columns
 #'
-#' @return a \code{data_frame}
+#' @return a \code{tibble}
 #' @export
 #' @import dplyr
 #' @importFrom tidyr spread
@@ -258,7 +258,7 @@ spread_data <-
       df_unite <- unite_columns %>% flatten_df()
       data <-
         data %>%
-        unite(col = rlang::UQ(df_unite$new_column), df_unite$column_1, df_unite$column_2, sep = df_unite$sep)
+        unite(col = UQ(df_unite$new_column), df_unite$column_1, df_unite$column_2, sep = df_unite$sep)
     }
 
     if (!separate_columns %>% purrr::is_null()) {
@@ -266,7 +266,7 @@ spread_data <-
         separate_columns %>% flatten_df()
       data <-
         data %>%
-        separate(col = rlang::UQ(df_sep$column), into = c(df_sep$new_column_1, df_sep$new_column_2), sep = df_sep$sep) %>%
+        separate(col = UQ(df_sep$column), into = c(df_sep$new_column_1, df_sep$new_column_2), sep = df_sep$sep) %>%
         suppressMessages()
     }
 
@@ -298,11 +298,11 @@ get_data_classes <- function(data) {
   df_classes <-
     data %>%
     future_map(class) %>%
-    as_data_frame() %>%
+    as_tibble() %>%
     gather(column,class) %>%
     mutate(idColumn = 1:n()) %>%
     select(idColumn, everything()) %>%
-    mutate(isNested = class %>% str_detect("list|data.frame|tbl|data_frame|data"))
+    mutate(isNested = class %>% str_detect("list|data.frame|tbl|tibble|data"))
   has_nested <- df_classes %>% filter(isNested) %>% nrow() >0
 
   if (has_nested) {
@@ -356,17 +356,17 @@ get_data_classes <- function(data) {
 
 
 get.json_data <-
-  function(url, use_read_lines = TRUE, is_data_frame = F, is_flattened = T) {
+  function(url, use_read_lines = TRUE, is_tibble = F, is_flattened = T) {
     if (use_read_lines) {
       data <-
         url %>%
         readr::read_lines() %>%
-        jsonlite::fromJSON(flatten = is_flattened, simplifyDataFrame = is_data_frame)
+        jsonlite::fromJSON(flatten = is_flattened, simplifyDataFrame = is_tibble)
       return(data)
     }
 
     url %>%
-      jsonlite::fromJSON(flatten = is_flattened, simplifyDataFrame = is_data_frame)
+      jsonlite::fromJSON(flatten = is_flattened, simplifyDataFrame = is_tibble)
 
   }
 
@@ -379,7 +379,7 @@ get.json_data <-
 #' @param id_columns vector of id columns
 #' @param scale_columns vector of columns to scale
 #'
-#' @return a \code{data_frame}
+#' @return a \code{tibble}
 #' @export
 #' @import dplyr stringr purrr
 #' @importFrom glue glue

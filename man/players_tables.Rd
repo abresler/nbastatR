@@ -151,7 +151,7 @@ players_tables(players = NULL, player_ids = NULL,
 \item{return_message}{if \code{TRUE} returns a message}
 }
 \value{
-a \code{data_frame}
+a \code{tibble}
 }
 \description{
 NBA players table data

@@ -3,7 +3,7 @@
 #' @param year summer league year
 #' @param assign_to_environment if \code{true assigns to environment}
 #'
-#' @return a nested \code{data_frame}
+#' @return a nested \code{tibble}
 #' @export
 #'
 #' @examples
@@ -24,7 +24,7 @@ sl_players <-
       future_map_dfr(function(league){
         data <-
           json_data[[league]] %>%
-          as_data_frame()
+          as_tibble()
 
         json_names <-
           names(data)
@@ -82,7 +82,7 @@ sl_players <-
 
         if (data %>% tibble::has_name("dataDraft")) {
           df_draft <-
-            data$dataDraft %>% as_data_frame() %>%
+            data$dataDraft %>% as_tibble() %>%
             mutate(idPlayer = df$idPlayer) %>%
             select(idPlayer, everything()) %>%
             purrr::set_names(c("idPlayer", "idTeamDrafted", "numberPick", "numberRound", "yearDraft")) %>%
@@ -110,7 +110,7 @@ sl_players <-
 
         }
 
-        data_frame(slugLeague = league, dataTeams = list(df))
+        tibble(slugLeague = league, dataTeams = list(df))
       })
 
   }
@@ -120,7 +120,7 @@ sl_players <-
 #'
 #' @param assign_to_environment if \code{TRUE} assings to environment
 #'
-#' @return a nested \code{data_frame}
+#' @return a nested \code{tibble}
 #' @export
 #'
 #' @examples
@@ -139,7 +139,7 @@ sl_teams <-
       future_map_dfr(function(league){
         data <-
           json_data[[league]] %>%
-          as_data_frame()
+          as_tibble()
 
         json_names <-
           names(data)
@@ -166,7 +166,7 @@ sl_teams <-
 
         }
 
-        data_frame(slugLeague = league, dataTeams = list(data))
+        tibble(slugLeague = league, dataTeams = list(data))
       })
 
     data

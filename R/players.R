@@ -37,7 +37,7 @@
       data <-
         json$resultSets$rowSet[[x]] %>%
         data.frame(stringsAsFactors = F) %>%
-        dplyr::as_data_frame()
+        dplyr::as_tibble()
 
       if (data %>% nrow() == 0) {
         return(invisible())
@@ -190,7 +190,7 @@
 
 .dictionary_player_tables <-
   memoise::memoise(function() {
-    data_frame(
+    tibble(
       nameTable = c(
         "passes",
         "clutch",
@@ -497,7 +497,7 @@
 #' @param return_message if \code{TRUE} returns a message
 #' @param assign_to_environment if \code{TRUE} assigns data to environment
 #'
-#' @return a \code{data_frame}
+#' @return a \code{tibble}
 #'
 #' @export
 #' @family player
@@ -566,9 +566,9 @@ players_tables <-
         last_n_games = last_n_games,
         stringsAsFactors = F
       ) %>%
-      dplyr::as_data_frame()
+      dplyr::as_tibble()
     get_player_table_data_safe <-
-      purrr::possibly(.get_player_table_data, data_frame())
+      purrr::possibly(.get_player_table_data, tibble())
 
     all_data <-
       1:nrow(input_df) %>%

@@ -14,7 +14,7 @@ drafts(draft_years = 1947:2018, nest_data = F, return_message = T)
 \item{return_message}{if \code{TRUE} returns message}
 }
 \value{
-a `data_frame`
+a `tibble`
 }
 \description{
 NBA draft data for specified seasons

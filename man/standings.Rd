@@ -22,7 +22,7 @@ standings(seasons = 1950:2018, season_types = c("Regular Season"),
 \item{return_message}{if \code{TRUE} returns a message}
 }
 \value{
-a `data_frame`
+a `tibble`
 }
 \description{
 NBA season standing data

@@ -12,7 +12,7 @@ hoops_hype_salary_summary(return_wide = T, return_message = T)
 \item{return_message}{if \code{TRUE} returns a message}
 }
 \value{
-a \code{data_frame()}
+a \code{tibble()}
 }
 \description{
 Gets all team salary summaries from HoopsHype

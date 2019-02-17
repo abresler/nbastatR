@@ -1,6 +1,6 @@
 .dictionary_nbadraft_names <-
   memoise::memoise(function() {
-    data_frame(nameBad = c("date.data.updated", "year.draft", "id.round", "id.pick", "name.player",
+    tibble(nameBad = c("date.data.updated", "year.draft", "id.round", "id.pick", "name.player",
                            "id.position", "id.position.secondary", "team", "slug.team",
                            "slug.team.current", "is.traded_pick", "height", "height.inches",
                            "weight.lbs", "is.combo_player", "school", "slug.class", "url.player.nbadraft_net",
@@ -17,7 +17,7 @@
 .get_nba_player_resolver_df <-
   memoise::memoise(function() {
   player_df <-
-    data_frame(
+    tibble(
       name.player = c(
         "BJ Mullens",
         "Darius Johnson-O...",
@@ -111,7 +111,7 @@
 .get_school_df  <-
   memoise::memoise(function() {
   school_df <-
-    data_frame(
+    tibble(
       school = c(
         "Bosnia & Herz...",
         "Long Beach St...",
@@ -137,7 +137,7 @@
 .get_nba_draft_net_team_df <-
   memoise::memoise(function() {
   team_df <-
-    data_frame(
+    tibble(
       name.team.nbadraft_net = c(
         "Atlanta",
         "Boston",
@@ -349,7 +349,7 @@
       stop("Sorry mock drafts only go from 2009")
     }
     class_df <-
-      data_frame(
+      tibble(
         slug.class = c("fr", 'so', 'jr', 'sr', "intl"),
         id.class = c(1:4, NA)
       )
@@ -427,7 +427,7 @@
       .get_school_df()
 
     draft_data <-
-      data_frame(
+      tibble(
         date.data.updated = last_update,
         year.draft = draft_year,
         id.pick = seq_along(name.player),
@@ -515,7 +515,7 @@
 #' @param nest_data if \code{TRUE} nests data by draft
 #' @param return_message  if \code{TRUE} returns a message
 #'
-#' @return a \code{data_frame()}
+#' @return a \code{tibble()}
 #' @export
 #' @import dplyr lubridate purrr stringr tibble tidyr rvest
 #' @importFrom glue glue
@@ -532,7 +532,7 @@ nbadraftnet_mock_drafts <-
            nest_data = F,
            return_message = T) {
     .get_nba_draftnet_year_mock_draft_safe <-
-      purrr::possibly(.get_nba_draftnet_year_mock_draft, data_frame())
+      purrr::possibly(.get_nba_draftnet_year_mock_draft, tibble())
 
     all_data <-
       years %>%

@@ -247,7 +247,7 @@
 #' @param ...
 #' @param return_message
 #'
-#' @return a `data_frame`
+#' @return a `tibble`
 #' @family game
 #' @export
 #' @import dplyr jsonlite purrr stringr lubridate magrittr tidyr tibble httr
@@ -287,11 +287,11 @@ game_logs <-
         season_type = season_types,
         stringsAsFactors = F
       ) %>%
-      as_data_frame() %>%
+      as_tibble() %>%
       arrange(season)
 
     .get_season_gamelog_safe <-
-      purrr::possibly(.get_season_gamelog, data_frame())
+      purrr::possibly(.get_season_gamelog, tibble())
 
     all_data <-
       1:nrow(input_df) %>%
@@ -503,7 +503,7 @@ game_logs <-
 #' @param box_score_tables vector of box score table names
 #' @param nest_data if `TRUE` nests the data
 #'
-#' @return a \code{data_frame()}
+#' @return a \code{tibble()}
 #' @family schedule
 #' @export
 #' @import dplyr jsonlite purrr stringr lubridate magrittr tidyr tibble httr
@@ -525,11 +525,11 @@ seasons_schedule <-
         season_type = season_types,
         stringsAsFactors = F
       ) %>%
-      as_data_frame() %>%
+      as_tibble() %>%
       arrange(season)
 
     .get_season_schedule_safe <-
-      purrr::possibly(.get_season_schedule, data_frame())
+      purrr::possibly(.get_season_schedule, tibble())
 
     all_data <-
       1:nrow(input_df) %>%

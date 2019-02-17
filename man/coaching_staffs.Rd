@@ -7,7 +7,7 @@
 coaching_staffs()
 }
 \value{
-a \code{data_frames}
+a \code{tibbles}
 }
 \description{
 Gets active coaching staff information for all

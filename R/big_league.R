@@ -1,6 +1,6 @@
 .dictionary_blg_names <-
   function() {
-    data_frame(
+    tibble(
       nameBLG = c(
         "_id",
         "teamCity",
@@ -54,7 +54,7 @@
   data <-
     "https://bigleaguegraphs.com/api/nba/teams/list" %>%
     jsonlite::fromJSON() %>%
-    dplyr::as_data_frame()
+    dplyr::as_tibble()
 
   data <-
     data %>%

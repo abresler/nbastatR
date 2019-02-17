@@ -14,7 +14,7 @@ teams_rankings(seasons = NULL, nest_data = F, return_message = T)
 \item{return_message}{`TRUE` returns a message}
 }
 \value{
-a `data_frame`
+a `tibble`
 }
 \description{
 Team rankings for specified season

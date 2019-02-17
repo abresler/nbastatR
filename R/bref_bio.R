@@ -24,7 +24,7 @@
 
 .dictionary_bref_bio_names <-
   memoise::memoise(function() {
-    data_frame(nameBREF = c("twitter", "position", "shoots", "height", "weight", "team",
+    tibble(nameBREF = c("twitter", "position", "shoots", "height", "weight", "team",
                "born", "birthplace", "college", "namehighschool", "locationhighschool",
                "nba debut", "experience", "playernicknames", "yearrankhighschool",
                "pronunciation", "hof", "death", "relatives"),
@@ -131,7 +131,7 @@
             parts <-
               node_text %>% str_split("\\:") %>% flatten_chr() %>% str_trim()
 
-            data <- data_frame(item = "death", value = parts[length(parts)] )
+            data <- tibble(item = "death", value = parts[length(parts)] )
             return(data)
           }
 
@@ -141,7 +141,7 @@
           if (isPron) {
             parts <- node_text %>% str_split("\\:") %>% flatten_chr() %>% str_trim()
 
-            data <- data_frame(item = "Pronunciation", value = parts[length(parts)] )
+            data <- tibble(item = "Pronunciation", value = parts[length(parts)] )
             return(data)
           }
 
@@ -157,7 +157,7 @@
               str_trim()
 
             data <-
-              data_frame(item = "hof", value = parts[length(parts)] )
+              tibble(item = "hof", value = parts[length(parts)] )
             return(data)
           }
 
@@ -168,7 +168,7 @@
               node_text %>% str_split("\\:") %>% flatten_chr()
             value <- values[length(values)]
             data <-
-              data_frame(item = c("Twitter"),
+              tibble(item = c("Twitter"),
                        value)
             return(data)
           }
@@ -179,7 +179,7 @@
           if (is_recruiting) {
             parts <- node_text %>% str_split("\\:") %>% flatten_chr()
             data <-
-              data_frame(item = "yearRankHighSchool", value = parts[length(parts)])
+              tibble(item = "yearRankHighSchool", value = parts[length(parts)])
             return(data)
           }
 
@@ -198,7 +198,7 @@
             items <- c("nameHighSchool", "locationHighSchool")
 
             data <-
-              data_frame(item = items[seq_along(parts)],
+              tibble(item = items[seq_along(parts)],
                        value = parts) %>%
               mutate_all(str_trim)
             return(data)
@@ -211,15 +211,15 @@
             hw <- node_text %>% str_split("\\(") %>% flatten_chr() %>% str_trim() %>% .[[1]]
             if (hw %>% str_detect("\\,")) {
               values <- hw %>% str_split(",") %>% flatten_chr() %>% str_trim()
-              data <- data_frame(item = c("height", "weight"), value = values)
+              data <- tibble(item = c("height", "weight"), value = values)
               return(data)
             }
             if (hw %>% str_detect("\\-") ){
-              data <- data_frame(item = "height", value = hw)
+              data <- tibble(item = "height", value = hw)
               return(data)
             }
             data <-
-              data_frame(item = "weight", value = hw)
+              tibble(item = "weight", value = hw)
           }
           if (node_text_single %>% str_detect("Born:")) {
           node_text <-
@@ -242,14 +242,14 @@
 
             value <- node_text %>% str_replace_all("\\(|\\)", "")
             data <-
-              data_frame(item = "playerNicknames", value)
+              tibble(item = "playerNicknames", value)
 
             return(data)
           }
 
           node_text <- node_text %>% str_replace_all("\\ and ", "\\, ")
 
-          data_frame(node_text) %>%
+          tibble(node_text) %>%
             tidyr::separate(node_text, into = c("item", "value"), sep = "\\:") %>%
             mutate_all(str_trim)
         }) %>%
@@ -380,7 +380,7 @@
     }
 
     data <-
-      data_frame(transactions) %>%
+      tibble(transactions) %>%
       tidyr::separate(transactions, into = c("dateTransaction", "descriptionTransaction"), sep = "\\:") %>%
       mutate_all(str_trim) %>%
       mutate(dateTransaction = dateTransaction %>% lubridate::mdy()) %>%
@@ -422,16 +422,16 @@
 
 
   .parse.transactions.safe <-
-    purrr::possibly(.parse.transactions, data_frame())
+    purrr::possibly(.parse.transactions, tibble())
 
   .parse.bio.safe <-
-    purrr::possibly(.parse.bio, data_frame())
+    purrr::possibly(.parse.bio, tibble())
 
   .parse.contracts.safe <-
-    purrr::possibly(.parse.contracts, data_frame())
+    purrr::possibly(.parse.contracts, tibble())
 
   .parse.salary.safe <-
-    purrr::possibly(.parse.salary, data_frame())
+    purrr::possibly(.parse.salary, tibble())
   dataPlayerBio =
     .parse.bio.safe(page = page)
   dataPlayerTransactions =
@@ -441,7 +441,7 @@
   dataPlayerSalaries =  .parse.salary.safe(page = page)
 
   data <-
-    data_frame(
+    tibble(
       nameTable = c("Biography", "Transactions", "Contracts", "Salaries"),
       dataTable = list(
         dataPlayerBio,
@@ -478,7 +478,7 @@
 .parse_bref_player_data_urls <-
   function(urls, return_message = T){
     .parse_bref_player_data_url_safe <-
-      purrr::possibly(.parse_bref_player_data_url, data_frame())
+      purrr::possibly(.parse_bref_player_data_url, tibble())
     all_data <-
     urls %>%
     future_map_dfr(function(url){
@@ -525,7 +525,7 @@
 #' @param assign_to_environment if \code{TRUE} assigns each table to environment
 #' @param return_message if \code{TRUE} returns
 #'
-#' @return a \code{data_frame}
+#' @return a \code{tibble}
 #' @export
 #' @family BREF
 #' @family player
@@ -552,7 +552,7 @@ bref_bios <-
       filter(slugPlayerBREF %in% ids) %>%
       pull(urlPlayerBioBREF)
     .parse_bref_player_data_urls_safe <-
-      purrr::possibly(.parse_bref_player_data_urls, data_frame())
+      purrr::possibly(.parse_bref_player_data_urls, tibble())
 
     all_data <-
       .parse_bref_player_data_urls(urls = urls, return_message = T)

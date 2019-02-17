@@ -7,7 +7,7 @@
 assign_nba_players()
 }
 \value{
-a `data_frame` to `df_dict_nba_players` in your environment
+a `tibble` to `df_dict_nba_players` in your environment
 }
 \description{
 Assign NBA player dictionary to environment

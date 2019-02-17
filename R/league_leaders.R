@@ -45,7 +45,7 @@
     data <-
       json$resultSet$rowSet %>%
       data.frame(stringsAsFactors = F) %>%
-      dplyr::as_data_frame() %>%
+      dplyr::as_tibble() %>%
       purrr::set_names(actual_names) %>%
       munge_nba_data() %>%
       mutate(numberTable = 1)
@@ -97,7 +97,7 @@
 #' @param return_message if \code{TRUE} returns a message
 #' @param nest_data if \code{TRUE} returns a nested data frame
 #'
-#' @return a \code{data_frame}
+#' @return a \code{tibble}
 #' @export
 #' @import curl lubridate dplyr jsonlite stringr purrr tidyr readr
 #' @importFrom glue glue
@@ -123,9 +123,9 @@ metrics_leaders <-
                season_type = season_types,
                mode = modes,
                stringsAsFactors = F) %>%
-      dplyr::as_data_frame()
+      dplyr::as_tibble()
    .get_season_metric_league_leaders_safe <-
-     purrr::possibly(.get_season_metric_league_leaders, data_frame())
+     purrr::possibly(.get_season_metric_league_leaders, tibble())
 
    all_data <-
      1:nrow(input_df) %>%
@@ -197,7 +197,7 @@ metrics_leaders <-
       mutate(numberTable = 1)
 
     data <-
-      json$resultSet$rowSet[[1]] %>% dplyr::as_data_frame() %>%
+      json$resultSet$rowSet[[1]] %>% dplyr::as_tibble() %>%
       purrr::set_names(actual_names) %>%
       munge_nba_data() %>%
       mutate(isActiveWithTeam = isActiveWithTeam %>% as.logical()) %>%
@@ -232,7 +232,7 @@ metrics_leaders <-
 #' \item Playoffs
 #' \item Pre Season
 #' }'
-#' @return a \code{data_frame}
+#' @return a \code{tibble}
 #' @family teams
 #' @family leaders
 #' @export
@@ -308,9 +308,9 @@ franchise_leaders <-
         season_type = season_types,
         stringsAsFactors = F
       ) %>%
-      dplyr::as_data_frame()
+      dplyr::as_tibble()
     .get_franchise_leaders_safe <-
-      purrr::possibly(.get_franchise_leaders, data_frame())
+      purrr::possibly(.get_franchise_leaders, tibble())
 
     all_data <-
       1:nrow(input_df) %>%

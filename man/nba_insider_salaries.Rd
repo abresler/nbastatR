@@ -18,7 +18,7 @@ nba_insider_salaries(assume_player_opt_out = F,
 \item{return_message}{if `TRUE` returns a message}
 }
 \value{
-a `data_frame`
+a `tibble`
 }
 \description{
 Gets information about NBA teams salaries

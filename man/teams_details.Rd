@@ -20,7 +20,7 @@ your environment starting with data}
 \item{return_message}{if \code{TRUE} returns a message}
 }
 \value{
-a `data_frame`
+a `tibble`
 }
 \description{
 Gets information about NBA franchises

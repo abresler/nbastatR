@@ -1,6 +1,6 @@
 .get_basketball_insider_team_ids <- function() {
   data <-
-    data_frame(
+    tibble(
       nameTeam = c(
         "Atlanta Hawks",
         "Boston Celtics",
@@ -66,7 +66,7 @@
         "WAS"
       )
     ) %>%
-    left_join(data_frame(
+    left_join(tibble(
       idBI = c(
         1,
         2,
@@ -213,7 +213,7 @@ nba_team_salaries <-
         '#009900')
 
     color_df <-
-      data_frame(color = colors,
+      tibble(color = colors,
                  typeContractDetail = types)
 
     page <-
@@ -299,7 +299,7 @@ nba_team_salaries <-
       gsub("[^A-Z a-z#0-9]", '', .)
 
     year_1_df <-
-      data_frame(slugSeason = names_salary_table[2],
+      tibble(slugSeason = names_salary_table[2],
                  color = year_1_salary_color,
                  value = year_1_salary[seq_along(year_1_salary_color)])
 
@@ -322,7 +322,7 @@ nba_team_salaries <-
       gsub("[^A-Z a-z#0-9]", '', .)
 
     year_2_df <-
-      data_frame(slugSeason = names_salary_table[3],
+      tibble(slugSeason = names_salary_table[3],
                  color = year_2_salary_color,
                  value = year_2_salary[seq_along(year_2_salary_color)])
 
@@ -345,7 +345,7 @@ nba_team_salaries <-
       gsub("[^A-Z a-z#0-9]", '', .)
 
     year_3_df <-
-      data_frame(slugSeason = names_salary_table[4],
+      tibble(slugSeason = names_salary_table[4],
                  color = year_3_salary_color,
                  value = year_3_salary[seq_along(year_3_salary_color)])
 
@@ -368,7 +368,7 @@ nba_team_salaries <-
       gsub("[^A-Z a-z#0-9]", '', .)
 
     year_4_df <-
-      data_frame(slugSeason = names_salary_table[5],
+      tibble(slugSeason = names_salary_table[5],
                  color = year_4_salary_color,
                  value = year_4_salary[seq_along(year_4_salary_color)])
 
@@ -400,7 +400,7 @@ nba_team_salaries <-
     }
 
     year_5_df <-
-      data_frame(slugSeason = names_salary_table[6],
+      tibble(slugSeason = names_salary_table[6],
                  color = year_5_salary_color,
                  value = year_5_salary[seq_along(year_5_salary_color)])
 
@@ -501,7 +501,7 @@ nba_team_salaries <-
 #' @param return_wide if `TRUE` spreads data
 #' @param return_message if `TRUE` returns a message
 #'
-#' @return a `data_frame`
+#' @return a `tibble`
 #' @export
 #' @family salaries
 #' @import dplyr rvest stringr purrr tidyr readr
@@ -553,7 +553,7 @@ nba_insider_salaries <-
       )
 
     nba_team_salaries_safe <-
-      purrr::possibly(nba_team_salaries, data_frame())
+      purrr::possibly(nba_team_salaries, tibble())
 
     all_salaries <-
       all_teams %>%

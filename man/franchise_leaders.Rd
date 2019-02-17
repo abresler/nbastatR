@@ -28,7 +28,7 @@ franchise_leaders(teams = NULL, all_teams = FALSE,
 }'}
 }
 \value{
-a \code{data_frame}
+a \code{tibble}
 }
 \description{
 Gets franchise leader information for

@@ -1,7 +1,7 @@
 .get_player_names <-
   memoise::memoise(function(){
   data <-
-    data_frame(
+    tibble(
     namePlayer = c("J.J. Barea", "Amare Stoudemire", "C.J. Watson", "Nene Hilario", "Wes Johnson", "A.J. Hammons",
                    "C.J. Wilcox"),
     nameNBA = c("Jose Juan Barea", "Amar'e Stoudemire", "CJ Watson", "Nene",
@@ -66,7 +66,7 @@ nba_injuries <-
     html_text()
 
   injury_data <-
-    data_frame(dateInformation,
+    tibble(dateInformation,
                namePlayer = players,
                dateInjury,
                injury,

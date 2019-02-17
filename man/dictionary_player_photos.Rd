@@ -7,7 +7,7 @@
 dictionary_player_photos()
 }
 \value{
-\code{data_frame}
+\code{tibble}
 }
 \description{
 Cached player photo dictionary

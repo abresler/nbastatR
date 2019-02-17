@@ -17,7 +17,7 @@
 
     data <-
       json$PlayerRotowires %>%
-      as_data_frame()
+      as_tibble()
 
     actual_names <- names(data) %>% resolve_nba_names()
     data <-
@@ -50,7 +50,7 @@
 #' @param results integer of results
 #' @param return_message if \code{TRUE} returns a message
 #'
-#' @return a `data_frame`
+#' @return a `tibble`
 #' @export
 #' @family news
 #' @import dplyr curl readr lubridate purrr jsonlite tidyr
@@ -73,7 +73,7 @@ players_rotowire <-
       nba_player_ids(player_ids = player_ids,
                           players = players)
     get_player_rotowire_news_safe <-
-      purrr::possibly(.get_player_rotowire_news, data_frame())
+      purrr::possibly(.get_player_rotowire_news, tibble())
 
     all_data <-
       ids %>%
@@ -126,7 +126,7 @@ players_rotowire <-
 #' @param results numeric vector of results
 #' @param return_message if `TRUE` returns a message
 #'
-#' @return a `data_frame`
+#' @return a `tibble`
 #' @family news
 #' @export
 #' @import dplyr curl readr lubridate purrr jsonlite tidyr
@@ -198,7 +198,7 @@ players_rotowire <-
 
     data <-
       json$ListItems %>%
-      as_data_frame() %>%
+      as_tibble() %>%
       purrr::set_names(c("title", "descriptionTransaction", "idTeam", "nameTeamFrom",
                          "idPlayer", "dateTransaction", "idTransaction", "meta")) %>%
       mutate_at(c("idPlayer", "idTransaction", "idTeam"),
@@ -245,7 +245,7 @@ players_rotowire <-
 #'
 #' Acquires all NBA transactions since 2012
 #'
-#' @return a `data_frame`
+#' @return a `tibble`
 #' @export
 #' @family transactions
 #' @import dplyr purrr curl jsonlite readr lubridate tidyr tibble
@@ -259,7 +259,7 @@ transactions <-
 
     data <-
       json$NBA_Player_Movement$rows %>%
-      as_data_frame()
+      as_tibble()
 
     json_names <- json$NBA_Player_Movement$columns$Name
     actual_names <- json_names %>% resolve_nba_names()
@@ -325,7 +325,7 @@ transactions <-
 #'
 #' @param count_articles numeric vector of counts
 #'
-#' @return a \code{data_frame}
+#' @return a \code{tibble}
 #' @family news
 #' @export
 #' @import dplyr curl jsonlite rvest xml2 purrr stringr lubridate readr
@@ -351,7 +351,7 @@ beyond_the_numbers <-
     url_article <- data$posts$meta %>% flatten_chr()
 
     df <-
-      data$posts[1:5] %>% as_data_frame() %>%
+      data$posts[1:5] %>% as_tibble() %>%
       purrr::set_names(c("idArticle", "titleArticle", "datetimeArticle", "htmlContent", "urlImage")) %>%
       mutate(urlArticle = url_article,
              titleArticle = ifelse(titleArticle == "", NA, titleArticle),

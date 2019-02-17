@@ -7,7 +7,7 @@
 nba_teams_seasons()
 }
 \value{
-a \code{data_frame()}
+a \code{tibble()}
 }
 \description{
 NBA teams seasons

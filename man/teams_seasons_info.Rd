@@ -28,7 +28,7 @@ teams_seasons_info(teams = NULL, team_ids = NULL,
 \item{return_message}{if `TRUE` returns a message}
 }
 \value{
-a `data_frame`
+a `tibble`
 }
 \description{
 Acquires information for a teams season

@@ -149,7 +149,7 @@ teams_tables(teams = NULL, team_ids = NULL, all_active_teams = F,
 \item{return_messages}{if \code{TRUE} returns message}
 }
 \value{
-a \code{data_frame}
+a \code{tibble}
 }
 \description{
 Returns NBA team data for specified teams

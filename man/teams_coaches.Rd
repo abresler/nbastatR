@@ -14,7 +14,7 @@ teams_coaches(seasons = 1990:2018, nest_data = F, return_message = T)
 \item{return_message}{if \code{TRUE} returns a message}
 }
 \value{
-a `data_frame`
+a `tibble`
 }
 \description{
 Gets coaching staffs for specified seasons

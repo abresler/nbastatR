@@ -17,7 +17,7 @@
     data <-
       json$resultSets$rowSet[[1]] %>%
       data.frame(stringsAsFactors = F) %>%
-      dplyr::as_data_frame()
+      dplyr::as_tibble()
 
     if (data %>% ncol() == 0) {
       return(invisible())
@@ -70,10 +70,10 @@
 #'
 #' @param players vector of players
 #' @param player_ids vector of player ids
-#' @param nest_data if \code{TRUE} returns nested data_frame
+#' @param nest_data if \code{TRUE} returns nested tibble
 #' @param return_message if \code{TRUE} returns a message
 #'
-#' @return a \code{data_frame}
+#' @return a \code{tibble}
 #' @family player
 #' @family awards
 #' @export
@@ -94,7 +94,7 @@ players_awards <-
       nba_player_ids(player_ids = player_ids,
                           players = players)
     get_player_award_safe <-
-      purrr::possibly(.get_player_award, data_frame())
+      purrr::possibly(.get_player_award, tibble())
 
     all_data <-
       ids %>%
@@ -209,9 +209,9 @@ players_awards <-
 #' @param players vector of players
 #' @param player_ids  vector of player ids
 #' @param return_message if \code{TRUE} returns a message
-#' @param nest_data if \code{TRUE} returns nested data_frame
+#' @param nest_data if \code{TRUE} returns nested tibble
 #'
-#' @return a `data_frame`
+#' @return a `tibble`
 #' @export
 #' @family biography
 #' @family players
@@ -228,7 +228,7 @@ players_bios <-
       nba_player_ids(player_ids = player_ids,
                           players = players)
     get_player_bio_safe <-
-      purrr::possibly(.get_player_bio, data_frame())
+      purrr::possibly(.get_player_bio, tibble())
 
     all_data <-
       ids %>%
@@ -339,7 +339,7 @@ players_bios <-
 #' @param return_message if \code{TRUE} returns a message
 #' @param nest_data if \code{TRUE}
 #'
-#' @return a `data_frame`
+#' @return a `tibble`
 #' @export
 #' @import dplyr curl purrr jsonlite tidyr readr
 #' @importFrom glue glue
@@ -360,7 +360,7 @@ player_profiles <- function(players = NULL,
   player_ids <-
     nba_player_ids(player_ids = player_ids, players = players)
   get_player_profile_safe <-
-    purrr::possibly(.get_player_profile, data_frame())
+    purrr::possibly(.get_player_profile, tibble())
   all_data <-
     player_ids %>%
     future_map_dfr(function(player_id) {

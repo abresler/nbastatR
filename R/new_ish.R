@@ -51,7 +51,7 @@ generate_data_name <- function(x, result = "Team") {
 }
 #' Assign NBA teams to environment
 #'
-#' @return a `data_frame`
+#' @return a `tibble`
 #' @family dictionary
 #' @family NBA teams
 #' @export
@@ -70,7 +70,7 @@ assign_nba_teams <-
 #' Assign NBA player dictionary to environment
 #'
 #'
-#' @return a `data_frame` to `df_dict_nba_players` in your environment
+#' @return a `tibble` to `df_dict_nba_players` in your environment
 #' @export
 #' @family dictionary
 #' @family NBA players
@@ -280,7 +280,7 @@ assign_tables_modes <-
 
 .dictionary_table_names <-
   function() {
-    data_frame(nameTable = c("CareerTotalsAllStarSeason", "CareerTotalsCollegeSeason", "CareerTotalsPostSeason",
+    tibble(nameTable = c("CareerTotalsAllStarSeason", "CareerTotalsCollegeSeason", "CareerTotalsPostSeason",
                              "CareerTotalsRegularSeason", "SeasonRankingsPostSeason", "SeasonRankingsRegularSeason",
                              "SeasonTotalsAllStarSeason", "SeasonTotalsCollegeSeason", "SeasonTotalsPostSeason",
                              "SeasonTotalsRegularSeason",
@@ -318,7 +318,7 @@ assign_tables_modes <-
 #' @param players vector of player names
 #' @param player_ids vector of player ids
 #'
-#' @return a `data_frame`
+#' @return a `tibble`
 #' @export
 #' @import dplyr stringr jsonlite readr purrr tibble tidyr curl
 #' @family ids
@@ -371,7 +371,7 @@ nba_player_ids <-
 #' @param teams vector of team names
 #' @param team_ids vector of team ids
 #'
-#' @return a `data_frame`
+#' @return a `tibble`
 #' @family ids
 #' @export
 #'
@@ -496,7 +496,7 @@ pad_id <-
 
 #' Dictionary of NBA Headers and nbastatR names
 #'
-#' @return a \code{data_frame}
+#' @return a \code{tibble}
 #' @export
 #' @import dplyr
 #' @family Dictionary
@@ -505,7 +505,7 @@ pad_id <-
 #' dictionary_nba_names()
 dictionary_nba_names <-
   function() {
-    data_frame(nameNBA =
+    tibble(nameNBA =
                  c("PERSON_ID", "DISPLAY_LAST_COMMA_FIRST", "DISPLAY_FIRST_LAST",
                    "ROSTERSTATUS", "FROM_YEAR", "TO_YEAR", "PLAYERCODE", "TEAM_ID",
                    "TEAM_CITY", "TEAM_NAME", "TEAM_ABBREVIATION", "TEAM_CODE", "GAMES_PLAYED_FLAG",
@@ -1591,7 +1591,7 @@ nba_json_to_df <-
     data <-
       json$resultSets$rowSet[table_id] %>%
       data.frame(stringsAsFactors = F) %>%
-      dplyr::as_data_frame() %>%
+      dplyr::as_tibble() %>%
       purrr::set_names(json_names)
 
     if (data %>% tibble::has_name("G")) {

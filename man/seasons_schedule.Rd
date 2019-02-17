@@ -22,7 +22,7 @@ seasons_schedule(seasons = 2019, season_types = "Regular Season",
 \item{return_message}{if `TRUE`}
 }
 \value{
-a \code{data_frame()}
+a \code{tibble()}
 }
 \description{
 NBA seasons schedules

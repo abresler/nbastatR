@@ -10,7 +10,7 @@ nba_teams(join_blg = T)
 \item{join_blg}{if \code{TRUE} joins BLG team features data}
 }
 \value{
-a `data_frame`
+a `tibble`
 }
 \description{
 Returns team dictionary

@@ -13,7 +13,7 @@
       df_set %>% pull() %>%
       future_map_dfr(function(x) {
         if (x %>% is.na()) {
-          return(data_frame(UQ(record_column) := x))
+          return(tibble(UQ(record_column) := x))
         }
         names_set <-
           c(
@@ -25,7 +25,7 @@
         values <-
           x %>% str_split("\\-") %>% flatten_chr() %>% as.numeric()
 
-        data_frame(
+        tibble(
           X1 = x,
           X2 = values[1],
           X3 = values[2],
@@ -63,7 +63,7 @@
 #'
 #' @param return_message if \code{TRUE} returns a message
 #'
-#' @return a `data_frame`
+#' @return a `tibble`
 #' @export
 #' @family standings
 #' @examples
@@ -86,7 +86,7 @@ current_standings <-
 
     data <-
       json$league$standard$teams %>%
-      dplyr::as_data_frame()
+      dplyr::as_tibble()
 
     actual_names <- names(data) %>% resolve_nba_names()
 
@@ -143,7 +143,7 @@ current_standings <-
         data <-
           tables_data$rowSet[[x]] %>%
           data.frame(stringsAsFactors = F) %>%
-          as_data_frame()
+          as_tibble()
 
         if (data %>% nrow() == 0) {
           return(invisible())
@@ -179,7 +179,7 @@ current_standings <-
         }
 
 
-        data_frame(
+        tibble(
           numberTable = x,
           nameTable = table_name,
           dataTable = list(data)
@@ -208,7 +208,7 @@ current_standings <-
 #' @param nest_data if \code{TRUE} returns nested data frame
 #' @param return_message if \code{TRUE} returns a message
 #'
-#' @return a `data_frame`
+#' @return a `tibble`
 #' @family playoffs
 #' @export
 #' @import dplyr stringr curl jsonlite lubridate purrr tidyr rlang readr tibble
@@ -231,9 +231,9 @@ playoff_pictures <-
     input_df <-
       expand.grid(season = seasons,
                   stringsAsFactors = F) %>%
-      dplyr::as_data_frame()
+      dplyr::as_tibble()
     .get_season_playoff_picture_safe <-
-      purrr::possibly(.get_season_playoff_picture, data_frame())
+      purrr::possibly(.get_season_playoff_picture, tibble())
 
     all_data <-
       1:nrow(input_df) %>%
@@ -325,7 +325,7 @@ playoff_pictures <-
 #' @param return_message if \code{TRUE} returns a message
 #' @param nest_data if \code{TRUE} returns a nested data frame
 #'
-#' @return a `data_frame`
+#' @return a `tibble`
 #' @export
 #' @import dplyr stringr curl jsonlite lubridate purrr tidyr rlang readr tibble
 #' @importFrom glue glue
@@ -344,10 +344,10 @@ standings <-
         season_type = season_types,
         stringsAsFactors = F
       ) %>%
-      dplyr::as_data_frame()
+      dplyr::as_tibble()
 
     .get_season_standings_safe <-
-      purrr::possibly(.get_season_standings, data_frame())
+      purrr::possibly(.get_season_standings, tibble())
 
     all_data <-
       1:nrow(input_df) %>%

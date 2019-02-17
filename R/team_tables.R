@@ -34,7 +34,7 @@
       data <-
         tables_data$rowSet[[x]] %>%
         data.frame(stringsAsFactors = F) %>%
-        as_data_frame()
+        as_tibble()
 
       if (data %>% nrow() == 0) {
         return(invisible())
@@ -69,7 +69,7 @@
 #' your environment starting with data
 #' @param return_message if \code{TRUE} returns a message
 #'
-#' @return a `data_frame`
+#' @return a `tibble`
 #' @export
 #' @import dplyr stringr curl jsonlite lubridate purrr tidyr rlang readr tibble
 #' @importFrom glue glue
@@ -136,7 +136,7 @@ teams_details <-
       unique() %>%
       sort()
     .get_team_details_safe <-
-      purrr::possibly(.get_team_details, data_frame())
+      purrr::possibly(.get_team_details, tibble())
 
     all_data <-
       ids %>%
@@ -234,7 +234,7 @@ teams_details <-
   data <-
     json$resultSets$rowSet[[1]] %>%
     data.frame(stringsAsFactors = F) %>%
-    dplyr::as_data_frame()
+    dplyr::as_tibble()
 
   actual_names <-
     json$resultSets$headers[[1]] %>%
@@ -280,9 +280,9 @@ teams_details <-
 #' \item Totals
 #' }
 #' @param return_message if \code{TRUE} returns a message
-#' @param nest_data if \code{TRUE} returns a nested data_frame
+#' @param nest_data if \code{TRUE} returns a nested tibble
 #'
-#' @return a \code{data_frame}
+#' @return a \code{tibble}
 #' @export
 #'
 #' @examples
@@ -323,7 +323,7 @@ teams_annual_stats <-
     teams_ids <- teams_ids  %>% unique()
 
     .get_team_year_by_year_stats_safe <-
-      purrr::possibly(.get_team_year_by_year_stats, data_frame())
+      purrr::possibly(.get_team_year_by_year_stats, tibble())
     df_input <-
       expand.grid(
         team_id = teams_ids,
@@ -331,7 +331,7 @@ teams_annual_stats <-
         mode = modes,
         stringsAsFactors = F
       ) %>%
-      as_data_frame()
+      as_tibble()
 
     all_data <-
       1:nrow(df_input) %>%

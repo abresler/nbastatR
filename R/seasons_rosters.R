@@ -223,7 +223,7 @@ seasons_rosters <-
       stop("Enter seasons")
     }
     .get_season_roster_safe <-
-      purrr::possibly(.get_season_roster, data_frame())
+      purrr::possibly(.get_season_roster, tibble())
     all_data <-
       seasons %>%
       future_map_dfr(function(season) {

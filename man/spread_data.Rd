@@ -9,7 +9,7 @@ spread_data(data, variable_name = "item", value_name = "value",
   separate_columns = NULL)
 }
 \arguments{
-\item{data}{a \code{data_frame}}
+\item{data}{a \code{tibble}}
 
 \item{variable_name}{name of variable vector}
 
@@ -20,7 +20,7 @@ spread_data(data, variable_name = "item", value_name = "value",
 \item{separate_columns}{}
 }
 \value{
-a \code{data_frame}
+a \code{tibble}
 }
 \description{
 Spread gathered data frame

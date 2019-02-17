@@ -57,7 +57,7 @@
         data <-
           json$resultSets$rowSet[[x]] %>%
           data.frame(stringsAsFactors = F) %>%
-          as_data_frame()
+          as_tibble()
         if (data %>% nrow() == 0) {
           return(invisible())
         }
@@ -127,7 +127,7 @@
 #' @param add_mode_names if \code{TRUE} adds the type of mode to the table data
 #' @param return_message if \code{TRUE} returns a message
 #'
-#' @return a \code{data_frame}
+#' @return a \code{tibble}
 #' @export
 #' @importFrom glue glue
 #' @family player
@@ -174,11 +174,11 @@ players_careers <-
         mode = modes,
         stringsAsFactors = F
       ) %>%
-      dplyr::as_data_frame()
+      dplyr::as_tibble()
 
 
     get_nba_player_career_stats_safe <-
-      purrr::possibly(.get_nba_player_career_stats, data_frame())
+      purrr::possibly(.get_nba_player_career_stats, tibble())
 
     all_data <-
       1:nrow(df_input) %>%

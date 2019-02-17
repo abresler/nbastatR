@@ -5,7 +5,7 @@
 #' @param return_message if \code{TRUE} returns message
 #' @param only_active if \code{TRUE} only active teams
 #'
-#' @return a \code{data_frame()}
+#' @return a \code{tibble()}
 #' @export
 #' @import dplyr stringr curl purrr jsonlite
 #' @examples
@@ -35,7 +35,7 @@ nba_franchise_history <-
     active_data <-
       team_data$resultSets$rowSet[1] %>%
       data.frame(stringsAsFactors = F) %>%
-      as_data_frame()
+      as_tibble()
 
 
     names(active_data) <-
@@ -48,7 +48,7 @@ nba_franchise_history <-
     defunct_data <-
       team_data$resultSets$rowSet[2] %>%
       data.frame(stringsAsFactors = F) %>%
-      as_data_frame()
+      as_tibble()
 
     names(defunct_data) <-
       names_defunct
@@ -129,7 +129,7 @@ nba_franchise_history <-
 #' @param season season vector
 #' @param return_message
 #'
-#' @return a `data_frame`
+#' @return a `tibble`
 #' @family rosters
 #' @export
 #' @import dplyr purrr stringr readr tidyr jsonlite curl lubridate
@@ -249,7 +249,7 @@ team_season_roster <-
       assign('df_dict_team_history', df_dict_team_history, envir = .GlobalEnv)
     }
     team_season_roster_safe <-
-      purrr::possibly(team_season_roster, data_frame())
+      purrr::possibly(team_season_roster, tibble())
 
     all_data <-
       df_dict_team_history$nameTeam %>%
@@ -275,7 +275,7 @@ team_season_roster <-
 #' @param nest_data if \code{TRUE} returns nested data frame
 #' @param return_message if \code{TRUE} returns a message
 #'
-#' @return a \code{data_frame}
+#' @return a \code{tibble}
 #' @family rosters
 #' @export
 #' @import dplyr purrr stringr readr tidyr jsonlite curl lubridate
@@ -400,7 +400,7 @@ teams_rosters <-
       assign('df_dict_team_history', df_dict_team_history, envir = .GlobalEnv)
     }
     .team_coaches_safe <-
-      purrr::possibly(.team_coaches, data_frame())
+      purrr::possibly(.team_coaches, tibble())
 
     all_data <-
       df_dict_team_history$nameTeam %>%
@@ -427,7 +427,7 @@ teams_rosters <-
 #' @param nest_data if \code{TRUE} nests data
 #' @param return_message if \code{TRUE} returns a message
 #'
-#' @return a `data_frame`
+#' @return a `tibble`
 #' @export
 #' @import dplyr purrr stringr readr tidyr jsonlite curl lubridate
 #' @importFrom glue glue

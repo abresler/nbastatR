@@ -17,7 +17,7 @@ player_profiles(players = NULL, player_ids = NULL, nest_data = F,
 \item{return_message}{if \code{TRUE} returns a message}
 }
 \value{
-a `data_frame`
+a `tibble`
 }
 \description{
 Returns NBA player profiles for specified

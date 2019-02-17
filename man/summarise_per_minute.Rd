@@ -16,7 +16,7 @@ summarise_per_minute(data, id_columns = c("idPlayerSeason"),
 \item{scale_columns}{vector of columns to scale}
 }
 \value{
-a \code{data_frame}
+a \code{tibble}
 }
 \description{
 Summarize data per minute

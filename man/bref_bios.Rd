@@ -17,7 +17,7 @@ bref_bios(players = NULL, player_ids = NULL,
 \item{return_message}{if \code{TRUE} returns}
 }
 \value{
-a \code{data_frame}
+a \code{tibble}
 }
 \description{
 Includes player bios, salaries, contracts and transactions

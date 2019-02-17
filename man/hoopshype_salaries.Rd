@@ -22,7 +22,7 @@ hoopshype_salaries(teams = NULL, all_teams = TRUE,
 \item{return_message}{if \code{TRUE} returns a message}
 }
 \value{
-a `data_frame`
+a `tibble`
 }
 \description{
 Detailed salaries for each player and
