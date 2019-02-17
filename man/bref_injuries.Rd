@@ -7,7 +7,7 @@
 bref_injuries()
 }
 \value{
-a \code{data_frame()}
+a \code{tibble()}
 }
 \description{
 Returns information of

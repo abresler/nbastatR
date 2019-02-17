@@ -35,7 +35,7 @@ bref_awards(awards = c("Most Valuable Player", "Rookie of the Year",
 \item{return_message}{if \code{TRUE} returns a message}
 }
 \value{
-a \code{data_frame}
+a \code{tibble}
 }
 \description{
 Award winners from basketball-reference

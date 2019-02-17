@@ -7,7 +7,7 @@
 dictionary_bref_awards()
 }
 \value{
-a \code{data_frame}
+a \code{tibble}
 }
 \description{
 Basketball Reference Awards

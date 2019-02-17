@@ -10,7 +10,7 @@ widen_bref_data(data)
 \item{data}{}
 }
 \value{
-a `data_frame`
+a `tibble`
 }
 \description{
 Widens basketball reference table data

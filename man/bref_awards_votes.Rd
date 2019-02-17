@@ -16,7 +16,7 @@ nested table into your global environment}
 \item{return_message}{if \code{TRUE} returns a message}
 }
 \value{
-a \code{data_frame()}
+a \code{tibble()}
 }
 \description{
 Acquires seasons awards votes

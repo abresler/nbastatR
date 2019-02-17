@@ -10,7 +10,7 @@ all_nba_teams(return_message = TRUE)
 \item{return_message}{}
 }
 \value{
-\code{data_frame}
+\code{tibble}
 }
 \description{
 All NBA Teams

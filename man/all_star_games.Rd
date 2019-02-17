@@ -12,7 +12,7 @@ all_star_games(include_aba = T, return_message = T)
 \item{return_message}{if `TRUE` returns a message}
 }
 \value{
-a `data_frame`
+a `tibble`
 }
 \description{
 Returns scores from All-Star Games

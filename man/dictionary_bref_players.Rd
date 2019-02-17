@@ -7,7 +7,7 @@
 dictionary_bref_players()
 }
 \value{
-a `data_frame`
+a `tibble`
 }
 \description{
 Basketball Reference player dictionary

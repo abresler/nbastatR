@@ -7,7 +7,7 @@
 dictionary_bref_coaches()
 }
 \value{
-a `data_frame`
+a `tibble`
 }
 \description{
 Basketball Reference coach dictionary

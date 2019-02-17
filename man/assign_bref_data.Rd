@@ -9,7 +9,7 @@ assign_bref_data(data, type = "Players", widen_data = TRUE,
   assign_to_environment = TRUE)
 }
 \arguments{
-\item{data}{a \code{data_frame} of tables}
+\item{data}{a \code{tibble} of tables}
 
 \item{type}{type of BREF data are `teams` and `players`}
 
@@ -24,7 +24,7 @@ assign_bref_data(data, type = "Players", widen_data = TRUE,
 \item{assign_to_environment}{if \code{TRUE} assigns data to your environment}
 }
 \value{
-a `data_frame`
+a `tibble`
 }
 \description{
 Assign nested BREF data to environment

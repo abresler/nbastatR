@@ -18,7 +18,7 @@ bref_teams_stats(seasons = 2019, return_message = TRUE,
 \item{widen_data}{if \code{TRUE} returns data in wide form}
 }
 \value{
-a \code{data_frame} with a list of \code{data_frames}
+a \code{tibble} with a list of \code{tibbles}
 }
 \description{
 Get all available team tables from BREF

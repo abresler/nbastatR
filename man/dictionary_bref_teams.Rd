@@ -7,7 +7,7 @@
 dictionary_bref_teams()
 }
 \value{
-a `data_frame`
+a `tibble`
 }
 \description{
 Basketball Reference team dictionary

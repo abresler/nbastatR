@@ -4,7 +4,7 @@
 \alias{bref_players_stats}
 \title{Basketball Reference Player Season Tables}
 \usage{
-bref_players_stats(seasons = 2018, tables = c("advanced", "totals"),
+bref_players_stats(seasons = NULL, tables = c("advanced", "totals"),
   include_all_nba = F, only_totals = TRUE, nest_data = FALSE,
   assign_to_environment = TRUE, widen_data = TRUE, join_data = TRUE,
   return_message = TRUE)
@@ -30,12 +30,12 @@ bref_players_stats(seasons = 2018, tables = c("advanced", "totals"),
 
 \item{widen_data}{if `TRUE` widens data}
 
-\item{join_data}{if `TRUE` joins `data_frames`}
+\item{join_data}{if `TRUE` joins `tibbles`}
 
 \item{return_message}{if \code{TRUE} returns a message}
 }
 \value{
-a \code{data_frame}
+a \code{tibble}
 }
 \description{
 Basketball Reference Player Season Tables
