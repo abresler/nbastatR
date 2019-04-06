@@ -271,7 +271,7 @@ synergy <-
       stop("please enter season")
     }
 
-    if (types %>% str_to_lower() %in% c("player", "team") %>% sum(na.rm = T) == 0) {
+    if (result_types %>% str_to_lower() %in% c("player", "team") %>% sum(na.rm = T) == 0) {
       stop("Result type can only be player and/or team")
     }
     input_df <-
