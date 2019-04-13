@@ -63,6 +63,7 @@
       json <-
         resp %>% jsonlite::fromJSON(simplifyVector = T)
 
+
       data <-
         json %>%
         nba_json_to_df() %>%
@@ -422,6 +423,7 @@ game_logs <-
              "tracking"
            ),
            return_message = TRUE) {
+    .get_season_gamelog_safe <- possibly(.get_season_gamelog, tibble())
     data <-
       .get_season_gamelog(
         season = season,
