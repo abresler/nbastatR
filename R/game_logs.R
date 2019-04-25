@@ -3,7 +3,7 @@
 
 # full_logs ---------------------------------------------------------------
 .get_season_gamelog <-
-  function(season = 2019,
+  function(season = 1984,
            league = "NBA",
            result_type  = "player",
            season_type = "Regular Season",
@@ -32,12 +32,16 @@
       ) %>% cat(fill = T)
     }
 
-    call_slug <- case_when(league %>% str_to_upper() == "WNBA" ~ "wnbaseasonstats",
-                           TRUE ~ "leaguegamelog")
+    call_slug <-
+      case_when(league %>% str_to_upper() == "WNBA" ~ "wnbaseasonstats",
+                TRUE ~ "leaguegamelog")
 
-    league_slug <- case_when(league %>% str_to_upper() == "WNBA" ~ "10",
-                             league %>% str_to_upper() == "GLEAGUE" ~ "20",
-                             TRUE ~ "00")
+    league_slug <-
+      case_when(
+        league %>% str_to_upper() == "WNBA" ~ "10",
+        league %>% str_to_upper() == "GLEAGUE" ~ "20",
+        TRUE ~ "00"
+      )
 
 
     season_name_slug <- URLencode(season_type)
@@ -52,16 +56,18 @@
 
     } else {
       url <-
-        glue::glue("https://stats.nba.com/stats/leaguegamelog?Counter=1000&Season={season_slug}&Direction=DESC&LeagueID={league_slug}&PlayerOrTeam={table_slug}&SeasonType={season_name_slug}&Sorter=DATE") %>% as.character()
+        glue::glue(
+          "https://stats.nba.com/stats/leaguegamelog?Counter=1000&Season={season_slug}&Direction=DESC&LeagueID={league_slug}&PlayerOrTeam={table_slug}&SeasonType={season_name_slug}&Sorter=DATE"
+        ) %>% as.character()
 
     }
-      resp <-
-        url %>%
-        curl() %>%
-        readr::read_lines()
+    resp <-
+      url %>%
+      curl() %>%
+      readr::read_lines()
 
-      json <-
-        resp %>% jsonlite::fromJSON(simplifyVector = T)
+    json <-
+      resp %>% jsonlite::fromJSON(simplifyVector = T)
 
 
       data <-

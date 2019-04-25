@@ -2562,7 +2562,7 @@ parse_for_seasons_data <-
 #' @examples
 #' nba_teams()
 nba_teams <-
-  function(join_blg = T) {
+  function(join_blg = F) {
     url <- "https://stats.nba.com/js/data/ptsd/stats_ptsd.js"
     json <-
       url %>%
