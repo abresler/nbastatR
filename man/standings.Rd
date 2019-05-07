@@ -4,7 +4,7 @@
 \alias{standings}
 \title{Get seasons standing data}
 \usage{
-standings(seasons = 1950:2018, season_types = c("Regular Season"),
+standings(seasons = 2019, season_types = c("Regular Season"),
   resolve_records = TRUE, nest_data = F, return_message = TRUE)
 }
 \arguments{

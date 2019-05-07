@@ -306,7 +306,6 @@ playoff_pictures <-
                    sep = " ",
                    remove = F) %>%
       select(typeSeason, yearSeason, slugSeason, everything()) %>%
-      dplyr::select(-one_of("idLeague")) %>%
       remove_na_columns()
 
     data
@@ -333,7 +332,7 @@ playoff_pictures <-
 #' @examples
 #' standings(seasons = 2015:2018, season_types = "Regular Season", resolve_records = T, nest_data = F, return_message = T)
 standings <-
-  function(seasons = 1950:2018,
+  function(seasons = 2019,
            season_types = c("Regular Season"),
            resolve_records = TRUE,
            nest_data = F,
@@ -370,7 +369,7 @@ standings <-
 
     all_data <-
       all_data %>%
-      left_join(get_nba_teams() %>% select(nameTeam, slugTeam)) %>%
+      left_join(nba_teams() %>% select(nameTeam, slugTeam)) %>%
       select(slugSeason,
              yearSeason,
              typeSeason,
@@ -380,7 +379,11 @@ standings <-
       suppressMessages()
 
     all_data <-
-      all_data %>% mutate(urlLogoTeamSeason = generate_team_season_logo(season = yearSeason, slug_team = slugTeam))
+      all_data %>%
+      mutate(urlLogoTeamSeason = generate_team_season_logo(season = yearSeason, slug_team = slugTeam)) %>%
+      group_by(slugSeason, nameTeam) %>%
+      slice(1) %>%
+      ungroup()
 
     if (nest_data) {
       all_data <-
