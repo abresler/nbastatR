@@ -866,7 +866,8 @@ dictionary_nba_names <-
                    "BOX_OUT_PLAYER_TEAM_REBS",
                    "BOX_OUT_PLAYER",
                    "SCREEN_AST_PTS",
-                   "BOX_OUT_PLAYER_REBS"
+                   "BOX_OUT_PLAYER_REBS",
+                   "OTHERLEAGUE_EXPERIENCE_CH"
                  ),
                nameActual =
                  c("idPlayer", "namePlayerLastFirst", "namePlayer",
@@ -1247,7 +1248,8 @@ dictionary_nba_names <-
                    "boxOutsPlayerTeamRebound",
                    "boxOutPlayerRebound",
                    "ptsScreenAssist",
-                   "boxOutsPlayerTREB"
+                   "boxOutsPlayerTREB",
+                   "idLeagueOtherExperience"
                  )
     )
   }
