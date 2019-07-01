@@ -1387,7 +1387,7 @@ munge_nba_data <- function(data) {
   if (data %>% tibble::has_name("slugScore")) {
     data <-
       data %>%
-      tidyr::separate(slugScore, into = c("scoreHome", "scoreAway"), sep = "\\ - ", remove = F) %>%
+      tidyr::separate(slugScore, into = c("scoreAway", "scoreHome"), sep = "\\ - ", remove = F) %>%
       mutate_at(c("scoreHome", "scoreAway"),
                 funs(. %>% as.numeric())) %>%
       mutate(slugTeamLeading = case_when(marginScore == 0 ~ "Tie",
