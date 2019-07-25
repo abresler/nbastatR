@@ -1,3 +1,32 @@
+.get_bref_players_ids  <-
+  function(players = c("Aaron McKie", "Aaron Gordon"), player_ids = "bonnean01") {
+    if (players %>% purrr::is_null() && player_ids %>% purrr::is_null()) {
+      stop("Please Enter IDS")
+    }
+    ids <- c()
+    df_bref_player_dict <-  dictionary_bref_players() %>% suppressMessages()
+    if (!players %>% purrr::is_null()) {
+      search_ids <-
+        df_bref_player_dict %>%
+        filter(namePlayerBREF %>% str_detect(players %>% str_c(collapse = "|"))) %>%
+        pull(slugPlayerBREF)
+      ids <-
+        ids %>% append(search_ids)
+    }
+
+    if (!player_ids %>% purrr::is_null()) {
+      ids <-
+        player_ids %>%
+        append(ids)
+    }
+
+    ids %>%
+      unique() %>%
+      sort()
+
+  }
+
+#' Ba
 .resolve_bref_names <-
   function(json_names) {
     df_nba_names <-
@@ -35,7 +64,7 @@
   })
 
 .check_table <-
-  memoise::memoise(function(page, css = "#div_all_salaries table") {
+  function(page, css = "#div_all_salaries table") {
     table <-
       page %>%
       html_nodes(css = css) %>%
@@ -45,10 +74,10 @@
       return(invisible())
     }
     table
-  })
+  }
 
 .parse.salary <-
-  memoise::memoise(function(page) {
+  function(page) {
     table <-
       .check_table(page = page, css =  "#div_all_salaries table")
 
@@ -61,10 +90,10 @@
       purrr::set_names(c("slugSeason", "nameTeam", "slugLeague", "amountSalary")) %>%
       filter(!slugSeason %>% str_detect("Career")) %>%
       mutate(amountSalary = readr::parse_number(as.character(amountSalary)))
-  })
+  }
 
 .parse.contracts  <-
-  memoise::memoise(function(page) {
+  function(page) {
     ids <- page %>% html_nodes('div') %>% html_attr('id')
     ids <- ids[!ids %>% is.na()]
 
@@ -99,10 +128,10 @@
     }
 
     table
-  })
+  }
 
 .parse.bio <-
-  memoise::memoise(function(page) {
+  function(page) {
     bio <-
       page %>%
       html_nodes(".media-item+ div p")
@@ -365,11 +394,11 @@
 
 
     all_data
-  })
+  }
 
 
 .parse.transactions <-
-  memoise::memoise(function(page) {
+  function(page) {
     transactions <-
       page %>%
       html_nodes("#div_transactions .transaction") %>%
@@ -397,10 +426,10 @@
       ) %>%
       select(-desl)
 
-  })
+  }
 
 .parse_bref_player_data_url <-
-  memoise::memoise(function(url = "https://www.basketball-reference.com/players/d/dinwisp01.html",
+  function(url = "https://www.basketball-reference.com/players/d/dinwisp01.html",
            return_message = TRUE) {
   page <-
     url %>%
@@ -473,7 +502,7 @@
   }
   data
 
-})
+}
 
 .parse_bref_player_data_urls <-
   function(urls, return_message = T){
@@ -488,33 +517,7 @@
 }
 
 
-.get_bref_players_ids  <-
-  memoise::memoise(function(players = c("Aaron McKie", "Aaron Gordon"), player_ids = "bonnean01") {
-    if (players %>% purrr::is_null() && player_ids %>% purrr::is_null()) {
-      stop("Please Enter IDS")
-    }
-   ids <- c()
-   df_bref_player_dict <-  dictionary_bref_players() %>% suppressMessages()
-   if (!players %>% purrr::is_null()) {
-     search_ids <-
-       df_bref_player_dict %>%
-       filter(namePlayerBREF %>% str_detect(players %>% str_c(collapse = "|"))) %>%
-       pull(slugPlayerBREF)
-     ids <-
-       ids %>% append(search_ids)
-   }
 
-   if (!player_ids %>% purrr::is_null()) {
-     ids <-
-       player_ids %>%
-       append(ids)
-   }
-
-   ids %>%
-     unique() %>%
-     sort()
-
-  })
 
 #' Basketball Reference players bios
 #'
@@ -546,10 +549,12 @@ bref_bios <-
       .get_bref_players_ids(players = players, player_ids = player_ids)
 
     df_bref_player_dict <-  dictionary_bref_players()
+
     urls <-
       df_bref_player_dict %>%
       filter(slugPlayerBREF %in% ids) %>%
       pull(urlPlayerBioBREF)
+
     .parse_bref_player_data_urls_safe <-
       purrr::possibly(.parse_bref_player_data_urls, tibble())
 
