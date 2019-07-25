@@ -543,10 +543,9 @@ bref_bios <-
            assign_to_environment = TRUE,
            return_message = T) {
     ids <-
-      .get_bref_players_ids(players = players, player_ids = player_ids) %>%
-      suppressMessages()
+      .get_bref_players_ids(players = players, player_ids = player_ids)
 
-    df_bref_player_dict <-  dictionary_bref_players() %>% suppressMessages()
+    df_bref_player_dict <-  dictionary_bref_players()
     urls <-
       df_bref_player_dict %>%
       filter(slugPlayerBREF %in% ids) %>%
