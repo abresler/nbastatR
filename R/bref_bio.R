@@ -481,7 +481,7 @@
       purrr::possibly(.parse_bref_player_data_url, tibble())
     all_data <-
     urls %>%
-    future_map_dfr(function(url){
+    map_dfr(function(url){
       .parse_bref_player_data_url_safe(url = url, return_message = return_message)
     })
   all_data
