@@ -642,7 +642,7 @@ players_tables <-
             all_data %>%
             filter(tableSlugName == table) %>%
             select(-one_of(c("slugTable", "tableSlugName"))) %>%
-            unnest() %>%
+            unnest_legacy() %>%
             remove_na_columns()
 
 
@@ -659,7 +659,7 @@ players_tables <-
                 df_table <-
                   df_tables %>%
                   filter(typeMeasure == measure) %>%
-                  unnest() %>%
+                  unnest_legacy() %>%
                   remove_na_columns() %>%
                   distinct()
                 assign(x = table_name,
@@ -669,7 +669,7 @@ players_tables <-
           } else{
             df_table <-
               df_tables %>%
-              unnest() %>%
+              unnest_legacy() %>%
               remove_na_columns() %>%
               distinct()
 

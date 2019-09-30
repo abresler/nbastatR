@@ -415,7 +415,7 @@ widen_bref_data <-
                  dataTable) %>%
           dplyr::rename(yearSeason = yearSeasonStart) %>%
           mutate(yearSeason = yearSeason + 1) %>%
-          unnest()
+          unnest_legacy()
 
         if (table == "Awards") {
           if (assign_to_environment) {
@@ -619,7 +619,7 @@ widen_bref_data <-
         df_table <-
           all_data %>%
           filter(typeData == table) %>%
-          unnest()
+          unnest_legacy()
 
         if (df_table %>% tibble::has_name("yearSeason")) {
           df_table <-
@@ -2898,7 +2898,7 @@ bref_awards_votes <-
 
     all_data <-
       all_data %>%
-      unnest() %>%
+      unnest_legacy() %>%
       nest(-c(slugTable), .key = 'dataTable')
 
     if (assign_to_environment) {
@@ -2910,7 +2910,7 @@ bref_awards_votes <-
             all_data %>%
             filter(slugTable == table) %>%
             select(dataTable) %>%
-            unnest()
+            unnest_legacy()
 
           df_table <-
             df_table %>%

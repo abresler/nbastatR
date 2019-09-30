@@ -162,7 +162,7 @@ days_scores <-
         df_row <-
           all_data %>%
           filter(nameTable == table) %>%
-          unnest() %>%
+          unnest_legacy() %>%
           distinct()
         df_row %>%
           nest(-c(nameTable), .key = dataTable)
@@ -176,7 +176,7 @@ days_scores <-
           df_row <-
             all_data %>%
             filter(nameTable == table) %>%
-            unnest() %>%
+            unnest_legacy() %>%
             select(-nameTable) %>%
             distinct()
 

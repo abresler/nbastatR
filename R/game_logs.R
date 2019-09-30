@@ -322,7 +322,7 @@ game_logs <-
       all_data <-
         all_data %>%
         select(-typeResult) %>%
-        unnest()
+        unnest_legacy()
 
       return(all_data)
     }
@@ -336,7 +336,7 @@ game_logs <-
             all_data %>%
             filter(typeResult == result) %>%
             select(-typeResult) %>%
-            unnest()
+            unnest_legacy()
 
           col_order <-
             c(
@@ -437,7 +437,7 @@ game_logs <-
         season_type = season_type,
         return_message = return_message
       ) %>%
-      unnest()
+      unnest_legacy()
     data <-
       data %>%
       select(one_of(
@@ -482,14 +482,14 @@ game_logs <-
           df_box_scores %>%
             filter(typeResult == "player") %>%
             select(dataBoxScore) %>%
-            unnest() %>%
+            unnest_legacy() %>%
             nest(-c(idGame, slugTeam), .key = dataBoxScorePlayer)
         ) %>%
         left_join(
           df_box_scores %>%
             filter(typeResult == "team") %>%
             select(dataBoxScore) %>%
-            unnest() %>%
+            unnest_legacy() %>%
             nest(-c(idGame, slugTeam), .key = dataBoxScoreTeam)
         ) %>%
         mutate(isTeamWinner = ifelse(slugTeamWinner == slugTeam, TRUE, FALSE)) %>%

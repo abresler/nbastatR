@@ -62,7 +62,7 @@ sl_players <-
           df_teams <-
             data %>%
             select(idPlayer, dataTeams) %>%
-            unnest()
+            unnest_legacy()
 
           if (df_teams %>% nrow() > 0) {
           df_teams <-

@@ -152,7 +152,7 @@ teams_details <-
         df_row <-
           all_data %>%
           filter(nameTable == table) %>%
-          unnest() %>%
+          unnest_legacy() %>%
           distinct()
 
         if (df_row %>% tibble::has_name("capacityArena")) {
@@ -205,7 +205,7 @@ teams_details <-
             all_data %>%
             filter(nameTable == table) %>%
             select(-nameTable) %>%
-            unnest() %>%
+            unnest_legacy() %>%
             distinct()
           assign(table_name, df_table, envir = .GlobalEnv)
         })

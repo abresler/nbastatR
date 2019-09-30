@@ -432,7 +432,7 @@ box_scores <-
                 df_results %>%
                 filter(typeBoxScore == table) %>%
                 select(idGame, dataBoxScore) %>%
-                unnest()
+                unnest_legacy()
 
 
               if (table_slug == "usage") {
@@ -495,7 +495,7 @@ box_scores <-
               all_data %>%
               filter(typeResult == result) %>%
               select(-typeResult) %>%
-              unnest()
+              unnest_legacy()
 
             if (df_table %>% tibble::has_name("groupStartPosition")) {
               df_table <-
@@ -527,7 +527,7 @@ box_scores <-
                 df_table <-
                   df_tables %>%
                   filter(typeBoxScore == type) %>%
-                  tidyr::unnest(.drop = T) %>%
+                  tidyr::unnest_legacy(.drop = T) %>%
                   select(-typeBoxScore)
                 type_slug <-
                   type %>% str_split("\\ ") %>% flatten_chr() %>%
