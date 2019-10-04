@@ -18488,14 +18488,15 @@ nba_stats_api_items <-
 #' @return a \code{tibble}
 #' @export
 #'
-#' @import dplyr purrr jsonlite curl stringr lubridate
+#' @import dplyr purrr jsonlite curl stringr lubridate memoise
 #' @importFrom glue glue
 #' @importFrom readr read_lines
 #' @examples
 #' nba_players()
 nba_players <-
-  function() {
-    season_slug <- .get_current_season()
+  memoise::memoise(function() {
+    season_slug <-
+      .get_current_season()
 
     url <-
       glue::glue(
@@ -18642,7 +18643,7 @@ nba_players <-
              idPlayer,
              countSeasons,
              everything())
-  }
+  })
 
 # games -------------------------------------------------------------------
 
