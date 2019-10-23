@@ -298,10 +298,10 @@ play_by_play <-
       all_data
   }
 
-#' NBA games play-by-play version 2
+
+#' NBA games play-by-play v2
 #'
-#' Returns play-by-play data
-#' for specified game ids using the "playbypayv2" NBA stats API endpoint.
+#' Returns play-by-play information using the playbyplayv2 endpoint
 #'
 #' @param game_ids vector of game ids
 #' @param nest_data if \code{TRUE} nests data
@@ -312,7 +312,7 @@ play_by_play <-
 #' @import dplyr curl stringr lubridate readr magrittr tidyr httr purrr jsonlite
 #' @importFrom glue glue
 #' @examples
-#' play_by_play_v2(game_ids = c(21700002, 21700003), nest_data = F, return_message = T)
+#' play_by_play(game_ids = c(21700002, 21700003), nest_data = F, return_message = T)
 play_by_play_v2 <-
   function(game_ids = NULL,
            nest_data = FALSE,
