@@ -39,6 +39,47 @@
     data
   }
 
+.get_pbp2 <-
+  function(game_id = 21601112,
+           period_start = 0,
+           period_end = 12,
+           return_message = T,
+           ...) {
+    game_slug <-
+      pad_id(game_id)
+    json_url <-
+      make_url(
+        datatype = "playbyplayv2",
+        GameID = game_slug,
+        StartPeriod = period_start,
+        EndPeriod = period_end
+      )
+
+    if (return_message) {
+      glue::glue("Getting play by play for game {game_id}") %>% cat(fill = T)
+    }
+    json <-
+      json_url  %>%
+      curl_json_to_vector()
+
+    data <-
+      json$resultSets$rowSet[[1]] %>%
+      data.frame(stringsAsFactors = F) %>%
+      as_tibble()
+
+    json_names <-
+      json$resultSets$headers[[1]]
+    actual_names <-
+      json_names %>% resolve_nba_names()
+
+    data <-
+      data %>%
+      purrr::set_names(actual_names) %>%
+      munge_nba_data()
+
+    data
+  }
+
 .get_fanduel <-
   function(game_id = 21700003,
            return_message = TRUE) {
@@ -257,6 +298,44 @@ play_by_play <-
       all_data
   }
 
+
+#' NBA games play-by-play v2
+#'
+#' Returns play-by-play information using the playbyplayv2 endpoint
+#'
+#' @param game_ids vector of game ids
+#' @param nest_data if \code{TRUE} nests data
+#' @param return_message if \code{T} returns message
+#'
+#' @return a \code{tibble}
+#' @export
+#' @import dplyr curl stringr lubridate readr magrittr tidyr httr purrr jsonlite
+#' @importFrom glue glue
+#' @examples
+#' play_by_play(game_ids = c(21700002, 21700003), nest_data = F, return_message = T)
+play_by_play_v2 <-
+  function(game_ids = NULL,
+           nest_data = FALSE,
+           return_message = TRUE) {
+    if (game_ids %>% purrr::is_null()) {
+      stop("Please enter game ids")
+    }
+    .get_pbp2_safe <-
+      purrr::possibly(.get_pbp2, tibble())
+
+    all_data <-
+      game_ids %>%
+      future_map_dfr(function(game_id){
+        .get_pbp2_safe(game_id = game_id, return_message = return_message)
+      })
+
+    if (nest_data) {
+      all_data <-
+        all_data %>%
+        nest(-c(idGame), .key = dataPlayByPlay)
+    }
+    all_data
+  }
 
 #' Games fanduel summary
 #'
