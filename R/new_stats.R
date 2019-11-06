@@ -17981,6 +17981,7 @@ current_schedule <-
 
     df_season_games <-
       df_season_games %>%
+      select(1:10) %>%
       purrr::set_names(
         c(
           "slugGame",
@@ -17992,11 +17993,9 @@ current_schedule <-
           "datetimeGame",
           "dateSlugGame",
           "timeEasternGame",
-          "hasBuzzerBeater",
-          "tags"
+          "hasBuzzerBeater"
         )
       ) %>%
-      select(-one_of("tags")) %>%
       tidyr::separate(slugGameCode,
                       into = c("idGame", "slugTeams"),
                       sep = "/")
