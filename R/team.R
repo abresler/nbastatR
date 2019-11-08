@@ -198,7 +198,7 @@
 
     json <-
       url %>%
-      curl_json_to_vector()
+      .curl_chinazi()
 
     names_md <-
       json$resultSets$headers[[1]] %>% resolve_nba_names()
@@ -485,13 +485,10 @@ teams_seasons_info <-
     url <-
       glue::glue("{URL}?{slug_param}") %>% as.character()
 
-    resp <-
-      url %>%
-      curl() %>%
-      readr::read_lines()
-
     json <-
-      resp %>% jsonlite::fromJSON(simplifyVector = T)
+      url %>%
+      .curl_chinazi()
+
     all_data <-
       .parse_team_json(
         json = json,
@@ -901,13 +898,9 @@ teams_tables <-
     url <-
       glue::glue("{URL}?{slug_param}") %>% as.character()
 
-    resp <-
-      url %>%
-      curl() %>%
-      readr::read_lines()
-
     json <-
-      resp %>% jsonlite::fromJSON(simplifyVector = T)
+      url %>%
+      .curl_chinazi()
 
     df_params <- json$parameters %>% flatten_df() %>% as_tibble()
     param_names <- names(df_params) %>% resolve_nba_names()

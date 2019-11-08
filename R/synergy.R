@@ -148,7 +148,7 @@
     }
     json <-
       json_url %>%
-      curl_json_to_vector()
+      .curl_chinazi()
     json_names <- json$results %>% names()
     actual_names <-
       json_names %>%

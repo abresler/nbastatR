@@ -90,7 +90,7 @@
 
     json <-
       json_url  %>%
-      curl_json_to_vector()
+      .curl_chinazi()
 
     if (names(json) %>% str_detect( "g") %>% sum(na.rm = T) > 0) {
       json_data <- json$g

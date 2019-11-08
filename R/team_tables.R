@@ -21,7 +21,7 @@
   }
 
   json <-
-    curl_json_to_vector(url = url)
+    url %>% .curl_chinazi()
   tables_data <- json$resultSets
   tables <- json$resultSets$rowSet %>% length()
 
@@ -229,7 +229,7 @@ teams_details <-
     ) %>% as.character() %>% URLencode()
   json <-
     json_url %>%
-    curl_json_to_vector()
+    .curl_chinazi()
 
   data <-
     json$resultSets$rowSet[[1]] %>%
