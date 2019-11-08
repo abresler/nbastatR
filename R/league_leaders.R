@@ -31,7 +31,8 @@
 
     json <-
       json_url %>%
-      .curl_chinazi()
+      curl() %>%
+      fromJSON(simplifyDataFrame = T)
 
     actual_names <- json$resultSet$headers %>% resolve_nba_names()
     df_params <- json$parameters %>% flatten_df()
@@ -180,7 +181,8 @@ metrics_leaders <-
 
     json <-
       json_url %>%
-      .curl_chinazi()
+      curl() %>%
+      fromJSON(simplifyDataFrame = T)
     json_names <-   json$resultSet$headers[[1]]
 
     actual_names <-

@@ -19,7 +19,7 @@
     }
     json <-
       json_url  %>%
-      .curl_chinazi()
+      curl_json_to_vector()
 
     data <-
       json$resultSets$rowSet[[1]] %>%
@@ -60,7 +60,7 @@
     }
     json <-
       json_url  %>%
-      .curl_chinazi()
+      curl_json_to_vector()
 
     data <-
       json$resultSets$rowSet[[1]] %>%
@@ -96,7 +96,7 @@
     }
     json <-
       json_url  %>%
-      .curl_chinazi()
+      curl_json_to_vector()
 
     data <-
       json$resultSets$rowSet[[1]] %>%
@@ -138,7 +138,7 @@
     }
     json <-
       json_url  %>%
-      .curl_chinazi()
+      curl_json_to_vector()
 
     data <-
       json$resultSets$rowSet[[1]] %>%

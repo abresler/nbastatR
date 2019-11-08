@@ -36,8 +36,7 @@
       as.character()
 
     json <-
-      url %>%
-      .curl_chinazi()
+      curl_json_to_vector(url = url)
 
     tables_data <- json$resultSets
     table_names <- json$resultSets

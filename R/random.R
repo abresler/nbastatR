@@ -13,7 +13,7 @@
 
     json <-
       json_url %>%
-      .curl_chinazi()
+      curl_json_to_vector()
 
     data <-
       json$PlayerRotowires %>%
@@ -194,7 +194,7 @@ players_rotowire <-
   function() {
     json <-
       "http://stats.nba.com/feeds/NBAPlayerTransactions-559107/json.js" %>%
-      .curl_chinazi()
+      curl_json_to_vector()
 
     data <-
       json$ListItems %>%

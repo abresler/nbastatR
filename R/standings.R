@@ -72,7 +72,7 @@ current_standings <-
   function(return_message = TRUE) {
     json <-
       "https://data.nba.net/prod/v1/current/standings_all_no_sort_keys.json" %>%
-      .curl_chinazi()
+      curl_json_to_vector()
 
     if (return_message) {
       "Acquring current NBA season standings" %>% cat(fill = T)
@@ -130,7 +130,7 @@ current_standings <-
       ) %>% as.character() %>% URLencode()
 
     json <-
-      url %>% .curl_chinazi()
+      curl_json_to_vector(url = url)
     tables_data <- json$resultSets
     tables <- json$resultSets$rowSet %>% length()
 
@@ -293,7 +293,7 @@ playoff_pictures <-
       ) %>% as.character() %>% URLencode()
 
     json <-
-      url %>% .curl_chinazi()
+      curl_json_to_vector(url = url)
     data <-
       json %>% nba_json_to_df() %>%
       mutate(yearSeason = season,

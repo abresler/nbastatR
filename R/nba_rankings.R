@@ -7,7 +7,7 @@
     json <-
       glue::glue("https://data.nba.net/prod/v1/{year}/team_stats_rankings.json") %>%
       as.character() %>%
-      .curl_chinazi()
+      curl_json_to_vector()
 
     season_slug <- generate_season_slug(season = season)
 

@@ -654,7 +654,7 @@
 
     json <-
       url_json %>%
-      .curl_chinazi()
+      curl_json_to_vector()
 
     table_length <-
       json$resultSets$rowSet %>% length()
