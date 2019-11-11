@@ -357,13 +357,10 @@
     url <-
       glue::glue("{URL}?{slug_param}") %>% as.character()
 
-    resp <-
-      url %>%
-      curl() %>%
-      readr::read_lines()
-
     json <-
-      resp %>% jsonlite::fromJSON(simplifyVector = T)
+      url %>%
+      .curl_chinazi()
+
     all_data <-
       .parse_player_json(
         json = json,

@@ -14,7 +14,8 @@ sl_players <-
 
     json_data <-
       glue::glue("https://data.nba.net/prod/v1/{year}/players.json") %>%
-      fromJSON(simplifyDataFrame = T)
+      .curl_chinazi()
+
     json_data <- json_data$league
     leagues <-
       names(json_data)
@@ -113,6 +114,7 @@ sl_players <-
         tibble(slugLeague = league, dataTeams = list(df))
       })
 
+    data
   }
 
 

@@ -38,8 +38,8 @@
       as.character()
 
     json <-
-      curl::curl(url) %>%
-      fromJSON(simplifyVector = T)
+      url %>%
+      .curl_chinazi()
 
     table_length <-
       json$resultSets$rowSet %>% length()

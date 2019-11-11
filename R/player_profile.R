@@ -12,7 +12,7 @@
 
     json <-
       url  %>%
-      curl_json_to_vector()
+      .curl_chinazi()
 
     data <-
       json$resultSets$rowSet[[1]] %>%
@@ -155,8 +155,7 @@ players_awards <-
 
     json <-
       url  %>%
-      curl() %>%
-      jsonlite::fromJSON(simplifyVector = T)
+      .curl_chinazi()
 
     data <-
       json$Bio %>% flatten_df()
@@ -279,8 +278,8 @@ players_bios <-
       as.character()
     ## Build URL
     json <-
-      curl(url_json) %>%
-      fromJSON(simplifyVector = T)
+      url_json %>%
+      .curl_chinazi()
 
     table_length <-
       json$resultSets$rowSet %>% length()

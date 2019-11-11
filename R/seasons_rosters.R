@@ -42,13 +42,9 @@
     url <-
       glue::glue("{URL}?{slug_param}") %>% as.character()
 
-    resp <-
-      url %>%
-      curl() %>%
-      readr::read_lines()
-
     json <-
-      resp %>% jsonlite::fromJSON(simplifyVector = T)
+      url %>%
+      .curl_chinazi()
 
     data <-
       json %>%
@@ -105,13 +101,9 @@
     url <-
       glue::glue("{URL}?{slug_param}") %>% as.character()
 
-    resp <-
-      url %>%
-      curl() %>%
-      readr::read_lines()
-
     json <-
-      resp %>% jsonlite::fromJSON(simplifyVector = T)
+      url %>%
+      .curl_chinazi()
 
     if (json$resultSets$rowSet[[1]] %>% length() == 0) {
       return(invisible())

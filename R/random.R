@@ -13,7 +13,7 @@
 
     json <-
       json_url %>%
-      curl_json_to_vector()
+      .curl_chinazi()
 
     data <-
       json$PlayerRotowires %>%
@@ -194,7 +194,7 @@ players_rotowire <-
   function() {
     json <-
       "http://stats.nba.com/feeds/NBAPlayerTransactions-559107/json.js" %>%
-      curl_json_to_vector()
+      .curl_chinazi()
 
     data <-
       json$ListItems %>%
@@ -255,7 +255,7 @@ transactions <-
   function(include_history = T) {
     json <-
       "http://stats.nba.com/js/data/playermovement/NBA_Player_Movement.json" %>%
-      curl_json_to_vector()
+      .curl_chinazi()
 
     data <-
       json$NBA_Player_Movement$rows %>%
@@ -347,7 +347,7 @@ beyond_the_numbers <-
 
     data <-
       url %>%
-      jsonlite::fromJSON(simplifyVector = T)
+      .curl_chinazi()
     url_article <- data$posts$meta %>% flatten_chr()
 
     df <-

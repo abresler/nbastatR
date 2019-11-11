@@ -71,9 +71,7 @@
 
     json <-
       url %>%
-      curl() %>%
-      readr::read_lines() %>%
-      fromJSON(simplifyDataFrame = T)
+      .curl_chinazi()
 
 
     data <-

@@ -18,9 +18,7 @@ nba_franchise_history <-
 
     team_data <-
       team_history_url %>%
-      curl() %>%
-      readr::read_lines() %>%
-      fromJSON(simplifyDataFrame = T, flatten = T)
+      .curl_chinazi()
 
     names_active <-
       team_data$resultSets$headers[1] %>%
@@ -170,9 +168,7 @@ team_season_roster <-
 
     json_data <-
       json_url %>%
-      curl::curl() %>%
-      readr::read_lines() %>%
-      fromJSON(simplifyDataFrame = T, flatten = T)
+      .curl_chinazi()
 
     names_roster <-
       json_data$resultSets$headers[1] %>%
@@ -335,9 +331,7 @@ teams_rosters <-
 
     json_data <-
       json_url %>%
-      curl::curl() %>%
-      readr::read_lines() %>%
-      fromJSON(simplifyDataFrame = T, flatten = T)
+      .curl_chinazi()
 
     names_roster <-
       json_data$resultSets$headers[2] %>%

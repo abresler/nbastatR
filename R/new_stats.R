@@ -17730,8 +17730,6 @@ curl_json_to_vector <-
       fromJSON(simplifyVector = T)
 
     json
-
-    json
   }
 
 # utils -------------------------------------------------------------------
@@ -17971,7 +17969,7 @@ current_schedule <-
     json <-
       glue::glue("https://data.nba.net/prod/v2/{slug_year}/schedule.json") %>%
       as.character() %>%
-      curl_json_to_vector()
+      .curl_chinazi()
 
     json_data <- json$league$standard
 
@@ -18425,7 +18423,7 @@ nba_teams <-
 nba_teams_seasons <- function() {
   json <-
     "https://stats.nba.com/stats/commonteamyears/?leagueId=00" %>%
-    curl_json_to_vector()
+    .curl_chinazi()
   actual_names <-
     json$resultSets$headers[[1]] %>%
     resolve_nba_names()
