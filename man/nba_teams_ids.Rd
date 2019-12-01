@@ -21,6 +21,7 @@ Resolve NBA team ID
 nba_teams_ids(teams = c("Brooklyn Nets", "Denver Nuggets"))
 }
 \seealso{
-Other ids: \code{\link{nba_player_ids}}
+Other ids: 
+\code{\link{nba_player_ids}()}
 }
 \concept{ids}

@@ -4,9 +4,14 @@
 \alias{seasons_schedule}
 \title{NBA seasons schedules}
 \usage{
-seasons_schedule(seasons = 2019, season_types = "Regular Season",
-  parse_boxscores = F, box_score_tables = c("Traditional"),
-  nest_data = FALSE, return_message = TRUE)
+seasons_schedule(
+  seasons = 2019,
+  season_types = "Regular Season",
+  parse_boxscores = F,
+  box_score_tables = c("Traditional"),
+  nest_data = FALSE,
+  return_message = TRUE
+)
 }
 \arguments{
 \item{seasons}{vector of seasons where season is year ending}

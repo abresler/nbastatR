@@ -4,10 +4,15 @@
 \alias{franchise_leaders}
 \title{Franchise leaders}
 \usage{
-franchise_leaders(teams = NULL, all_teams = FALSE,
-  remove_inactive_teams = F, modes = "Totals",
-  season_types = c("Regular Season"), return_message = TRUE,
-  nest_data = FALSE)
+franchise_leaders(
+  teams = NULL,
+  all_teams = FALSE,
+  remove_inactive_teams = F,
+  modes = "Totals",
+  season_types = c("Regular Season"),
+  return_message = TRUE,
+  nest_data = FALSE
+)
 }
 \arguments{
 \item{teams}{vector of team names}
@@ -38,12 +43,14 @@ by specified input for specific teams
 franchise_leaders(teams = "Brooklyn Nets", modes = c("Totals"))
 }
 \seealso{
-Other teams: \code{\link{drafts}},
-  \code{\link{seasons_rosters}},
-  \code{\link{teams_players_stats}},
-  \code{\link{teams_rankings}}
+Other teams: 
+\code{\link{drafts}()},
+\code{\link{seasons_rosters}()},
+\code{\link{teams_players_stats}()},
+\code{\link{teams_rankings}()}
 
-Other leaders: \code{\link{metrics_leaders}}
+Other leaders: 
+\code{\link{metrics_leaders}()}
 }
 \concept{leaders}
 \concept{teams}

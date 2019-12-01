@@ -32,13 +32,15 @@ arrange(ageMean) \%>\%
 ungroup()
 }
 \seealso{
-Other teams: \code{\link{drafts}},
-  \code{\link{franchise_leaders}},
-  \code{\link{teams_players_stats}},
-  \code{\link{teams_rankings}}
+Other teams: 
+\code{\link{drafts}()},
+\code{\link{franchise_leaders}()},
+\code{\link{teams_players_stats}()},
+\code{\link{teams_rankings}()}
 
-Other rosters: \code{\link{team_season_roster}},
-  \code{\link{teams_rosters}}
+Other rosters: 
+\code{\link{team_season_roster}()},
+\code{\link{teams_rosters}()}
 }
 \concept{rosters}
 \concept{teams}

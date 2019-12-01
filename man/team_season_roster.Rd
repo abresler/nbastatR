@@ -4,8 +4,7 @@
 \alias{team_season_roster}
 \title{Team roster}
 \usage{
-team_season_roster(team = "Denver Nuggets", season = 2015,
-  return_message = T)
+team_season_roster(team = "Denver Nuggets", season = 2015, return_message = T)
 }
 \arguments{
 \item{team}{team name}
@@ -24,7 +23,8 @@ Gets teams roster from a specified seasons
 team_season_roster(team = "Denver Nuggets", season = 1991)
 }
 \seealso{
-Other rosters: \code{\link{seasons_rosters}},
-  \code{\link{teams_rosters}}
+Other rosters: 
+\code{\link{seasons_rosters}()},
+\code{\link{teams_rosters}()}
 }
 \concept{rosters}

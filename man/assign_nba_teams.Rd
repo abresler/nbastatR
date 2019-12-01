@@ -16,10 +16,11 @@ Assign NBA teams to environment
 assign_nba_teams()
 }
 \seealso{
-Other dictionary: \code{\link{assign_nba_players}},
-  \code{\link{dictionary_bref_coaches}},
-  \code{\link{dictionary_bref_players}},
-  \code{\link{dictionary_bref_teams}}
+Other dictionary: 
+\code{\link{assign_nba_players}()},
+\code{\link{dictionary_bref_coaches}()},
+\code{\link{dictionary_bref_players}()},
+\code{\link{dictionary_bref_teams}()}
 }
 \concept{NBA teams}
 \concept{dictionary}

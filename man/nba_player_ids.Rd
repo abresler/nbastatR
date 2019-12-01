@@ -21,6 +21,7 @@ Resolve player ids for specified players
 nba_player_ids(players = c("Mitch Richmond", "Kyle Kuzma"))
 }
 \seealso{
-Other ids: \code{\link{nba_teams_ids}}
+Other ids: 
+\code{\link{nba_teams_ids}()}
 }
 \concept{ids}

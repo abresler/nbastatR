@@ -4,11 +4,16 @@
 \alias{box_scores}
 \title{NBA box scores}
 \usage{
-box_scores(game_ids = NULL, league = "NBA",
-  box_score_types = c("Traditional", "Advanced", "Scoring", "Misc",
-  "Usage", "Four Factors", "hustle", "tracking"),
-  result_types = c("player", "team"), join_data = TRUE,
-  assign_to_environment = TRUE, return_message = TRUE)
+box_scores(
+  game_ids = NULL,
+  league = "NBA",
+  box_score_types = c("Traditional", "Advanced", "Scoring", "Misc", "Usage",
+    "Four Factors", "hustle", "tracking"),
+  result_types = c("player", "team"),
+  join_data = TRUE,
+  assign_to_environment = TRUE,
+  return_message = TRUE
+)
 }
 \arguments{
 \item{game_ids}{vector of game ids}
@@ -48,7 +53,9 @@ Acquires specified box score type by game ID
 box_scores(game_ids = c(21700002, 21700003), box_score_types = c("Traditional", "Advanced", "Scoring", "Misc", "Usage", "Four Factors", "Tracking"), result_types = c("player", "team"), join_data = TRUE, assign_to_environment = TRUE, return_message = TRUE)
 }
 \seealso{
-Other game: \code{\link{fanduel_summary}},
-  \code{\link{game_logs}}, \code{\link{win_probability}}
+Other game: 
+\code{\link{fanduel_summary}()},
+\code{\link{game_logs}()},
+\code{\link{win_probability}()}
 }
 \concept{game}

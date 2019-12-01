@@ -23,10 +23,11 @@ Team rankings for specified season
 teams_rankings(seasons = 2019)
 }
 \seealso{
-Other teams: \code{\link{drafts}},
-  \code{\link{franchise_leaders}},
-  \code{\link{seasons_rosters}},
-  \code{\link{teams_players_stats}}
+Other teams: 
+\code{\link{drafts}()},
+\code{\link{franchise_leaders}()},
+\code{\link{seasons_rosters}()},
+\code{\link{teams_players_stats}()}
 }
 \concept{rankings}
 \concept{teams}

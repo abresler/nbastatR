@@ -256,7 +256,7 @@ playoff_pictures <-
           df_table <-
             all_data %>%
             filter(nameTable %>% str_detect(slug)) %>%
-            unnest_legacy() %>%
+            unnest() %>%
             remove_na_columns() %>%
             dplyr::select(dplyr::matches("slugSeason|^id|^name"), everything()) %>%
             select(-nameTable)

@@ -16,12 +16,14 @@ Assign NBA player dictionary to environment
 assign_nba_players()
 }
 \seealso{
-Other dictionary: \code{\link{assign_nba_teams}},
-  \code{\link{dictionary_bref_coaches}},
-  \code{\link{dictionary_bref_players}},
-  \code{\link{dictionary_bref_teams}}
+Other dictionary: 
+\code{\link{assign_nba_teams}()},
+\code{\link{dictionary_bref_coaches}()},
+\code{\link{dictionary_bref_players}()},
+\code{\link{dictionary_bref_teams}()}
 
-Other NBA players: \code{\link{dictionary_bref_players}}
+Other NBA players: 
+\code{\link{dictionary_bref_players}()}
 }
 \concept{NBA players}
 \concept{dictionary}

@@ -4,9 +4,15 @@
 \alias{teams_seasons_info}
 \title{NBA teams seasons information}
 \usage{
-teams_seasons_info(teams = NULL, team_ids = NULL,
-  all_active_teams = T, seasons = 2019,
-  season_types = "Regular Season", nest_data = F, return_message = T)
+teams_seasons_info(
+  teams = NULL,
+  team_ids = NULL,
+  all_active_teams = T,
+  seasons = 2019,
+  season_types = "Regular Season",
+  nest_data = F,
+  return_message = T
+)
 }
 \arguments{
 \item{teams}{vector of team names}

@@ -4,8 +4,12 @@
 \alias{win_probability}
 \title{NBA games win probabilities}
 \usage{
-win_probability(game_ids = c(21700002, 21700003), nest_data = FALSE,
-  filter_non_plays = FALSE, return_message = TRUE)
+win_probability(
+  game_ids = c(21700002, 21700003),
+  nest_data = FALSE,
+  filter_non_plays = FALSE,
+  return_message = TRUE
+)
 }
 \arguments{
 \item{game_ids}{vector of game ids}
@@ -31,10 +35,13 @@ nest_data = FALSE,
 return_message = TRUE)
 }
 \seealso{
-Other game: \code{\link{box_scores}},
-  \code{\link{fanduel_summary}}, \code{\link{game_logs}}
+Other game: 
+\code{\link{box_scores}()},
+\code{\link{fanduel_summary}()},
+\code{\link{game_logs}()}
 
-Other season: \code{\link{fanduel_summary}}
+Other season: 
+\code{\link{fanduel_summary}()}
 }
 \concept{game}
 \concept{season}

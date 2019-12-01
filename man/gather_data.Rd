@@ -4,10 +4,17 @@
 \alias{gather_data}
 \title{Gather a data frame}
 \usage{
-gather_data(data, variable_name = "item", numeric_ids = c("^id"),
-  use_logical_keys = TRUE, use_factor_keys = TRUE,
-  unite_columns = NULL, separate_columns = NULL,
-  use_date_keys = FALSE, remove_na = TRUE)
+gather_data(
+  data,
+  variable_name = "item",
+  numeric_ids = c("^id"),
+  use_logical_keys = TRUE,
+  use_factor_keys = TRUE,
+  unite_columns = NULL,
+  separate_columns = NULL,
+  use_date_keys = FALSE,
+  remove_na = TRUE
+)
 }
 \arguments{
 \item{data}{a \code{tibble}}
@@ -37,20 +44,6 @@ gather_data(data, variable_name = "item", numeric_ids = c("^id"),
 \item{use_date_keys}{if \code{TRUE} uses dates as a key}
 
 \item{remove_na}{removes NA columns}
-
-\item{unite_columns}{if not \code{NULL} \code{list} \itemize{
-\item new_column : new column name
-\item column_1 : first column to unite
-\item column_2 : second column to unite
-\item sep : separator
-}}
-
-\item{separate_columns}{if not \code{NULL} \code{list} \itemize{
-\item column : column to separate
-\item new_column_1 : new_column 1
-\item new_column_2 : new_column 2
-\item sep : separator
-}}
 }
 \value{
 a \code{tibble}

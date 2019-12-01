@@ -24,13 +24,15 @@ draft_combines(years = c(2001:2018),
 nest_data = T)
 }
 \seealso{
-Other draft: \code{\link{drafts}},
-  \code{\link{nbadraftnet_mock_drafts}}
+Other draft: 
+\code{\link{drafts}()},
+\code{\link{nbadraftnet_mock_drafts}()}
 
-Other player: \code{\link{bref_bios}},
-  \code{\link{players_awards}},
-  \code{\link{players_careers}},
-  \code{\link{players_tables}}
+Other player: 
+\code{\link{bref_bios}()},
+\code{\link{players_awards}()},
+\code{\link{players_careers}()},
+\code{\link{players_tables}()}
 }
 \concept{draft}
 \concept{player}

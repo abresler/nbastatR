@@ -4,17 +4,35 @@
 \alias{players_tables}
 \title{NBA players table data}
 \usage{
-players_tables(players = NULL, player_ids = NULL,
+players_tables(
+  players = NULL,
+  player_ids = NULL,
   tables = c("year over year", "passes", "game splits"),
-  measures = "Base", seasons = 2019, modes = c("PerGame", "Totals"),
-  season_types = "Regular Season", playoff_rounds = NA,
-  is_plus_minus = F, n_games = 20, is_rank = F,
-  is_pace_adjusted = F, outcomes = NA, locations = NA, months = NA,
-  season_segments = NA, date_from = NA, date_to = NA,
-  opponent_ids = NA, vs_confs = NA, vs_divisions = NA,
-  game_segments = NA, periods = NA, shot_clocks = NA,
-  last_n_games = NA, assign_to_environment = TRUE,
-  return_message = TRUE)
+  measures = "Base",
+  seasons = 2019,
+  modes = c("PerGame", "Totals"),
+  season_types = "Regular Season",
+  playoff_rounds = NA,
+  is_plus_minus = F,
+  n_games = 20,
+  is_rank = F,
+  is_pace_adjusted = F,
+  outcomes = NA,
+  locations = NA,
+  months = NA,
+  season_segments = NA,
+  date_from = NA,
+  date_to = NA,
+  opponent_ids = NA,
+  vs_confs = NA,
+  vs_divisions = NA,
+  game_segments = NA,
+  periods = NA,
+  shot_clocks = NA,
+  last_n_games = NA,
+  assign_to_environment = TRUE,
+  return_message = TRUE
+)
 }
 \arguments{
 \item{players}{vector of player names}
@@ -160,9 +178,10 @@ NBA players table data
 players_tables(players = c("Caris LeVert", "Joe Harris"), tables =  c("year over year", "passes", "game splits"),   modes = c("PerGame", "Totals"), measures = c("Base", "Advanced"), assign_to_environment = TRUE)
 }
 \seealso{
-Other player: \code{\link{bref_bios}},
-  \code{\link{draft_combines}},
-  \code{\link{players_awards}},
-  \code{\link{players_careers}}
+Other player: 
+\code{\link{bref_bios}()},
+\code{\link{draft_combines}()},
+\code{\link{players_awards}()},
+\code{\link{players_careers}()}
 }
 \concept{player}

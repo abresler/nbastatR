@@ -4,8 +4,7 @@
 \alias{seasons_players}
 \title{Seasons players}
 \usage{
-seasons_players(seasons = 1960:2018, nest_data = F,
-  return_message = T)
+seasons_players(seasons = 1960:2018, nest_data = F, return_message = T)
 }
 \arguments{
 \item{seasons}{numeric vector of seasons}

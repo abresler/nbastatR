@@ -4,9 +4,13 @@
 \alias{playoff_pictures}
 \title{NBA seasons playoff picture}
 \usage{
-playoff_pictures(seasons = NULL, assign_to_environment = TRUE,
-  include_numeric_records = F, nest_data = FALSE,
-  return_message = TRUE)
+playoff_pictures(
+  seasons = NULL,
+  assign_to_environment = TRUE,
+  include_numeric_records = F,
+  nest_data = FALSE,
+  return_message = TRUE
+)
 }
 \arguments{
 \item{seasons}{vector of seasons}

@@ -4,10 +4,17 @@
 \alias{bref_players_stats}
 \title{Basketball Reference Player Season Tables}
 \usage{
-bref_players_stats(seasons = NULL, tables = c("advanced", "totals"),
-  include_all_nba = F, only_totals = TRUE, nest_data = FALSE,
-  assign_to_environment = TRUE, widen_data = TRUE, join_data = TRUE,
-  return_message = TRUE)
+bref_players_stats(
+  seasons = NULL,
+  tables = c("advanced", "totals"),
+  include_all_nba = F,
+  only_totals = TRUE,
+  nest_data = FALSE,
+  assign_to_environment = TRUE,
+  widen_data = TRUE,
+  join_data = TRUE,
+  return_message = TRUE
+)
 }
 \arguments{
 \item{seasons}{vector of years 1951 to current season}
@@ -44,12 +51,14 @@ Basketball Reference Player Season Tables
 bref_players_stats(seasons = 2017:2018, tables = c("advanced", "totals"))
 }
 \seealso{
-Other BREF: \code{\link{bref_awards_votes}},
-  \code{\link{bref_awards}}, \code{\link{bref_bios}},
-  \code{\link{bref_teams_stats}},
-  \code{\link{dictionary_bref_coaches}},
-  \code{\link{dictionary_bref_players}},
-  \code{\link{dictionary_bref_teams}}
+Other BREF: 
+\code{\link{bref_awards_votes}()},
+\code{\link{bref_awards}()},
+\code{\link{bref_bios}()},
+\code{\link{bref_teams_stats}()},
+\code{\link{dictionary_bref_coaches}()},
+\code{\link{dictionary_bref_players}()},
+\code{\link{dictionary_bref_teams}()}
 }
 \concept{BREF}
 \concept{player statistics}

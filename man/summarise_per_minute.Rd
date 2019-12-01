@@ -4,9 +4,12 @@
 \alias{summarise_per_minute}
 \title{Summarize data per minute}
 \usage{
-summarise_per_minute(data, id_columns = c("idPlayerSeason"),
-  scale_columns = c("pts", "fg", "ast", "tov", "blk", "stl", "drb",
-  "trb", "orb", "ft", "pf", "countLayupsShooting", "countDunks", "hlf"))
+summarise_per_minute(
+  data,
+  id_columns = c("idPlayerSeason"),
+  scale_columns = c("pts", "fg", "ast", "tov", "blk", "stl", "drb", "trb", "orb", "ft",
+    "pf", "countLayupsShooting", "countDunks", "hlf")
+)
 }
 \arguments{
 \item{data}{a data frame}

@@ -4,8 +4,12 @@
 \alias{bref_bios}
 \title{Basketball Reference players bios}
 \usage{
-bref_bios(players = NULL, player_ids = NULL,
-  assign_to_environment = TRUE, return_message = T)
+bref_bios(
+  players = NULL,
+  player_ids = NULL,
+  assign_to_environment = TRUE,
+  return_message = T
+)
 }
 \arguments{
 \item{players}{vector of player names}
@@ -30,22 +34,25 @@ assign_to_environment = TRUE)
 }
 }
 \seealso{
-Other BREF: \code{\link{bref_awards_votes}},
-  \code{\link{bref_awards}},
-  \code{\link{bref_players_stats}},
-  \code{\link{bref_teams_stats}},
-  \code{\link{dictionary_bref_coaches}},
-  \code{\link{dictionary_bref_players}},
-  \code{\link{dictionary_bref_teams}}
+Other BREF: 
+\code{\link{bref_awards_votes}()},
+\code{\link{bref_awards}()},
+\code{\link{bref_players_stats}()},
+\code{\link{bref_teams_stats}()},
+\code{\link{dictionary_bref_coaches}()},
+\code{\link{dictionary_bref_players}()},
+\code{\link{dictionary_bref_teams}()}
 
-Other player: \code{\link{draft_combines}},
-  \code{\link{players_awards}},
-  \code{\link{players_careers}},
-  \code{\link{players_tables}}
+Other player: 
+\code{\link{draft_combines}()},
+\code{\link{players_awards}()},
+\code{\link{players_careers}()},
+\code{\link{players_tables}()}
 
-Other salaries: \code{\link{hoops_hype_salary_summary}},
-  \code{\link{hoopshype_salaries}},
-  \code{\link{nba_insider_salaries}}
+Other salaries: 
+\code{\link{hoops_hype_salary_summary}()},
+\code{\link{hoopshype_salaries}()},
+\code{\link{nba_insider_salaries}()}
 }
 \concept{BREF}
 \concept{player}

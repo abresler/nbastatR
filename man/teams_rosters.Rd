@@ -23,7 +23,8 @@ Gets NBA teams rosters for specified seasons
 teams_rosters(seasons = 2010:2018, nest_data = F, return_message = T)
 }
 \seealso{
-Other rosters: \code{\link{seasons_rosters}},
-  \code{\link{team_season_roster}}
+Other rosters: 
+\code{\link{seasons_rosters}()},
+\code{\link{team_season_roster}()}
 }
 \concept{rosters}

@@ -4,8 +4,11 @@
 \alias{fanduel_summary}
 \title{Games fanduel summary}
 \usage{
-fanduel_summary(game_ids = c(21700002, 21700003), nest_data = FALSE,
-  return_message = TRUE)
+fanduel_summary(
+  game_ids = c(21700002, 21700003),
+  nest_data = FALSE,
+  return_message = TRUE
+)
 }
 \arguments{
 \item{game_ids}{vector of game ids}
@@ -25,10 +28,13 @@ game ids
 fanduel_summary(game_ids = c(21700002, 21700003), nest_data = F, return_message = T)
 }
 \seealso{
-Other season: \code{\link{win_probability}}
+Other season: 
+\code{\link{win_probability}()}
 
-Other game: \code{\link{box_scores}},
-  \code{\link{game_logs}}, \code{\link{win_probability}}
+Other game: 
+\code{\link{box_scores}()},
+\code{\link{game_logs}()},
+\code{\link{win_probability}()}
 }
 \concept{game}
 \concept{season}

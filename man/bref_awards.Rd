@@ -4,14 +4,16 @@
 \alias{bref_awards}
 \title{Basketball reference awards}
 \usage{
-bref_awards(awards = c("Most Valuable Player", "Rookie of the Year",
-  "Defensive Player of the Year", "Sixth Man of the Year",
-  "Most Improved Player", "Teammate of the Year",
-  "J. Walter Kennedy Citizenship Award", "NBA Finals Most Valuable Player",
-  "ABA Playoffs Most Valuable Player",
-  "All-Star Game Most Valuable Player", "Comeback Player of the Year",
-  "Sporting News MVP", "Sporting News Rookie of the Year",
-  "Coach of the Year", "Executive of the Year"), return_message = T)
+bref_awards(
+  awards = c("Most Valuable Player", "Rookie of the Year",
+    "Defensive Player of the Year", "Sixth Man of the Year", "Most Improved Player",
+    "Teammate of the Year", "J. Walter Kennedy Citizenship Award",
+    "NBA Finals Most Valuable Player", "ABA Playoffs Most Valuable Player",
+    "All-Star Game Most Valuable Player", "Comeback Player of the Year",
+    "Sporting News MVP", "Sporting News Rookie of the Year", "Coach of the Year",
+    "Executive of the Year"),
+  return_message = T
+)
 }
 \arguments{
 \item{awards}{vector of awards options include \itemize{
@@ -44,16 +46,18 @@ Award winners from basketball-reference
 bref_awards(awards = c("Most Valuable Player", "Rookie of the Year", "Defensive Player of the Year"))
 }
 \seealso{
-Other BREF: \code{\link{bref_awards_votes}},
-  \code{\link{bref_bios}},
-  \code{\link{bref_players_stats}},
-  \code{\link{bref_teams_stats}},
-  \code{\link{dictionary_bref_coaches}},
-  \code{\link{dictionary_bref_players}},
-  \code{\link{dictionary_bref_teams}}
+Other BREF: 
+\code{\link{bref_awards_votes}()},
+\code{\link{bref_bios}()},
+\code{\link{bref_players_stats}()},
+\code{\link{bref_teams_stats}()},
+\code{\link{dictionary_bref_coaches}()},
+\code{\link{dictionary_bref_players}()},
+\code{\link{dictionary_bref_teams}()}
 
-Other awards: \code{\link{bref_awards_votes}},
-  \code{\link{players_awards}}
+Other awards: 
+\code{\link{bref_awards_votes}()},
+\code{\link{players_awards}()}
 }
 \concept{BREF}
 \concept{awards}

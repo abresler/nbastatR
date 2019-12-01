@@ -11,6 +11,9 @@ scale_per_minute(data, scale_columns = NULL)
 
 \item{scale_columns}{vector of columns to scale}
 }
+\value{
+
+}
 \description{
 Summarise data per minute
 }

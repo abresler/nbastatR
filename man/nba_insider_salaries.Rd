@@ -4,9 +4,12 @@
 \alias{nba_insider_salaries}
 \title{NBA team salaries}
 \usage{
-nba_insider_salaries(assume_player_opt_out = F,
-  assume_team_doesnt_exercise = T, return_wide = F,
-  return_message = T)
+nba_insider_salaries(
+  assume_player_opt_out = F,
+  assume_team_doesnt_exercise = T,
+  return_wide = F,
+  return_message = T
+)
 }
 \arguments{
 \item{assume_player_opt_out}{if `TRUE` assumes player opts out of a player option}
@@ -27,8 +30,9 @@ Gets information about NBA teams salaries
 nba_insider_salaries(assume_player_opt_out = T, assume_team_doesnt_exercise = T, return_message = TRUE)
 }
 \seealso{
-Other salaries: \code{\link{bref_bios}},
-  \code{\link{hoops_hype_salary_summary}},
-  \code{\link{hoopshype_salaries}}
+Other salaries: 
+\code{\link{bref_bios}()},
+\code{\link{hoops_hype_salary_summary}()},
+\code{\link{hoopshype_salaries}()}
 }
 \concept{salaries}

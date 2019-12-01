@@ -16,19 +16,23 @@ Basketball Reference player dictionary
 dictionary_bref_players()
 }
 \seealso{
-Other BREF: \code{\link{bref_awards_votes}},
-  \code{\link{bref_awards}}, \code{\link{bref_bios}},
-  \code{\link{bref_players_stats}},
-  \code{\link{bref_teams_stats}},
-  \code{\link{dictionary_bref_coaches}},
-  \code{\link{dictionary_bref_teams}}
+Other BREF: 
+\code{\link{bref_awards_votes}()},
+\code{\link{bref_awards}()},
+\code{\link{bref_bios}()},
+\code{\link{bref_players_stats}()},
+\code{\link{bref_teams_stats}()},
+\code{\link{dictionary_bref_coaches}()},
+\code{\link{dictionary_bref_teams}()}
 
-Other dictionary: \code{\link{assign_nba_players}},
-  \code{\link{assign_nba_teams}},
-  \code{\link{dictionary_bref_coaches}},
-  \code{\link{dictionary_bref_teams}}
+Other dictionary: 
+\code{\link{assign_nba_players}()},
+\code{\link{assign_nba_teams}()},
+\code{\link{dictionary_bref_coaches}()},
+\code{\link{dictionary_bref_teams}()}
 
-Other NBA players: \code{\link{assign_nba_players}}
+Other NBA players: 
+\code{\link{assign_nba_players}()}
 }
 \concept{BREF}
 \concept{NBA players}

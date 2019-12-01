@@ -14,7 +14,7 @@
           select(-typeResult) %>%
           select(slugSeason, everything()) %>%
           arrange(slugSeason) %>%
-          unnest_legacy() %>%
+          unnest() %>%
           distinct()
 
         if (result_type == "player") {

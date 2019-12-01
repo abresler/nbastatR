@@ -4,8 +4,12 @@
 \alias{players_awards}
 \title{NBA players awards}
 \usage{
-players_awards(players = NULL, player_ids = NULL, nest_data = F,
-  return_message = TRUE)
+players_awards(
+  players = NULL,
+  player_ids = NULL,
+  nest_data = F,
+  return_message = TRUE
+)
 }
 \arguments{
 \item{players}{vector of players}
@@ -30,13 +34,15 @@ return_message = T,
  nest_data = F)
 }
 \seealso{
-Other player: \code{\link{bref_bios}},
-  \code{\link{draft_combines}},
-  \code{\link{players_careers}},
-  \code{\link{players_tables}}
+Other player: 
+\code{\link{bref_bios}()},
+\code{\link{draft_combines}()},
+\code{\link{players_careers}()},
+\code{\link{players_tables}()}
 
-Other awards: \code{\link{bref_awards_votes}},
-  \code{\link{bref_awards}}
+Other awards: 
+\code{\link{bref_awards_votes}()},
+\code{\link{bref_awards}()}
 }
 \concept{awards}
 \concept{player}

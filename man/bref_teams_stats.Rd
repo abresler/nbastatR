@@ -4,9 +4,14 @@
 \alias{bref_teams_stats}
 \title{Basketball Reference teams seasons data}
 \usage{
-bref_teams_stats(seasons = 2019, return_message = TRUE,
-  assign_to_environment = TRUE, nest_data = FALSE, join_data = TRUE,
-  widen_data = TRUE)
+bref_teams_stats(
+  seasons = 2019,
+  return_message = TRUE,
+  assign_to_environment = TRUE,
+  nest_data = FALSE,
+  join_data = TRUE,
+  widen_data = TRUE
+)
 }
 \arguments{
 \item{seasons}{vector of years from 1950 to current}
@@ -28,12 +33,14 @@ for specified seasons
 bref_teams_stats(seasons = 2017:2018)
 }
 \seealso{
-Other BREF: \code{\link{bref_awards_votes}},
-  \code{\link{bref_awards}}, \code{\link{bref_bios}},
-  \code{\link{bref_players_stats}},
-  \code{\link{dictionary_bref_coaches}},
-  \code{\link{dictionary_bref_players}},
-  \code{\link{dictionary_bref_teams}}
+Other BREF: 
+\code{\link{bref_awards_votes}()},
+\code{\link{bref_awards}()},
+\code{\link{bref_bios}()},
+\code{\link{bref_players_stats}()},
+\code{\link{dictionary_bref_coaches}()},
+\code{\link{dictionary_bref_players}()},
+\code{\link{dictionary_bref_teams}()}
 }
 \concept{BREF}
 \concept{team statistics}

@@ -4,8 +4,11 @@
 \alias{bref_awards_votes}
 \title{Basketball Reference award votes}
 \usage{
-bref_awards_votes(seasons = 2017, assign_to_environment = TRUE,
-  return_message = TRUE)
+bref_awards_votes(
+  seasons = 2017,
+  assign_to_environment = TRUE,
+  return_message = TRUE
+)
 }
 \arguments{
 \item{seasons}{vector of seasons starting in 1964}
@@ -25,16 +28,18 @@ Acquires seasons awards votes
 bref_awards_votes(2017)
 }
 \seealso{
-Other BREF: \code{\link{bref_awards}},
-  \code{\link{bref_bios}},
-  \code{\link{bref_players_stats}},
-  \code{\link{bref_teams_stats}},
-  \code{\link{dictionary_bref_coaches}},
-  \code{\link{dictionary_bref_players}},
-  \code{\link{dictionary_bref_teams}}
+Other BREF: 
+\code{\link{bref_awards}()},
+\code{\link{bref_bios}()},
+\code{\link{bref_players_stats}()},
+\code{\link{bref_teams_stats}()},
+\code{\link{dictionary_bref_coaches}()},
+\code{\link{dictionary_bref_players}()},
+\code{\link{dictionary_bref_teams}()}
 
-Other awards: \code{\link{bref_awards}},
-  \code{\link{players_awards}}
+Other awards: 
+\code{\link{bref_awards}()},
+\code{\link{players_awards}()}
 }
 \concept{BREF}
 \concept{awards}

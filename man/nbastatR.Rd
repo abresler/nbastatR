@@ -3,7 +3,6 @@
 \docType{package}
 \name{nbastatR}
 \alias{nbastatR}
-\alias{nbastatR-package}
 \title{nbastatR}
 \description{
 Tools to acquire and explore NBA data

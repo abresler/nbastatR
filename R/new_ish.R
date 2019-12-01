@@ -139,7 +139,7 @@ assign_tables_modes <-
           walk(function(mode){
             df_table <-
               df_tables %>% filter(modeSearch == mode) %>%
-              tidyr::unnest_legacy()
+              tidyr::unnest()
 
             slug_season <-
               df_table_names$slugTable

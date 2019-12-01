@@ -4,8 +4,12 @@
 \alias{nbadraftnet_mock_drafts}
 \title{NBADraft.net mock drafts}
 \usage{
-nbadraftnet_mock_drafts(years = 2009:2018, merge_nba_data = T,
-  nest_data = F, return_message = T)
+nbadraftnet_mock_drafts(
+  years = 2009:2018,
+  merge_nba_data = T,
+  nest_data = F,
+  return_message = T
+)
 }
 \arguments{
 \item{years}{vector of draft years}
@@ -30,7 +34,8 @@ nest_data = F,
 return_message = T)
 }
 \seealso{
-Other draft: \code{\link{draft_combines}},
-  \code{\link{drafts}}
+Other draft: 
+\code{\link{draft_combines}()},
+\code{\link{drafts}()}
 }
 \concept{draft}

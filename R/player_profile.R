@@ -374,7 +374,7 @@ player_profiles <- function(players = NULL,
       all_data %>%
         filter(nameTable == table) %>%
         select(-nameTable) %>%
-        tidyr::unnest_legacy()
+        tidyr::unnest()
     })
 
   all_data <-

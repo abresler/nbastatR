@@ -4,12 +4,20 @@
 \alias{pst_transaction}
 \title{ProSports NBA transactions}
 \usage{
-pst_transaction(person = "Jarrett Jack", team = NULL,
-  date_from = NULL, date_to = NULL, include_trades = T,
-  include_injury_list_movement = T, include_g_league_movement = T,
-  include_injury_missed_games = T, include_personal_missed_games = T,
-  include_discipline = T, include_criminal_incidents = T,
-  return_message = T)
+pst_transaction(
+  person = "Jarrett Jack",
+  team = NULL,
+  date_from = NULL,
+  date_to = NULL,
+  include_trades = T,
+  include_injury_list_movement = T,
+  include_g_league_movement = T,
+  include_injury_missed_games = T,
+  include_personal_missed_games = T,
+  include_discipline = T,
+  include_criminal_incidents = T,
+  return_message = T
+)
 }
 \arguments{
 \item{person}{if not \code{NULL} vector of person name}

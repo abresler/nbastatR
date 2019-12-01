@@ -4,9 +4,14 @@
 \alias{players_careers}
 \title{Player career stats}
 \usage{
-players_careers(players = NULL, player_ids = NULL,
-  modes = c("PerGame", "Totals"), assign_to_environment = TRUE,
-  add_mode_names = TRUE, return_message = TRUE)
+players_careers(
+  players = NULL,
+  player_ids = NULL,
+  modes = c("PerGame", "Totals"),
+  assign_to_environment = TRUE,
+  add_mode_names = TRUE,
+  return_message = TRUE
+)
 }
 \arguments{
 \item{players}{\code{NULL} or \code{vector} of NBA players}
@@ -38,10 +43,11 @@ players_careers(players = c("Joe Harris", "Myles Turner", "Spencer Dinwiddie"),
 modes = c("Totals", "PerGame"))
 }
 \seealso{
-Other player: \code{\link{bref_bios}},
-  \code{\link{draft_combines}},
-  \code{\link{players_awards}},
-  \code{\link{players_tables}}
+Other player: 
+\code{\link{bref_bios}()},
+\code{\link{draft_combines}()},
+\code{\link{players_awards}()},
+\code{\link{players_tables}()}
 }
 \concept{player}
 \concept{summary stats}

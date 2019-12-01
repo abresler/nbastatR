@@ -4,9 +4,15 @@
 \alias{teams_annual_stats}
 \title{NBA teams yearly performance}
 \usage{
-teams_annual_stats(teams = NULL, team_ids = NULL,
-  all_active_teams = T, season_types = c("Regular Season"),
-  modes = c("Totals"), return_message = TRUE, nest_data = F)
+teams_annual_stats(
+  teams = NULL,
+  team_ids = NULL,
+  all_active_teams = T,
+  season_types = c("Regular Season"),
+  modes = c("Totals"),
+  return_message = TRUE,
+  nest_data = F
+)
 }
 \arguments{
 \item{teams}{vector of team names}

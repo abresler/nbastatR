@@ -5,9 +5,16 @@
 \title{NBA game logs
 NBA game logs for specified parameters}
 \usage{
-game_logs(seasons = 2019, league = "NBA", result_types = "player",
-  season_types = "Regular Season", nest_data = F,
-  assign_to_environment = TRUE, return_message = TRUE, ...)
+game_logs(
+  seasons = 2019,
+  league = "NBA",
+  result_types = "player",
+  season_types = "Regular Season",
+  nest_data = F,
+  assign_to_environment = TRUE,
+  return_message = TRUE,
+  ...
+)
 }
 \arguments{
 \item{seasons}{vector of seasons where season is year ending}
@@ -43,8 +50,9 @@ NBA game logs for specified parameters
 game_logs(seasons = 2019, result_types = c("team", "player"))
 }
 \seealso{
-Other game: \code{\link{box_scores}},
-  \code{\link{fanduel_summary}},
-  \code{\link{win_probability}}
+Other game: 
+\code{\link{box_scores}()},
+\code{\link{fanduel_summary}()},
+\code{\link{win_probability}()}
 }
 \concept{game}

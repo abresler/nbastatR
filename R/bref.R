@@ -415,7 +415,7 @@ widen_bref_data <-
                  dataTable) %>%
           dplyr::rename(yearSeason = yearSeasonStart) %>%
           mutate(yearSeason = yearSeason + 1) %>%
-          unnest_legacy()
+          unnest()
 
         if (table == "Awards") {
           if (assign_to_environment) {
@@ -619,7 +619,7 @@ widen_bref_data <-
         df_table <-
           all_data %>%
           filter(typeData == table) %>%
-          unnest_legacy()
+          unnest()
 
         if (df_table %>% tibble::has_name("yearSeason")) {
           df_table <-
@@ -1150,7 +1150,7 @@ all_nba_teams <-
 
 .parse_player_season <-
   memoise::memoise(
-    function(url = "http://www.basketball-reference.com/leagues/NBA_1997_per_game.html",
+    function(url = "http://www.basketball-reference.com/leagues/NBA_2019_advanced.html",
            return_message = TRUE) {
     ## case_when
 
@@ -1223,15 +1223,6 @@ all_nba_teams <-
       filter(!Rk %>% is.na()) %>%
       suppressWarnings()
 
-    # df_players_unique <-
-    #   df %>% group_by(Rk) %>% slice(1) %>%
-    #   select(numberPlayer = Rk, namePlayer = Player) %>%
-    #   ungroup()
-    #
-    # df <-
-    #   df %>%
-    #   dplyr::select(-dplyr::matches("Rk"))
-
     df_names <-
       get_bref_name_df()
 
@@ -1275,7 +1266,7 @@ all_nba_teams <-
 
     df <-
       df %>%
-      left_join(df_players) %>%
+      left_join(df_players, by = c("numberPlayer", "namePlayer")) %>%
       distinct() %>%
       suppressMessages() %>%
       mutate(slugSeason = id_season,
@@ -1289,7 +1280,8 @@ all_nba_teams <-
       mutate_at(df %>% dplyr::select(dplyr::matches("pct")) %>% names(),
                 funs(ifelse(. >= 1, . / 100, .))) %>%
       mutate(typeData = name_slug) %>%
-      dplyr::select(typeData, everything())
+      dplyr::select(typeData, everything()) %>%
+      mutate(namePlayer = namePlayer %>% stringi::stri_trans_general("Latin-ASCII"))
 
     if (return_message) {
       list("parsed ", url) %>%
@@ -2898,7 +2890,7 @@ bref_awards_votes <-
 
     all_data <-
       all_data %>%
-      unnest_legacy() %>%
+      unnest() %>%
       nest(-c(slugTable), .key = 'dataTable')
 
     if (assign_to_environment) {
@@ -2910,7 +2902,7 @@ bref_awards_votes <-
             all_data %>%
             filter(slugTable == table) %>%
             select(dataTable) %>%
-            unnest_legacy()
+            unnest()
 
           df_table <-
             df_table %>%

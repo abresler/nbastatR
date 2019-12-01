@@ -4,9 +4,14 @@
 \alias{metrics_leaders}
 \title{League leaders by season}
 \usage{
-metrics_leaders(seasons = 2017:2018, metric = "pts",
-  season_types = "Regular Season", modes = c("PerGame", "Totals"),
-  return_message = TRUE, nest_data = FALSE)
+metrics_leaders(
+  seasons = 2017:2018,
+  metric = "pts",
+  season_types = "Regular Season",
+  modes = c("PerGame", "Totals"),
+  return_message = TRUE,
+  nest_data = FALSE
+)
 }
 \arguments{
 \item{seasons}{vector of seasons}
@@ -61,10 +66,12 @@ season_types = "Regular Season",
  return_message = T)
 }
 \seealso{
-Other players: \code{\link{players_bios}},
-  \code{\link{teams_players_stats}}
+Other players: 
+\code{\link{players_bios}()},
+\code{\link{teams_players_stats}()}
 
-Other leaders: \code{\link{franchise_leaders}}
+Other leaders: 
+\code{\link{franchise_leaders}()}
 }
 \concept{leaders}
 \concept{players}

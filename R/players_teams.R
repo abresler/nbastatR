@@ -1228,7 +1228,7 @@ teams_players_stats <-
                 df_table %>%
                 filter(nameTable == table) %>%
                 select(-nameTable) %>%
-                unnest_legacy() %>%
+                unnest() %>%
                 remove_zero_sum_cols()
 
               assign(table_name, data, envir = .GlobalEnv)

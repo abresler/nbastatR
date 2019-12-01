@@ -4,8 +4,12 @@
 \alias{players_bios}
 \title{NBA.com bios}
 \usage{
-players_bios(players = NULL, player_ids = NULL, nest_data = F,
-  return_message = TRUE)
+players_bios(
+  players = NULL,
+  player_ids = NULL,
+  nest_data = F,
+  return_message = TRUE
+)
 }
 \arguments{
 \item{players}{vector of players}
@@ -29,8 +33,9 @@ Seems to only work for the 2013-14 season
 players_bios(players = c("Carmelo Anthony", "Joe Johnson"))
 }
 \seealso{
-Other players: \code{\link{metrics_leaders}},
-  \code{\link{teams_players_stats}}
+Other players: 
+\code{\link{metrics_leaders}()},
+\code{\link{teams_players_stats}()}
 }
 \concept{biography}
 \concept{players}

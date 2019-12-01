@@ -4,8 +4,14 @@
 \alias{teams_rotowire}
 \title{Teams Rotowire news}
 \usage{
-teams_rotowire(teams = NULL, team_ids = NULL, all_active_teams = F,
-  nest_data = F, results = 50, return_message = TRUE)
+teams_rotowire(
+  teams = NULL,
+  team_ids = NULL,
+  all_active_teams = F,
+  nest_data = F,
+  results = 50,
+  return_message = TRUE
+)
 }
 \arguments{
 \item{teams}{vector of teams}
@@ -30,7 +36,8 @@ Returns roto wire news for specified teams.
 teams_rotowire(teams = "Brooklyn Nets")
 }
 \seealso{
-Other news: \code{\link{beyond_the_numbers}},
-  \code{\link{players_rotowire}}
+Other news: 
+\code{\link{beyond_the_numbers}()},
+\code{\link{players_rotowire}()}
 }
 \concept{news}

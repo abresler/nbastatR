@@ -21,7 +21,8 @@ beyond_the_numbers(count_articles = 10)
 }
 }
 \seealso{
-Other news: \code{\link{players_rotowire}},
-  \code{\link{teams_rotowire}}
+Other news: 
+\code{\link{players_rotowire}()},
+\code{\link{teams_rotowire}()}
 }
 \concept{news}

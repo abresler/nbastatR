@@ -4,8 +4,11 @@
 \alias{agents_players}
 \title{Players Agents}
 \usage{
-agents_players(agents = "Jeff Schwartz", all_agents = F,
-  return_message = FALSE)
+agents_players(
+  agents = "Jeff Schwartz",
+  all_agents = F,
+  return_message = FALSE
+)
 }
 \arguments{
 \item{agents}{vector of agents}
@@ -25,6 +28,7 @@ agents_players(agents = c("Jeff Schwartz"))
 
 }
 \seealso{
-Other agents: \code{\link{players_agents}}
+Other agents: 
+\code{\link{players_agents}()}
 }
 \concept{agents}

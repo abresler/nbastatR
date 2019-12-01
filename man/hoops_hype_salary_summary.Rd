@@ -21,11 +21,13 @@ Gets all team salary summaries from HoopsHype
 hoops_hype_salary_summary(spread_data = TRUE)
 }
 \seealso{
-Other hoopshype: \code{\link{hoopshype_salaries}}
+Other hoopshype: 
+\code{\link{hoopshype_salaries}()}
 
-Other salaries: \code{\link{bref_bios}},
-  \code{\link{hoopshype_salaries}},
-  \code{\link{nba_insider_salaries}}
+Other salaries: 
+\code{\link{bref_bios}()},
+\code{\link{hoopshype_salaries}()},
+\code{\link{nba_insider_salaries}()}
 }
 \concept{hoopshype}
 \concept{salaries}

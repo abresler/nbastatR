@@ -4,8 +4,12 @@
 \alias{player_profiles}
 \title{NBA.com player profiles}
 \usage{
-player_profiles(players = NULL, player_ids = NULL, nest_data = F,
-  return_message = TRUE)
+player_profiles(
+  players = NULL,
+  player_ids = NULL,
+  nest_data = F,
+  return_message = TRUE
+)
 }
 \arguments{
 \item{players}{character vector of player names}

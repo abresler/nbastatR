@@ -4,9 +4,14 @@
 \alias{days_scores}
 \title{Get NBA Dates' NBA Scores}
 \usage{
-days_scores(game_dates = NULL, league = "NBA", day_offset = 0,
-  include_standings = F, assign_to_environment = TRUE,
-  return_message = TRUE)
+days_scores(
+  game_dates = NULL,
+  league = "NBA",
+  day_offset = 0,
+  include_standings = F,
+  assign_to_environment = TRUE,
+  return_message = TRUE
+)
 }
 \arguments{
 \item{game_dates}{vector of dates}

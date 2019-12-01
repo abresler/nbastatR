@@ -4,8 +4,13 @@
 \alias{players_rotowire}
 \title{Players RotoWire news}
 \usage{
-players_rotowire(players = NULL, player_ids = NULL, nest_data = F,
-  results = 50, return_message = TRUE)
+players_rotowire(
+  players = NULL,
+  player_ids = NULL,
+  nest_data = F,
+  results = 50,
+  return_message = TRUE
+)
 }
 \arguments{
 \item{players}{vector of player_names}
@@ -29,7 +34,8 @@ players.
 players_rotowire(players = c( "Jarrett Allen", "DeMarre Carroll", "Allen Crabbe"))
 }
 \seealso{
-Other news: \code{\link{beyond_the_numbers}},
-  \code{\link{teams_rotowire}}
+Other news: 
+\code{\link{beyond_the_numbers}()},
+\code{\link{teams_rotowire}()}
 }
 \concept{news}

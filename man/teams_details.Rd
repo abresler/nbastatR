@@ -4,8 +4,13 @@
 \alias{teams_details}
 \title{NBA teams details}
 \usage{
-teams_details(teams = NULL, team_ids = NULL, all_teams = F,
-  assign_to_environment = TRUE, return_message = T)
+teams_details(
+  teams = NULL,
+  team_ids = NULL,
+  all_teams = F,
+  assign_to_environment = TRUE,
+  return_message = T
+)
 }
 \arguments{
 \item{teams}{vector of team names}

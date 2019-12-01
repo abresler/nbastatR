@@ -4,8 +4,7 @@
 \alias{play_by_play}
 \title{NBA games play-by play}
 \usage{
-play_by_play(game_ids = NULL, nest_data = FALSE,
-  return_message = TRUE)
+play_by_play(game_ids = NULL, nest_data = FALSE, return_message = TRUE)
 }
 \arguments{
 \item{game_ids}{vector of game ids}

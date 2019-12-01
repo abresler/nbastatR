@@ -4,8 +4,13 @@
 \alias{standings}
 \title{Get seasons standing data}
 \usage{
-standings(seasons = 2019, season_types = c("Regular Season"),
-  resolve_records = TRUE, nest_data = F, return_message = TRUE)
+standings(
+  seasons = 2019,
+  season_types = c("Regular Season"),
+  resolve_records = TRUE,
+  nest_data = F,
+  return_message = TRUE
+)
 }
 \arguments{
 \item{seasons}{vector of seasons}
@@ -31,6 +36,7 @@ NBA season standing data
 standings(seasons = 2015:2018, season_types = "Regular Season", resolve_records = T, nest_data = F, return_message = T)
 }
 \seealso{
-Other standings: \code{\link{current_standings}}
+Other standings: 
+\code{\link{current_standings}()}
 }
 \concept{standings}

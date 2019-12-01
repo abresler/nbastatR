@@ -4,9 +4,14 @@
 \alias{hoopshype_salaries}
 \title{Hoopshype teams players salaries}
 \usage{
-hoopshype_salaries(teams = NULL, all_teams = TRUE,
-  assume_player_opt_out = T, assume_team_doesnt_exercise = T,
-  nest_data = F, return_message = TRUE)
+hoopshype_salaries(
+  teams = NULL,
+  all_teams = TRUE,
+  assume_player_opt_out = T,
+  assume_team_doesnt_exercise = T,
+  nest_data = F,
+  return_message = TRUE
+)
 }
 \arguments{
 \item{teams}{vector of team names}
@@ -39,11 +44,13 @@ hoopshype_salaries(all_teams = TRUE,
  arrange(nameTeam)
 }
 \seealso{
-Other hoopshype: \code{\link{hoops_hype_salary_summary}}
+Other hoopshype: 
+\code{\link{hoops_hype_salary_summary}()}
 
-Other salaries: \code{\link{bref_bios}},
-  \code{\link{hoops_hype_salary_summary}},
-  \code{\link{nba_insider_salaries}}
+Other salaries: 
+\code{\link{bref_bios}()},
+\code{\link{hoops_hype_salary_summary}()},
+\code{\link{nba_insider_salaries}()}
 }
 \concept{hoopshype}
 \concept{salaries}

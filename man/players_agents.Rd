@@ -23,6 +23,7 @@ df_players_agents \%>\%
 glimpse()
 }
 \seealso{
-Other agents: \code{\link{agents_players}}
+Other agents: 
+\code{\link{agents_players}()}
 }
 \concept{agents}

@@ -569,7 +569,7 @@ bref_bios <-
             all_data %>%
             filter(nameTable == table) %>%
             select(-nameTable) %>%
-            unnest_legacy()
+            unnest()
 
           table_name <-
             glue::glue("dataBREFPlayers{table}") %>% as.character()

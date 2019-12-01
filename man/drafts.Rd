@@ -31,13 +31,15 @@ filter(numberPickOverall <= 5) \%>\%
 count(nameOrganizationFrom, sort = T)
 }
 \seealso{
-Other draft: \code{\link{draft_combines}},
-  \code{\link{nbadraftnet_mock_drafts}}
+Other draft: 
+\code{\link{draft_combines}()},
+\code{\link{nbadraftnet_mock_drafts}()}
 
-Other teams: \code{\link{franchise_leaders}},
-  \code{\link{seasons_rosters}},
-  \code{\link{teams_players_stats}},
-  \code{\link{teams_rankings}}
+Other teams: 
+\code{\link{franchise_leaders}()},
+\code{\link{seasons_rosters}()},
+\code{\link{teams_players_stats}()},
+\code{\link{teams_rankings}()}
 }
 \concept{draft}
 \concept{teams}

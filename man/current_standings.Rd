@@ -19,6 +19,7 @@ Acquires current season's standings
 current_standings()
 }
 \seealso{
-Other standings: \code{\link{standings}}
+Other standings: 
+\code{\link{standings}()}
 }
 \concept{standings}
