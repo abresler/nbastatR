@@ -93,7 +93,7 @@
   })
 
 .get_synergy_category_data <-
-  function(season = 2018,
+  function(season = 2020,
          result_type = "player",
          season_type = "Regular Season",
          category = "transition",

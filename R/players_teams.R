@@ -336,7 +336,7 @@
         "ShotClock Off"
       )
 
-      if (!shot_clock_range %in% SeasonSegment) {
+      if (!shot_clock_range %in% ShotClockRange) {
         "Sorry shot clock range can only be " %>%
           paste0(ShotClockRange %>% paste0(collapse = ', ')) %>%
           stop(call. = F)
@@ -461,13 +461,13 @@
     if (!starter_bench %>% is.na()) {
       StarterBench = c("Starters", "Bench")
 
-      if (!starter_bench %in% SeasonSegment) {
+      if (!starter_bench %in% StarterBench) {
         "Sorry starter/bench can only be " %>%
           paste0(StarterBench %>% paste0(collapse = ', ')) %>%
           stop(call. = F)
       }
       starter_bench_stem <-
-        starter_bench[1] %>% clean_to_stem
+        starter_bench[1] %>% clean_to_stem()
     } else {
       starter_bench_range_stem <-
         ''

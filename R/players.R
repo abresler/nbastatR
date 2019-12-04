@@ -18,7 +18,8 @@
       df_parameters <-
         df_parameters %>%
         purrr::set_names(names(df_parameters) %>% resolve_nba_names()) %>%
-        munge_nba_data()
+        munge_nba_data() %>%
+        select(-matches("remove"))
       df_parameters <-
         df_parameters %>%
         mutate_at(df_parameters %>% dplyr::select(dplyr::matches("is[A-Z]")) %>% names(),
@@ -37,7 +38,8 @@
       data <-
         json$resultSets$rowSet[[x]] %>%
         data.frame(stringsAsFactors = F) %>%
-        dplyr::as_tibble()
+        dplyr::as_tibble() %>%
+        select(-matches("remove"))
 
       if (data %>% nrow() == 0) {
         return(invisible())
@@ -180,7 +182,9 @@
 
       data <-
         data %>%
-        nest_(key_col = 'dataTable', nest_cols = nest_cols)
+        nest(.key = "dataTable",cols = nest_cols) %>%
+        rename(dataTable = cols)
+
       data
     })
 
@@ -359,7 +363,8 @@
 
     json <-
       url %>%
-      .curl_chinazi()
+      .curl_chinazi(
+      )
 
     all_data <-
       .parse_player_json(

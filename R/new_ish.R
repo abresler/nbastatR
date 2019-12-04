@@ -867,7 +867,12 @@ dictionary_nba_names <-
                    "BOX_OUT_PLAYER",
                    "SCREEN_AST_PTS",
                    "BOX_OUT_PLAYER_REBS",
-                   "OTHERLEAGUE_EXPERIENCE_CH"
+                   "OTHERLEAGUE_EXPERIENCE_CH",
+                   "sp_work_OFF_RATING", "sp_work_DEF_RATING", "sp_work_NET_RATING",
+                   "E_TOV_PCT", "PACE_PER40", "sp_work_PACE", "E_OFF_RATING_RANK",
+                   "sp_work_OFF_RATING_RANK", "E_DEF_RATING_RANK", "sp_work_DEF_RATING_RANK",
+                   "E_NET_RATING_RANK", "sp_work_NET_RATING_RANK", "E_TOV_PCT_RANK",
+                   "E_USG_PCT_RANK", "E_PACE_RANK", "sp_work_PACE_RANK"
                  ),
                nameActual =
                  c("idPlayer", "namePlayerLastFirst", "namePlayer",
@@ -1249,7 +1254,12 @@ dictionary_nba_names <-
                    "boxOutPlayerRebound",
                    "ptsScreenAssist",
                    "boxOutsPlayerTREB",
-                   "idLeagueOtherExperience"
+                   "idLeagueOtherExperience",
+                   "removeOFF_RATING", "removeDEF_RATING", "removeNET_RATING",
+                   "pctTOVE", "pacePer40PACE_PER40", "removePACE", "rankORTGE",
+                   "removeOFF_RATING_RANK", "rankDRTGE", "removeDEF_RATING_RANK",
+                   "rankNTRGE", "removeNET_RATING_RANK", "rankPCTOVE",
+                   "rankPCTUSGE", "rankPACEE", "removePACE_RANK"
                  )
     )
   }
