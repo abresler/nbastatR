@@ -3,7 +3,7 @@
 
 # full_logs ---------------------------------------------------------------
 .get_season_gamelog <-
-  function(season = 1984,
+  function(season = 2020,
            league = "NBA",
            result_type  = "player",
            season_type = "Regular Season",
@@ -65,12 +65,12 @@
     json <-
       .curl_chinazi(url = url)
 
-      data <-
-        json %>%
-        nba_json_to_df() %>%
-        mutate(slugSeason = season_slug,
-               typeSeason = season_type,
-               typeResult = result_type)
+    data <-
+      json %>%
+      nba_json_to_df() %>%
+      mutate(slugSeason = season_slug,
+             typeSeason = season_type,
+             typeResult = result_type)
 
     if (data %>% tibble::has_name("dateGame")) {
       data <-
@@ -90,12 +90,12 @@
         select(typeSeason:idTeam, isWin, everything())
     }
 
-      data <-
-        data %>%
-        clean_data_table_name() %>%
-        mutate(yearSeason = season,
-               typeResult = result_type) %>%
-        mutate(urlTeamSeasonLogo = generate_team_season_logo(season = yearSeason, slug_team = slugTeam))
+    data <-
+      data %>%
+      clean_data_table_name() %>%
+      mutate(yearSeason = season,
+             typeResult = result_type) %>%
+      mutate(urlTeamSeasonLogo = generate_team_season_logo(season = yearSeason, slug_team = slugTeam))
 
     if (data %>% tibble::has_name("dateGame")) {
       df_teams_games <-
@@ -130,7 +130,8 @@
 
       data <-
         data %>%
-        left_join(df_teams_games) %>%
+        left_join(df_teams_games,
+                  by = c("slugTeam", "dateGame", "idTeam", "yearSeason")) %>%
         select(one_of(
           c(
             "typeResult",
@@ -160,7 +161,8 @@
     }
 
 
-    if (result_type == "player" && league %>% str_to_upper() == "NBA") {
+    if (result_type == "player" &&
+        league %>% str_to_upper() == "NBA") {
       if (!'df_nba_player_dict' %>% exists()) {
         df_nba_player_dict <-
           nba_players()
@@ -170,8 +172,8 @@
 
       data <-
         data %>%
-        left_join(df_nba_player_dict %>% select(idPlayer, matches("url"))) %>%
-        suppressMessages()
+        left_join(df_nba_player_dict %>% select(idPlayer, matches("url")),
+                  by = "idPlayer")
 
 
       df_players_games <-
@@ -181,14 +183,14 @@
         mutate(
           numberGamePlayerSeason = 1:n(),
           countDaysRestPlayer = ifelse(numberGamePlayerSeason > 1,
-                                        (dateGame - lag(dateGame) - 1),
-                                        120),
+                                       (dateGame - lag(dateGame) - 1),
+                                       120),
           countDaysNextGamePlayer =
             ifelse(countDaysRestPlayer < 82,
-                    ((
-                      lead(dateGame) - dateGame
-                    ) - 1),
-                    120)
+                   ((
+                     lead(dateGame) - dateGame
+                   ) - 1),
+                   120)
         ) %>%
         mutate(
           countDaysNextGamePlayer = countDaysNextGamePlayer %>% as.numeric(),
@@ -200,8 +202,8 @@
 
       data <-
         data %>%
-        left_join(df_players_games) %>%
-        suppressMessages()
+        left_join(df_players_games,
+                  by =  c("yearSeason", "dateGame", "namePlayer", "idPlayer"))
 
       data <-
         data %>%
@@ -265,11 +267,11 @@ game_logs <-
            assign_to_environment = TRUE,
            return_message = TRUE,
            ...) {
-    if (seasons %>% purrr::is_null()) {
+    if (length(seasons) == 0) {
       stop("Please enter season(s)")
     }
 
-    if (result_types %>% purrr::is_null()) {
+    if (length(result_types) == 0) {
       stop("Please enter result type {player and/or team}")
     }
 
