@@ -364,7 +364,9 @@
     separate(
       slugPosition,
       into = c('slugPosition', 'slugPositionSecondary'),
-      sep = '\\/'
+      sep = '\\/',
+      fill = "right",
+      extra = 'merge'
     ) %>%
     dplyr::select(
       idLeague,
@@ -539,22 +541,30 @@ players_agents <-
       con %>%
       read_html()
 
-    table <-
+    tables <-
       page %>%
-      html_table() %>%
-      data.frame() %>%
-      tbl_df()
+      html_table(fill = T)
+
+    table <-
+      tables[[length(tables)]] %>%
+      as_tibble()
 
     player <-
       page %>%
-      html_nodes('td:nth-child(1)') %>%
+      html_nodes('td:nth-child(1) a') %>%
       html_text() %>%
       str_trim()
+    start <- player %>% grep("Preview",.) %>% max() + 1
+    player <- player[(start:length(player))]
 
     urlPlayerRealGM <-
       page %>%
       html_nodes('td:nth-child(1) a') %>%
-      html_attr('href') %>%
+      html_attr('href')
+
+    urlPlayerRealGM <- urlPlayerRealGM[urlPlayerRealGM %>% str_detect("player")]
+
+    urlPlayerRealGM <- urlPlayerRealGM %>%
       paste0('http://basketball.realgm.com', .)
 
     nameTeam <-
@@ -563,12 +573,15 @@ players_agents <-
       html_text() %>%
       str_trim()
 
+    nameTeam <- nameTeam[13:length(nameTeam)]
 
     slugPosition <-
       page %>%
       html_nodes('td:nth-child(3)') %>%
       html_text() %>%
       str_trim()
+
+    slugPosition <- slugPosition[13:length(slugPosition)]
 
     heightPlayer <-
       page %>%
@@ -628,12 +641,16 @@ players_agents <-
     }
     player.agents <-
       all_agents$nameAgent
+
     player_df <-
       .get_player_resolution_df()
+
     team_df <-
       .get_leagues_teams_df()
+
     contract_status_df <-
       .dictionary_contract_status()
+
     players_agents_df <-
       tibble(
         namePlayer = player,

@@ -1,6 +1,146 @@
 # gdeltr2::load_needed_packages(c("dplyr", "curl", "tidyr", "rvest", "tidyr", "stringr", "readr", "purrr", "glue"))
 
 
+.resolve_bref_players <-
+  function(data) {
+    data <-
+      data %>%
+      mutate(
+        namePlayer = case_when(
+          slugPlayerBREF == "johnsbj01" ~ "BJ Johnson",
+          slugPlayerBREF == "bowenbr02" ~ "Brian Bowen II",
+          slugPlayerBREF == "brownch02" ~ "Charles Brown Jr.",
+          slugPlayerBREF == "houseda01" ~ "Danuel House Jr.",
+          slugPlayerBREF == "smithde03" ~ "Dennis Smith Jr.",
+          slugPlayerBREF == "gilesha01" ~ "Harry Giles III",
+          slugPlayerBREF == "poeltja01" ~ "Jakob Poeltl",
+          slugPlayerBREF == "jacksja02" ~ "Jaren Jackson Jr.",
+          slugPlayerBREF == "knoxke01" ~ "Kevin Knox II",
+          slugPlayerBREF == "porteke02" ~ "Kevin Porter Jr.",
+          slugPlayerBREF == "walkelo01" ~ "Lonnie Walker IV",
+          slugPlayerBREF == "morrima03" ~ "Marcus Morris Sr.",
+          slugPlayerBREF == "baglema01" ~ "Marvin Bagley III",
+          slugPlayerBREF == "frazime01" ~ "Melvin Frazier Jr.",
+          slugPlayerBREF == "portemi01" ~ "Michael Porter Jr.",
+          slugPlayerBREF == "washipj01" ~ "P.J. Washington",
+          slugPlayerBREF == "williro04" ~ "Robert Williams III",
+          slugPlayerBREF == "mykhasv01" ~ "Svi Mykhailiuk",
+          slugPlayerBREF == "browntr01" ~ "Troy Brown Jr.",
+          slugPlayerBREF == "cartewe01" ~ "Wendell Carter Jr.",
+          slugPlayerBREF == "ennisja01" ~ "James Ennis III",
+          slugPlayerBREF == "hernaju01" ~ "Juancho Hernangomez",
+          slugPlayerBREF == "iwundwe01" ~ "Wes Iwundu",
+          slugPlayerBREF == "jonesde02" ~ "Derrick Jones Jr.",
+          slugPlayerBREF == "leaftj01" ~ "TJ Leaf",
+          slugPlayerBREF == "milescj01" ~ "CJ Miles",
+          slugPlayerBREF == "norveza01" ~ "Zach Norvell Jr.",
+          slugPlayerBREF == "porteot01" ~ "Otto Porter Jr.",
+          slugPlayerBREF == "redicjj01" ~ "JJ Redick",
+          slugPlayerBREF == "princta02" ~ "Taurean Prince",
+          slugPlayerBREF == "waltode01" ~ "Derrick Walton Jr.",
+          slugPlayerBREF == "oubreke01"  ~ "Kelly Oubre Jr.",
+          slugPlayerBREF == "baldwwa01" ~ "Wade Baldwin IV",
+          slugPlayerBREF == "creekmi01" ~ "Mitchell Creek",
+          slugPlayerBREF == "hilarne01" ~ "Nene",
+          slugPlayerBREF == "hunterj01" ~ "RJ Hunter",
+          slugPlayerBREF == "lemonwa01" ~ "Walt Lemon Jr.",
+          slugPlayerBREF == "smithjr01" ~ "JR Smith",
+          slugPlayerBREF == "stephdj01" ~ "DJ Stephens",
+          slugPlayerBREF == "edwarvi01" ~ "Vincent Edwards",
+          slugPlayerBREF == "architi01" ~ "Nate Archibald",
+          slugPlayerBREF ==  "batesbi01" ~ "Billyray Bates",
+          slugPlayerBREF == "freewo01" ~ "World Free",
+          slugPlayerBREF == "greenda01" ~ "David Greenwood",
+          slugPlayerBREF == "hamilro01" ~ "Roylee Hamilton",
+          slugPlayerBREF == "hassejo01" ~ "Joey Hassett",
+          slugPlayerBREF == "heardga01" ~ "Garfield Heard",
+          slugPlayerBREF == "johnsch02" ~ "Lynbert Johnson",
+          slugPlayerBREF == "robincl01" ~ "Cliff T. Robinson",
+          slugPlayerBREF == "smithsa02" ~ "Sammy Smith",
+          slugPlayerBREF == "vanbrja01" ~ "Jan Van Breda Kolff",
+          slugPlayerBREF == "whitejo01" ~ "Jojo White",
+          slugPlayerBREF == "willidu01" ~ "Don Williams",
+          slugPlayerBREF == "wilsobu01" ~ "Thomas Wilson",
+          slugPlayerBREF == "brittda01" ~ "David Britton",
+          slugPlayerBREF == "crompge01" ~ "Jeffrey Crompton",
+          slugPlayerBREF == "lawreed01" ~ "Ed Lawrence",
+          slugPlayerBREF == "rayja01" ~ "Jim Ray",
+          slugPlayerBREF == "scalede01" ~ "Dewayne Scales",
+          slugPlayerBREF == "valenro01" ~ "Ron Valentine",
+          slugPlayerBREF == "whitnha02" ~ "Charles Whitney",
+          slugPlayerBREF == "davisch02" ~ "Charlie Davis",
+          slugPlayerBREF == "schayda01" ~ "Dan Schayes",
+          slugPlayerBREF == "verhope01" ~ "Peter Verhoeven",
+          slugPlayerBREF == "anderjj01" ~ "Mitchell Anderson",
+          slugPlayerBREF == "coxch01" ~ "John Cox",
+          slugPlayerBREF == "joneshu01" ~ "Willie Jones",
+          slugPlayerBREF == "leverfa01" ~ "Lafayette Lever",
+          slugPlayerBREF == "pittmch01" ~ "Charlie Pittman",
+          slugPlayerBREF == "sheroed01" ~ "Edmund Sherod",
+          slugPlayerBREF == "wilsomi01" ~ "Mike Wilson",
+          slugPlayerBREF == "edelike01" ~ "Kent Edelin",
+          slugPlayerBREF == "holtomi01" ~ "Michael Holton",
+          slugPlayerBREF == "turpime01" ~ "Mel Turpin",
+          slugPlayerBREF == "wilkied01" ~ "Eddielee Wilkins",
+          slugPlayerBREF == "phelpmi01" ~ "Mike Phelps",
+          slugPlayerBREF == "martima01" ~ "Mo Martin",
+          slugPlayerBREF == "singlmc01" ~ "Mckinley Singleton",
+          slugPlayerBREF == "washipe01" ~ "Dwayne Washington",
+          slugPlayerBREF == "grandro01" ~ "Ronnie Grandison",
+          slugPlayerBREF == "lockro01" ~ "Robert Lock",
+          slugPlayerBREF == "rosero01" ~ "Robert Rose",
+          slugPlayerBREF == "austiis01" ~ "Ike Austin",
+          slugPlayerBREF == "bardost01" ~ "Stephen Bardo",
+          slugPlayerBREF == "smithla02" ~ "Labradford Smith",
+          slugPlayerBREF == "smithst01" ~ "Steven Smith",
+          slugPlayerBREF == "englijo01" ~ "Jojo English",
+          slugPlayerBREF == "weathcl01" ~ "Clar. Weatherspoon",
+          slugPlayerBREF == "radjadi01" ~ "Dino Radja",
+          slugPlayerBREF == "manniri01" ~ "Richard Manning",
+          slugPlayerBREF == "vandelo01" ~ "Log Vander Velden",
+          slugPlayerBREF == "llamaho01" ~ "Horacio Llamas",
+          slugPlayerBREF == "djordal01" ~ "Aleksandar Djordjevic",
+          slugPlayerBREF == "bakerla01" ~ "Mark Baker",
+          slugPlayerBREF == "ndiayma01" ~ "Makhtar N'diaye",
+          slugPlayerBREF == "medvest01" ~ "Slava Medvedenko",
+          slugPlayerBREF == "ndiayma02" ~ "Mamadou N'diaye",
+          slugPlayerBREF == "zhizhwa01" ~ "Wang Zhi-zhi	",
+          slugPlayerBREF == "fontais01" ~ "Ike Fontaine",
+          slugPlayerBREF == "richano01" ~ "Norman Richardson",
+          slugPlayerBREF == "masonro01" ~ "Roger Mason Jr.",
+          slugPlayerBREF == "murraro01" ~ "Flip Murray",
+          slugPlayerBREF == "rentzef01" ~ "Efthimios Rentzias",
+          slugPlayerBREF == "sweetmi01" ~ "Michael Sweetney",
+          slugPlayerBREF == "mbengdj01" ~ "DJ Mbenga",
+          slugPlayerBREF == "kutluib01" ~ "Ibrahim Kutluay",
+          slugPlayerBREF == "seungha01" ~ "Ha Ha",
+          slugPlayerBREF == "ndongbo01" ~ "Boniface Ndong",
+          slugPlayerBREF == "strawdj01" ~ "DJ Strawberry",
+          slugPlayerBREF == "hicksjj01" ~ "JJ Hickson",
+          slugPlayerBREF == "whitedj01" ~ "DJ White",
+          slugPlayerBREF == "yuesu01" ~ "Sun Sun",
+          slugPlayerBREF == "priceaj01" ~ "AJ Price",
+          slugPlayerBREF == "jetereu01" ~ "Pooh Jeter",
+          slugPlayerBREF == "ndiayha01" ~ "Hamady Ndiaye",
+          slugPlayerBREF == "jonespe01" ~ "Perry Jones III",
+          slugPlayerBREF == "datomlu01" ~ "Gigi Datome",
+          slugPlayerBREF == "hairspj02" ~ "PJ Hairston",
+          slugPlayerBREF == "mcdankj01" ~ "KJ McDaniels",
+          slugPlayerBREF == "obryajo01" ~ "Johnny O'Bryant III",
+          slugPlayerBREF == "obriejj01" ~ "JJ O'Brien",
+          slugPlayerBREF == "hammoaj01" ~ "AJ Hammons",
+          slugPlayerBREF == "huntevi01" ~ "Vincent Hunter",
+          slugPlayerBREF == "webbja01" ~ "James Webb III",
+          slugPlayerBREF == "whitean01" ~ "Andrew White III",
+          slugPlayerBREF == "willima05" ~ "Matt Williams Jr.",
+          TRUE ~ namePlayer
+        )
+      )
+
+    data
+  }
+
+
 # csv ---------------------------------------------------------------------
 
 .munge_seasons <-
@@ -1076,7 +1216,8 @@ all_nba_teams <-
       df_people %>%
       select(namePlayer, slugPlayerBREF, urlPlayerBREF) %>%
       distinct() %>%
-      filter(!slugPlayerBREF %>% is.na())
+      filter(!slugPlayerBREF %>% is.na()) %>%
+      .resolve_bref_players()
 
     df <-
       df %>%
@@ -1150,153 +1291,157 @@ all_nba_teams <-
 
 .parse_player_season <-
   memoise::memoise(
-    function(url = "http://www.basketball-reference.com/leagues/NBA_2019_advanced.html",
+    function(url = "http://www.basketball-reference.com/leagues/NBA_2020_advanced.html",
            return_message = TRUE) {
     ## case_when
 
-    page <-
-      url %>%
-      read_html()
+      page <-
+        url %>%
+        read_html()
 
-    url_df <- url %>% httr::parse_url() %>% flatten_df()
+      url_df <- url %>% httr::parse_url() %>% flatten_df()
 
-    url_path <-
-      url_df$path %>% str_replace_all(".html|leagues/NBA_", '')
+      url_path <-
+        url_df$path %>% str_replace_all(".html|leagues/NBA_", '')
 
-    year_season_end <-
-      url_path %>% str_split('\\_') %>% flatten_chr() %>% .[[1]] %>% as.character() %>% readr::parse_number()
+      year_season_end <-
+        url_path %>% str_split('\\_') %>% flatten_chr() %>% .[[1]] %>% as.character() %>% readr::parse_number()
 
-    name_slug <-
-      url_path %>%
-      map_chr(function(x) {
-        parts <-
-          x %>% str_split('\\_') %>% flatten_chr()
+      name_slug <-
+        url_path %>%
+        map_chr(function(x) {
+          parts <-
+            x %>% str_split('\\_') %>% flatten_chr()
 
-        parts[2:length(parts)] %>% str_to_title() %>% str_c(collapse = '')
-      })
+          parts[2:length(parts)] %>% str_to_title() %>% str_c(collapse = '')
+        })
 
-    id_season <-
-      list(year_season_end - 1, '-', year_season_end %>% str_sub(3, 4)) %>%
-      purrr::reduce(paste0)
+      id_season <-
+        list(year_season_end - 1, '-', year_season_end %>% str_sub(3, 4)) %>%
+        purrr::reduce(paste0)
 
-    players <-
-      page %>%
-      html_nodes('th+ .left a') %>%
-      html_text()
+      players <-
+        page %>%
+        html_nodes('th+ .left a') %>%
+        html_text()
 
-    player_id <-
-      page %>%
-      html_nodes('th+ .left a') %>%
-      html_attr('href') %>%
-      str_replace_all('/players/', '')
+      player_id <-
+        page %>%
+        html_nodes('th+ .left a') %>%
+        html_attr('href') %>%
+        str_replace_all('/players/', '')
 
-    player_ids <-
-      player_id %>%
-      map_chr(function(x) {
-        x %>%
-          str_replace_all('.html', '') %>%
-          str_split('/') %>%
-          flatten_chr() %>%
-          .[[2]]
-      })
+      player_ids <-
+        player_id %>%
+        map_chr(function(x) {
+          x %>%
+            str_replace_all('.html', '') %>%
+            str_split('/') %>%
+            flatten_chr() %>%
+            .[[2]]
+        })
 
-    df_players <-
-      tibble(slugPlayerBREF = player_ids, namePlayer = players) %>%
-      distinct() %>%
-      mutate(numberPlayer = 1:n()) %>%
-      select(numberPlayer, everything())
+      df_players <-
+        tibble(slugPlayerBREF = player_ids, namePlayer = players) %>%
+        distinct() %>%
+        mutate(numberPlayer = 1:n()) %>%
+        select(numberPlayer, everything())
 
-    df <-
-      page %>%
-      html_table() %>%
-      .[[1]] %>%
-      data.frame(stringsAsFactors = FALSE) %>%
-      tbl_df() %>%
-      dplyr::select(-dplyr::matches("Var"))
+      df <-
+        page %>%
+        html_table() %>%
+        .[[1]] %>%
+        data.frame(stringsAsFactors = FALSE) %>%
+        tbl_df() %>%
+        dplyr::select(-dplyr::matches("Var"))
 
-    df <-
-      df %>%
-      mutate_at(df %>% dplyr::select(-one_of(c(
-        "Tm", "Player", "Pos"
-      ))) %>% names(),
-      funs(. %>% as.numeric())) %>%
-      filter(!Rk %>% is.na()) %>%
-      suppressWarnings()
+      df <-
+        df %>%
+        mutate_at(df %>% dplyr::select(-one_of(c(
+          "Tm", "Player", "Pos"
+        ))) %>% names(),
+        funs(. %>% as.numeric())) %>%
+        filter(!Rk %>% is.na()) %>%
+        suppressWarnings()
 
-    df_names <-
-      get_bref_name_df()
+      df_names <-
+        get_bref_name_df()
 
-    bref_names <-
-      names(df)
+      bref_names <-
+        names(df)
 
-    actual_names <-
-      seq_along(bref_names) %>%
-      map_chr(function(x) {
-        actual <-
-          df_names %>%
-          filter(nameBREF == bref_names[x]) %>%
-          .$nameActual
+      actual_names <-
+        seq_along(bref_names) %>%
+        map_chr(function(x) {
+          actual <-
+            df_names %>%
+            filter(nameBREF == bref_names[x]) %>%
+            .$nameActual
 
-        if (actual == 'MinutesPlayed') {
-          if (!name_slug == 'pergame') {
+          if (actual == 'MinutesPlayed') {
+            if (!name_slug == 'pergame') {
+              actual <-
+                str_c('total', actual)
+            } else {
+              actual <-
+                str_c('pergame', actual)
+            }
+            return(actual)
+          }
+
+          if (actual %>% substr(1, 1) %in% LETTERS) {
             actual <-
-              str_c('total', actual)
-          } else {
-            actual <-
-              str_c('pergame', actual)
+              str_c(name_slug, actual)
           }
           return(actual)
-        }
-
-        if (actual %>% substr(1, 1) %in% LETTERS) {
-          actual <-
-            str_c(name_slug, actual)
-        }
-        return(actual)
-      })
+        })
 
 
-    df <-
-      df %>%
-      purrr::set_names(actual_names) %>%
-      mutate(
-        isHOFPlayer = namePlayer %>% str_detect('\\*'),
-        namePlayer = namePlayer %>% str_replace_all('\\*', '')
-      )
+      df <-
+        df %>%
+        purrr::set_names(actual_names) %>%
+        mutate(
+          isHOFPlayer = namePlayer %>% str_detect('\\*'),
+          namePlayer = namePlayer %>% str_replace_all('\\*', '')
+        )
 
-    df <-
-      df %>%
-      left_join(df_players, by = c("numberPlayer", "namePlayer")) %>%
-      distinct() %>%
-      suppressMessages() %>%
-      mutate(slugSeason = id_season,
-             yearSeason = year_season_end,
-             urlData = url) %>%
-      dplyr::select(slugSeason, yearSeason,
-                    slugPlayerBREF, everything())
+      df <-
+        df %>%
+        left_join(df_players, by = c("numberPlayer", "namePlayer")) %>%
+        distinct() %>%
+        suppressMessages() %>%
+        mutate(slugSeason = id_season,
+               yearSeason = year_season_end,
+               urlData = url) %>%
+        dplyr::select(slugSeason, yearSeason,
+                      slugPlayerBREF, everything())
 
-    df <-
-      df %>%
-      mutate_at(df %>% dplyr::select(dplyr::matches("pct")) %>% names(),
-                funs(ifelse(. >= 1, . / 100, .))) %>%
-      mutate(typeData = name_slug) %>%
-      dplyr::select(typeData, everything()) %>%
-      mutate(namePlayer = namePlayer %>% stringi::stri_trans_general("Latin-ASCII"))
+      df <-
+        df %>%
+        mutate_at(df %>% dplyr::select(dplyr::matches("pct")) %>% names(),
+                  funs(ifelse(. >= 1, . / 100, .))) %>%
+        mutate(typeData = name_slug) %>%
+        dplyr::select(typeData, everything()) %>%
+        mutate(namePlayer = namePlayer %>% stringi::stri_trans_general("Latin-ASCII"))
 
-    if (return_message) {
-      list("parsed ", url) %>%
-        purrr::reduce(paste0) %>%
-        cat(fill = T)
-    }
-    df <- df %>%
-      select(-one_of("numberPlayer"))
+      df <-
+        df %>%
+        .resolve_bref_players()
 
-    df <- df %>%
-      mutate_if(is.numeric, list(function(x){
-        ifelse(is.na(x), 0, x)
-      }))
-    gc()
-    df
+      if (return_message) {
+        list("parsed ", url) %>%
+          purrr::reduce(paste0) %>%
+          cat(fill = T)
+      }
+      df <- df %>%
+        select(-one_of("numberPlayer"))
+
+      df <- df %>%
+        mutate_if(is.numeric, list(function(x) {
+          ifelse(is.na(x), 0, x)
+        }))
+      gc()
+      df
   }
     )
 
@@ -2308,7 +2453,8 @@ all_star_games <-
       left_join(voting_df) %>%
       arrange(desc(yearSeason)) %>%
       suppressMessages() %>%
-      suppressWarnings()
+      suppressWarnings() %>%
+      .resolve_bref_players()
 
 
     if (!include_aba) {
@@ -2374,7 +2520,8 @@ bref_injuries <-
       separate(statusTypeInjury, into = c("statusGame", "typeInjury"), sep = "\\(") %>%
       mutate(typeInjury = typeInjury %>% str_remove_all("\\)")) %>%
       mutate_if(is.character, funs(. %>% str_trim())) %>%
-      mutate(isOut = statusGame %>% str_to_lower() %>% str_detect("out"))
+      mutate(isOut = statusGame %>% str_to_lower() %>% str_detect("out")) %>%
+      .resolve_bref_players()
 
     data
   }
@@ -2683,7 +2830,8 @@ bref_awards <-
       })
 
     all_data <-
-      .parse_bref_award_urls(url = df_urls$urlBREF)
+      .parse_bref_award_urls(url = df_urls$urlBREF) %>%
+      .resolve_bref_players()
 
     all_data %>%
       arrange(slugSeason)
@@ -2884,13 +3032,18 @@ bref_awards_votes <-
     all_data <-
       .parse_bref_vote_urls(urls = df_urls$urlBREF, return_message = return_message)
 
+
+
     all_data <-
       all_data %>%
       arrange(yearSeason)
 
     all_data <-
       all_data %>%
-      unnest() %>%
+      unnest()
+
+    all_data <- all_data %>%
+      .resolve_bref_players() %>%
       nest(-c(slugTable), .key = 'dataTable')
 
     if (assign_to_environment) {
