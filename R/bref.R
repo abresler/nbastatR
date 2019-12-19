@@ -829,9 +829,113 @@ widen_bref_data <-
             mutate(yearSeason = yearSeason - 1)
         }
 
+        dict_nba_players <- nba_players()
+
+        data_players <-
+          df_table %>%
+          dplyr::select(one_of(c(
+            "namePlayer", "slugPlayerBREF"
+          ))) %>%
+          distinct()
+
+        data_players <-
+          data_players %>%
+          .resolve_bref_players()
+
+        data_players <-
+          data_players %>%
+          left_join(dict_nba_players %>%
+                      dplyr::select(namePlayer,
+                                    idPlayerNBA = idPlayer,),
+                    by = "namePlayer")
+
+        data_players <- data_players %>%
+          mutate(idPlayerNBA = case_when(
+            slugPlayerBREF == "johnsge01" ~ 77147L,
+            slugPlayerBREF == "johnsge02" ~ 77149L,
+            slugPlayerBREF == "johnsge03" ~ 77148L,
+            slugPlayerBREF == "smithch01" ~ 293L,
+            slugPlayerBREF == "smithch02" ~ 78179L,
+            slugPlayerBREF == "smithch04" ~ 1520L,
+            slugPlayerBREF == "brownde01" ~ 244L,
+            slugPlayerBREF == "brownde03" ~ 200793L,
+            slugPlayerBREF == "davisch01" ~ 76519L,
+            slugPlayerBREF == "davisch02" ~ 76518L,
+            slugPlayerBREF == "davisma01" ~ 76528L,
+            slugPlayerBREF == "davisma02" ~ 707L,
+            slugPlayerBREF == "duffybo02" ~ 76610L,
+            slugPlayerBREF == "dunlemi01" ~ 76616L,
+            slugPlayerBREF == "dunlemi02" ~ 2399L,
+            slugPlayerBREF == "ewingpa01" ~ 121L,
+            slugPlayerBREF == "ewingpa02" ~ 201607L,
+            slugPlayerBREF == "guokama02" ~ 76908L,
+            slugPlayerBREF == "hendece01" ~ 76990L,
+            slugPlayerBREF == "hendece02" ~ 1538L,
+            slugPlayerBREF == "hendege01" ~ 76993L,
+            slugPlayerBREF == "hendege02" ~ 201945L,
+            slugPlayerBREF == "jamesmi01" ~ 2229L,
+            slugPlayerBREF == "jamesmi02" ~ 1628455L,
+            slugPlayerBREF == "johnsch03" ~ 202419L,
+            slugPlayerBREF == "johnsch04" ~ 203187L,
+            slugPlayerBREF == "johnsed02" ~ 77144L,
+            slugPlayerBREF == "johnsed03" ~ 698L,
+            slugPlayerBREF == "johnske01" ~ 77154L,
+            slugPlayerBREF == "johnske03" ~ 2256L,
+            slugPlayerBREF == "johnsla01" ~ 77156L,
+            slugPlayerBREF == "johnsla02" ~ 913L,
+            slugPlayerBREF == "jonesbo01" ~ 77193L,
+            slugPlayerBREF == "jonesbo02" ~ 200784L,
+            slugPlayerBREF == "jonesch01" ~ 279L,
+            slugPlayerBREF ==  "jonesch02" ~ 77178L,
+            slugPlayerBREF == "jonesch03" ~ 1869L,
+            slugPlayerBREF == "joneshu01" ~ 77203L,
+            slugPlayerBREF == "jonesma02" ~ 90000L,
+            slugPlayerBREF == "jonesma03" ~ 2891L,
+            slugPlayerBREF == "joneswi01" ~ 77202L,
+            slugPlayerBREF == "kingge03" ~ 1628994L,
+            slugPlayerBREF == "mitchto02" ~ 203183L,
+            slugPlayerBREF == "mitchto03" ~ 203502L,
+            slugPlayerBREF == "paxsoji02" ~ 77819L,
+            slugPlayerBREF == "russewa01" ~ 78048L,
+            slugPlayerBREF == "russewa02" ~ 201041L,
+            slugPlayerBREF == "smithbi01" ~ 78209L,
+            slugPlayerBREF == "smithch03" ~ 1814L,
+            slugPlayerBREF == "smithch05" ~ 203147L,
+            slugPlayerBREF == "smithgr01" ~ 78190L,
+            slugPlayerBREF == "smithgr02" ~ 202962L,
+            slugPlayerBREF == "smithmi01" ~ 78197L,
+            slugPlayerBREF == "smithmi02" ~ 63L,
+            slugPlayerBREF == "smithst01" ~ 120L,
+            slugPlayerBREF == "smithst03" ~ 200848L,
+            slugPlayerBREF == "smithwi01" ~ 78209L,
+            slugPlayerBREF == "turneja02" ~ 78382L,
+            slugPlayerBREF == "willima03" ~ 200766L,
+            slugPlayerBREF == "willima04" ~ 201173L,
+            slugPlayerBREF == "willire01" ~ 199L,
+            slugPlayerBREF == "willire02" ~ 202130L,
+            slugPlayerBREF == "wrighch01" ~ 202874L,
+            slugPlayerBREF == "wrighch02" ~ 203203L,
+            TRUE ~ idPlayerNBA
+          ))
+
+        data_players <- data_players %>%
+          left_join(
+            dict_nba_players %>%
+              select(idPlayerNBA = idPlayer,
+                     urlPlayerThumbnail,
+                     urlPlayerHeadshot,
+                     urlPlayerPhoto,
+                     urlPlayerStats,
+                     urlPlayerActionPhoto),
+             by = "idPlayerNBA"
+          )
+
         df_table <-
           df_table %>%
-          .resolve.players(site = "bref")
+          select(-namePlayer) %>%
+          left_join(data_players, by = "slugPlayerBREF") %>%
+          select(one_of(names(df_table)), everything())
+
 
         if (!table == "Advanced") {
           df_table <-
