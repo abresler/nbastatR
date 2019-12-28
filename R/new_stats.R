@@ -18305,7 +18305,7 @@ parse_for_seasons_data <-
 
     df_teams <-
       seq_along(json_teams) %>%
-      future_map_dfr(function(x) {
+      map_dfr(function(x) {
         values <-
           json_teams[[x]] %>%
           purrr::map_chr(function(z) {
