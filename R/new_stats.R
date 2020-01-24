@@ -18492,60 +18492,51 @@ nba_stats_api_items <-
 #' nba_players()
 nba_players <-
   memoise::memoise(function() {
-    season_slug <-
-      .get_current_season()
+    data <-
+      "https://stats.nba.com/js/data/ptsd/stats_ptsd.js" %>%
+      read_lines()
 
-    url <-
-      glue::glue(
-        "https://stats.nba.com/stats/commonallplayers?IsOnlyCurrentSeason=0&LeagueID=00&Season={season_slug}"
-      ) %>% as.character()
-
-    json <- .curl_chinazi(url = url)
-
-    names_nba <-
-      json$resultSets$headers %>%
-      flatten_chr()
+    json_data <-
+      data %>% substr(18,nchar(data)-1) %>% fromJSON(simplifyDataFrame = T)
+    json_data$data$players
 
     data <-
-      json$resultSets$rowSet[[1]] %>%
-      data.frame(stringsAsFactors = F) %>%
-      as_tibble()
-
-
-    df_names <-
-      dictionary_nba_names()
-
-    actual_names <-
-      names_nba %>%
-      map_chr(function(x) {
-        df_names %>% filter(nameNBA == x) %>% pull(nameActual)
-      })
+      json_data$data$players %>% as_tibble() %>%
+      setNames(c("idPlayer", "player", "isActive", "yearSeasonFirst", "yearSeasonLast", "idTeam", "hasGamesPlayedFlag"))
 
     df_players <-
       data %>%
-      purrr::set_names(actual_names) %>%
       mutate_at(
         c(
           "idPlayer",
-          "idTeam",
           "isActive",
-          "yearSeasonLast",
           "yearSeasonFirst",
-          "idLeagueOtherExperience"
-
+          "yearSeasonLast",
+          "idTeam"
         ),
-        list(function(x) {
-          as.integer(x)
-        })
+        as.numeric
       ) %>%
-      mutate_if(is.character,
-                list(function(x) {
-                  ifelse(x == "", NA, x)
-                })) %>%
       mutate(
+        hasGamesPlayedFlag = hasGamesPlayedFlag == "Y",
         isActive = as.logical(isActive),
-        countSeasons = (yearSeasonLast - yearSeasonFirst)
-      )
+        idTeam = case_when(idTeam == 0 ~ NA_real_,
+                           TRUE ~ idTeam)
+      ) %>%
+      separate(
+        player,
+        into = c("nameLast", "nameFirst"),
+        sep = "\\, ",
+        extra = "merge",
+        fill = "right"
+      ) %>%
+      mutate(namePlayer = case_when(
+        is.na(nameFirst) ~ nameLast,
+        TRUE ~ str_c(nameFirst, nameLast, sep = " ")
+      )) %>%
+      select(idPlayer, namePlayer, everything()) %>%
+      select(-c(nameFirst, nameLast)) %>%
+      mutate(countSeasons = (yearSeasonLast - yearSeasonFirst))
+
 
     most_recent <-
       df_players %>% pull(yearSeasonFirst) %>% max(na.rm = T)
@@ -18574,21 +18565,7 @@ nba_players <-
         )
       )
 
-    df_players <-
-      df_players %>%
-      mutate(NP = namePlayerLastFirst %>% sub("\\,", "\\:", .)) %>%
-      tidyr::separate(NP,
-                      into = c("namePlayerLast", "namePlayerFirst"),
-                      fill = "right",
-                      extra = "merge",
-                      sep = "\\:") %>%
-      mutate(namePlayer = ifelse(
-        namePlayerFirst %>% is.na(),
-        namePlayerLast,
-        str_c(namePlayerFirst, namePlayerLast, sep = " ")
-      ) %>% str_trim()) %>%
-      dplyr::select(idPlayer, namePlayer, everything()) %>%
-      suppressWarnings()
+
 
     df_players <-
       df_players %>%
@@ -18605,10 +18582,6 @@ nba_players <-
       mutate(namePlayer = case_when(idPlayer == 203318 ~ "Glen Rice Jr.",
                                     TRUE ~ namePlayer))
 
-    df_players <-
-      df_players %>%
-      mutate(nameTeam = ifelse(idTeam %>% is.na(), NA, str_c(cityTeam, teamName, sep =  " "))) %>%
-      select(idPlayer, nameTeam, everything())
 
     dict_photos <- dictionary_player_photos()
 
@@ -18634,6 +18607,7 @@ nba_players <-
              idPlayer,
              countSeasons,
              everything())
+
   })
 
 # games -------------------------------------------------------------------
