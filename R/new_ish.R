@@ -22,14 +22,9 @@ get_nba_team_dict <-
                      "Dallas Mavericks", "Cleveland Cavaliers", "Chicago Bulls", "Charlotte Hornets",
                      "Brooklyn Nets", "Boston Celtics", "Atlanta Hawks")) {
 
-    if (!'df_nba_team_dict' %>% exists()) {
-      df_nba_team_dict <- nba_teams()
-
-      assign('df_nba_team_dict', df_nba_team_dict, envir = .GlobalEnv)
-    }
     team_slugs <- teams %>% str_c(collapse = "|")
 
-    df_nba_team_dict %>%
+    nba_teams() %>%
       filter(nameTeam %>% str_detect(team_slugs)) %>%
       pull(idTeam)
   }
@@ -394,14 +389,8 @@ nba_teams_ids <-
         append(team_ids)
     }
 
-    if (!'df_nba_team_dict' %>% exists()) {
-      df_nba_team_dict <- nba_teams()
-
-      assign('df_nba_team_dict', df_nba_team_dict, envir = .GlobalEnv)
-    }
-
     if (all_active_teams) {
-      ids <- df_dict_nba_teams %>% filter(isNonNBATeam == 0) %>% pull(idTeam) %>% unique() %>% sort()
+      ids <- nba_teams() %>% filter(isNonNBATeam == 0) %>% pull(idTeam) %>% unique() %>% sort()
       return(ids)
     }
 
@@ -410,7 +399,7 @@ nba_teams_ids <-
         teams %>% str_c(collapse = "|")
 
       search_ids <-
-        df_nba_team_dict %>%
+        nba_teams() %>%
         filter(!teamName %>% is.na()) %>%
         filter(nameTeam %>% str_detect(teams_search)) %>%
         pull(idTeam) %>%
