@@ -1,7 +1,7 @@
 Package: nbastatR
 Type: Package
 Title: R's interface to NBA data
-Version: 0.1.1502
+Version: 0.1.1503
 Authors@R: c(person("Alex", "Bresler", email = "abresler@asbcllc.com", role = c("aut", "cre")))
 Description: NBA data tools for R
 License: MIT + file LICENSE
@@ -21,7 +21,10 @@ Imports:
     memoise,
     readr,
     furrr,
-    future
+    future,
+    glue,
+    stringi,
+    rvest
 RoxygenNote: 7.0.2
 URL: https://github.com/abresler/nbastatR
 BugReports: https://github.com/abresler/nbastatR/issues
