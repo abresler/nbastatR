@@ -214,9 +214,9 @@
 
           if (node_text_single %>% str_detect("High School:")) {
             parts <-
-              node_text %>% str_split("\\in[A-Z]") %>% flatten_chr()
+              node_text %>% str_split("in [A-Z]") %>% flatten_chr()
             start <-
-              node_text %>% str_locate('\\in[A-Z]') %>% max()
+              node_text %>% str_locate('in [A-Z]') %>% max()
 
             parts[[2]] <-
               str_c(node_text %>% substr(start, start), parts[[2]], collapse = "")
