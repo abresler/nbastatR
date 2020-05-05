@@ -244,7 +244,7 @@
           }
 
           is_height_weight <-
-            (node_text_single %>% str_detect("\\-|\\lb")) %>% sum(na.rm = T) > 0
+            (node_text_single %>% str_detect("[0-9]lb")) %>% sum(na.rm = T) > 0
 
           if (is_height_weight) {
             hw <- node_text %>% str_split("\\(") %>% flatten_chr() %>% str_trim() %>% .[[1]]
