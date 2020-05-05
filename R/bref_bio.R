@@ -233,6 +233,16 @@
             return(data)
           }
 
+          is_position <- node_text_single %>% str_detect("^Position:")
+
+          if (is_position) {
+            matches <- node_text_single %>% str_match("^Position:(.*)\\\u25AA")
+            position <- matches %>% last() %>% str_replace_all(c(" and" = ",")) %>% str_trim()
+
+            data <- tibble(item = "Position", value = position)
+            return(data)
+          }
+
           is_height_weight <-
             (node_text_single %>% str_detect("\\-|\\lb")) %>% sum(na.rm = T) > 0
 
