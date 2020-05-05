@@ -168,9 +168,9 @@
             node_text_single %>% str_detect("Pronunciation")
 
           if (isPron) {
-            parts <- node_text %>% str_split("\\:") %>% flatten_chr() %>% str_trim()
+            parts <- node_text_single %>% str_split("\\:") %>% flatten_chr() %>% str_trim()
 
-            data <- tibble(item = "Pronunciation", value = parts[length(parts)] )
+            data <- tibble(item = "Pronunciation", value = parts %>% last() )
             return(data)
           }
 
@@ -269,7 +269,7 @@
 
           if (is_nicknames) {
 
-            value <- node_text %>% str_replace_all("\\(|\\)", "")
+            value <- node_text_single %>% str_replace_all("\\(|\\)", "")
             data <-
               tibble(item = "playerNicknames", value)
 
