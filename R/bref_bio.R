@@ -472,7 +472,8 @@
   .parse.salary.safe <-
     purrr::possibly(.parse.salary, tibble())
   dataPlayerBio =
-    .parse.bio.safe(page = page)
+    .parse.bio.safe(page = page) %>%
+    tidyr::unnest()
   dataPlayerTransactions =
     .parse.transactions.safe(page = page)
   dataPlayerContracts =
