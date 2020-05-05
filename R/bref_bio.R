@@ -134,7 +134,7 @@
   function(page) {
     bio <-
       page %>%
-      html_nodes(".media-item+ div p")
+      html_nodes("#meta > div[itemscope] > p")
 
     if (bio %>% length() == 0) {
       return(invisible())
