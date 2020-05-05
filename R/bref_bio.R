@@ -312,7 +312,7 @@
       all_data %>%
       mutate(nameActual = actual_names) %>%
       select(nameActual, value) %>%
-      tidyr::spread(nameActual, value) %>%
+      tidyr::pivot_wider(names_from = nameActual, values_from = value) %>%
       dplyr::select(one_of(actual_names))
 
     if (all_data %>% tibble::has_name("heightInches")) {
