@@ -1,7 +1,8 @@
-pandoc: '2.6'
-pkgdown: 1.3.0.9000
-pkgdown_sha: 7e788c41d20ab28d4bf97556e18382391d359c9f
-articles: []
+pandoc: 2.11.1.1
+pkgdown: 1.6.1
+pkgdown_sha: ~
+articles: {}
+last_built: 2020-11-16T14:39Z
 urls:
   reference: https://asbcllc.com/nbastatR//reference
   article: https://asbcllc.com/nbastatR//articles

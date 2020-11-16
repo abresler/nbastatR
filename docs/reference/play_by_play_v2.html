@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>NBA teams seasons — nba_teams_seasons • nbastatR</title>
+<title>NBA games play-by-play v2 — play_by_play_v2 • nbastatR</title>
 
 
 <!-- jquery -->
@@ -39,8 +39,8 @@
 
 
 
-<meta property="og:title" content="NBA teams seasons — nba_teams_seasons" />
-<meta property="og:description" content="NBA teams seasons" />
+<meta property="og:title" content="NBA games play-by-play v2 — play_by_play_v2" />
+<meta property="og:description" content="Returns play-by-play information using the playbyplayv2 endpoint" />
 
 
 
@@ -123,24 +123,40 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>NBA teams seasons</h1>
-    <small class="dont-index">Source: <a href='https://github.com/abresler/nbastatR/blob/master/R/new_stats.R'><code>R/new_stats.R</code></a></small>
-    <div class="hidden name"><code>nba_teams_seasons.Rd</code></div>
+    <h1>NBA games play-by-play v2</h1>
+    <small class="dont-index">Source: <a href='https://github.com/abresler/nbastatR/blob/master/R/play_by_play.R'><code>R/play_by_play.R</code></a></small>
+    <div class="hidden name"><code>play_by_play_v2.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>NBA teams seasons</p>
+    <p>Returns play-by-play information using the playbyplayv2 endpoint</p>
     </div>
 
-    <pre class="usage"><span class='fu'>nba_teams_seasons</span><span class='op'>(</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>play_by_play_v2</span><span class='op'>(</span>game_ids <span class='op'>=</span> <span class='cn'>NULL</span>, nest_data <span class='op'>=</span> <span class='cn'>FALSE</span>, return_message <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span></pre>
 
+    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
+    <table class="ref-arguments">
+    <colgroup><col class="name" /><col class="desc" /></colgroup>
+    <tr>
+      <th>game_ids</th>
+      <td><p>vector of game ids</p></td>
+    </tr>
+    <tr>
+      <th>nest_data</th>
+      <td><p>if <code>TRUE</code> nests data</p></td>
+    </tr>
+    <tr>
+      <th>return_message</th>
+      <td><p>if <code>T</code> returns message</p></td>
+    </tr>
+    </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>a <code><a href='https://tibble.tidyverse.org/reference/tibble.html'>tibble()</a></code></p>
+    <p>a <code>tibble</code></p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><span class='fu'>nba_teams_seasons</span><span class='op'>(</span><span class='op'>)</span>
+    <pre class="examples"><span class='fu'><a href='play_by_play.html'>play_by_play</a></span><span class='op'>(</span>game_ids <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>21700002</span>, <span class='fl'>21700003</span><span class='op'>)</span>, nest_data <span class='op'>=</span> <span class='cn'>F</span>, return_message <span class='op'>=</span> <span class='cn'>T</span><span class='op'>)</span>
 </pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
