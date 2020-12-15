@@ -2146,6 +2146,10 @@ bref_players_stats <-
 
         is_awards <- table_id == "all_awards"
 
+        if (table_name == "League Awards Table") {
+          return(invisible())
+        }
+
         if (is_ap) {
           return(invisible())
         }
@@ -2356,8 +2360,8 @@ bref_players_stats <-
           dataTable = list(table_data)
         )
       }) %>%
-      suppressWarnings() %>%
       mutate(urlSeasonBREF = url)
+
 
     all_data
   }
