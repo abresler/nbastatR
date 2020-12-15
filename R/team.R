@@ -88,9 +88,8 @@
 
       data <-
         data %>%
-        left_join(df_parameters) %>%
+        left_join(df_parameters, by = "numberTable") %>%
         dplyr::select(one_of(names(df_parameters)), everything()) %>%
-        suppressMessages() %>%
         select(-numberTable) %>%
         mutate(nameTable = table_name) %>%
         select(nameTable, everything()) %>%
@@ -169,10 +168,13 @@
         ) %>% unique()
 
       nest_cols <-
-        names(data)[!names(data) %in% key_cols]
+        names(data)[names(data) %in% key_cols]
 
       data %>%
-        nest_(key_col = 'dataTable', nest_cols = nest_cols)
+        group_by(!!!syms(nest_cols)) %>%
+        nest() %>%
+        rename(dataTable = data) %>%
+        ungroup()
     })
 
   all_data
