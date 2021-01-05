@@ -1,8 +1,12 @@
-# gdeltr2::load_needed_packages(c("dplyr", "curl", "tidyr", "rvest", "tidyr", "stringr", "readr", "purrr", "glue"))
+
 
 
 .resolve_bref_players <-
   function(data) {
+
+    if (!data %>% hasName("slugPlayerBREF")) {
+      return(data)
+    }
     data <-
       data %>%
       mutate(
@@ -2685,17 +2689,29 @@ bref_injuries <-
         "dateInjury",
         "descriptionInjury"
       ))
+
     data <-
       data %>%
       mutate(dateInjury = dateInjury %>% lubridate::mdy()) %>%
       arrange(desc(dateInjury))
 
-    data <- data %>%
+    data <-
+      data %>%
       tidyr::separate(descriptionInjury, into = c("statusTypeInjury", "descriptionInjury"), sep = "\\ - ") %>%
       separate(statusTypeInjury, into = c("statusGame", "typeInjury"), sep = "\\(") %>%
       mutate(typeInjury = typeInjury %>% str_remove_all("\\)")) %>%
       mutate_if(is.character, funs(. %>% str_trim())) %>%
-      mutate(isOut = statusGame %>% str_to_lower() %>% str_detect("out")) %>%
+      mutate(isOut = statusGame %>% str_to_lower() %>% str_detect("out"))
+
+    player_ids <- page %>% html_nodes("th a") %>% html_attr("href") %>% str_remove_all("\\.html") %>% str_split("/") %>%
+      map_chr(function(x){
+        x[length(x)]
+      })
+
+    data <- data %>%
+      mutate(slugPlayerBREF = player_ids, .before = "namePlayer")
+
+    data <- data %>%
       .resolve_bref_players()
 
     data
