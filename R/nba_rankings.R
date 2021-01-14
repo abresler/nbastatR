@@ -1,13 +1,15 @@
 
 
 .get_teams_season_rankings <-
-  function(season = 2018,
+  function(season = 2021,
            return_message = T) {
     year <- season - 1
+    url <- glue::glue("https://data.nba.net/prod/v1/{year}/team_stats_rankings.json") %>%
+      as.character()
     json <-
-      glue::glue("https://data.nba.net/prod/v1/{year}/team_stats_rankings.json") %>%
-      as.character() %>%
-      .curl_chinazi()
+      fromJSON(url)
+
+    # .curl_chinazi()
 
     season_slug <- generate_season_slug(season = season)
 
@@ -25,11 +27,17 @@
     teams <-
       json_data$regularSeason$teams[1] %>% pull(1) %>% as.numeric()
     col_nos <- 2:ncol(json_data$regularSeason$teams)
-    data <- col_nos %>%  future_map(function(x) {
+    data <-
+      col_nos %>%
+      future_map(function(x) {
       var_data <- json_data$regularSeason$teams[x]
       var_name <- var_data %>% names() %>% str_to_upper()
       name_actual <-
         resolve_nba_names(json_names = var_name)
+
+      if (name_actual == "NAME") {
+        return(tibble())
+      }
       types <- c("Avg", "Rank")
       var_names <-
         glue::glue("{name_actual}{types}") %>% as.character()
