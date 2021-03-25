@@ -286,7 +286,7 @@ play_by_play <-
 
     all_data <-
       game_ids %>%
-      future_map_dfr(function(game_id){
+      map_dfr(function(game_id){
         .get_pbp_safe(game_id = game_id, return_message = return_message)
       })
 
@@ -325,7 +325,7 @@ play_by_play_v2 <-
 
     all_data <-
       game_ids %>%
-      future_map_dfr(function(game_id){
+      map_dfr(function(game_id){
         .get_pbp2_safe(game_id = game_id, return_message = return_message)
       })
 
