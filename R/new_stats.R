@@ -18276,7 +18276,7 @@ parse_for_seasons_data <-
 
         values <-
           row[1:5] %>%
-          flatten_chr()
+          purrr::flatten_chr()
 
         items <-
           c(
