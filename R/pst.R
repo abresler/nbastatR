@@ -69,26 +69,26 @@
 #'          include_criminal_incidents = T
 #' ) {
 #'
-#'     if (person %>% purrr::is_null()) {
+#'     if (person %>% is_null()) {
 #'       entity_slug <- ''
 #'     } else {
 #'       entity_slug <-
 #'         person %>% URLencode()
 #'     }
-#'     if (team %>% purrr::is_null()) {
+#'     if (team %>% is_null()) {
 #'       team_slug <- ''
 #'     } else {
 #'       team_slug <-
 #'         team %>% URLencode()
 #'     }
 #'
-#'     if (date_from %>% purrr::is_null()) {
+#'     if (date_from %>% is_null()) {
 #'       date_f_slug <- ''
 #'     } else {
 #'       date_f_slug <- lubridate::ymd(date_from)
 #'     }
 #'
-#'     if (date_to %>% purrr::is_null()) {
+#'     if (date_to %>% is_null()) {
 #'       date_t_slug <- ''
 #'     } else {
 #'       date_t_slug <- lubridate::ymd(date_to)
@@ -123,7 +123,7 @@
 #'
 #'   base_url <- "http://www.prosportstransactions.com/basketball/Search/SearchResults.php?"
 #'   url <-
-#'     glue::glue("{base_url}Player={entity_slug}&Team={team_slug}&BeginDate={date_f_slug}&EndDate={date_t_slug}&PlayerMovementChkBx={player_m_slug}&ILChkBx={il_slug}&NBADLChkBx={gl_slug}&InjuriesChkBx={injury_slug}&PersonalChkBx={personal_slug}&DisciplinaryChkBx={disc_slug}&LegalChkBx={legal_slug}&Submit=Search") %>% as.character()
+#'     glue("{base_url}Player={entity_slug}&Team={team_slug}&BeginDate={date_f_slug}&EndDate={date_t_slug}&PlayerMovementChkBx={player_m_slug}&ILChkBx={il_slug}&NBADLChkBx={gl_slug}&InjuriesChkBx={injury_slug}&PersonalChkBx={personal_slug}&DisciplinaryChkBx={disc_slug}&LegalChkBx={legal_slug}&Submit=Search") %>% as.character()
 #'   url
 #' }
 #'
@@ -143,7 +143,7 @@
 #'       future_map_dfr(function(x){
 #'         value <-
 #'           page %>%
-#'           html_nodes(css = glue::glue(".center td:nth-child({x})") %>% as.character()) %>%
+#'           html_nodes(css = glue(".center td:nth-child({x})") %>% as.character()) %>%
 #'           html_text() %>%
 #'           str_trim()
 #'
@@ -196,11 +196,11 @@
 #'         res$url
 #'
 #'       if (return_message) {
-#'         glue::glue("Parsing {url}") %>%
+#'         glue("Parsing {url}") %>%
 #'           cat(fill = T)
 #'       }
 #'       .parse.pst.page.safe <-
-#'         purrr::possibly(.parse.pst.page, tibble())
+#'         possibly(.parse.pst.page, tibble())
 #'
 #'       all_data <-
 #'         .parse.pst.page(url = url)
@@ -231,7 +231,7 @@
 #'       html_nodes('.center+ table td:nth-child(3) a') %>%
 #'       html_text() %>%
 #'       as.character() %>%
-#'       readr::parse_number()
+#'       parse_number()
 #'
 #'     if (pages %>% length() == 0) {
 #'       return(tibble(idPage = 1,

@@ -6,7 +6,7 @@
            return_message = TRUE,
            results = 50) {
     json_url <-
-      glue::glue(
+      glue(
         "https://stats-prod.nba.com/wp-json/statscms/v1/rotowire/player/?playerId={player_id}&limit={results}&offset=0"
       ) %>%
       as.character()
@@ -22,8 +22,8 @@
     actual_names <- names(data) %>% resolve_nba_names()
     data <-
       data %>%
-      purrr::set_names(actual_names) %>%
-      tidyr::unite(namePlayer, nameFirst, nameLast, sep = " ") %>%
+      set_names(actual_names) %>%
+      unite(namePlayer, nameFirst, nameLast, sep = " ") %>%
       mutate_at(c("idUpdate", "idPlayer", "idRotoWorld", "dateISO", "numberPriority"),
                 funs(. %>% as.numeric())) %>%
       mutate_at(c("datetimePublished", "datetimeUpdatedLast"),
@@ -34,7 +34,7 @@
                 funs(ifelse(. == "", NA_character_, .)))
 
     if (return_message) {
-      glue::glue("Acquired {nrow(data)} Roto Wire articles for {data$namePlayer %>% unique()}") %>% cat(fill = T)
+      glue("Acquired {nrow(data)} Roto Wire articles for {data$namePlayer %>% unique()}") %>% cat(fill = T)
     }
     data
   }
@@ -73,7 +73,7 @@ players_rotowire <-
       nba_player_ids(player_ids = player_ids,
                           players = players)
     get_player_rotowire_news_safe <-
-      purrr::possibly(.get_player_rotowire_news, tibble())
+      possibly(.get_player_rotowire_news, tibble())
 
     all_data <-
       ids %>%
@@ -199,7 +199,7 @@ players_rotowire <-
     data <-
       json$ListItems %>%
       as_tibble() %>%
-      purrr::set_names(c("title", "descriptionTransaction", "idTeam", "nameTeamFrom",
+      set_names(c("title", "descriptionTransaction", "idTeam", "nameTeamFrom",
                          "idPlayer", "dateTransaction", "idTransaction", "meta")) %>%
       mutate_at(c("idPlayer", "idTransaction", "idTeam"),
                 funs(. %>% as.numeric())) %>%
@@ -278,15 +278,15 @@ transactions <-
 
     data <-
       data %>%
-      purrr::set_names(actual_names)
+      set_names(actual_names)
 
     data <-
       data %>%
-      tidyr::separate(sortGroup,
+      separate(sortGroup,
                       into = c("remove", "idTransaction"),
                       sep = "\\ ") %>%
       mutate(
-        dateTransaction = readr::parse_datetime(dateTransaction) %>% as.Date(),
+        dateTransaction = parse_datetime(dateTransaction) %>% as.Date(),
         idTeamFrom = ifelse(idTeamFrom == 0, NA, idTeamFrom),
         idPlayer = ifelse(idPlayer == 0 , NA, idPlayer),
         yearTransaction = lubridate::year(dateTransaction),
@@ -342,7 +342,7 @@ beyond_the_numbers <-
     }
 
     url <-
-      glue::glue("https://stats-prod.nba.com/wp-json/statscms/v1/type/beyondthenumber/?limit={count_articles}&offset=0") %>%
+      glue("https://stats-prod.nba.com/wp-json/statscms/v1/type/beyondthenumber/?limit={count_articles}&offset=0") %>%
       as.character()
 
     data <-
@@ -352,7 +352,7 @@ beyond_the_numbers <-
 
     df <-
       data$posts[1:5] %>% as_tibble() %>%
-      purrr::set_names(c("idArticle", "titleArticle", "datetimeArticle", "htmlContent", "urlImage")) %>%
+      set_names(c("idArticle", "titleArticle", "datetimeArticle", "htmlContent", "urlImage")) %>%
       mutate(urlArticle = url_article,
              titleArticle = ifelse(titleArticle == "", NA, titleArticle),
              datetimeArticle = datetimeArticle %>% lubridate::ymd_hms()) %>%

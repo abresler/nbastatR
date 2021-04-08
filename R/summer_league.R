@@ -13,7 +13,7 @@ sl_players <-
            assign_to_environment = T) {
 
     json_data <-
-      glue::glue("https://data.nba.net/prod/v1/{year}/players.json") %>%
+      glue("https://data.nba.net/prod/v1/{year}/players.json") %>%
       .curl_chinazi()
 
     json_data <- json_data$league
@@ -34,7 +34,7 @@ sl_players <-
           json_names %>% resolve_nba_names()
 
         data <-
-          data %>% purrr::set_names(actual_names)
+          data %>% set_names(actual_names)
 
         height_cols <- data %>% select(dplyr::matches("height")) %>% names()
 
@@ -44,7 +44,7 @@ sl_players <-
           select(-dplyr::matches("data")) %>%
           munge_nba_data()
 
-        if (df %>% tibble::has_name("dateBirth")) {
+        if (df %>% has_name("dateBirth")) {
           df <- df %>% mutate_at('dateBirth',
                                  funs(lubridate::ymd))
         }
@@ -59,7 +59,7 @@ sl_players <-
             suppressWarnings()
         }
 
-        if (data %>% tibble::has_name("dataTeams")) {
+        if (data %>% has_name("dataTeams")) {
           df_teams <-
             data %>%
             select(idPlayer, dataTeams) %>%
@@ -68,7 +68,7 @@ sl_players <-
           if (df_teams %>% nrow() > 0) {
           df_teams <-
             df_teams %>%
-            purrr::set_names(names(df_teams) %>%
+            set_names(names(df_teams) %>%
             resolve_nba_names()) %>%
             munge_nba_data()
 
@@ -81,12 +81,12 @@ sl_players <-
           }
         }
 
-        if (data %>% tibble::has_name("dataDraft")) {
+        if (data %>% has_name("dataDraft")) {
           df_draft <-
             data$dataDraft %>% as_tibble() %>%
             mutate(idPlayer = df$idPlayer) %>%
             select(idPlayer, everything()) %>%
-            purrr::set_names(c("idPlayer", "idTeamDrafted", "numberPick", "numberRound", "yearDraft")) %>%
+            set_names(c("idPlayer", "idTeamDrafted", "numberPick", "numberRound", "yearDraft")) %>%
             mutate_all(as.numeric)
 
           df <-
@@ -105,7 +105,7 @@ sl_players <-
           league_slug <- case_when(league == "standard" ~ "",
                                    TRUE ~ league %>% str_to_title())
 
-          table_name <- glue::glue("dataPlayers{league_slug}")
+          table_name <- glue("dataPlayers{league_slug}")
 
           assign(x = table_name, df, envir = .GlobalEnv)
 
@@ -150,7 +150,7 @@ sl_teams <-
           json_names %>% resolve_nba_names()
 
         data <-
-          data %>% purrr::set_names(actual_names)
+          data %>% set_names(actual_names)
 
         data <-
           data %>%
@@ -162,7 +162,7 @@ sl_teams <-
           league_slug <- case_when(league == "standard" ~ "",
                     TRUE ~ league %>% str_to_title())
 
-          table_name <- glue::glue("dataTeams{league_slug}")
+          table_name <- glue("dataTeams{league_slug}")
 
           assign(x = table_name, data, envir = .GlobalEnv)
 
@@ -176,5 +176,5 @@ sl_teams <-
 
 .parse_sl_schedule_url <-
   function(url = "https://data.nba.com/data/10s/v2015/json/mobile_teams/vegas/2018/league/15_full_schedule.json") {
-    data <- url %>% jsonlite::fromJSON(simplifyDataFrame = T)
+    data <- url %>% fromJSON(simplifyDataFrame = T)
   }

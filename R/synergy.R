@@ -6,7 +6,7 @@
 #'     result_types %>%
 #'       walk(function(result_type){
 #'         table_name <-
-#'           glue::glue("dataSynergy{str_to_title(result_type)}") %>%
+#'           glue("dataSynergy{str_to_title(result_type)}") %>%
 #'           as.character()
 #'         df_result <-
 #'           all_data %>%
@@ -61,7 +61,7 @@
 #'   }
 #'
 #' .dictionary_synergy_categories <-
-#'   memoise::memoise(function() {
+#'   memoise(function() {
 #'     tibble(
 #'       nameSynergy = c(
 #'         "Transition",
@@ -123,7 +123,7 @@
 #'     wrong_cat <-
 #'       cat_slug  %>% str_detect(str_to_lower(categories)) %>% sum(na.rm = T) == 0
 #'     if (wrong_cat) {
-#'       stop(glue::glue(
+#'       stop(glue(
 #'         "Synergy categories can only be:\n{str_c(categories, collapse = '\n')}"
 #'       ))
 #'     }
@@ -135,13 +135,13 @@
 #'
 #'     season_synergy <- season - 1
 #'     json_url <-
-#'       glue::glue(
+#'       glue(
 #'         "https://stats-prod.nba.com/wp-json/statscms/v1/synergy/{result_type}/?category={category}&season={season_synergy}&seasonType={slug_season_type}&names={set_type}&limit={results}"
 #'       ) %>%
 #'       as.character()
 #'
 #'     if (return_message) {
-#'       glue::glue(
+#'       glue(
 #'         "Acquiring {result_type} synergy data for {str_to_lower(set_type)} {str_to_lower(category)} in the {str_to_lower(season_type)} during the {slug_season}"
 #'       ) %>%
 #'         cat(fill = T)
@@ -157,7 +157,7 @@
 #'     data <-
 #'       json$results %>%
 #'       as_tibble() %>%
-#'       purrr::set_names(actual_names) %>%
+#'       set_names(actual_names) %>%
 #'       mutate(
 #'         categorySynergy = category,
 #'         typeResult = result_type,
@@ -192,7 +192,7 @@
 #'   data <-
 #'     data %>%
 #'     mutate_at(num_cols,
-#'              funs(. %>% as.character() %>% readr::parse_number()))
+#'              funs(. %>% as.character() %>% parse_number()))
 #'
 #'   ppp_names <- data %>% dplyr::select(dplyr::matches("PPP")) %>% names()
 #'
@@ -267,7 +267,7 @@
 #'            return_wide = F,
 #'            nest_data = F,
 #'            return_message = TRUE) {
-#'     if (seasons %>% purrr::is_null()) {
+#'     if (seasons %>% is_null()) {
 #'       stop("please enter season")
 #'     }
 #'
@@ -287,7 +287,7 @@
 #'       distinct()
 #'
 #'     .get_synergy_category_data_safe <-
-#'       purrr::possibly(.get_synergy_category_data, tibble())
+#'       possibly(.get_synergy_category_data, tibble())
 #'
 #'     all_data <-
 #'       1:nrow(input_df) %>%

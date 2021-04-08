@@ -7,7 +7,7 @@
   function(player_id = 76003,
            return_message = T) {
     url <-
-      glue::glue("https://stats.nba.com/stats/playerawards/?playerId={player_id}") %>%
+      glue("https://stats.nba.com/stats/playerawards/?playerId={player_id}") %>%
       as.character()
 
     json <-
@@ -24,7 +24,7 @@
     }
     data <-
       data %>%
-      purrr::set_names(
+      set_names(
         c(
           "idPlayer",
           "nameFirst",
@@ -42,7 +42,7 @@
           "otherAward"
         )
       ) %>%
-      tidyr::unite(namePlayer, nameFirst, nameLast, sep = " ")
+      unite(namePlayer, nameFirst, nameLast, sep = " ")
 
     data <-
       data %>%
@@ -51,13 +51,13 @@
       suppressWarnings() %>%
       mutate(
         dateMonthAward = lubridate::mdy(dateMonthAward),
-        dateWeekAward = readr::parse_datetime(dateWeekAward) %>% as.Date()
+        dateWeekAward = parse_datetime(dateWeekAward) %>% as.Date()
       ) %>%
       arrange(slugSeason) %>%
       remove_na_columns()
 
     if (return_message) {
-      glue::glue("Acquired {nrow(data)} awards for {data$namePlayer %>% unique()}") %>% cat(fill = T)
+      glue("Acquired {nrow(data)} awards for {data$namePlayer %>% unique()}") %>% cat(fill = T)
     }
     data
   }
@@ -94,14 +94,14 @@ players_awards <-
       nba_player_ids(player_ids = player_ids,
                           players = players)
     get_player_award_safe <-
-      purrr::possibly(.get_player_award, tibble())
+      possibly(.get_player_award, tibble())
 
     all_data <-
       ids %>%
       future_map_dfr(function(id) {
         get_player_award_safe(player_id = id, return_message = return_message)
       })
-    if (all_data %>% tibble::has_name("datetimePublished")) {
+    if (all_data %>% has_name("datetimePublished")) {
     all_data <-
       all_data %>%
       arrange(datetimePublished)
@@ -149,7 +149,7 @@ players_awards <-
   function(player_id = 101127,
            return_message = T) {
     url <-
-      glue::glue("https://data.nba.net/json/bios/player_{player_id}.json") %>%
+      glue("https://data.nba.net/json/bios/player_{player_id}.json") %>%
       as.character()
 
 
@@ -163,7 +163,7 @@ players_awards <-
 
     data <-
       data %>%
-      purrr::set_names(
+      set_names(
         c(
           "idPlayer",
           "typeResult",
@@ -181,17 +181,17 @@ players_awards <-
         x %>% read_html() %>% html_text() %>% str_trim()
       })) %>%
       dplyr::select(-htmlPlayerBio) %>%
-      tidyr::separate(nameDisplay,
+      separate(nameDisplay,
                       into = c("nameLast", "nameFirst"),
                       sep = "\\, ") %>%
-      tidyr::unite(namePlayer, nameFirst, nameLast, sep = " ") %>%
+      unite(namePlayer, nameFirst, nameLast, sep = " ") %>%
       mutate_if(is.character,
                 funs(ifelse(. == "", NA_character_, .))) %>%
       remove_na_columns() %>%
       dplyr::select(idPlayer, namePlayer, everything())
 
     if (return_message) {
-      glue::glue("Acquired {data$namePlayer} 2013-14 bio") %>% cat(fill = T)
+      glue("Acquired {data$namePlayer} 2013-14 bio") %>% cat(fill = T)
     }
 
 
@@ -227,7 +227,7 @@ players_bios <-
       nba_player_ids(player_ids = player_ids,
                           players = players)
     get_player_bio_safe <-
-      purrr::possibly(.get_player_bio, tibble())
+      possibly(.get_player_bio, tibble())
 
     all_data <-
       ids %>%
@@ -252,7 +252,7 @@ players_bios <-
 .get_player_profile <-
   function(player_id = 1628378,
            return_message = T) {
-    if (player_id %>% purrr::is_null()) {
+    if (player_id %>% is_null()) {
       stop("Pleas enter player id")
     }
     if (!'df_nba_player_dict' %>% exists()) {
@@ -268,11 +268,11 @@ players_bios <-
       pull(namePlayer)
 
     if (return_message) {
-      glue::glue("Acquiring {player} NBA player profile") %>% cat(fill = T)
+      glue("Acquiring {player} NBA player profile") %>% cat(fill = T)
     }
 
     url_json <-
-      glue::glue(
+      glue(
         'https://stats.nba.com/stats/commonplayerinfo?LeagueID=00&PlayerID={player_id}'
       ) %>%
       as.character()
@@ -301,7 +301,7 @@ players_bios <-
           suppressMessages() %>%
           select(-numberTable)
 
-        if (!df_table %>% tibble::has_name("idPlayer")) {
+        if (!df_table %>% has_name("idPlayer")) {
           df_table <-
             df_table %>%
             mutate(idPlayer = player_id)
@@ -351,15 +351,15 @@ player_profiles <- function(players = NULL,
                                      player_ids = NULL,
                                      nest_data = F,
                                      return_message = TRUE) {
-  if (player_ids %>% purrr::is_null() &&
-      players %>% purrr::is_null()) {
+  if (player_ids %>% is_null() &&
+      players %>% is_null()) {
     stop("Please enter players of player ids")
   }
 
   player_ids <-
     nba_player_ids(player_ids = player_ids, players = players)
   get_player_profile_safe <-
-    purrr::possibly(.get_player_profile, tibble())
+    possibly(.get_player_profile, tibble())
   all_data <-
     player_ids %>%
     future_map_dfr(function(player_id) {
@@ -374,12 +374,12 @@ player_profiles <- function(players = NULL,
       all_data %>%
         filter(nameTable == table) %>%
         select(-nameTable) %>%
-        tidyr::unnest()
+        unnest()
     })
 
   all_data <-
     data %>%
-    purrr::reduce(left_join) %>%
+    reduce(left_join) %>%
     mutate(heightInches = heightInches %>% map_dbl(height_in_inches)) %>%
     dplyr::select(
       one_of(
@@ -426,7 +426,7 @@ player_profiles <- function(players = NULL,
     left_join(df_dict_nba_players %>% dplyr::select(idPlayer, dplyr::matches("url"))) %>%
     suppressMessages()
 
-  if (all_data %>% tibble::has_name("datetimeBirth")) {
+  if (all_data %>% has_name("datetimeBirth")) {
     all_data <-
       all_data %>%
       dplyr::rename(dateBirth = datetimeBirth)

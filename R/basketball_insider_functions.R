@@ -143,7 +143,7 @@
 }
 
 nba_team_salaries <-
-  memoise::memoise(function(team_name = "Brooklyn Nets",
+  memoise(function(team_name = "Brooklyn Nets",
            team_slug = NA,
            assume_player_opt_out = T,
            assume_team_doesnt_exercise = T,
@@ -223,7 +223,7 @@ nba_team_salaries <-
     salary_table <-
       page %>%
       html_table(header = F) %>%
-      purrr::flatten_df()
+      flatten_df()
 
     names_salary_table <-
       c(
@@ -553,7 +553,7 @@ nba_insider_salaries <-
       )
 
     nba_team_salaries_safe <-
-      purrr::possibly(nba_team_salaries, tibble())
+      possibly(nba_team_salaries, tibble())
 
     all_salaries <-
       all_teams %>%
@@ -577,7 +577,7 @@ nba_insider_salaries <-
 
     all_salaries <-
       all_salaries %>%
-      tidyr::replace_na(list(isFinalSeason = F)) %>%
+      replace_na(list(isFinalSeason = F)) %>%
       replace_na(list(typeContractDetail = "Guaranteed"))
 
     all_salaries

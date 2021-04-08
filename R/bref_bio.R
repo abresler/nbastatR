@@ -1,11 +1,11 @@
 .get_bref_players_ids  <-
   function(players = c("Aaron McKie", "Aaron Gordon"), player_ids = "bonnean01") {
-    if (players %>% purrr::is_null() && player_ids %>% purrr::is_null()) {
+    if (players %>% is_null() && player_ids %>% is_null()) {
       stop("Please Enter IDS")
     }
     ids <- c()
     df_bref_player_dict <-  dictionary_bref_players() %>% suppressMessages()
-    if (!players %>% purrr::is_null()) {
+    if (!players %>% is_null()) {
       search_ids <-
         df_bref_player_dict %>%
         filter(namePlayerBREF %>% str_detect(players %>% str_c(collapse = "|"))) %>%
@@ -14,7 +14,7 @@
         ids %>% append(search_ids)
     }
 
-    if (!player_ids %>% purrr::is_null()) {
+    if (!player_ids %>% is_null()) {
       ids <-
         player_ids %>%
         append(ids)
@@ -40,7 +40,7 @@
           nrow() == 0
 
         if (no_name) {
-          glue::glue("Missing {name} in dictionary") %>% cat(fill = T)
+          glue("Missing {name} in dictionary") %>% cat(fill = T)
           return(name)
         }
         df_nba_names %>%
@@ -52,7 +52,7 @@
   }
 
 .dictionary_bref_bio_names <-
-  memoise::memoise(function() {
+  memoise(function() {
     tibble(nameBREF = c("twitter", "position", "shoots", "height", "weight", "team",
                "born", "birthplace", "college", "namehighschool", "locationhighschool",
                "nba debut", "experience", "playernicknames", "yearrankhighschool",
@@ -87,9 +87,9 @@
 
     table %>%
       flatten_df() %>%
-      purrr::set_names(c("slugSeason", "nameTeam", "slugLeague", "amountSalary")) %>%
+      set_names(c("slugSeason", "nameTeam", "slugLeague", "amountSalary")) %>%
       filter(!slugSeason %>% str_detect("Career")) %>%
-      mutate(amountSalary = readr::parse_number(as.character(amountSalary)))
+      mutate(amountSalary = parse_number(as.character(amountSalary)))
   }
 
 .parse.contracts  <-
@@ -104,7 +104,7 @@
     }
 
     conract_css <-
-      glue::glue("#{contract_id} table") %>% as.character()
+      glue("#{contract_id} table") %>% as.character()
 
     table <-
       .check_table(page = page, css =  conract_css)
@@ -117,8 +117,8 @@
       table %>%
       flatten_df() %>%
       dplyr::rename(nameTeam = Team) %>%
-      tidyr::gather(slugSeason, amountSalary, -nameTeam) %>%
-      mutate(amountSalary = amountSalary %>% as.character() %>%  readr::parse_number())
+      gather(slugSeason, amountSalary, -nameTeam) %>%
+      mutate(amountSalary = amountSalary %>% as.character() %>%  parse_number())
     contract_details <- page %>% html_nodes(".bullets") %>% html_text()
     if (contract_details %>% length() > 0) {
       table <-
@@ -147,7 +147,7 @@
             bio[x]
           node_text <-
             node %>% html_text() %>%
-            stringi::stri_trans_general("Latin-ASCII") %>%
+            stri_trans_general("Latin-ASCII") %>%
             str_split("\\.") %>%
             flatten_chr()
 
@@ -279,7 +279,7 @@
           node_text <- node_text %>% str_replace_all("\\ and ", "\\, ")
 
           tibble(node_text) %>%
-            tidyr::separate(node_text, into = c("item", "value"), sep = "\\:") %>%
+            separate(node_text, into = c("item", "value"), sep = "\\:") %>%
             mutate_all(str_trim)
         }) %>%
       mutate(item = item %>% str_to_lower()) %>%
@@ -302,72 +302,72 @@
       all_data %>%
       mutate(nameActual = actual_names) %>%
       select(nameActual, value) %>%
-      tidyr::spread(nameActual, value) %>%
+      spread(nameActual, value) %>%
       dplyr::select(one_of(actual_names))
 
-    if (all_data %>% tibble::has_name("heightInches")) {
+    if (all_data %>% has_name("heightInches")) {
       all_data <-
         all_data %>%
         mutate(heightInches = height_in_inches(height = heightInches))
     }
 
-    if (all_data %>% tibble::has_name("weightLBS")) {
+    if (all_data %>% has_name("weightLBS")) {
       all_data <-
         all_data %>%
-        mutate(weightLBS = readr::parse_number(as.character(weightLBS)))
+        mutate(weightLBS = parse_number(as.character(weightLBS)))
     }
 
 
-    if (all_data %>% tibble::has_name("yearsExperience")) {
+    if (all_data %>% has_name("yearsExperience")) {
       all_data <-
         all_data %>%
-        mutate(yearsExperience = readr::parse_number(as.character(yearsExperience)))
+        mutate(yearsExperience = parse_number(as.character(yearsExperience)))
     }
 
 
-    if (all_data %>% tibble::has_name("dateBirth")) {
+    if (all_data %>% has_name("dateBirth")) {
       all_data <-
         all_data %>%
         mutate(dateBirth = lubridate::mdy(dateBirth))
     }
 
-    if (all_data %>% tibble::has_name("dateDeath")) {
+    if (all_data %>% has_name("dateDeath")) {
       all_data <-
         all_data %>%
         mutate(dateDeath = lubridate::mdy(dateDeath))
 
     }
 
-    if (all_data %>% tibble::has_name("dateNBADebut")) {
+    if (all_data %>% has_name("dateNBADebut")) {
       all_data <-
         all_data %>%
         mutate(dateNBADebut = lubridate::mdy(dateNBADebut))
 
     }
 
-    if (all_data %>% tibble::has_name("locationBirthplace")) {
+    if (all_data %>% has_name("locationBirthplace")) {
       all_data <-
 
         all_data %>%
-        tidyr::separate(locationBirthplace, into = c("cityBirthplace", "stateBirthplace"), sep = "\\,") %>%
+        separate(locationBirthplace, into = c("cityBirthplace", "stateBirthplace"), sep = "\\,") %>%
         mutate_if(is.character,
                   str_trim) %>%
         mutate(stateBirthplace = stateBirthplace %>% str_replace_all("$us", "")) %>%
-        tidyr::unite(locationBirthplace, cityBirthplace, stateBirthplace, sep = "\\, ", remove = F)
+        unite(locationBirthplace, cityBirthplace, stateBirthplace, sep = "\\, ", remove = F)
 
     }
 
-    if (all_data %>% tibble::has_name("locationHighSchool")) {
+    if (all_data %>% has_name("locationHighSchool")) {
       all_data <-
         all_data %>%
-        tidyr::separate(
+        separate(
           locationHighSchool,
           into = c("ciyHighSchool", "stateHighSchool"),
           sep = "\\,"
         ) %>%
         mutate_if(is.character,
                   str_trim) %>%
-        tidyr::unite(
+        unite(
           locationHighSchool,
           ciyHighSchool,
           stateHighSchool,
@@ -377,16 +377,16 @@
 
     }
 
-    if (all_data %>% tibble::has_name("yearRankHighSchool")) {
+    if (all_data %>% has_name("yearRankHighSchool")) {
       all_data <-
         all_data %>%
-        tidyr::separate(
+        separate(
           yearRankHighSchool,
           into = c("yearHighSchool", "rankHighSchool"),
           sep = "\\ "
         ) %>%
         mutate_at(c("yearHighSchool", "rankHighSchool"),
-                  funs(. %>% as.character() %>% readr::parse_number()))
+                  funs(. %>% as.character() %>% parse_number()))
 
     }
 
@@ -410,7 +410,7 @@
 
     data <-
       tibble(transactions) %>%
-      tidyr::separate(transactions, into = c("dateTransaction", "descriptionTransaction"), sep = "\\:") %>%
+      separate(transactions, into = c("dateTransaction", "descriptionTransaction"), sep = "\\:") %>%
       mutate_all(str_trim) %>%
       mutate(dateTransaction = dateTransaction %>% lubridate::mdy()) %>%
       mutate(numberTransactionPlayer = 1:n()) %>%
@@ -446,21 +446,21 @@
   player <- page %>% html_nodes("h1") %>% html_text() %>% .[[1]]
 
   if (return_message) {
-    glue::glue("Parsing basketball reference biography data for {player}") %>% cat(fill = T)
+    glue("Parsing basketball reference biography data for {player}") %>% cat(fill = T)
   }
 
 
   .parse.transactions.safe <-
-    purrr::possibly(.parse.transactions, tibble())
+    possibly(.parse.transactions, tibble())
 
   .parse.bio.safe <-
-    purrr::possibly(.parse.bio, tibble())
+    possibly(.parse.bio, tibble())
 
   .parse.contracts.safe <-
-    purrr::possibly(.parse.contracts, tibble())
+    possibly(.parse.contracts, tibble())
 
   .parse.salary.safe <-
-    purrr::possibly(.parse.salary, tibble())
+    possibly(.parse.salary, tibble())
   dataPlayerBio =
     .parse.bio.safe(page = page)
   dataPlayerTransactions =
@@ -507,7 +507,7 @@
 .parse_bref_player_data_urls <-
   function(urls, return_message = T){
     .parse_bref_player_data_url_safe <-
-      purrr::possibly(.parse_bref_player_data_url, tibble())
+      possibly(.parse_bref_player_data_url, tibble())
     all_data <-
     urls %>%
     map_dfr(function(url){
@@ -556,7 +556,7 @@ bref_bios <-
       pull(urlPlayerBioBREF)
 
     .parse_bref_player_data_urls_safe <-
-      purrr::possibly(.parse_bref_player_data_urls, tibble())
+      possibly(.parse_bref_player_data_urls, tibble())
 
     all_data <-
       .parse_bref_player_data_urls(urls = urls, return_message = T)
@@ -572,7 +572,7 @@ bref_bios <-
             unnest()
 
           table_name <-
-            glue::glue("dataBREFPlayers{table}") %>% as.character()
+            glue("dataBREFPlayers{table}") %>% as.character()
           assign(x = table_name, value = df_table, envir = .GlobalEnv)
         })
     }

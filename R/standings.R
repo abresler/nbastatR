@@ -18,9 +18,9 @@
         names_set <-
           c(
             record_column,
-            glue::glue("{record_column}Wins"),
-            glue::glue("{record_column}Losses"),
-            glue::glue("{record_column}WinPct")
+            glue("{record_column}Wins"),
+            glue("{record_column}Losses"),
+            glue("{record_column}WinPct")
           )
         values <-
           x %>% str_split("\\-") %>% flatten_chr() %>% as.numeric()
@@ -31,7 +31,7 @@
           X3 = values[2],
           X4 = (X2 / (X2 + X3))
         ) %>%
-          purrr::set_names(c(names_set))
+          set_names(c(names_set))
       })
 
     data %>%
@@ -49,7 +49,7 @@
 
   data <-
     data %>%
-    purrr::reduce(left_join) %>%
+    reduce(left_join) %>%
     suppressMessages()
 
   data
@@ -92,7 +92,7 @@ current_standings <-
 
     data <-
       data %>%
-      purrr::set_names(actual_names) %>%
+      set_names(actual_names) %>%
       dplyr::select(-dplyr::matches("Remove")) %>%
       munge_nba_data() %>%
       mutate_at(c("pctLosses", "pctWins"),
@@ -122,10 +122,10 @@ current_standings <-
     season_id <- season - 1
 
     if (return_message) {
-      glue::glue("Getting {season_slug} NBA playoff picture") %>% cat(fill = T)
+      glue("Getting {season_slug} NBA playoff picture") %>% cat(fill = T)
     }
     url <-
-      glue::glue(
+      glue(
         "https://stats.nba.com/stats/playoffpicture/?leagueId=00&seasonId=2{season_id}"
       ) %>% as.character() %>% URLencode()
 
@@ -151,8 +151,8 @@ current_standings <-
 
         actual_names <- json_names %>% resolve_nba_names()
         data <-
-          data %>% purrr::set_names(actual_names)
-        if (data %>% tibble::has_name("slugTeam")) {
+          data %>% set_names(actual_names)
+        if (data %>% has_name("slugTeam")) {
           data <-
             data %>%
             dplyr::rename(nameTeamAbbr = slugTeam)
@@ -161,7 +161,7 @@ current_standings <-
           data %>%
           munge_nba_data()
 
-        if (!data %>% tibble::has_name("nameConference")) {
+        if (!data %>% has_name("nameConference")) {
           data <-
             data %>%
             mutate(nameConference = table_name %>% substr(1, 4))
@@ -225,7 +225,7 @@ playoff_pictures <-
            nest_data = FALSE,
            return_message = TRUE) {
 
-    if (seasons %>% purrr::is_null()) {
+    if (seasons %>% is_null()) {
       stop("Please enter seasons")
     }
     input_df <-
@@ -233,7 +233,7 @@ playoff_pictures <-
                   stringsAsFactors = F) %>%
       dplyr::as_tibble()
     .get_season_playoff_picture_safe <-
-      purrr::possibly(.get_season_playoff_picture, tibble())
+      possibly(.get_season_playoff_picture, tibble())
 
     all_data <-
       1:nrow(input_df) %>%
@@ -252,7 +252,7 @@ playoff_pictures <-
       table_slugs %>%
         walk(function(slug) {
           table_name <-
-            glue::glue("data{slug %>% str_replace_all('Conf', '')}") %>% as.character()
+            glue("data{slug %>% str_replace_all('Conf', '')}") %>% as.character()
           df_table <-
             all_data %>%
             filter(nameTable %>% str_detect(slug)) %>%
@@ -285,10 +285,10 @@ playoff_pictures <-
     }
     season_slug <- season %>% generate_season_slug()
     if (return_message) {
-      glue::glue("Getting {season_slug} {season_type} NBA standings data") %>% cat(fill = T)
+      glue("Getting {season_slug} {season_type} NBA standings data") %>% cat(fill = T)
     }
     url <-
-      glue::glue(
+      glue(
         "https://stats.nba.com/stats/leaguestandingsv3/?leagueId=00&season={season_slug}&seasonType={season_type}"
       ) %>% as.character() %>% URLencode()
 
@@ -300,7 +300,7 @@ playoff_pictures <-
              slugSeason = season_slug,
              typeSeason = season_type) %>%
       dplyr::rename(teamName = nameTeam) %>%
-      tidyr::unite(nameTeam,
+      unite(nameTeam,
                    cityTeam,
                    teamName,
                    sep = " ",
@@ -346,7 +346,7 @@ standings <-
       dplyr::as_tibble()
 
     .get_season_standings_safe <-
-      purrr::possibly(.get_season_standings, tibble())
+      possibly(.get_season_standings, tibble())
 
     all_data <-
       1:nrow(input_df) %>%

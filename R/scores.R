@@ -11,7 +11,7 @@
     game_date <-
       game_date %>%
       as.character() %>%
-      readr::parse_date()
+      parse_date()
 
 
     league_slug <-
@@ -22,7 +22,7 @@
       )
 
     if (return_message) {
-      glue::glue("Getting {league} game details for {game_date}") %>%
+      glue("Getting {league} game details for {game_date}") %>%
         cat(fill = T)
     }
 
@@ -30,7 +30,7 @@
       parse_to_date_url(game_date = game_date)
 
     url <-
-      glue::glue(
+      glue(
         "https://stats.nba.com/stats/scoreboardv2/?leagueId={league_slug}&gameDate={date_slug}&dayOffset={day_offset}"
       ) %>%
       as.character()
@@ -69,7 +69,7 @@
 
         actual_names <- json_names %>% resolve_nba_names()
         data <-
-          data %>% purrr::set_names(actual_names)
+          data %>% set_names(actual_names)
 
         data <-
           data %>%
@@ -78,7 +78,7 @@
                  dateGame = game_date) %>%
           remove_na_columns()
 
-        if (data %>% tibble::has_name("cityTeam")) {
+        if (data %>% has_name("cityTeam")) {
           data <-
             data %>%
             unite(nameTeam,
@@ -88,7 +88,7 @@
                   remove = F)
         }
 
-        if (data %>% tibble::has_name("dateStandings")) {
+        if (data %>% has_name("dateStandings")) {
           data <-
             data %>%
             mutate(dateStandings = dateStandings %>% lubridate::mdy())
@@ -128,7 +128,7 @@ days_scores <-
            include_standings = F,
            assign_to_environment = TRUE,
            return_message = TRUE) {
-    if (game_dates %>% purrr::is_null()) {
+    if (game_dates %>% is_null()) {
       stop("Please enter game dates")
     }
     input_df <-
@@ -138,7 +138,7 @@ days_scores <-
       as_tibble()
 
     .get_day_nba_scores_safe <-
-      purrr::possibly(.get_day_nba_scores, tibble())
+      possibly(.get_day_nba_scores, tibble())
 
     all_data <-
       1:nrow(input_df) %>%
@@ -173,7 +173,7 @@ days_scores <-
       tables %>%
         walk(function(table) {
           table_name <-
-            glue::glue("dataScore{table}{league}")
+            glue("dataScore{table}{league}")
           df_row <-
             all_data %>%
             filter(nameTable == table) %>%

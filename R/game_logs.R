@@ -27,7 +27,7 @@
       generate_season_slug(season = season)
 
     if (return_message) {
-      glue::glue(
+      glue(
         "Acquiring {league} basic {result_type} game logs for the {season_slug} {season_type}"
       ) %>% cat(fill = T)
     }
@@ -47,7 +47,7 @@
 
     if (league %>% str_to_upper() == "WNBA") {
       url <-
-        glue::glue(
+        glue(
           "https://stats.nba.com/stats/wnbaseasonstats?College=&Conference=&Country=&DateFrom=&DateTo=&Division=&DraftPick=&DraftYear=&GameScope=&GameSegment=&Height=&LastNGames=0&LeagueID=10&Location=&MeasureType=Base&Month=0&OpponentTeamID=&Outcome=&PORound=&PaceAdjust=&PerMode=PerGame&Period=&PlayerExperience=&PlayerPosition=&PlusMinus=&Rank=&Season={season}&SeasonSegment=&SeasonType={URLencode(season_type)}&ShotClockRange=&StarterBench=&StatCategory=PTS&TeamID=0&VsConference=&VsDivision=&Weight="
         ) %>%
         URLencode() %>%
@@ -55,7 +55,7 @@
 
     } else {
       url <-
-        glue::glue(
+        glue(
           "https://stats.nba.com/stats/leaguegamelog?Counter=1000&Season={season_slug}&Direction=DESC&LeagueID={league_slug}&PlayerOrTeam={table_slug}&SeasonType={season_name_slug}&Sorter=DATE"
         ) %>% as.character()
 
@@ -72,7 +72,7 @@
              typeSeason = season_type,
              typeResult = result_type)
 
-    if (data %>% tibble::has_name("dateGame")) {
+    if (data %>% has_name("dateGame")) {
       data <-
         data %>%
         mutate(dateGame = dateGame %>% lubridate::ymd()) %>%
@@ -97,7 +97,7 @@
              typeResult = result_type) %>%
       mutate(urlTeamSeasonLogo = generate_team_season_logo(season = yearSeason, slug_team = slugTeam))
 
-    if (data %>% tibble::has_name("dateGame")) {
+    if (data %>% has_name("dateGame")) {
       df_teams_games <-
         data %>%
         distinct(yearSeason, dateGame, idTeam, slugTeam) %>%
@@ -295,7 +295,7 @@ game_logs <-
       arrange(season)
 
     .get_season_gamelog_safe <-
-      purrr::possibly(.get_season_gamelog, tibble())
+      possibly(.get_season_gamelog, tibble())
 
     all_data <-
       1:nrow(input_df) %>%
@@ -315,7 +315,7 @@ game_logs <-
         data_row
       })
 
-    if (result_length == 1 && all_data %>% tibble::has_name("typeResult")) {
+    if (result_length == 1 && all_data %>% has_name("typeResult")) {
       all_data <-
         all_data %>%
         select(-typeResult) %>%
@@ -399,7 +399,7 @@ game_logs <-
 
 
           table_name <-
-            glue::glue("dataGameLogs{str_to_title(result)}") %>% as.character()
+            glue("dataGameLogs{str_to_title(result)}") %>% as.character()
 
           assign(x = table_name, df_table, envir = .GlobalEnv)
 
@@ -534,7 +534,7 @@ seasons_schedule <-
       arrange(season)
 
     .get_season_schedule_safe <-
-      purrr::possibly(.get_season_schedule, tibble())
+      possibly(.get_season_schedule, tibble())
 
     all_data <-
       1:nrow(input_df) %>%

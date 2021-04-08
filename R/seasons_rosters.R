@@ -40,7 +40,7 @@
       .generate_param_slug(params = params)
 
     url <-
-      glue::glue("{URL}?{slug_param}") %>% as.character()
+      glue("{URL}?{slug_param}") %>% as.character()
 
     json <-
       url %>%
@@ -99,7 +99,7 @@
       .generate_param_slug(params = params)
 
     url <-
-      glue::glue("{URL}?{slug_param}") %>% as.character()
+      glue("{URL}?{slug_param}") %>% as.character()
 
     json <-
       url %>%
@@ -114,13 +114,13 @@
       nba_json_to_df(table_id = table_id) %>%
       mutate(slugSeason = season_slug)
 
-    if (data %>% tibble::has_name("dateBirth")) {
+    if (data %>% has_name("dateBirth")) {
       data <-
         data %>%
         mutate(dateBirth = dateBirth %>% lubridate::mdy())
     }
 
-    if (data %>% tibble::has_name("countYearsExperience")) {
+    if (data %>% has_name("countYearsExperience")) {
     data <-
       data %>%
       mutate(
@@ -128,10 +128,10 @@
       )
     }
 
-    if (data %>% tibble::has_name("heightInches")) {
+    if (data %>% has_name("heightInches")) {
       data <-
         data %>%
-        tidyr::separate(heightInches,
+        separate(heightInches,
                         sep = "\\-",
                         into = c("feet", "inches")) %>%
         mutate_at(c("feet", "inches"),
@@ -161,7 +161,7 @@
       future_map_dfr(function(team_id) {
         if (return_message) {
           team_slug <- df_teams %>% filter(idTeam == team_id) %>% pull(slugTeam)
-          glue::glue("Acquiring {team_slug}'s team roster for the {season} season") %>% cat(fill = T)
+          glue("Acquiring {team_slug}'s team roster for the {season} season") %>% cat(fill = T)
         }
         .get_team_id_season_roster(season = season, team_id = team_id)
       })
@@ -211,11 +211,11 @@ seasons_rosters <-
   function(seasons = NULL,
            return_message = TRUE,
            nest_data = F) {
-    if (seasons %>% purrr::is_null()) {
+    if (seasons %>% is_null()) {
       stop("Enter seasons")
     }
     .get_season_roster_safe <-
-      purrr::possibly(.get_season_roster, tibble())
+      possibly(.get_season_roster, tibble())
     all_data <-
       seasons %>%
       future_map_dfr(function(season) {

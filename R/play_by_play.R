@@ -15,7 +15,7 @@
       )
 
     if (return_message) {
-      glue::glue("Getting play by play for game {game_id}") %>% cat(fill = T)
+      glue("Getting play by play for game {game_id}") %>% cat(fill = T)
     }
     json <-
       json_url  %>%
@@ -33,7 +33,7 @@
 
     data <-
       data %>%
-      purrr::set_names(actual_names) %>%
+      set_names(actual_names) %>%
       munge_nba_data()
 
     data
@@ -56,7 +56,7 @@
       )
 
     if (return_message) {
-      glue::glue("Getting play by play for game {game_id}") %>% cat(fill = T)
+      glue("Getting play by play for game {game_id}") %>% cat(fill = T)
     }
     json <-
       json_url  %>%
@@ -74,7 +74,7 @@
 
     data <-
       data %>%
-      purrr::set_names(actual_names) %>%
+      set_names(actual_names) %>%
       munge_nba_data()
 
     data
@@ -86,13 +86,13 @@
     game_slug <-
       pad_id(game_id)
     json_url <-
-      glue::glue(
+      glue(
       "https://stats.nba.com/stats/infographicfanduelplayer/?gameId={game_slug}"
       ) %>%
       as.character()
 
     if (return_message) {
-      glue::glue("Getting fanduel summary for game {game_id}") %>% cat(fill = T)
+      glue("Getting fanduel summary for game {game_id}") %>% cat(fill = T)
     }
     json <-
       json_url  %>%
@@ -112,7 +112,7 @@
 
     data <-
       data %>%
-      purrr::set_names(actual_names) %>%
+      set_names(actual_names) %>%
       munge_nba_data() %>%
       suppressMessages()
     data
@@ -128,13 +128,13 @@
     game_slug <-
       pad_id(game_id)
     json_url <-
-      glue::glue(
+      glue(
         "https://stats.nba.com/stats/winprobabilitypbp?SeasonType=&LeagueID=&Season=&IsOnlyCurrentSeason=&PlayerID=&TeamID=&GameID={game_slug}&ContextMeasure=&PlayerPosition=&DateFrom=&DateTo=&GameSegment=&LastNGames=&Location=&Month=&OpponentTeamID=&Outcome=&SeasonSegment=&VSConference=&VSDivision=&RookieYear=&Period=&StartPeriod=0&EndPeriod=12&StartRange=0&EndRange=12&RangeType=1&Runtype=each%20second"
       ) %>%
       as.character()
 
     if (return_message) {
-      glue::glue("Getting win probability and play-by-play for game {game_id}") %>% cat(fill = T)
+      glue("Getting win probability and play-by-play for game {game_id}") %>% cat(fill = T)
     }
     json <-
       json_url  %>%
@@ -163,7 +163,7 @@
 
     df_metadata <-
       df_metadata %>%
-      purrr::set_names(names_md) %>%
+      set_names(names_md) %>%
       mutate(dateGame = dateGame %>% lubridate::mdy()) %>%
       mutate_at(c("idGame", "idTeamHome", "idTeamAway", "ptsTotalTeamHome", "ptsTotalTeamAway"),
                 funs(. %>% as.integer())
@@ -175,7 +175,7 @@
 
     data <-
       data %>%
-      purrr::set_names(actual_names) %>%
+      set_names(actual_names) %>%
       munge_nba_data() %>%
       dplyr::rename(slugLocationPossession = locationGame) %>%
       left_join(df_metadata) %>%
@@ -214,11 +214,11 @@ win_probability <-
            nest_data = FALSE,
            filter_non_plays = FALSE,
            return_message = TRUE) {
-    if (game_ids %>% purrr::is_null()) {
+    if (game_ids %>% is_null()) {
       stop("Please enter game ids")
     }
     .get_win_prob_safe <-
-      purrr::possibly(.get_win_prob, tibble())
+      possibly(.get_win_prob, tibble())
 
     all_data <-
       game_ids %>%
@@ -278,11 +278,11 @@ play_by_play <-
   function(game_ids = NULL,
            nest_data = FALSE,
            return_message = TRUE) {
-    if (game_ids %>% purrr::is_null()) {
+    if (game_ids %>% is_null()) {
       stop("Please enter game ids")
     }
     .get_pbp_safe <-
-      purrr::possibly(.get_pbp, tibble())
+      possibly(.get_pbp, tibble())
 
     all_data <-
       game_ids %>%
@@ -317,11 +317,11 @@ play_by_play_v2 <-
   function(game_ids = NULL,
            nest_data = FALSE,
            return_message = TRUE) {
-    if (game_ids %>% purrr::is_null()) {
+    if (game_ids %>% is_null()) {
       stop("Please enter game ids")
     }
     .get_pbp2_safe <-
-      purrr::possibly(.get_pbp2, tibble())
+      possibly(.get_pbp2, tibble())
 
     all_data <-
       game_ids %>%
@@ -360,11 +360,11 @@ fanduel_summary <-
   function(game_ids = c(21700002, 21700003),
            nest_data = FALSE,
            return_message = TRUE) {
-    if (game_ids %>% purrr::is_null()) {
+    if (game_ids %>% is_null()) {
       stop("Please enter game ids")
     }
     .get_fanduel_safe <-
-      purrr::possibly(.get_fanduel, tibble())
+      possibly(.get_fanduel, tibble())
 
     all_data <-
       game_ids %>%

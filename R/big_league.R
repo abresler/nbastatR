@@ -41,7 +41,7 @@
       map_chr(function(x) {
         df_row <- dictionary %>% filter(!!sym(dictionary_name) == x)
         if (nrow(df_row) == 0) {
-          glue::glue("Missing {x} from {dictionary_name} dictionary") %>%
+          glue("Missing {x} from {dictionary_name} dictionary") %>%
             cat(fill = T)
 
           return(x)
@@ -53,12 +53,12 @@
 .blg_teams <- function() {
   data <-
     "https://bigleaguegraphs.com/api/nba/teams/list" %>%
-    jsonlite::fromJSON() %>%
+    fromJSON() %>%
     dplyr::as_tibble()
 
   data <-
     data %>%
-    purrr::set_names(.validate_dictionary_names(data = data, dictionary = .dictionary_blg_names(), dictionary_name = "nameBLG")) %>%
+    set_names(.validate_dictionary_names(data = data, dictionary = .dictionary_blg_names(), dictionary_name = "nameBLG")) %>%
     unite(nameTeam, cityTeam, teamName, sep = " ", remove = F)
 
   data

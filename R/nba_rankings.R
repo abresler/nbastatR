@@ -4,7 +4,7 @@
   function(season = 2021,
            return_message = T) {
     year <- season - 1
-    url <- glue::glue("https://data.nba.net/prod/v1/{year}/team_stats_rankings.json") %>%
+    url <- glue("https://data.nba.net/prod/v1/{year}/team_stats_rankings.json") %>%
       as.character()
     json <-
       fromJSON(url)
@@ -14,7 +14,7 @@
     season_slug <- generate_season_slug(season = season)
 
     if (return_message) {
-      glue::glue("Getting {season_slug} team rankings") %>% cat(fill = T)
+      glue("Getting {season_slug} team rankings") %>% cat(fill = T)
     }
 
 
@@ -40,13 +40,13 @@
       }
       types <- c("Avg", "Rank")
       var_names <-
-        glue::glue("{name_actual}{types}") %>% as.character()
+        glue("{name_actual}{types}") %>% as.character()
 
       var_df <-
         var_data %>%
         flatten_df() %>%
-        mutate_all(funs(. %>% as.character() %>% readr::parse_number())) %>%
-        purrr::set_names(var_names) %>%
+        mutate_all(funs(. %>% as.character() %>% parse_number())) %>%
+        set_names(var_names) %>%
         mutate(idTeam = teams) %>%
         suppressWarnings()
       var_df
@@ -54,7 +54,7 @@
 
     data <-
       data %>%
-      purrr::reduce(left_join) %>%
+      reduce(left_join) %>%
       mutate(slugSeason = season_slug,
              yearSeason = year_season_start + 1,
              datetimePublished) %>%
@@ -98,8 +98,8 @@ teams_rankings <-
            nest_data = F,
            return_message = T) {
     .get_teams_season_rankings_safe <-
-      purrr::possibly(.get_teams_season_rankings, tibble())
-    if (seasons %>% purrr::is_null()) {
+      possibly(.get_teams_season_rankings, tibble())
+    if (seasons %>% is_null()) {
       stop("Enter seasons")
     }
     all_data <-

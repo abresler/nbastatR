@@ -1,7 +1,7 @@
 
 
 .parse_out_set <-
-  memoise::memoise(function(data, set_column = "setSpot15CornerLeftCollege") {
+  memoise(function(data, set_column = "setSpot15CornerLeftCollege") {
     df_set <-
       data %>%
       select(one_of(set_column)) %>%
@@ -16,9 +16,9 @@
         names_set <-
           c(
             set_column,
-            glue::glue("{set_column}Made"),
-            glue::glue("{set_column}Attempted"),
-            glue::glue("{set_column}Pct")
+            glue("{set_column}Made"),
+            glue("{set_column}Attempted"),
+            glue("{set_column}Pct")
           )
         values <-
           x %>% str_split("\\-") %>% flatten_chr() %>% as.numeric()
@@ -29,7 +29,7 @@
           X3 = values[2],
           X4 = X2 / X3
         ) %>%
-          purrr::set_names(c(names_set))
+          set_names(c(names_set))
       })
 
     data %>%
@@ -38,7 +38,7 @@
   })
 
 .get_shot_pct <-
-  memoise::memoise(function(x) {
+  memoise(function(x) {
   shots <-
     x %>%
     str_split('\\-') %>%
@@ -52,18 +52,18 @@
 
 })
 .get_year_draft_combine <-
-  memoise::memoise(function(combine_year = 2014,
+  memoise(function(combine_year = 2014,
            return_message = T) {
     if (combine_year < 2000) {
       stopifnot("Sorry data starts in the 2000-2001 season")
     }
 
     if (return_message) {
-      glue::glue("Acquiring {combine_year} NBA Draft Combine Data") %>% cat(fill = T)
+      glue("Acquiring {combine_year} NBA Draft Combine Data") %>% cat(fill = T)
     }
     slugSeason <- generate_season_slug(season = combine_year)
     url <-
-      glue::glue(
+      glue(
         "https://stats.nba.com/stats/draftcombinestats?LeagueID=00&SeasonYear={slugSeason}"
       ) %>%
       as.character()
@@ -86,7 +86,7 @@
 
     data <-
       data %>%
-      purrr::set_names(actual_names)
+      set_names(actual_names)
 
     num_names <-
       actual_names[actual_names %>% str_detect("pct|Inches|^id[A-Z]|time|weight|reps")]
@@ -94,7 +94,7 @@
     data <-
       data %>%
       mutate_at(num_names,
-                funs(. %>% as.character() %>% readr::parse_number())) %>%
+                funs(. %>% as.character() %>% parse_number())) %>%
       dplyr::rename(slugPosition = groupPosition)
 
     if (actual_names[actual_names %>% str_detect("set")] %>% length() > 0) {
@@ -107,7 +107,7 @@
 
       data <-
         data %>%
-        purrr::reduce(left_join) %>%
+        reduce(left_join) %>%
         suppressMessages()
     }
 
@@ -142,11 +142,11 @@ draft_combines <-
   function(years = NULL,
            return_message = T,
            nest_data = F) {
-    if (years %>% purrr::is_null()) {
+    if (years %>% is_null()) {
       stop("Please enter combine years")
     }
     .get_year_draft_combine_safe <-
-      purrr::possibly(.get_year_draft_combine, tibble())
+      possibly(.get_year_draft_combine, tibble())
 
     all_data <-
       years %>%

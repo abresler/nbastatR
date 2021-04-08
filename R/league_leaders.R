@@ -17,16 +17,16 @@
 
     if (!mode %>% str_to_lower() %in% str_to_lower(modes)) {
       mode_slugs <- modes %>% str_c(collapse='\n')
-      stop(glue::glue("Modes can only be {mode_slugs}"))
+      stop(glue("Modes can only be {mode_slugs}"))
     }
     scope_slug <- "S"
     json_url <-
-      glue::glue("https://stats.nba.com/stats/leagueLeaders?LeagueID=00&PerMode={mode}&Scope={scope_slug}&Season={slug_season}&SeasonType={season_type}&StatCategory={metric}") %>%
+      glue("https://stats.nba.com/stats/leagueLeaders?LeagueID=00&PerMode={mode}&Scope={scope_slug}&Season={slug_season}&SeasonType={season_type}&StatCategory={metric}") %>%
       as.character() %>%
       URLencode()
 
     if (return_message) {
-      glue::glue("Acquiring {metric} {mode} league leaders in the {slug_season} season") %>% cat(fill = T)
+      glue("Acquiring {metric} {mode} league leaders in the {slug_season} season") %>% cat(fill = T)
     }
 
     json <-
@@ -38,14 +38,14 @@
     actual_params <- names(df_params) %>% resolve_nba_names()
     df_params <-
       df_params %>%
-      purrr::set_names(actual_params) %>%
+      set_names(actual_params) %>%
       mutate(numberTable = 1)
 
     data <-
       json$resultSet$rowSet %>%
       data.frame(stringsAsFactors = F) %>%
       dplyr::as_tibble() %>%
-      purrr::set_names(actual_names) %>%
+      set_names(actual_names) %>%
       munge_nba_data() %>%
       mutate(numberTable = 1)
 
@@ -124,7 +124,7 @@ metrics_leaders <-
                stringsAsFactors = F) %>%
       dplyr::as_tibble()
    .get_season_metric_league_leaders_safe <-
-     purrr::possibly(.get_season_metric_league_leaders, tibble())
+     possibly(.get_season_metric_league_leaders, tibble())
 
    all_data <-
      1:nrow(input_df) %>%
@@ -160,7 +160,7 @@ metrics_leaders <-
       assign(x = 'df_dict_nba_teams_history', df_dict_nba_teams_history, envir = .GlobalEnv)
     }
     json_url <-
-      glue::glue(
+      glue(
       "https://stats.nba.com/stats/franchiseleaderswrank?LeagueID=00&PerMode={mode}&SeasonType={season_type}&TeamID={team_id}"
     ) %>%
       URLencode() %>%
@@ -175,7 +175,7 @@ metrics_leaders <-
 
 
     if (return_message) {
-      glue::glue("Acquiring {team_name} {mode} franchise leaders") %>% cat(fill = T)
+      glue("Acquiring {team_name} {mode} franchise leaders") %>% cat(fill = T)
     }
 
     json <-
@@ -191,12 +191,12 @@ metrics_leaders <-
     actual_params <- names(df_params) %>% resolve_nba_names()
     df_params <-
       df_params %>%
-      purrr::set_names(actual_params) %>%
+      set_names(actual_params) %>%
       mutate(numberTable = 1)
 
     data <-
       json$resultSet$rowSet[[1]] %>% dplyr::as_tibble() %>%
-      purrr::set_names(actual_names) %>%
+      set_names(actual_names) %>%
       munge_nba_data() %>%
       mutate(isActiveWithTeam = isActiveWithTeam %>% as.logical()) %>%
       mutate(numberTable = 1) %>%
@@ -249,7 +249,7 @@ franchise_leaders <-
            return_message = TRUE,
            nest_data = FALSE) {
 
-    if (teams %>% purrr::is_null() & !all_teams) {
+    if (teams %>% is_null() & !all_teams) {
       stop("Please enter a team or make all_teams = T")
     }
     if (!'df_dict_nba_teams_history' %>% exists()) {
@@ -268,7 +268,7 @@ franchise_leaders <-
         df_dict_nba_teams_history
     }
 
-    if (!teams %>% purrr::is_null()) {
+    if (!teams %>% is_null()) {
       team_slugs <- teams %>% str_to_upper() %>% str_c(collapse = "|")
 
       search_ids <-
@@ -308,7 +308,7 @@ franchise_leaders <-
       ) %>%
       dplyr::as_tibble()
     .get_franchise_leaders_safe <-
-      purrr::possibly(.get_franchise_leaders, tibble())
+      possibly(.get_franchise_leaders, tibble())
 
     all_data <-
       1:nrow(input_df) %>%

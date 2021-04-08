@@ -83,7 +83,7 @@ assign_nba_players <-
 generate_call_slug <-
   function(x = NULL, default_value = "") {
 
-    if (x %>% purrr::is_null()) {
+    if (x %>% is_null()) {
       return(default_value)
     }
 
@@ -134,7 +134,7 @@ assign_tables_modes <-
           walk(function(mode){
             df_table <-
               df_tables %>% filter(modeSearch == mode) %>%
-              tidyr::unnest()
+              unnest()
 
             slug_season <-
               df_table_names$slugTable
@@ -149,7 +149,7 @@ assign_tables_modes <-
               select(slugSeasonType, everything())
             }
 
-            has_measure <-  df_table %>% tibble::has_name("typeMeasure")
+            has_measure <-  df_table %>% has_name("typeMeasure")
 
             if (has_measure) {
               measures <-
@@ -165,13 +165,13 @@ assign_tables_modes <-
                   if (measure == "Advanced") {
                     df <-
                       df %>% dplyr::rename(minutesTotal = minutes)
-                    if (df %>% tibble::has_name("fgm")) {
+                    if (df %>% has_name("fgm")) {
                       df <-
                         df %>%
                         dplyr::rename(fgmTotal = fgm)
                     }
 
-                    if (df %>% tibble::has_name("fga")) {
+                    if (df %>% has_name("fga")) {
                       df <-
                         df %>%
                         dplyr::rename(fgaTotal = fga)
@@ -185,7 +185,7 @@ assign_tables_modes <-
                   }
 
 
-                  remove_rank <- names(df) %>% str_detect("Rank") %>% sum(na.rm = T) > 0 & (!df %>% tibble::has_name("isRank") & !table %>% str_detect("LeagueDash"))
+                  remove_rank <- names(df) %>% str_detect("Rank") %>% sum(na.rm = T) > 0 & (!df %>% has_name("isRank") & !table %>% str_detect("LeagueDash"))
 
                   if (remove_rank){
                     df <- df %>% select(-dplyr::matches("Rank"))
@@ -216,7 +216,7 @@ assign_tables_modes <-
 
               data <-
                 table_map %>%
-                purrr::reduce(left_join) %>%
+                reduce(left_join) %>%
                 suppressWarnings() %>%
                 suppressMessages()
 
@@ -229,7 +229,7 @@ assign_tables_modes <-
               }
               table_slug <- table %>% str_replace_all("Dashboard", "")
               table_name <-
-                glue::glue("data{table_slug}{mode}") %>%
+                glue("data{table_slug}{mode}") %>%
                 as.character()
 
               assign(table_name, eval(data), envir = .GlobalEnv)
@@ -240,7 +240,7 @@ assign_tables_modes <-
             }
 
             table_name <-
-              glue::glue("data{str_to_title(stat_type)}{table}")
+              glue("data{str_to_title(stat_type)}{table}")
 
             if (add_mode_names) {
               df_table <-
@@ -322,13 +322,13 @@ assign_tables_modes <-
 nba_player_ids <-
   function(players = NULL, player_ids = NULL) {
 
-    if (player_ids %>% purrr::is_null() && players %>% purrr::is_null()) {
+    if (player_ids %>% is_null() && players %>% is_null()) {
       stop("Please enter players of player ids")
     }
 
     ids <- c()
 
-    if (!player_ids %>% purrr::is_null()) {
+    if (!player_ids %>% is_null()) {
       ids <-
         ids %>%
         append(player_ids)
@@ -341,7 +341,7 @@ nba_player_ids <-
       assign(x = 'df_nba_player_dict', df_nba_player_dict, envir = .GlobalEnv)
     }
 
-    if (!players %>% purrr::is_null() ) {
+    if (!players %>% is_null() ) {
     player_search <-
       players %>% str_c(collapse = "|")
 
@@ -377,13 +377,13 @@ nba_teams_ids <-
            team_ids = NULL,
            all_active_teams = F) {
 
-    if (team_ids %>% purrr::is_null() && teams %>% purrr::is_null() & all_active_teams == F) {
+    if (team_ids %>% is_null() && teams %>% is_null() & all_active_teams == F) {
       stop("Please enter teams or team_ids ids")
     }
 
     ids <- c()
 
-    if (!team_ids %>% purrr::is_null()) {
+    if (!team_ids %>% is_null()) {
       ids <-
         ids %>%
         append(team_ids)
@@ -394,7 +394,7 @@ nba_teams_ids <-
       return(ids)
     }
 
-    if (!teams %>% purrr::is_null() ) {
+    if (!teams %>% is_null() ) {
       teams_search <-
         teams %>% str_c(collapse = "|")
 
@@ -416,7 +416,7 @@ nba_teams_ids <-
 
 gen_url <- function(endpoint) {
   path <- paste('stats/', endpoint, sep = '')
-  url <- httr::modify_url("https://stats.nba.com/stats/", path = path)
+  url <- modify_url("https://stats.nba.com/stats/", path = path)
   url
 }
 
@@ -444,7 +444,7 @@ clean_data_table_name <-
       data %>% select_if(is.numeric) %>% select(-dplyr::matches("id")) %>% names()
 
     num_new <-
-      glue::glue("{num_names}Team") %>% as.character()
+      glue("{num_names}Team") %>% as.character()
 
     names(data)[names(data) %in% num_names] <-
       num_new
@@ -464,7 +464,7 @@ generate_season_slug <-
     season_start <- season - 1
     season_end_slug <- season %>% substr(3,4)
 
-    glue::glue("{season_start}-{season_end_slug}") %>%
+    glue("{season_start}-{season_end_slug}") %>%
       as.character()
 
   }
@@ -480,7 +480,7 @@ pad_id <-
 
     start <-
       rep("0", times = zeros) %>% str_c(collapse = "")
-    glue::glue("{start}{id}") %>% as.character()
+    glue("{start}{id}") %>% as.character()
   }
 
 #' Dictionary of NBA Headers and nbastatR names
@@ -1267,7 +1267,7 @@ resolve_nba_names <- function(json_names) {
         nrow() == 0
 
       if (no_name) {
-        glue::glue("Missing {name} in dictionary") %>% cat(fill = T)
+        glue("Missing {name} in dictionary") %>% cat(fill = T)
         return(name)
       }
       df_nba_names %>%
@@ -1282,7 +1282,7 @@ resolve_nba_names <- function(json_names) {
 char_words <-
   function(words = c("name[A-Z]", "date[A-Z]", "slug[A-Z]", "outcome[A-Z]", "team[A-Z]", 'height[A-Z]', 'result[A-Z]', "segment[A-Z]", "range[A-Z]", "vs[A-Z]", "mode[A-Z]", "category[A-Z]", "record[A-Z]", "^url[A-Z]", "code[A-Z]",
                      "description", "city", "time[A-Z]", "nickname[A-Z]", "group[A-Z]", "location[A-Z]", "zone[A-Z]", "type[A-Z]")){
-    words %>% stringr::str_c(collapse = "|")
+    words %>% str_c(collapse = "|")
   }
 
 ### ned to think about htis
@@ -1291,26 +1291,26 @@ munge_play_description <- function(data) {
 }
 
 munge_nba_data <- function(data) {
-  if (data %>% tibble::has_name("datetimeBirth")) {
+  if (data %>% has_name("datetimeBirth")) {
     data <-
       data %>%
-      mutate(datetimeBirth = datetimeBirth %>%  readr::parse_datetime() %>% as.Date())
+      mutate(datetimeBirth = datetimeBirth %>%  parse_datetime() %>% as.Date())
   }
 
-  if (data %>% tibble::has_name("timeGame")) {
+  if (data %>% has_name("timeGame")) {
     data <-
       data %>%
-      tidyr::separate(timeGame, into = c("hours", "minutes"), sep = "\\:") %>%
+      separate(timeGame, into = c("hours", "minutes"), sep = "\\:") %>%
       mutate_at(c("hours", "minutes"),
                 funs(. %>% as.numeric())) %>%
       mutate(lengthGameMinutes = (hours * 60) + minutes) %>%
       dplyr::select(-one_of(c("hours", "minutes")))
   }
 
-  if (data %>% tibble::has_name("minutes")) {
+  if (data %>% has_name("minutes")) {
     if (data$minutes %>% str_count("\\:") %>% sum(na.rm = T) > 0) {
       data <- data %>%
-        tidyr::separate(minutes, into = c("min", "seconds"), sep = "\\:") %>%
+        separate(minutes, into = c("min", "seconds"), sep = "\\:") %>%
         mutate_at(c("min", "seconds"),
                   funs(. %>% as.numeric())) %>%
         mutate(seconds = seconds / 60,
@@ -1332,7 +1332,7 @@ munge_nba_data <- function(data) {
               funs(. %>% as.numeric())) %>%
     suppressWarnings()
 
-  if (data %>% tibble::has_name("fga") && data %>%  tibble::has_name("fg3a")) {
+  if (data %>% has_name("fga") && data %>%  has_name("fg3a")) {
     data <-
       data %>%
       mutate(fg2m = fgm - fg3m,
@@ -1341,13 +1341,13 @@ munge_nba_data <- function(data) {
       )
   }
 
-  if (data %>% tibble::has_name("slugMatchup")){
+  if (data %>% has_name("slugMatchup")){
     data <-
       data %>%
       mutate(locationGame = case_when(slugMatchup %>% str_detect("@") ~
                                         "A",
                                       T ~ "H")) %>%
-      tidyr::separate(
+      separate(
         slugMatchup,
         into = c("remove", "slugOpponent"),
         sep = c("vs.|@"),
@@ -1359,14 +1359,14 @@ munge_nba_data <- function(data) {
       dplyr::select(slugSeason:outcomeGame, locationGame, everything())
   }
 
-  if (data %>% tibble::has_name("groupStartPosition")){
+  if (data %>% has_name("groupStartPosition")){
     data <-
       data %>%
       mutate(isStarter = !is.na(groupStartPosition)) %>%
       dplyr::select(dplyr::matches("id|name|slug|city|is"), everything())
   }
 
-  if (data %>% tibble::has_name("dateGame")) {
+  if (data %>% has_name("dateGame")) {
     if (data$dateGame %>% str_detect("T") %>% sum(na.rm = T) > 0) {
       data <-
         data %>%
@@ -1374,7 +1374,7 @@ munge_nba_data <- function(data) {
     }
   }
 
-  if (data %>% tibble::has_name("dateGameLast")) {
+  if (data %>% has_name("dateGameLast")) {
     if (data$dateGameLast %>% str_detect("T") %>% sum(na.rm = T) > 0) {
       data <-
         data %>%
@@ -1385,10 +1385,10 @@ munge_nba_data <- function(data) {
         mutate(dateGameLast = dateGameLast %>% lubridate::mdy())
     }
   }
-  if (data %>% tibble::has_name("slugScore")) {
+  if (data %>% has_name("slugScore")) {
     data <-
       data %>%
-      tidyr::separate(slugScore, into = c("scoreAway", "scoreHome"), sep = "\\ - ", remove = F) %>%
+      separate(slugScore, into = c("scoreAway", "scoreHome"), sep = "\\ - ", remove = F) %>%
       mutate_at(c("scoreHome", "scoreAway"),
                 funs(. %>% as.numeric())) %>%
       mutate(slugTeamLeading = case_when(marginScore == 0 ~ "Tie",
@@ -1396,17 +1396,17 @@ munge_nba_data <- function(data) {
                                          TRUE ~ "Home"))
   }
 
-  if (data %>% tibble::has_name("nameGroup") && data %>% tibble::has_name("nameGroupValue")) {
+  if (data %>% has_name("nameGroup") && data %>% has_name("nameGroupValue")) {
     data <-
       data %>%
       dplyr::select(-nameGroup) %>%
       dplyr::rename(typeFilter = nameGroupValue)
   }
 
-  if (data %>% tibble::has_name("timeQuarter")) {
+  if (data %>% has_name("timeQuarter")) {
     data <-
       data %>%
-      tidyr::separate(
+      separate(
         "timeQuarter",
         into = c("minuteRemainingQuarter", "secondsRemainingQuarter"),
         sep = "\\:",
@@ -1425,16 +1425,16 @@ munge_nba_data <- function(data) {
       dplyr::select(idGame:numberPeriod, minuteGame, timeRemaining, everything())
   }
 
-  if (data %>% tibble::has_name("dateGameLastPlayed")) {
+  if (data %>% has_name("dateGameLastPlayed")) {
     data <-
       data %>%
       mutate(dateGameLastPlayed = dateGameLastPlayed %>% substr(1,10) %>% lubridate::ymd())
   }
 
-  if (data %>% tibble::has_name("slugRecordTeam")){
+  if (data %>% has_name("slugRecordTeam")){
     data <-
       data %>%
-      tidyr::separate(slugRecordTeam,
+      separate(slugRecordTeam,
                       sep = "\\-",
                       into = c("winsTeam", "lossesTeam"),
                       remove = F) %>%
@@ -1477,7 +1477,7 @@ munge_nba_data <- function(data) {
       dplyr::rename(nameTeam = teamName)
   }
 
-  if (data %>% tibble::has_name("namePlayerOnOff")) {
+  if (data %>% has_name("namePlayerOnOff")) {
     assign_nba_players()
     data <-
       data %>%
@@ -1499,13 +1499,13 @@ munge_nba_data <- function(data) {
       dplyr::rename(typeFilter = namePlayerOnOff)
   }
 
-  if (data %>% tibble::has_name("fg3a") && data %>% tibble::has_name("fg3m")) {
+  if (data %>% has_name("fg3a") && data %>% has_name("fg3m")) {
     data <-
       data %>%
       mutate(pctFG3 = fg3m / fg3a)
   }
 
-  if (data %>% tibble::has_name("namePlayerPasser")) {
+  if (data %>% has_name("namePlayerPasser")) {
     assign_nba_players()
     data <-
       data %>%
@@ -1520,7 +1520,7 @@ munge_nba_data <- function(data) {
       suppressMessages()
   }
 
-  if (data %>% tibble::has_name("namePlayerPassTo")) {
+  if (data %>% has_name("namePlayerPassTo")) {
     assign_nba_players()
     data <-
       data %>%
@@ -1542,7 +1542,7 @@ munge_nba_data <- function(data) {
     dplyr::select(-one_of(c("orderSort", "idLeague", "namePlayerLastFirst", "dateGameLastPlayed"))) %>%
     suppressWarnings()
 
-  if (data %>% tibble::has_name("idTeam1")) {
+  if (data %>% has_name("idTeam1")) {
    data <-
      data %>%
       dplyr::rename(idTeam = idTeam1)
@@ -1595,9 +1595,9 @@ nba_json_to_df <-
       json$resultSets$rowSet[table_id] %>%
       data.frame(stringsAsFactors = F) %>%
       dplyr::as_tibble() %>%
-      purrr::set_names(json_names)
+      set_names(json_names)
 
-    if (data %>% tibble::has_name("G")) {
+    if (data %>% has_name("G")) {
       data <-
         data %>%
         dplyr::select(-G)
@@ -1609,7 +1609,7 @@ nba_json_to_df <-
 
     data <-
       data %>%
-      purrr::set_names(actual_names)
+      set_names(actual_names)
 
     if (data %>% nrow() == 0) {
       return(invisible())

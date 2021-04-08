@@ -14,7 +14,7 @@
       stop("Drafts start in 1948")
     }
     url <-
-      glue::glue(
+      glue(
         "https://stats.nba.com/stats/drafthistory?College=&LeagueID=00&OverallPick=&RoundNum=&RoundPick=&Season={draft_year}"
       )
 
@@ -39,12 +39,12 @@
 
         df_table %>%
           dplyr::rename(yearDraft = yearSeasonStart) %>%
-          tidyr::unite(nameTeam, cityTeam, teamName, sep = " ", remove = F) %>%
+          unite(nameTeam, cityTeam, teamName, sep = " ", remove = F) %>%
           select(yearDraft, numberPickOverall, numberRound, numberRoundPick, everything())
       })
 
     if (return_message) {
-      glue::glue("Acquired {draft_year} NBA Draft data") %>%
+      glue("Acquired {draft_year} NBA Draft data") %>%
         cat(fill = T)
     }
     all_data
@@ -81,7 +81,7 @@ drafts <-
            nest_data = F,
            return_message = T) {
     .get_nba_draft_year_safe <-
-      purrr::possibly(.get_nba_draft_year, tibble())
+      possibly(.get_nba_draft_year, tibble())
 
     all_data <-
       draft_years %>%
@@ -99,7 +99,7 @@ drafts <-
     df_foreign <-
       all_data %>%
       filter(slugOrganizationTypeFrom == "PRO") %>%
-      tidyr::separate(
+      separate(
         nameOrganizationFrom,
         sep = "\\(",
         into = c("nameOrganizationFrom", "locationOrganizationFrom")
@@ -117,7 +117,7 @@ drafts <-
     if (nest_data) {
       all_data <-
         all_data %>%
-        tidyr::nest(-c(yearDraft), .key = dataDraft)
+        nest(-c(yearDraft), .key = dataDraft)
     }
 
     all_data

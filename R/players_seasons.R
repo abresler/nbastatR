@@ -2,7 +2,7 @@
 .get_nba_season_players <-
   function(season = NULL,
            return_message = T) {
-    if (season %>% purrr::is_null()) {
+    if (season %>% is_null()) {
       stop("Please enter as season")
     }
 
@@ -71,7 +71,7 @@ seasons_players <-
            nest_data = F,
            return_message = T) {
     .get_nba_season_players_safe <-
-      purrr::possibly(.get_nba_season_players, tibble())
+      possibly(.get_nba_season_players, tibble())
 
     all_data <-
       seasons %>%
@@ -86,7 +86,7 @@ seasons_players <-
     if (nest_data) {
       all_data  <-
         all_data %>%
-        tidyr::nest(-c(slugSeason), .key = dataSeasonPlayers) %>%
+        nest(-c(slugSeason), .key = dataSeasonPlayers) %>%
         mutate(countPlayers = dataSeasonPlayers %>% map_dbl(nrow) %>% as.integer())
     }
     all_data

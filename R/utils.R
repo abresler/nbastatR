@@ -83,7 +83,7 @@ make_url <- function(datatype = NULL,
 fix_name <- function(data, fix_name = "Weeks12") {
   names(data) <-
     names(data) %>%
-    str_replace_all(fix_name, glue::glue("\\.{fix_name}"))
+    str_replace_all(fix_name, glue("\\.{fix_name}"))
   data
 }
 
@@ -154,7 +154,7 @@ gather_data <-
       gather_cols %>% append(char_names)
 
 
-    if (!numeric_ids %>% purrr::is_null()){
+    if (!numeric_ids %>% is_null()){
       numeric_names <-
         numeric_ids %>% str_c(collapse = "|")
       base_numerics <-
@@ -203,7 +203,7 @@ gather_data <-
       data %>%
       gather(UQ(variable_name), value, -gather_cols)
 
-    if (!unite_columns %>% purrr::is_null()) {
+    if (!unite_columns %>% is_null()) {
       df_unite <- unite_columns %>% flatten_df()
       data <-
         data %>%
@@ -211,7 +211,7 @@ gather_data <-
         suppressWarnings()
     }
 
-    if (!separate_columns %>% purrr::is_null()) {
+    if (!separate_columns %>% is_null()) {
       df_sep <-
         separate_columns %>% flatten_df()
       data <-
@@ -254,14 +254,14 @@ spread_data <-
            separate_columns = NULL
   ) {
 
-    if (!unite_columns %>% purrr::is_null()) {
+    if (!unite_columns %>% is_null()) {
       df_unite <- unite_columns %>% flatten_df()
       data <-
         data %>%
         unite(col = UQ(df_unite$new_column), df_unite$column_1, df_unite$column_2, sep = df_unite$sep)
     }
 
-    if (!separate_columns %>% purrr::is_null()) {
+    if (!separate_columns %>% is_null()) {
       df_sep <-
         separate_columns %>% flatten_df()
       data <-
@@ -313,7 +313,7 @@ get_data_classes <- function(data) {
       future_map_dfr(function(x) {
         df_wide <- data %>%
           select(x) %>%
-          purrr::set_names("listColumn") %>%
+          set_names("listColumn") %>%
           mutate(nrow = listColumn %>% map_dbl(length)) %>%
           count(countZero = nrow == 0) %>%
           mutate(pctZero = n /sum(n),
@@ -323,7 +323,7 @@ get_data_classes <- function(data) {
           unite(item, item, countZero, sep = "") %>%
           spread(item, value)
 
-        if (df_wide %>% tibble::has_name("pctZeroTRUE")) {
+        if (df_wide %>% has_name("pctZeroTRUE")) {
           df_wide <-
             df_wide %>%
             mutate(removeColumn = if_else(pctZeroTRUE == 1, TRUE, FALSE),
@@ -360,13 +360,13 @@ get.json_data <-
     if (use_read_lines) {
       data <-
         url %>%
-        readr::read_lines() %>%
-        jsonlite::fromJSON(flatten = is_flattened, simplifyDataFrame = is_tibble)
+        read_lines() %>%
+        fromJSON(flatten = is_flattened, simplifyDataFrame = is_tibble)
       return(data)
     }
 
     url %>%
-      jsonlite::fromJSON(flatten = is_flattened, simplifyDataFrame = is_tibble)
+      fromJSON(flatten = is_flattened, simplifyDataFrame = is_tibble)
 
   }
 
@@ -389,7 +389,7 @@ summarise_per_minute <-
            id_columns = c("idPlayerSeason"),
            scale_columns = c("pts", "fg", "ast", "tov", "blk", "stl", "drb", "trb", "orb", "ft", "pf", "countLayupsShooting", "countDunks", "hlf")) {
     cols_to_match <-
-      glue::glue("^{scale_columns}") %>%
+      glue("^{scale_columns}") %>%
       str_c(collapse = "|")
 
     data <-
@@ -443,11 +443,11 @@ summarise_per_minute <-
 scale_per_minute <-
   function(data,
            scale_columns = NULL) {
-    if (scale_columns %>% purrr::is_null()) {
+    if (scale_columns %>% is_null()) {
       stop("Please enter columns to scale")
     }
     cols_to_match <-
-      glue::glue("^{scale_columns}") %>%
+      glue("^{scale_columns}") %>%
       str_c(collapse = "|")
 
     is_team <-
@@ -507,7 +507,7 @@ height_in_inches <-
   function(height) {
     height_ft_in <-
       height %>%
-      stringr::str_split("-") %>%
+      str_split("-") %>%
       flatten_chr() %>%
       as.numeric()
     height_in <-

@@ -4,7 +4,7 @@
   function(player_id = 1628386,
            mode = "Totals",
            return_message = TRUE) {
-    if (player_id %>% purrr::is_null()) {
+    if (player_id %>% is_null()) {
       stop("Please enter an NBA player ID")
     }
 
@@ -21,7 +21,7 @@
       pull(namePlayer)
 
     if (return_message) {
-      glue::glue("Acquiring {player} career {mode} statistic tables") %>% cat(fill = T)
+      glue("Acquiring {player} career {mode} statistic tables") %>% cat(fill = T)
     }
     mode_options <-
       c('Totals', 'PerGame', "Per36") %>% str_to_upper()
@@ -32,7 +32,7 @@
     }
 
     url <-
-      glue::glue(
+      glue(
         "https://stats.nba.com/stats/playercareerstats?LeagueID=00&PerMode={mode}&PlayerID={player_id}"
       ) %>%
       as.character()
@@ -68,7 +68,7 @@
 
         data <-
           data %>%
-          purrr::set_names(actual_names) %>%
+          set_names(actual_names) %>%
           munge_nba_data() %>%
           mutate(
             modeSearch = mode,
@@ -78,7 +78,7 @@
           ) %>%
           select(nameTable, modeSearch, namePlayer, everything())
 
-        if (data %>% tibble::has_name("slugSeason")) {
+        if (data %>% has_name("slugSeason")) {
           df_players_seasons <-
             data %>%
             distinct(slugSeason) %>%
@@ -144,18 +144,18 @@ players_careers <-
            assign_to_environment = TRUE,
            add_mode_names = TRUE,
            return_message = TRUE) {
-    if (modes %>% purrr::is_null()) {
+    if (modes %>% is_null()) {
       stop("Please enter a valid mode")
     }
     ids <- c()
 
-    if (!player_ids %>% purrr::is_null()) {
+    if (!player_ids %>% is_null()) {
       ids <-
         ids %>%
         append(player_ids)
     }
 
-    if (!players %>% purrr::is_null()) {
+    if (!players %>% is_null()) {
       players_search <-
         nba_player_ids(players = players)
 
@@ -178,7 +178,7 @@ players_careers <-
 
 
     get_nba_player_career_stats_safe <-
-      purrr::possibly(.get_nba_player_career_stats, tibble())
+      possibly(.get_nba_player_career_stats, tibble())
 
     all_data <-
       1:nrow(df_input) %>%

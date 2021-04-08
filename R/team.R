@@ -30,7 +30,7 @@
 
       df_parameters <-
         df_parameters %>%
-        purrr::set_names(names(df_parameters) %>% resolve_nba_names()) %>%
+        set_names(names(df_parameters) %>% resolve_nba_names()) %>%
         munge_nba_data()
 
       df_parameters <-
@@ -60,11 +60,11 @@
 
       data <-
         data  %>%
-        purrr::set_names(actual_names) %>%
+        set_names(actual_names) %>%
         munge_nba_data() %>%
         mutate(numberTable = x)
 
-      if (data %>% tibble::has_name("typeShot")) {
+      if (data %>% has_name("typeShot")) {
         data <-
           data %>%
           dplyr::rename(typeFilter = typeShot)
@@ -119,13 +119,13 @@
         suppressWarnings()
 
       if (table_name == "ByYearTeamDashboard") {
-        if (data %>% tibble::has_name("slugSeason")) {
+        if (data %>% has_name("slugSeason")) {
           data <-
             data %>%
             dplyr::rename(slugSeasonSearch = slugSeason)
         }
 
-        if (data %>% tibble::has_name("groupByYear")) {
+        if (data %>% has_name("groupByYear")) {
           data <-
             data %>%
             dplyr::rename(slugSeason = groupByYear)
@@ -193,7 +193,7 @@
       clean_to_stem()
 
     url <-
-      glue::glue(
+      glue(
         "https://stats.nba.com/stats/teaminfocommon/?leagueId=00&season={season_slug}&seasonType={season_type_slug}&teamId={team_id}"
       ) %>%
       as.character()
@@ -209,7 +209,7 @@
       json$resultSets$rowSet[[1]] %>%
       data.frame(stringsAsFactors = F) %>%
       dplyr::as_tibble() %>%
-      purrr::set_names(names_md) %>%
+      set_names(names_md) %>%
       munge_nba_data()
 
     names_md <-
@@ -219,7 +219,7 @@
       json$resultSets$rowSet[[2]] %>%
       data.frame(stringsAsFactors = F) %>%
       dplyr::as_tibble() %>%
-      purrr::set_names(names_md) %>%
+      set_names(names_md) %>%
       munge_nba_data() %>%
       dplyr::rename(idSeason = slugSeason) %>%
       mutate(idSeason = idSeason %>% as.numeric())
@@ -228,7 +228,7 @@
       df_md %>%
       left_join(df_md2) %>%
       mutate(yearSeason = season) %>%
-      tidyr::unite(nameTeam,
+      unite(nameTeam,
                    cityTeam,
                    teamName,
                    sep = " ",
@@ -243,7 +243,7 @@
     names(data)[names(data) %in% no_teams] <-
       str_c(names(data)[names(data) %in% no_teams], "Team")
     if (return_message) {
-      glue::glue("Acquired {data$nameTeam %>% unique()} {season_slug} team information") %>% cat(fill = T)
+      glue("Acquired {data$nameTeam %>% unique()} {season_slug} team information") %>% cat(fill = T)
     }
     data
 
@@ -286,7 +286,7 @@ teams_seasons_info <-
                         team_ids = team_ids,
                         all_active_teams = all_active_teams)
     .get_team_season_info_safe <-
-      purrr::possibly(.get_team_season_info, tibble())
+      possibly(.get_team_season_info, tibble())
     df_input <-
       expand.grid(
         team_id = team_ids,
@@ -322,7 +322,7 @@ teams_seasons_info <-
   }
 
 .dictionary_team_tables <-
-  memoise::memoise(function() {
+  memoise(function() {
     tibble(
       nameTable = c(
         "passes",
@@ -397,7 +397,7 @@ teams_seasons_info <-
       .dictionary_team_tables()
 
     if (return_message) {
-      glue::glue("Acquiring {team_id} {season} {season_type} {measure} {table} {mode} data") %>% cat(fill = T)
+      glue("Acquiring {team_id} {season} {season_type} {measure} {table} {mode} data") %>% cat(fill = T)
     }
 
     table_slug <-
@@ -485,7 +485,7 @@ teams_seasons_info <-
       .generate_param_slug(params = params)
 
     url <-
-      glue::glue("{URL}?{slug_param}") %>% as.character()
+      glue("{URL}?{slug_param}") %>% as.character()
 
     json <-
       url %>%
@@ -661,20 +661,20 @@ teams_tables <-
            last_n_games = NA,
            assign_to_environment = TRUE,
            return_message = TRUE) {
-    if (tables %>% purrr::is_null()) {
+    if (tables %>% is_null()) {
       stop("Please enter tables")
     }
 
-    if (modes %>% purrr::is_null()) {
+    if (modes %>% is_null()) {
       stop("Please enter modes")
     }
 
-    if (seasons %>% purrr::is_null()) {
+    if (seasons %>% is_null()) {
       stop("Enter seasons")
     }
 
 
-    if (measures %>% purrr::is_null()) {
+    if (measures %>% is_null()) {
       stop("Please enter measures")
     }
     team_ids <-
@@ -711,7 +711,7 @@ teams_tables <-
       ) %>%
       dplyr::as_tibble()
     .get_team_table_data_safe <-
-      purrr::possibly(.get_team_table_data, tibble())
+      possibly(.get_team_table_data, tibble())
 
     all_data <-
       1:nrow(input_df) %>%
@@ -783,7 +783,7 @@ teams_tables <-
             unnest() %>%
             remove_na_columns()
 
-          has_measure <- df_tables %>% tibble::has_name("typeMeasure")
+          has_measure <- df_tables %>% has_name("typeMeasure")
 
           if (has_measure) {
             measures <-
@@ -845,7 +845,7 @@ teams_tables <-
     player_id <- 0
     slugSeason <- generate_season_slug(season = season)
     if (return_message) {
-      glue::glue("{team} {slugSeason} shot data") %>% cat(fill = T)
+      glue("{team} {slugSeason} shot data") %>% cat(fill = T)
     }
     URL <- gen_url("shotchartdetail")
 
@@ -898,7 +898,7 @@ teams_tables <-
       .generate_param_slug(params = params)
 
     url <-
-      glue::glue("{URL}?{slug_param}") %>% as.character()
+      glue("{URL}?{slug_param}") %>% as.character()
 
     json <-
       url %>%
@@ -909,7 +909,7 @@ teams_tables <-
 
     df_params <-
       df_params %>%
-      purrr::set_names(param_names) %>%
+      set_names(param_names) %>%
       mutate(numberTable = table_id,
              nameTeam = team)
 
@@ -931,11 +931,11 @@ teams_tables <-
                 funs(ifelse(. == "", NA, .))) %>%
       remove_na_columns() %>%
       mutate_at(c("locationX", "locationY"),
-                funs(. %>% as.character() %>% readr::parse_number())) %>%
+                funs(. %>% as.character() %>% parse_number())) %>%
       suppressWarnings() %>%
       suppressMessages() %>%
       select(dplyr::matches("yearSeason", "slugSeason", "nameTeam"), everything()) %>%
-      tidyr::separate(zoneArea, into = c("nameZone", "slugZone"), sep = "\\(") %>%
+      separate(zoneArea, into = c("nameZone", "slugZone"), sep = "\\(") %>%
       mutate(slugZone = slugZone %>% str_replace_all("\\)", ""))
 
     data
@@ -1002,7 +1002,7 @@ teams_shots <-
       as_tibble()
 
     .get_team_shot_chart_safe <-
-      purrr::possibly(.get_team_shot_chart, tibble())
+      possibly(.get_team_shot_chart, tibble())
 
     all_data <-
       1:nrow(input_df) %>%

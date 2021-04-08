@@ -17569,15 +17569,15 @@ validate_nba_player_photos <-
     all_data <-
       1:players %>%
       map_dfr(function(x) {
-        glue::glue("{x} of {players}") %>% message()
+        glue("{x} of {players}") %>% message()
         df_row <- dict_players[x, ]
         id_player <- df_row$idPlayer
         is_ok_headshot <-
-          !httr::http_error(df_row$urlPlayerHeadshot)
+          !http_error(df_row$urlPlayerHeadshot)
         is_ok_thumbnail <-
-          !httr::http_error(df_row$urlPlayerThumbnail)
+          !http_error(df_row$urlPlayerThumbnail)
         is_ok_action <-
-          !httr::http_error(df_row$urlPlayerActionPhoto)
+          !http_error(df_row$urlPlayerActionPhoto)
 
         df <- tibble(
           idPlayer = id_player,
@@ -17677,7 +17677,7 @@ validate_nba_player_photos <-
 
     url <-
       list('https://', domain_slug, tl_domain) %>%
-      purrr::reduce(paste0)
+      reduce(paste0)
     df <-
       tibble(urlReferer = url,
              userAgent = user_agent)
@@ -17725,7 +17725,7 @@ validate_nba_player_photos <-
 curl_json_to_vector <-
   function(url = "https://data.nba.net/prod/v1/2017/coaches.json") {
     json <-
-      curl::curl(url = url) %>%
+      curl(url = url) %>%
       read_lines() %>%
       fromJSON(simplifyVector = T)
 
@@ -17745,7 +17745,7 @@ generate_team_season_logo <-
       generate_season_slug(season = season)
 
     url <-
-      glue::glue(
+      glue(
         "https://stats.nba.com/media/img/teams/logos/season/{slug_season}/{slug_team}_logo.svg"
       ) %>%
       as.character()
@@ -17762,7 +17762,7 @@ generate_team_seasons_logos_data <-
                   stringsAsFactors = F) %>%
       as_tibble()
     generate_team_season_logo_safe <-
-      purrr::possibly(generate_team_season_logo, NULL)
+      possibly(generate_team_season_logo, NULL)
 
     1:nrow(input_df) %>%
       future_map_dfr(function(x) {
@@ -17822,7 +17822,7 @@ parse.nba.json_data <-
       json_data$resultSets$rowSet %>%
       data.frame(stringsAsFactors = F) %>%
       dplyr::as_tibble() %>%
-      purrr::set_names(names_actual)
+      set_names(names_actual)
 
 
 
@@ -17867,7 +17867,7 @@ generate.nba_api.items <-
   ),
   table_type = "game") {
     urls <-
-      glue::glue(
+      glue(
         "https://stats.nba.com/templates/angular/views/{table_type}/{table_type}-{table_slugs}.html"
       ) %>%
       as.character()
@@ -17967,7 +17967,7 @@ current_schedule <-
     slug_year <-
       .get_slug_year()
     json <-
-      glue::glue("https://data.nba.net/prod/v2/{slug_year}/schedule.json") %>%
+      glue("https://data.nba.net/prod/v2/{slug_year}/schedule.json") %>%
       as.character() %>%
       fromJSON()
 
@@ -17980,7 +17980,7 @@ current_schedule <-
     df_season_games <-
       df_season_games %>%
       select(1:10) %>%
-      purrr::set_names(
+      set_names(
         c(
           "slugGame",
           "idStageGame",
@@ -17994,7 +17994,7 @@ current_schedule <-
           "hasBuzzerBeater"
         )
       ) %>%
-      tidyr::separate(slugGameCode,
+      separate(slugGameCode,
                       into = c("idGame", "slugTeams"),
                       sep = "/")
     season <-
@@ -18010,10 +18010,10 @@ current_schedule <-
       ) %>%
       mutate(
         idGame = slugGame %>% as.numeric(),
-        urlNBAGameBook = glue::glue(
+        urlNBAGameBook = glue(
           "https://data.nba.net/prod/v1/{dateSlugGame}/{dateSlugGame}_Book.pdf"
         ) %>% as.character(),
-        datetimeGame = readr::parse_datetime(datetimeGame),
+        datetimeGame = parse_datetime(datetimeGame),
         dateGame = lubridate::ymd(dateSlugGame)
       ) %>%
       mutate(idRow = 1:n()) %>%
@@ -18027,7 +18027,7 @@ current_schedule <-
     df_periods <-
       json_data$period %>%
       as_tibble() %>%
-      purrr::set_names(c("quarterMaxPlayed", "idSeasonType", "maxQuartersRegular")) %>%
+      set_names(c("quarterMaxPlayed", "idSeasonType", "maxQuartersRegular")) %>%
       mutate(
         hasOvertime = quarterMaxPlayed > 4,
         countOTQuarters =  quarterMaxPlayed - maxQuartersRegular,
@@ -18042,7 +18042,7 @@ current_schedule <-
 
     df_home <-
       json_data$hTeam %>% flatten() %>% dplyr::as_tibble() %>%
-      purrr::set_names(c('idTeamHome', 'scoreHome', 'isWinnerHome', 'isLoserHome')) %>%
+      set_names(c('idTeamHome', 'scoreHome', 'isWinnerHome', 'isLoserHome')) %>%
       mutate_all(as.numeric) %>%
       mutate(idRow = 1:n()) %>%
       left_join(nba_teams() %>% select(idTeamHome = idTeam, nameTeamHome = nameTeam)) %>%
@@ -18052,7 +18052,7 @@ current_schedule <-
 
     df_away <-
       json_data$vTeam %>% flatten() %>% dplyr::as_tibble() %>%
-      purrr::set_names(c('idTeamAway', 'scoreAway', 'isWinnerAway', 'isLoserAway')) %>%
+      set_names(c('idTeamAway', 'scoreAway', 'isWinnerAway', 'isLoserAway')) %>%
       mutate_all(as.numeric) %>%
       mutate(idRow = 1:n()) %>%
       left_join(nba_teams() %>% select(idTeamAway = idTeam, nameTeamAway = nameTeam)) %>%
@@ -18066,7 +18066,7 @@ current_schedule <-
            df_home,
            df_away,
            df_descriptions) %>%
-      purrr::reduce(left_join) %>%
+      reduce(left_join) %>%
       suppressMessages() %>%
       select(-idRow) %>%
       dplyr::select(idSeasonType,
@@ -18096,15 +18096,15 @@ coaching_staffs <-
     slug_year <-
       .get_slug_year()
     json <-
-      glue::glue("https://data.nba.net/prod/v1/{slug_year}/coaches.json") %>%
+      glue("https://data.nba.net/prod/v1/{slug_year}/coaches.json") %>%
       as.character() %>%
       curl() %>%
-      readr::read_lines() %>%
-      jsonlite::fromJSON(simplifyVector = T)
+      read_lines() %>%
+      fromJSON(simplifyVector = T)
 
     data <-
       json$league %>% flatten_df() %>%
-      purrr::set_names(
+      set_names(
         c(
           "nameFirst",
           "nameLast",
@@ -18122,7 +18122,7 @@ coaching_staffs <-
     data <-
       data %>%
       left_join(nba_teams() %>% select(nameTeam, idTeam)) %>%
-      tidyr::unite(nameCoach, nameFirst, nameLast, sep = " ") %>%
+      unite(nameCoach, nameFirst, nameLast, sep = " ") %>%
       select(nameTeam, everything()) %>%
       arrange(nameTeam) %>%
       suppressMessages()
@@ -18134,7 +18134,7 @@ coaching_staffs <-
 .nbastats_api_parameters <-
   function(api_version = 3) {
     df <-
-      glue::glue("https://data.nba.net/10s/prod/v{api_version}/today.json") %>%
+      glue("https://data.nba.net/10s/prod/v{api_version}/today.json") %>%
       as.character() %>%
       get.json_data(use_read_lines = T, is_tibble = T) %>%
       flatten_df() %>%
@@ -18170,7 +18170,7 @@ coaching_staffs <-
 nbastats_api_parameters <-
   function(api_versions = 1:3) {
     .nbastats_api_parameters_safe <-
-      purrr::possibly(.nbastats_api_parameters, tibble())
+      possibly(.nbastats_api_parameters, tibble())
     api_versions %>%
       future_map_dfr(function(api_version) {
         .nbastats_api_parameters_safe(api_version = api_version)
@@ -18183,7 +18183,7 @@ nbastats_api_parameters <-
     df_players <-
       json$data$players %>%
       dplyr::as_tibble() %>%
-      purrr::set_names(
+      set_names(
         c(
           "idPlayer",
           "namePlayerLastFirst",
@@ -18219,11 +18219,11 @@ nbastats_api_parameters <-
         idTeam = ifelse(idTeam == 0, NA, idTeam),
         isRookie = ifelse(countSeasons == 0 &
                             yearSeasonFirst == most_recent, TRUE, FALSE),
-        urlPlayerStats = glue::glue("https://stats.nba.com/player/{idPlayer}") %>% as.character(),
-        urlPlayerThumbnail = glue::glue(
+        urlPlayerStats = glue("https://stats.nba.com/player/{idPlayer}") %>% as.character(),
+        urlPlayerThumbnail = glue(
           "https://stats.nba.com/media/players/230x185/{idPlayer}.png"
         ) %>% as.character(),
-        urlPlayerHeadshot = glue::glue(
+        urlPlayerHeadshot = glue(
           "https://ak-static.cms.nba.com/wp-content/uploads/headshots/nba/latest/260x190/{idPlayer}.png"
         ) %>% as.character()
       ) %>%
@@ -18231,14 +18231,14 @@ nbastats_api_parameters <-
         urlPlayerActionPhoto = ifelse(
           isRookie,
           "https://stats.nba.com/media/img/league/nba-headshot-fallback.png",
-          glue::glue("https://stats.nba.com/media/players/700/{idPlayer}.png")
+          glue("https://stats.nba.com/media/players/700/{idPlayer}.png")
         ) %>% as.character()
       )
 
     df_players <-
       df_players %>%
       mutate(NP = namePlayerLastFirst %>% sub("\\,", "\\:", .)) %>%
-      tidyr::separate(NP,
+      separate(NP,
                       into = c("namePlayerLast", "namePlayerFirst"),
                       sep = "\\:") %>%
       mutate(namePlayer = ifelse(
@@ -18289,7 +18289,7 @@ parse_for_seasons_data <-
 
         tibble(items, values) %>%
           mutate(values = values %>% as.character()) %>%
-          tidyr::spread(items, values)
+          spread(items, values)
       })
 
     seasons %>%
@@ -18308,7 +18308,7 @@ parse_for_seasons_data <-
       map_dfr(function(x) {
         values <-
           json_teams[[x]] %>%
-          purrr::map_chr(function(z) {
+          map_chr(function(z) {
             if (z %>% length() == 0) {
               return(NA)
             }
@@ -18319,14 +18319,14 @@ parse_for_seasons_data <-
           str_c("V", seq_along(values))
 
         tibble(items, values) %>%
-          tidyr::spread(items, values)
+          spread(items, values)
 
       }) %>%
       dplyr::select(one_of(
         c("V1", "V2", "V3", "V4", "V5", "V6", "V7", "V8", "V9", "V10",
           "V11")
       )) %>%
-      purrr::set_names(
+      set_names(
         c(
           "idTeam",
           "slugTeam",
@@ -18363,7 +18363,7 @@ parse_for_seasons_data <-
         nameTeam = nameTeam %>% str_replace_all("LA Clippers", "Los Angeles Clippers"),
         urlThumbnailTeam = if_else(
           isNonNBATeam == 0,
-          glue::glue(
+          glue(
             "https://stats.nba.com/media/img/teams/logos/{slugTeam}_logo.svg"
           ) %>% as.character(),
           "https://stats.nba.com/media/img/teams/logos/NBA_logo.svg"
@@ -18391,9 +18391,9 @@ nba_teams <-
     url <- "https://stats.nba.com/js/data/ptsd/stats_ptsd.js"
     json <-
       url %>%
-      readr::read_lines() %>%
+      read_lines() %>%
       str_replace_all("var stats_ptsd =|\\;", "") %>%
-      jsonlite::fromJSON(flatten = TRUE,
+      fromJSON(flatten = TRUE,
                          simplifyDataFrame = TRUE)
 
     df_teams <-
@@ -18432,7 +18432,7 @@ nba_teams_seasons <- function() {
     json$resultSets$rowSet[[1]] %>%
     data.frame(stringsAsFactors = F) %>%
     as_tibble() %>%
-    purrr::set_names(actual_names) %>%
+    set_names(actual_names) %>%
     munge_nba_data() %>%
     mutate(isActiveTeam = yearSeasonLast == max(yearSeasonLast)) %>%
     select(isActiveTeam, everything())
@@ -18453,9 +18453,9 @@ nba_stats_api_items <-
     url <- "https://stats.nba.com/js/data/ptsd/stats_ptsd.js"
     json <-
       url %>%
-      readr::read_lines() %>%
+      read_lines() %>%
       str_replace_all("var stats_ptsd =|\\;", "") %>%
-      jsonlite::fromJSON(flatten = TRUE,
+      fromJSON(flatten = TRUE,
                          simplifyDataFrame = TRUE)
 
     df_players <-
@@ -18491,7 +18491,7 @@ nba_stats_api_items <-
 #' @examples
 #' nba_players()
 nba_players <-
-  memoise::memoise(function() {
+  memoise(function() {
     data <-
       "https://stats.nba.com/js/data/ptsd/stats_ptsd.js" %>%
       read_lines()
@@ -18549,11 +18549,11 @@ nba_players <-
         idTeam = ifelse(idTeam == 0, NA, idTeam),
         isRookie = ifelse(countSeasons == 0 &
                             yearSeasonFirst == most_recent, TRUE, FALSE),
-        urlPlayerStats = glue::glue("https://stats.nba.com/player/{idPlayer}") %>% as.character(),
-        urlPlayerThumbnail = glue::glue(
+        urlPlayerStats = glue("https://stats.nba.com/player/{idPlayer}") %>% as.character(),
+        urlPlayerThumbnail = glue(
           "https://stats.nba.com/media/players/230x185/{idPlayer}.png"
         ) %>% as.character(),
-        urlPlayerHeadshot = glue::glue(
+        urlPlayerHeadshot = glue(
           "https://ak-static.cms.nba.com/wp-content/uploads/headshots/nba/latest/260x190/{idPlayer}.png"
         ) %>% as.character()
       ) %>%
@@ -18561,7 +18561,7 @@ nba_players <-
         urlPlayerActionPhoto = ifelse(
           isRookie,
           "https://stats.nba.com/media/img/league/nba-headshot-fallback.png",
-          glue::glue("https://stats.nba.com/media/players/700/{idPlayer}.png") %>% as.character()
+          glue("https://stats.nba.com/media/players/700/{idPlayer}.png") %>% as.character()
         )
       )
 

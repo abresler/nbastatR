@@ -1,6 +1,6 @@
 
 .get_hoopshype_teams_ids <-
-  memoise::memoise(function() {
+  memoise(function() {
     data <-
       tibble(
         nameTeam = c(
@@ -182,7 +182,7 @@ hoops_hype_salary_summary <-
     salary_table_df <-
       salary_table_df %>%
       mutate_at(salary_table_df %>% select(dplyr::matches("X")) %>% names(),
-                funs(. %>%  as.character() %>% readr::parse_number()))
+                funs(. %>%  as.character() %>% parse_number()))
 
     salary_data <-
       salary_table_df %>%
@@ -191,7 +191,7 @@ hoops_hype_salary_summary <-
              -c(nameTeam, nameTeam, slugTeam, urlTeamSalaryHoopsHype)) %>%
       mutate(
         slugSeason = slugSeason %>% str_replace('\\.', '\\-') %>% str_replace("X", '') %>% factor(ordered = T),
-        amountSalary = amountSalary %>% as.character() %>% readr::parse_number()
+        amountSalary = amountSalary %>% as.character() %>% parse_number()
       )
 
     if (return_wide) {
@@ -268,7 +268,7 @@ hoops_hype_salary_summary <-
       html_nodes('tbody .hh-salaries-sorted') %>%
       html_text() %>%
       as.character() %>%
-      readr::parse_number() %>%
+      parse_number() %>%
       suppressWarnings()
 
     salary.1.colors <-
@@ -282,7 +282,7 @@ hoops_hype_salary_summary <-
       html_nodes('tbody .hh-salaries-sorted+ td') %>%
       html_text() %>%
       as.character() %>%
-      readr::parse_number() %>%
+      parse_number() %>%
       suppressWarnings()
 
     salary.2.colors <-
@@ -296,7 +296,7 @@ hoops_hype_salary_summary <-
       html_nodes('tbody td:nth-child(4)') %>%
       html_text() %>%
       as.character() %>%
-      readr::parse_number() %>%
+      parse_number() %>%
       suppressWarnings()
 
     salary.3.colors <-
@@ -310,7 +310,7 @@ hoops_hype_salary_summary <-
       html_nodes('tbody td:nth-child(5)') %>%
       html_text() %>%
       as.character() %>%
-      readr::parse_number() %>%
+      parse_number() %>%
       suppressWarnings()
 
     salary.4.colors <-
@@ -324,7 +324,7 @@ hoops_hype_salary_summary <-
       html_nodes('tbody td:nth-child(6)') %>%
       html_text() %>%
       as.character() %>%
-      readr::parse_number() %>%
+      parse_number() %>%
       suppressWarnings()
 
     salary.5.colors <-
@@ -338,7 +338,7 @@ hoops_hype_salary_summary <-
       html_nodes('tbody td:nth-child(7)') %>%
       html_text() %>%
       as.character() %>%
-      readr::parse_number() %>%
+      parse_number() %>%
       suppressWarnings()
 
     salary.6.colors <-
@@ -465,11 +465,11 @@ hoops_hype_salary_summary <-
         res$url
 
       if (return_message) {
-        glue::glue("Parsing {url}") %>%
+        glue("Parsing {url}") %>%
           cat(fill = T)
       }
       .parse_hoops_hype_salary_url_safe <-
-        purrr::possibly(.parse_hoops_hype_salary_url, tibble())
+        possibly(.parse_hoops_hype_salary_url, tibble())
 
       all_data <-
         .parse_hoops_hype_salary_url_safe(url = url,
@@ -537,7 +537,7 @@ hoopshype_salaries <-
     urls <- c()
 
 
-    if (!teams %>% purrr::is_null()) {
+    if (!teams %>% is_null()) {
 
       urls_teams <-
         df_hoopshype_team_salaries %>%

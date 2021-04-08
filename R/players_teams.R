@@ -1,5 +1,5 @@
 .dictionary_nba_queries <-
-  memoise::memoise(function() {
+  memoise(function() {
     tibble(typeQuery = c("splits", "splits", "general", "general", "defense", "defense", "clutch", "clutch",
                              "hustle", "hustle", "shots", "shots", "shot locations", "shot locations"),
                slugQuery = c("teamdashboardbygeneralsplits", "playerdashboardbygeneralsplits", "leaguedashteamstats", "leaguedashplayerstats" ,"leaguedashptdefend", "leaguedashptdefend", "leaguedashteamclutch", "leaguedashplayerclutch","leaguehustlestatsteam", "leaguehustlestatsplayer", "leaguedashteamptshot", "leaguedashplayerptshot",
@@ -70,7 +70,7 @@
 
 
     base <-
-      glue::glue("https://stats.nba.com/stats/{query_slug}?") %>%
+      glue("https://stats.nba.com/stats/{query_slug}?") %>%
       as.character()
 
     slug_type <-
@@ -540,7 +540,7 @@
     }
 
     url <-
-      glue::glue("{base}&DateFrom={date_from_stem}&DateTo={date_to_stem}&GameSegment={game_segment_stem}&LastNGames={last_n_games_stem}&LeagueID=00&Location={location_stem}&MeasureType={measure_type_stem}&LastNGames={last_n_games_stem}&Month={month_stem}&OpponentTeamID={opponent_stem}&Outcome={outcome_stem}&PORound={playoff_round_stem}&PaceAdjust={pace_stem}&PerMode={per_mode_type_stem}&Period={period_stem}&PlusMinus={plus_minus_stem}&Rank={rank_stem}&Season={slugSeason}&SeasonSegment={season_segment_stem}&SeasonType={season_type_stem}&ShotClockRange={shot_clock_range_stem}&{slug_type}={id}&VsConference={conference_against_stem}&VsDivision={division_against_stem}&DraftYear={draft_year_stem}&GameScope={game_scope_stem}&PlayerPosition={player_position_stem}&height={height_stem}&Country={country_stem}&College={college_stem}&DraftPick={draft_pick_stem}&Weight={weight_stem}&StarterBench={starter_bench_range_stem}&PlayerExperience={player_experience_stem}&clutchTime={clutch_stem}&aheadBehind={ahead_behind_stem}&defenseCategory={defense_stem}&pointDiff={point_diff}&closeDefDistRange={closest_defender_range_stem}&touchTimeRange={touch_time_range_stem}&generalRange={general_range_stem}&dribbleRange={dribble_range_stem}&distanceRange={shot_distance_range_stem}") %>%
+      glue("{base}&DateFrom={date_from_stem}&DateTo={date_to_stem}&GameSegment={game_segment_stem}&LastNGames={last_n_games_stem}&LeagueID=00&Location={location_stem}&MeasureType={measure_type_stem}&LastNGames={last_n_games_stem}&Month={month_stem}&OpponentTeamID={opponent_stem}&Outcome={outcome_stem}&PORound={playoff_round_stem}&PaceAdjust={pace_stem}&PerMode={per_mode_type_stem}&Period={period_stem}&PlusMinus={plus_minus_stem}&Rank={rank_stem}&Season={slugSeason}&SeasonSegment={season_segment_stem}&SeasonType={season_type_stem}&ShotClockRange={shot_clock_range_stem}&{slug_type}={id}&VsConference={conference_against_stem}&VsDivision={division_against_stem}&DraftYear={draft_year_stem}&GameScope={game_scope_stem}&PlayerPosition={player_position_stem}&height={height_stem}&Country={country_stem}&College={college_stem}&DraftPick={draft_pick_stem}&Weight={weight_stem}&StarterBench={starter_bench_range_stem}&PlayerExperience={player_experience_stem}&clutchTime={clutch_stem}&aheadBehind={ahead_behind_stem}&defenseCategory={defense_stem}&pointDiff={point_diff}&closeDefDistRange={closest_defender_range_stem}&touchTimeRange={touch_time_range_stem}&generalRange={general_range_stem}&dribbleRange={dribble_range_stem}&distanceRange={shot_distance_range_stem}") %>%
       as.character()
 
     url
@@ -602,7 +602,7 @@
       generate_season_slug(season = season)
 
     if (return_message) {
-      glue::glue("Acquiring all {type} {mode} {table} {measure} split tables for the {slugSeason} season") %>% cat(fill = T)
+      glue("Acquiring all {type} {mode} {table} {measure} split tables for the {slugSeason} season") %>% cat(fill = T)
     }
 
     url_json <-
@@ -673,7 +673,7 @@
         df_parameters <- json$parameters %>% flatten_df()
         df_parameters <-
           df_parameters %>%
-          purrr::set_names(names(df_parameters) %>% resolve_nba_names())
+          set_names(names(df_parameters) %>% resolve_nba_names())
 
         df_parameters <-
           df_parameters %>%
@@ -724,7 +724,7 @@
 
             df_table <-
               df_table %>%
-              purrr::set_names(actual_names) %>%
+              set_names(actual_names) %>%
               munge_nba_data() %>%
               mutate(numberTable = table_id) %>%
               select(numberTable, everything())
@@ -763,7 +763,7 @@
 
             df_table <-
               df_table %>%
-              purrr::set_names(actual_names) %>%
+              set_names(actual_names) %>%
               munge_nba_data() %>%
               mutate(numberTable = table_id) %>%
               select(numberTable, everything())
@@ -1140,7 +1140,7 @@ teams_players_stats <-
                   ,stringsAsFactors = F) %>%
       dplyr::as_tibble()
     players_teams_season_summary_safe <-
-      purrr::possibly(.players_teams_season_summary, tibble())
+      possibly(.players_teams_season_summary, tibble())
     all_data <-
       1:nrow(input_df) %>%
       future_map_dfr(function(x) {
@@ -1200,7 +1200,7 @@ teams_players_stats <-
       types %>%
         walk(function(type){
           result_type <-
-            glue::glue("{type}s") %>%
+            glue("{type}s") %>%
             str_to_title()
           df_table <-
             all_data %>%
@@ -1221,7 +1221,7 @@ teams_players_stats <-
                 str_c(collapse = "")
 
               table_name <-
-                glue::glue("data{tn}{result_type}") %>%
+                glue("data{tn}{result_type}") %>%
                 as.character()
 
               data <-

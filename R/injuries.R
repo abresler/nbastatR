@@ -1,5 +1,5 @@
 .get_player_names <-
-  memoise::memoise(function(){
+  memoise(function(){
   data <-
     tibble(
     namePlayer = c("J.J. Barea", "Amare Stoudemire", "C.J. Watson", "Nene Hilario", "Wes Johnson", "A.J. Hammons",

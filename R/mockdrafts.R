@@ -1,5 +1,5 @@
 .dictionary_nbadraft_names <-
-  memoise::memoise(function() {
+  memoise(function() {
     tibble(nameBad = c("date.data.updated", "year.draft", "id.round", "id.pick", "name.player",
                            "id.position", "id.position.secondary", "team", "slug.team",
                            "slug.team.current", "is.traded_pick", "height", "height.inches",
@@ -15,7 +15,7 @@
   })
 
 .get_nba_player_resolver_df <-
-  memoise::memoise(function() {
+  memoise(function() {
   player_df <-
     tibble(
       name.player = c(
@@ -109,7 +109,7 @@
 })
 
 .get_school_df  <-
-  memoise::memoise(function() {
+  memoise(function() {
   school_df <-
     tibble(
       school = c(
@@ -135,7 +135,7 @@
 })
 
 .get_nba_draft_net_team_df <-
-  memoise::memoise(function() {
+  memoise(function() {
   team_df <-
     tibble(
       name.team.nbadraft_net = c(
@@ -359,7 +359,7 @@
 
     page <-
       url %>%
-      xml2::read_html()
+      read_html()
 
     last_update <-
       page %>%
@@ -399,7 +399,7 @@
       html_nodes('td:nth-child(5)') %>%
       html_text() %>%
       as.character() %>%
-      readr::parse_number()
+      parse_number()
 
     id.position <-
       page %>%
@@ -532,7 +532,7 @@ nbadraftnet_mock_drafts <-
            nest_data = F,
            return_message = T) {
     .get_nba_draftnet_year_mock_draft_safe <-
-      purrr::possibly(.get_nba_draftnet_year_mock_draft, tibble())
+      possibly(.get_nba_draftnet_year_mock_draft, tibble())
 
     all_data <-
       years %>%
@@ -553,7 +553,7 @@ nbadraftnet_mock_drafts <-
             nrow() == 0
 
           if (no_name) {
-            glue::glue("Missing {name} in dictionary") %>% cat(fill = T)
+            glue("Missing {name} in dictionary") %>% cat(fill = T)
             return(name)
           }
           df_actual_names %>%
@@ -565,7 +565,7 @@ nbadraftnet_mock_drafts <-
 
     all_data <-
       all_data %>%
-      purrr::set_names(actual_names)
+      set_names(actual_names)
 
     if (merge_nba_data) {
       df_nba_player_dict <- nba_players()
@@ -607,7 +607,7 @@ nbadraftnet_mock_drafts <-
     if (nest_data) {
       all_data <-
         all_data %>%
-        tidyr::nest(-c(yearDraft), .key = dataDraft)
+        nest(-c(yearDraft), .key = dataDraft)
     }
     all_data
   }

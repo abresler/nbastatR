@@ -93,7 +93,7 @@ nba_franchise_history <-
     data <-
       data %>%
       mutate(idTeam = idTeam %>% as.numeric()) %>%
-      tidyr::unite(nameTeam, cityTeam, teamName, sep = " ", remove = F) %>%
+      unite(nameTeam, cityTeam, teamName, sep = " ", remove = F) %>%
       dplyr::select(idLeague, idTeam, nameTeam, everything()) %>%
       mutate(nameTeam = nameTeam %>% str_replace_all("LA Clippers", "Los Angeles Clippers"))
 
@@ -163,7 +163,7 @@ team_season_roster <-
       unique()
 
     json_url <-
-      glue::glue('https://stats.nba.com/stats/commonteamroster?LeagueID=00&Season={slugSeason}&TeamID={team_id}') %>% as.character()
+      glue('https://stats.nba.com/stats/commonteamroster?LeagueID=00&Season={slugSeason}&TeamID={team_id}') %>% as.character()
 
 
     json_data <-
@@ -197,7 +197,7 @@ team_season_roster <-
 
      data_roster <-
       data_roster %>%
-      purrr::set_names(
+      set_names(
         actual_names
       ) %>%
       mutate(slugSeason,
@@ -217,7 +217,7 @@ team_season_roster <-
           "countSeasons",
           "idPlayer"
         ),
-        funs(. %>% as.character() %>% readr::parse_number())
+        funs(. %>% as.character() %>% parse_number())
       ) %>%
       mutate(
         dateBirth = lubridate::mdy(dateBirth),
@@ -230,7 +230,7 @@ team_season_roster <-
       suppressWarnings()
 
       if (return_message) {
-        glue::glue("You got the {team}'s roster for the {slugSeason}") %>% cat(fill = T)
+        glue("You got the {team}'s roster for the {slugSeason}") %>% cat(fill = T)
       }
     data_roster
   }
@@ -245,7 +245,7 @@ team_season_roster <-
       assign('df_dict_team_history', df_dict_team_history, envir = .GlobalEnv)
     }
     team_season_roster_safe <-
-      purrr::possibly(team_season_roster, tibble())
+      possibly(team_season_roster, tibble())
 
     all_data <-
       df_dict_team_history$nameTeam %>%
@@ -326,7 +326,7 @@ teams_rosters <-
       unique()
 
     json_url <-
-      glue::glue('https://stats.nba.com/stats/commonteamroster?LeagueID=00&Season={slugSeason}&TeamID={team_id}') %>% as.character()
+      glue('https://stats.nba.com/stats/commonteamroster?LeagueID=00&Season={slugSeason}&TeamID={team_id}') %>% as.character()
 
 
     json_data <-
@@ -356,7 +356,7 @@ teams_rosters <-
 
     data_roster <-
       data_roster %>%
-      purrr::set_names(
+      set_names(
         actual_names
       ) %>%
       mutate(slugSeason,
@@ -373,14 +373,14 @@ teams_rosters <-
           "idTeam",
           "yearSeason"
         ),
-        funs(. %>% as.character() %>%  readr::parse_number())
+        funs(. %>% as.character() %>%  parse_number())
       ) %>%
-      tidyr::separate(schoolCoach, into = c("typeSchoolCoach", "nameSchoolCoach"), sep = "\\ - ") %>%
+      separate(schoolCoach, into = c("typeSchoolCoach", "nameSchoolCoach"), sep = "\\ - ") %>%
       suppressMessages() %>%
       suppressWarnings()
 
     if (return_message) {
-      glue::glue("You got the {team}'s coaches for the {slugSeason} season") %>% cat(fill = T)
+      glue("You got the {team}'s coaches for the {slugSeason} season") %>% cat(fill = T)
     }
     data_roster
   }
@@ -394,7 +394,7 @@ teams_rosters <-
       assign('df_dict_team_history', df_dict_team_history, envir = .GlobalEnv)
     }
     .team_coaches_safe <-
-      purrr::possibly(.team_coaches, tibble())
+      possibly(.team_coaches, tibble())
 
     all_data <-
       df_dict_team_history$nameTeam %>%

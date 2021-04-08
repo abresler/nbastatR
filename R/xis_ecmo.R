@@ -46,13 +46,13 @@
     # )
 
     res <-
-      httr::GET(url,
-                httr::add_headers(.headers = headers))
+      GET(url,
+                add_headers(.headers = headers))
 
     json <-
       res$content %>%
       rawToChar() %>%
-      jsonlite::fromJSON(simplifyVector = T)
+      fromJSON(simplifyVector = T)
 
     json
 

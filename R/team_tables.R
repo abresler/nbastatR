@@ -2,7 +2,7 @@
 
 .get_team_details <- function(team_id = 1610612745, return_message = TRUE) {
   url <-
-    glue::glue("https://stats.nba.com/stats/teamdetails/?teamId={team_id}")
+    glue("https://stats.nba.com/stats/teamdetails/?teamId={team_id}")
   if (!'df_dict_nba_teams_history' %>% exists()) {
     df_dict_nba_teams_history <- nba_franchise_history()
     assign(x = 'df_dict_nba_teams_history', df_dict_nba_teams_history, envir = .GlobalEnv)
@@ -17,7 +17,7 @@
     .[[1]]
 
   if (return_message) {
-    glue::glue("Acquiring team details for the {team_name}") %>% cat(fill = T)
+    glue("Acquiring team details for the {team_name}") %>% cat(fill = T)
   }
 
   json <-
@@ -42,7 +42,7 @@
 
       actual_names <- json_names %>% resolve_nba_names()
       data <-
-        data %>% purrr::set_names(actual_names)
+        data %>% set_names(actual_names)
 
       data <-
         data %>%
@@ -83,8 +83,8 @@ teams_details <-
            all_teams = F,
            assign_to_environment = TRUE,
            return_message = T) {
-    no_ids <- as.numeric( (team_ids %>% purrr::is_null() & !all_teams))
-    no_teams <-  as.numeric((teams %>% purrr::is_null() & !all_teams))
+    no_ids <- as.numeric( (team_ids %>% is_null() & !all_teams))
+    no_teams <-  as.numeric((teams %>% is_null() & !all_teams))
     if (no_ids + no_teams == 2) {
       stop("Please enter a team or make all_teams = T")
     }
@@ -97,7 +97,7 @@ teams_details <-
 
     df_teams_filter <- df_dict_nba_teams_history %>% filter(isActive)
 
-    if (!teams %>% purrr::is_null()) {
+    if (!teams %>% is_null()) {
       team_slugs <- teams %>% str_to_upper() %>% str_c(collapse = "|")
 
       search_ids <-
@@ -125,7 +125,7 @@ teams_details <-
         append(all_ids)
     }
 
-    if (!team_ids %>% purrr::is_null()) {
+    if (!team_ids %>% is_null()) {
       ids <-
         ids %>%
         append(team_ids)
@@ -136,7 +136,7 @@ teams_details <-
       unique() %>%
       sort()
     .get_team_details_safe <-
-      purrr::possibly(.get_team_details, tibble())
+      possibly(.get_team_details, tibble())
 
     all_data <-
       ids %>%
@@ -155,7 +155,7 @@ teams_details <-
           unnest() %>%
           distinct()
 
-        if (df_row %>% tibble::has_name("capacityArena")) {
+        if (df_row %>% has_name("capacityArena")) {
           df_row <-
             df_row %>%
             mutate(capacityArena = capacityArena %>% as.numeric())
@@ -199,7 +199,7 @@ teams_details <-
       tables %>%
         walk(function(table){
           table_name <-
-            glue::glue('data{table}') %>% as.character()
+            glue('data{table}') %>% as.character()
 
           df_table <-
             all_data %>%
@@ -224,7 +224,7 @@ teams_details <-
   query_slug <- "teamyearbyyearstats"
   season_slug <- season_type %>% clean_to_stem()
   json_url <-
-    glue::glue(
+    glue(
       "https://stats.nba.com/stats/{query_slug}/?teamId={team_id}&leagueId=00&seasonType={season_slug}&perMode={mode}"
     ) %>% as.character() %>% URLencode()
   json <-
@@ -242,15 +242,15 @@ teams_details <-
 
   data <-
     data %>%
-    purrr::set_names(actual_names) %>%
-    tidyr::unite(nameTeam, cityTeam, teamName, sep = " ", remove = F)
+    set_names(actual_names) %>%
+    unite(nameTeam, cityTeam, teamName, sep = " ", remove = F)
 
   num_cols <- names(data)[!names(data) %>% str_detect(char_words())]
 
   teams <- data$nameTeam %>% unique() %>% str_c(collapse = ", ")
 
   if (return_message) {
-    glue::glue("Acquired {teams} history") %>% cat(fill = T)
+    glue("Acquired {teams} history") %>% cat(fill = T)
   }
 
   data <-
@@ -303,14 +303,14 @@ teams_annual_stats <-
 
     teams_ids <- c()
 
-    if (!purrr::is_null(teams)) {
+    if (!is_null(teams)) {
       teams_ids <-
         teams_ids %>% append(df_teams %>%
         filter(nameTeam %>% str_detect(str_c(teams, sep = " | "))) %>%
         pull(idTeam))
     }
 
-    if (!purrr::is_null(team_ids)) {
+    if (!is_null(team_ids)) {
       teams_ids <-
         teams_ids %>% append(team_ids)
     }
@@ -323,7 +323,7 @@ teams_annual_stats <-
     teams_ids <- teams_ids  %>% unique()
 
     .get_team_year_by_year_stats_safe <-
-      purrr::possibly(.get_team_year_by_year_stats, tibble())
+      possibly(.get_team_year_by_year_stats, tibble())
     df_input <-
       expand.grid(
         team_id = teams_ids,

@@ -2,7 +2,7 @@
 
 
 .dictionary.sites <-
-  memoise::memoise(function() {
+  memoise(function() {
     df_formulas <-
       tibble(
         nameSite = c("bref", "yahoo", "realgm", "hoopshype"),
@@ -17,7 +17,7 @@
   })
 
 .dictionary.bref.nba.missing <-
-  memoise::memoise(function() {
+  memoise(function() {
     tibble(
       namePlayer = c(
         "J.J. Anderson",
@@ -221,7 +221,7 @@
 
 
 .resolve.players <-
-  memoise::memoise(function(data, site = "bref") {
+  memoise(function(data, site = "bref") {
 
     data <-
       data %>%
@@ -259,7 +259,7 @@
     }
 
     name_site <-
-      glue::glue("namePlayer{str_to_upper(site)}")
+      glue("namePlayer{str_to_upper(site)}")
 
     df_nba_stats_players <-
       df_dict_nba_players %>%
@@ -595,7 +595,7 @@
       df_formulas %>%
       filter(nameSite == site %>% str_to_lower()) %>%
       pull(formulatDict) %>%
-      rlang::parse_expr() %>%
+      parse_expr() %>%
       eval()
 
     players_na <-

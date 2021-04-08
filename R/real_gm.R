@@ -63,7 +63,7 @@
 
   }
 .get_player_resolution_df <-
-  memoise::memoise(function() {
+  memoise(function() {
   player_df <-
     tibble(
       namePlayer = c(
@@ -145,7 +145,7 @@
 
 
 .dictionary_contract_status <-
-  memoise::memoise(function() {
+  memoise(function() {
   contract_df <-
     tibble(statusContract = c(NA, "Unrestricted Free Agent", "Unsigned Draft Pick", "Draft Eligible",
                                   "Restricted Free Agent"),
@@ -156,7 +156,7 @@
 })
 
 .get_leagues_teams_df <-
-  memoise::memoise(function() {
+  memoise(function() {
   nba_teams <-
     tibble(nameTeam = c("Atlanta Hawks", "Boston Celtics", "Brooklyn Nets", "Charlotte Hornets",
                             "Chicago Bulls", "Cleveland Cavaliers", "Dallas Mavericks", "Denver Nuggets",
@@ -296,7 +296,7 @@
     html_nodes('td:nth-child(5)') %>%
     html_text() %>%
     as.character() %>%
-    readr::parse_number() %>%
+    parse_number() %>%
     suppressWarnings()
 
   birth_dates <-
@@ -311,7 +311,7 @@
     html_nodes('td:nth-child(7)') %>%
     html_text() %>%
     as.character() %>%
-    readr::parse_number() %>%
+    parse_number() %>%
     suppressWarnings()
 
 
@@ -325,7 +325,7 @@
     html_nodes('td:nth-child(9)') %>%
     html_text() %>%
     as.character() %>%
-    readr::parse_number() %>%
+    parse_number() %>%
     suppressWarnings()
 
   team_df <-
@@ -446,11 +446,11 @@
           res$url
 
         if (return_message) {
-          glue::glue("Parsing {url}") %>%
+          glue("Parsing {url}") %>%
             cat(fill = T)
         }
         .parse_agent_url_safe <-
-          purrr::possibly(.parse_agent_url, tibble())
+          possibly(.parse_agent_url, tibble())
 
         all_data <-
           .parse_agent_url_safe(url = url)
@@ -491,7 +491,7 @@ agents_players <-
   function(agents = "Jeff Schwartz",
            all_agents = F,
            return_message = FALSE) {
-    if (!all_agents & agents %>% purrr::is_null()) {
+    if (!all_agents & agents %>% is_null()) {
       stop("Please enter agents")
     }
     if (!'df_all_agent_urls' %>% exists()) {
@@ -594,7 +594,7 @@ players_agents <-
       html_nodes('td:nth-child(5)') %>%
       html_text() %>%
       as.character() %>%
-      readr::parse_number() %>%
+      parse_number() %>%
       suppressWarnings()
 
     dateBirth <-
@@ -609,7 +609,7 @@ players_agents <-
       html_nodes('td:nth-child(7)') %>%
       html_text() %>%
       as.character() %>%
-      readr::parse_number() %>%
+      parse_number() %>%
       suppressWarnings()
 
     agentPlayer <-

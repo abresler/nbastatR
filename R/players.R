@@ -17,7 +17,7 @@
 
       df_parameters <-
         df_parameters %>%
-        purrr::set_names(names(df_parameters) %>% resolve_nba_names()) %>%
+        set_names(names(df_parameters) %>% resolve_nba_names()) %>%
         munge_nba_data() %>%
         select(-matches("remove"))
       df_parameters <-
@@ -47,7 +47,7 @@
 
       data <-
         data  %>%
-        purrr::set_names(actual_names) %>%
+        set_names(actual_names) %>%
         munge_nba_data() %>%
         mutate(numberTable = x,
                namePlayer = player,
@@ -75,7 +75,7 @@
           mutate(dateGame = dateGame %>% lubridate::mdy())
       }
 
-      if (data %>% tibble::has_name("typeShot")){
+      if (data %>% has_name("typeShot")){
         data <-
           data %>%
           dplyr::rename(typeFilter = typeShot)
@@ -137,13 +137,13 @@
         suppressWarnings()
 
       if (table_name == "ByYearTeamDashboard") {
-        if (data %>% tibble::has_name("slugSeason")) {
+        if (data %>% has_name("slugSeason")) {
         data <-
           data %>%
           dplyr::rename(slugSeasonSearch = slugSeason)
         }
 
-        if (data %>% tibble::has_name("groupByYear")) {
+        if (data %>% has_name("groupByYear")) {
           data <-
             data %>%
             dplyr::rename(slugSeason = groupByYear)
@@ -193,7 +193,7 @@
 }
 
 .dictionary_player_tables <-
-  memoise::memoise(function() {
+  memoise(function() {
     tibble(
       nameTable = c(
         "passes",
@@ -269,7 +269,7 @@
       pull(namePlayer)
 
     if (return_message) {
-      glue::glue("Acquiring {player} {season} {season_type} {measure} {table} {mode} data") %>% cat(fill = T)
+      glue("Acquiring {player} {season} {season_type} {measure} {table} {mode} data") %>% cat(fill = T)
     }
 
     table_slug <-
@@ -359,7 +359,7 @@
       .generate_param_slug(params = params)
 
     url <-
-      glue::glue("{URL}?{slug_param}") %>% as.character()
+      glue("{URL}?{slug_param}") %>% as.character()
 
     json <-
       url %>%
@@ -570,7 +570,7 @@ players_tables <-
       ) %>%
       dplyr::as_tibble()
     get_player_table_data_safe <-
-      purrr::possibly(.get_player_table_data, tibble())
+      possibly(.get_player_table_data, tibble())
 
     all_data <-
       1:nrow(input_df) %>%
@@ -648,7 +648,7 @@ players_tables <-
             remove_na_columns()
 
 
-          has_measure <- df_tables %>% tibble::has_name("typeMeasure")
+          has_measure <- df_tables %>% has_name("typeMeasure")
 
           if (has_measure) {
             measures <-
@@ -675,7 +675,7 @@ players_tables <-
               remove_na_columns() %>%
               distinct()
 
-            if (df_table %>% tibble::has_name("idPlayer1")){
+            if (df_table %>% has_name("idPlayer1")){
               data <- data %>% select(-idPlayer1)
             }
 
