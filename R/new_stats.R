@@ -18276,7 +18276,7 @@ parse_for_seasons_data <-
 
         values <-
           row[1:5] %>%
-          flatten_chr()
+          purrr::flatten_chr()
 
         items <-
           c(
@@ -18387,8 +18387,8 @@ parse_for_seasons_data <-
 #' @examples
 #' nba_teams()
 nba_teams <-
-  function(join_blg = F) {
-    url <- "https://stats.nba.com/js/data/ptsd/stats_ptsd.js"
+  function(league = "NBA", join_blg = F) {
+    url <- paste0("https://stats.", tolower(league), ".com/js/data/ptsd/stats_ptsd.js")
     json <-
       url %>%
       read_lines() %>%
