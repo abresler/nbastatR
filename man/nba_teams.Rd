@@ -4,7 +4,7 @@
 \alias{nba_teams}
 \title{NBA team dictionary}
 \usage{
-nba_teams(join_blg = F)
+nba_teams(league = "NBA", join_blg = F)
 }
 \arguments{
 \item{join_blg}{if \code{TRUE} joins BLG team features data}
