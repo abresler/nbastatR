@@ -374,45 +374,50 @@ dictionary_bref_teams <-
 
 
 .dictionary_bref_tables <-
-  memoise(function() {
+  function() {
+    slugs <- c(
+      "all_awards",
+      "confs_standings_E",
+      "confs_standings_W",
+      "divs_standings_",
+      "divs_standings_E",
+      "divs_standings_W",
+      "misc_stats",
+      "shooting-opponent",
+      "per_game-opponent",
+      "per_poss-opponent",
+      "opponent-stats-per_poss",
+      "shooting-team",
+      "totals-team",
+      "per_game-team",
+      "per_poss-team",
+      "totals-opponent"
+    )
+
+    table_names <- c(
+      "Awards",
+      "StandingsConf",
+      "StandingsConf",
+      "StandingsDiv",
+      "StandingsDiv",
+      "StandingsDiv",
+      "Misc",
+      "Shooting",
+      "PerGame",
+      "PerGame",
+      "PerPoss",
+      "Shooting",
+      "Totals",
+      "PerGame",
+      "PerPoss",
+      "Totals"
+    )
     tibble(
-      idTable = c(
-        "all_awards",
-        "confs_standings_E",
-        "confs_standings_W",
-        "divs_standings_",
-        "divs_standings_E",
-        "divs_standings_W",
-        "misc_stats",
-        "opponent_shooting",
-        "opponent-stats-base",
-        "opponent-stats-per_game",
-        "opponent-stats-per_poss",
-        "team_shooting",
-        "team-stats-base",
-        "team-stats-per_game",
-        "team-stats-per_poss"
-      ),
-      slugTable = c(
-        "Awards",
-        "StandingsConf",
-        "StandingsConf",
-        "StandingsDiv",
-        "StandingsDiv",
-        "StandingsDiv",
-        "Misc",
-        "Shooting",
-        "Totals",
-        "PerGame",
-        "PerPoss",
-        "Shooting",
-        "Totals",
-        "PerGame",
-        "PerPoss"
-      )
+      idTable = slugs,
+      slugTable = table_names
 
     )
-  })
+  }
 
 get_bref_name_df <-
   memoise(function() {
@@ -595,7 +600,7 @@ widen_bref_data <-
   })
 
 .assign.bref.teams <-
-  memoise(function(all_data,
+  function(all_data,
            widen_data = TRUE,
            join_data = FALSE,
            assign_to_environment = TRUE) {
@@ -608,7 +613,7 @@ widen_bref_data <-
 
     all_data <-
       table_names %>%
-      future_map(function(table) {
+      map(function(table) {
         table %>% cat(fill = T)
         df_table <-
           all_data %>%
@@ -650,8 +655,8 @@ widen_bref_data <-
 
         df_table <-
           df_table %>%
-          left_join(df_teams) %>%
-          suppressMessages()
+          left_join(df_teams, by = "nameTeam")
+
 
         df_table <-
           df_table %>%
@@ -673,16 +678,14 @@ widen_bref_data <-
           )
 
         add_names <-
-          c(
-            "minutes",
+          c("minutes",
             "countGames",
             "attendance",
             "rating",
             "wins",
             "losses",
             "margin",
-            "rank"
-          ) %>% str_c(collapse = "|")
+            "rank") %>% str_c(collapse = "|")
         names(df_table)[names(df_table) %>% str_detect(add_names)] <-
           names(df_table)[names(df_table) %>% str_detect(add_names)] %>%
           str_c("Team", sep = "")
@@ -696,6 +699,12 @@ widen_bref_data <-
         df_table <-
           df_table %>%
           unite(item, item, slugTable, sep = "")
+
+        if (df_table %>% hasName("timeframeData")) {
+          df_table <-
+            df_table %>%
+            unite(item, item, typeData, sep = "")
+        }
 
         if (df_table %>% has_name("typeData")) {
           df_table <-
@@ -717,6 +726,9 @@ widen_bref_data <-
         if (widen_data) {
           df_table <-
             df_table %>%
+            group_by(nameTeam, item) %>%
+            slice(1) %>%
+            ungroup() %>%
             spread_data(
               variable_name = "item",
               value_name = "value",
@@ -803,7 +815,7 @@ widen_bref_data <-
     }
 
     all_data
-  })
+  }
 
 .assign.bref.players <-
   function(all_data,
@@ -1832,6 +1844,7 @@ bref_players_stats <-
   function(data) {
     conference <-
       data %>% slice(1) %>% pull(X1) %>% str_replace_all("Conference", "") %>% str_trim()
+
     data <-
       data %>%
       slice(2:nrow(data)) %>%
@@ -1845,6 +1858,7 @@ bref_players_stats <-
 
     data %>%
       select(-idRow) %>%
+      filter(!X1 %>% str_detect("Division")) %>%
       set_names(
         c(
           "nameTeamRank",
@@ -1858,15 +1872,15 @@ bref_players_stats <-
         )
       ) %>%
       separate(nameTeamRank,
-                      sep = "\\(",
+                      sep = "\\(",extra = "merge",
                       into = c("nameTeam", "rankConference")) %>%
       mutate_all(str_trim) %>%
       mutate(rankConference = rankConference %>% str_replace_all('\\)', "")) %>%
       mutate_at(c("rankConference", "winsTeam", "lossesTeam"),
                 funs(. %>% as.integer())) %>%
-      mutate(idRow = 1:n()) %>%
-      left_join(df_divisions) %>%
-      filter(!rankConference %>% is.na()) %>%
+      mutate(idRow = 1:n() + 1) %>%
+      left_join(df_divisions, by = "idRow") %>%
+      select(nameDivision, everything()) %>%
       select(-idRow) %>%
       select(nameDivision, everything()) %>%
       fill(nameDivision) %>%
@@ -1890,8 +1904,10 @@ bref_players_stats <-
         nameTeam = nameTeam %>% str_replace_all("\\*", "")
       ) %>%
       dplyr::select(nameConference, nameDivision, isPlayoffTeam, everything()) %>%
-      suppressWarnings() %>%
-      suppressMessages()
+      arrange(desc(winsTeam)) %>%
+      group_by(nameConference) %>%
+      mutate(rankConference = 1:n()) %>%
+      ungroup()
   }
 
 .parse.bref.team.pg <-
@@ -2070,7 +2086,8 @@ bref_players_stats <-
   function(data) {
     data <-
       data %>%
-      slice(4:nrow(data))
+      slice(3:nrow(data)) %>%
+      janitor::remove_empty(which = "cols")
 
     actual_names <-
       c(
@@ -2140,6 +2157,11 @@ bref_players_stats <-
         table_id <-
           xml_tables[x] %>%
           html_attr("id")
+
+        if (table_id %in% c("advanced-team")) {
+          return(tibble())
+        }
+
         table_name <-
           xml_tables[[x]] %>%
           xml_nodes("caption") %>%
@@ -2199,28 +2221,28 @@ bref_players_stats <-
           table_id %>% str_detect("divs_standing")
 
         is_team_stats_pg <-
-          table_id %>% str_detect("team-stats-per_game")
+          table_id %>% str_detect("team-stats-per_game|per_game-team")
 
         is_opp_stats_pg <-
-          table_id %>% str_detect("opponent-stats-per_game")
+          table_id %>% str_detect("opponent-stats-per_game|per_game-opponent")
 
         is_team_base <-
-          table_id %>% str_detect("team-stats-base")
+          table_id %>% str_detect("team-stats-base|totals-team")
 
         is_opp_total <-
-          table_id %>% str_detect("opponent-stats-base")
+          table_id %>% str_detect("opponent-stats-base|totals-opponent")
 
         is_team_100 <-
-          table_id %>% str_detect("team-stats-per_poss")
+          table_id %>% str_detect("team-stats-per_poss|per_poss-team")
 
         is_opp_100 <-
-          table_id %>% str_detect("opponent-stats-per_poss")
+          table_id %>% str_detect("opponent-stats-per_poss|per_poss-opponent")
 
         is_team_shooting <-
-          table_id %>% str_detect("team_shooting")
+          table_id %>% str_detect("team_shooting|shooting-team")
 
         is_opponent_shooting <-
-          table_id %>% str_detect("opponent_shooting")
+          table_id %>% str_detect("opponent_shooting|shooting-opponent")
 
         if (is_team_shooting) {
           table_name <- "Team Shooting"
@@ -2473,8 +2495,8 @@ bref_teams_stats <-
 
     all_data <-
       all_data %>%
-      left_join(df_urls) %>%
-      left_join(.dictionary_bref_tables()) %>%
+      left_join(df_urls, by = "urlSeasonBREF") %>%
+      left_join(.dictionary_bref_tables(), by = 'idTable') %>%
       select(slugTable, everything()) %>%
       suppressMessages()
 
