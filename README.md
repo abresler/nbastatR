@@ -17,16 +17,16 @@ A package to help you master the NBA data universe in R.
   - Basketball-Reference
   - HoopsHype
   - nbadraft.net
-  - realgm
+  - RealGM
   - Basketball Insiders
 
 ## Parallel Computing
 
 This package now supports parallel computing for all iterative
-functions. In order to utilize this just run \``future::plan` with your
+functions. In order to utilize this, just run \``future::plan` with your
 selected method.
 
-For example to use muiltiprocess.
+For example to use multiprocess.
 
 ``` r
 library(nbastatR)
