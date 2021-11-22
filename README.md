@@ -26,7 +26,7 @@ This package now supports parallel computing for all iterative
 functions. In order to utilize this, just run \``future::plan` with your
 selected method.
 
-For example to use multiprocess.
+For example, to use the multiprocess function:
 
 ``` r
 library(nbastatR)
