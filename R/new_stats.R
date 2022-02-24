@@ -18498,11 +18498,20 @@ nba_players <-
 
     json_data <-
       data %>% substr(18,nchar(data)-1) %>% fromJSON(simplifyDataFrame = T)
-    json_data$data$players
 
     data <-
       json_data$data$players %>% as_tibble() %>%
-      setNames(c("idPlayer", "player", "isActive", "yearSeasonFirst", "yearSeasonLast", "idTeam", "hasGamesPlayedFlag"))
+      setNames(
+        c(
+          "idPlayer",
+          "player",
+          "isActive",
+          "yearSeasonFirst",
+          "yearSeasonLast",
+          "idTeam",
+          "hasGamesPlayedFlag"
+        )
+      )
 
     df_players <-
       data %>%
@@ -18570,11 +18579,9 @@ nba_players <-
     df_players <-
       df_players %>%
       mutate(
-        urlPlayerThumbnail = if_else(
-          yearSeasonFirst >= 2017,
-          urlPlayerHeadshot,
-          urlPlayerThumbnail
-        )
+        urlPlayerThumbnail = if_else(yearSeasonFirst >= 2017,
+                                     urlPlayerHeadshot,
+                                     urlPlayerThumbnail)
       )
 
 
@@ -18599,6 +18606,12 @@ nba_players <-
           TRUE ~ "https://stats.nba.com/media/img/league/nba-headshot-fallback.png"
         )
       )
+
+    recent_season <- df_players$yearSeasonLast %>% max()
+
+    df_players <-
+      df_players %>%
+      mutate(isActive = yearSeasonLast == recent_season)
 
     df_players %>%
       select(isActive,

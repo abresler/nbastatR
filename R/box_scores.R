@@ -95,7 +95,7 @@
     if (names(json) %>% str_detect( "g") %>% sum(na.rm = T) > 0) {
       json_data <- json$g
       df_classes <-
-        json_data %>% future_map_dfr(class) %>%
+        json_data %>% map_dfr(class) %>%
         gather(column, class)
 
       base_cols <-
@@ -123,7 +123,7 @@
 
       all_data <-
         list_cols %>%
-        future_map_dfr(function(col){
+        map_dfr(function(col){
           d <-
             json_data[[col]]
 
@@ -325,6 +325,7 @@
       select(-cols) %>%
       select(typeBoxScore, typeResult, everything())
     gc()
+    closeAllConnections()
     data
   })
 
@@ -395,7 +396,7 @@ box_scores <-
 
     all_data <-
       1:nrow(input_df) %>%
-      future_map_dfr(function(x) {
+      map_dfr(function(x) {
         df_row <-
           input_df %>% slice(x)
 
@@ -416,7 +417,7 @@ box_scores <-
 
       all_data <-
         results %>%
-        future_map_dfr(function(result) {
+        map_dfr(function(result) {
           df_results <-
             all_data %>%
             filter(typeResult == result)
@@ -426,7 +427,7 @@ box_scores <-
 
           all_tables <-
             tables %>%
-            future_map(function(table) {
+            map(function(table) {
               table_slug <- table %>% str_to_lower()
               data <-
                 df_results %>%
@@ -523,7 +524,7 @@ box_scores <-
             data <-
               df_tables$typeBoxScore %>%
               unique() %>%
-              future_map(function(type) {
+              map(function(type) {
                 df_table <-
                   df_tables %>%
                   filter(typeBoxScore == type) %>%
