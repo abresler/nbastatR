@@ -184,6 +184,8 @@ team_season_roster <-
       "yearSeason",
       "idLeague",
       "namePlayer",
+      "nickname",
+      "playerSlug",
       "numberJerseySeason",
       "groupPosition",
       "heightInches",
@@ -192,7 +194,8 @@ team_season_roster <-
       "agePlayerSeason",
       "countSeasons",
       "nameSchool",
-      "idPlayer"
+      "idPlayer",
+      "howAcquired"
     )[seq_along(names(data_roster))]
 
      data_roster <-
