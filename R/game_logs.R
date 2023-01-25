@@ -156,8 +156,7 @@
             "slugTeamLoser",
             "outcomeGame"
           )
-        ), everything()) %>%
-        suppressMessages()
+        ), everything())
     }
 
 
@@ -223,7 +222,9 @@
       data %>%
       mutate(slugLeague = league) %>%
       select(typeResult, typeSeason, yearSeason, everything()) %>%
-      nest(-c(slugLeague, typeResult, slugSeason, yearSeason), .key = dataTables)
+      nest(-c(slugLeague, typeResult, slugSeason, yearSeason)) |>
+      rename(dataTables = data) |>
+      ungroup()
 
 
 
