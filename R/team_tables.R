@@ -53,7 +53,7 @@
         remove_na_columns()
 
       data %>%
-        nest(-c(nameTable, nameTeam, idTeam), .key = dataTable)
+        nest(-c(nameTable, nameTeam, idTeam), .key = 'dataTable')
     })
   data
 }
@@ -192,7 +192,7 @@ teams_details <-
 
 
         df_row %>%
-          nest(-c(nameTable), .key = dataTable)
+          nest(-c(nameTable), .key = 'dataTable')
       })
 
     if (assign_to_environment) {
@@ -350,7 +350,7 @@ teams_annual_stats <-
     if (nest_data) {
       all_data <-
         all_data %>%
-        nest(-c(slugSeason), .key = dataTeamSeasonPerformance)
+        nest(-c(slugSeason), .key = 'dataTeamSeasonPerformance')
     }
 
 
@@ -369,7 +369,7 @@ teams_annual_stats <-
     if (nest_data) {
       all_data <-
         all_data %>%
-        nest(-idTeam, .key = dataTeamYearlyStats)
+        nest(-idTeam, .key = 'dataTeamYearlyStats')
     }
 
     all_data

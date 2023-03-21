@@ -86,7 +86,7 @@ seasons_players <-
     if (nest_data) {
       all_data  <-
         all_data %>%
-        nest(-c(slugSeason), .key = dataSeasonPlayers) %>%
+        nest(-c(slugSeason), .key = 'dataSeasonPlayers') %>%
         mutate(countPlayers = dataSeasonPlayers %>% map_dbl(nrow) %>% as.integer())
     }
     all_data

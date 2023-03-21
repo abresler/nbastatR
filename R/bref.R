@@ -1203,7 +1203,7 @@ assign_bref_data <-
         data <-
           data %>%
           mutate(typeBREFData = type) %>%
-          nest(-c(slugSeason, typeBREFData, yearSeason), .key = dataSeason)
+          nest(-c(slugSeason, typeBREFData, yearSeason), .key = "dataSeason")
       }
     }
     data
@@ -1693,7 +1693,7 @@ all_nba_teams <-
 
     all_data <-
       all_data %>%
-      nest(-c(typeData, slugSeason, yearSeason), .key = dataTable)
+      nest(-c(typeData, slugSeason, yearSeason), .key = "dataTable")
    all_data
   }
 
@@ -3174,7 +3174,7 @@ bref_awards <-
 
     all_data <-
       all_data %>%
-      nest(-c(slugSeason, yearSeason, slugTable, urlBREF), .key = dataVotes)
+      nest(-c(slugSeason, yearSeason, slugTable, urlBREF), .key = "dataVotes")
 
     all_data
   })

@@ -291,7 +291,7 @@ teams_rosters <-
     if (nest_data) {
       all_data <-
         all_data %>%
-        nest(-c(slugSeason, nameTeam, idTeam), .key = dataRoster) %>%
+        nest(-c(slugSeason, nameTeam, idTeam), .key = 'dataRoster') %>%
         mutate(countPlayers = dataRoster %>% map_dbl(nrow))
     }
 
@@ -441,7 +441,7 @@ teams_coaches <-
     if (nest_data) {
       all_data <-
         all_data %>%
-        nest(-c(slugSeason, nameTeam, idTeam), .key = dataCoaches) %>%
+        nest(-c(slugSeason, nameTeam, idTeam), .key = 'dataCoaches') %>%
         mutate(countCoaches = dataRoster %>% map_dbl(nrow))
     }
 

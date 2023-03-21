@@ -178,7 +178,7 @@
       data <-
         all_data %>%
         mutate(slugLeague = league) %>%
-        nest(-c(idGame, slugLeague), .key = dataBoxScore) %>%
+        nest(-c(idGame, slugLeague), .key = "dataBoxScore") %>%
         mutate(typeResult = result_type,
                typeBoxScore = boxscore) %>%
         mutate(cols = dataBoxScore %>% map_dbl(ncol)) %>%
@@ -317,7 +317,7 @@
     data <-
       data %>%
       mutate(slugLeague = league) %>%
-      nest(-c(idGame, slugLeague), .key = dataBoxScore) %>%
+      nest(-c(idGame, slugLeague), .key = "dataBoxScore") %>%
       mutate(typeResult = result_type,
              typeBoxScore = boxscore) %>%
       mutate(cols = dataBoxScore %>% map_dbl(ncol)) %>%

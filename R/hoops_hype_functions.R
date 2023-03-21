@@ -576,7 +576,7 @@ hoopshype_salaries <-
     if (nest_data) {
       all_data <-
         all_data %>%
-        nest(-c(nameTeam, urlTeamSalaryHoopsHype), .key = dataSalaries)
+        nest(-c(nameTeam, urlTeamSalaryHoopsHype), .key = "dataSalaries")
     }
     all_data
   }

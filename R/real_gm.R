@@ -712,7 +712,7 @@ players_agents <-
     if (nest_data) {
       players_agents_df <-
         players_agents_df %>%
-        nest(-nameAgent, .key = dataNBAPlayers)
+        nest(-nameAgent, .key = 'dataNBAPlayers')
     }
 
     players_agents_df

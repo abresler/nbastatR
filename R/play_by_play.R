@@ -293,7 +293,7 @@ play_by_play <-
     if (nest_data) {
       all_data <-
         all_data %>%
-        nest(-c(idGame), .key = dataPlayByPlay)
+        nest(-c(idGame), .key = 'dataPlayByPlay')
     }
       all_data
   }
@@ -332,7 +332,7 @@ play_by_play_v2 <-
     if (nest_data) {
       all_data <-
         all_data %>%
-        nest(-c(idGame), .key = dataPlayByPlay)
+        nest(-c(idGame), .key = 'dataPlayByPlay')
     }
     all_data
   }
@@ -375,7 +375,7 @@ fanduel_summary <-
     if (nest_data) {
       all_data <-
         all_data %>%
-        nest(-c(idGame), .key = dataFanDuel)
+        nest(-c(idGame), .key = 'dataFanDuel')
     }
     all_data
   }

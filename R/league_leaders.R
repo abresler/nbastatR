@@ -141,7 +141,7 @@ metrics_leaders <-
    if (nest_data) {
      all_data <-
        all_data %>%
-       nest(-c(modeSearch, categoryStat, slugSeason, typeSeason, slugScope), .key = dataLeaders)
+       nest(-c(modeSearch, categoryStat, slugSeason, typeSeason, slugScope), .key = "dataLeaders")
    }
    all_data
   }
@@ -338,7 +338,7 @@ franchise_leaders <-
     if (nest_data) {
       all_data <-
         all_data %>%
-        nest(-c(modeSearch, nameTeam, typeSeason, idTeam), .key = dataFranchiseLeaders)
+        nest(-c(modeSearch, nameTeam, typeSeason, idTeam), .key = "dataFranchiseLeaders")
     }
     all_data
   }

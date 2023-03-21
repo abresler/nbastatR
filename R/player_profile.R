@@ -238,7 +238,7 @@ players_bios <-
     if (nest_data) {
       all_data <-
         all_data %>%
-        nest(-c(idPlayer, namePlayer, typeResult), .key = dataBio)
+        nest(-c(idPlayer, namePlayer, typeResult), .key = 'dataBio')
     }
 
     all_data
@@ -435,7 +435,7 @@ player_profiles <- function(players = NULL,
   if (nest_data) {
     all_data <-
       all_data %>%
-      nest(-c(idPlayer, namePlayer), .key = dataPlayerProfiles)
+      nest(-c(idPlayer, namePlayer), .key = 'dataPlayerProfiles')
   }
 
   all_data

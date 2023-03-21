@@ -111,7 +111,7 @@ teams_rankings <-
     if (nest_data) {
       all_data <-
         all_data %>%
-        nest(-c(slugSeason), .key = dataRankings)
+        nest(-c(slugSeason), .key = "dataRankings")
     }
     all_data
   }
