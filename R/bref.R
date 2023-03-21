@@ -488,7 +488,9 @@ get_bref_name_df <-
       "eFG.",
       "FT.",
       "PS.G",
-      "Team"
+      "Team",
+      "ORtg",
+      "DRtg"
 
     ),
     nameActual = c(
@@ -557,7 +559,9 @@ get_bref_name_df <-
       "pctEFG",
       "pctFT",
       "pts",
-      "nameTeam"
+      "nameTeam",
+      "ortg",
+      "drtg"
     )
   )
 })
