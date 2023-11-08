@@ -18365,7 +18365,7 @@ parse_for_seasons_data <-
         urlThumbnailTeam = if_else(
           isNonNBATeam == 0,
           glue(
-            "https://stats.nba.com/media/img/teams/logos/{slugTeam}_logo.svg"
+            "https://cdn.nba.com/logos/nba/{idTeam}/primary/L/logo.svg"
           ) %>% as.character(),
           "https://stats.nba.com/media/img/teams/logos/NBA_logo.svg"
         )
