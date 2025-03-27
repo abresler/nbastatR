@@ -54,6 +54,8 @@
       rawToChar() %>%
       fromJSON(simplifyVector = T)
 
+    closeAllConnections()
+
     json
 
 }

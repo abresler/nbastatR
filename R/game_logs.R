@@ -226,8 +226,7 @@
       rename(dataTables = data) |>
       ungroup()
 
-
-
+    closeAllConnections()
     data
   }
 

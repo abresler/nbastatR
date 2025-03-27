@@ -34,8 +34,8 @@ bref_teams_stats(seasons = 2017:2018)
 }
 \seealso{
 Other BREF: 
-\code{\link{bref_awards_votes}()},
 \code{\link{bref_awards}()},
+\code{\link{bref_awards_votes}()},
 \code{\link{bref_bios}()},
 \code{\link{bref_players_stats}()},
 \code{\link{dictionary_bref_coaches}()},

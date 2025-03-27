@@ -2,10 +2,19 @@
 % Please edit documentation in R/nbastatR-package.R
 \docType{package}
 \name{nbastatR}
+\alias{nbastatR-package}
 \alias{nbastatR}
 \title{nbastatR}
 \description{
 Tools to acquire and explore NBA data
+}
+\seealso{
+Useful links:
+\itemize{
+  \item \url{https://github.com/abresler/nbastatR}
+  \item Report bugs at \url{https://github.com/abresler/nbastatR/issues}
+}
+
 }
 \author{
 Alex Bresler (abresler@asbcllc.com)

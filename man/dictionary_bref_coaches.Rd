@@ -23,8 +23,8 @@ Other dictionary:
 \code{\link{dictionary_bref_teams}()}
 
 Other BREF: 
-\code{\link{bref_awards_votes}()},
 \code{\link{bref_awards}()},
+\code{\link{bref_awards_votes}()},
 \code{\link{bref_bios}()},
 \code{\link{bref_players_stats}()},
 \code{\link{bref_teams_stats}()},

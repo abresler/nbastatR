@@ -41,8 +41,8 @@ Other player:
 \code{\link{players_tables}()}
 
 Other awards: 
-\code{\link{bref_awards_votes}()},
-\code{\link{bref_awards}()}
+\code{\link{bref_awards}()},
+\code{\link{bref_awards_votes}()}
 }
 \concept{awards}
 \concept{player}
