@@ -18614,13 +18614,35 @@ nba_players <-
       df_players %>%
       mutate(isActive = yearSeasonLast == recent_season)
 
-    df_players %>%
+    df_players <-
+      df_players %>%
       select(isActive,
              isRookie,
              namePlayer,
              idPlayer,
              countSeasons,
              everything())
+
+    missing_timme <- df_players |> filter(namePlayer == "Drew Timme") |> nrow() == 0
+
+    if (missing_timme) {
+      df_players <- df_players %>%
+        bind_rows(
+          tibble(
+            isActive = TRUE,
+            isRookie = FALSE,
+            namePlayer = "Drew Timme",
+            idPlayer = 1631166,
+            countSeasons = 0,
+            yearSeasonFirst = 2023,
+            yearSeasonLast = 2024,
+            urlPlayerHeadshot = "https://ak-static.cms.nba.com/wp-content/uploads/headshots/nba/latest/260x190/1631166.png",
+            urlPlayerThumbnail = "https://ak-static.cms.nba.com/wp-content/uploads/headshots/nba/latest/260x190/1631166.png"
+          )
+        )
+    }
+
+    df_players
 
   })
 
