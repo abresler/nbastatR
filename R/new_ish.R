@@ -2938,7 +2938,8 @@ munge_nba_data <- function(data) {
               funs(. %>% as.numeric())) %>%
     suppressWarnings()
 
-  if (data %>% has_name("fga") && data %>%  has_name("fg3a")) {
+  if (data %>% has_name("fga") &&
+      data %>%  has_name("fg3a")) {
     data <-
       data %>%
       mutate(
@@ -2952,8 +2953,7 @@ munge_nba_data <- function(data) {
     data <-
       data %>%
       mutate(locationGame = case_when(slugMatchup %>% str_detect("@") ~
-                                        "A",
-                                      T ~ "H")) %>%
+                                        "A", T ~ "H")) %>%
       separate(
         slugMatchup,
         into = c("remove", "slugOpponent"),
@@ -2961,8 +2961,7 @@ munge_nba_data <- function(data) {
         remove = F
       ) %>%
       dplyr::select(-remove) %>%
-      mutate_if(is.character,
-                funs(. %>% str_trim())) %>%
+      mutate_if(is.character, funs(. %>% str_trim())) %>%
       dplyr::select(slugSeason:outcomeGame, locationGame, everything())
   }
 
@@ -3001,11 +3000,8 @@ munge_nba_data <- function(data) {
         sep = "\\ - ",
         remove = F
       ) %>%
-      mutate_at(c("scoreHome", "scoreAway"),
-                funs(. %>% as.numeric())) %>%
-      mutate(slugTeamLeading = case_when(marginScore == 0 ~ "Tie",
-                                         marginScore < 0 ~ "Away",
-                                         TRUE ~ "Home"))
+      mutate_at(c("scoreHome", "scoreAway"), funs(. %>% as.numeric())) %>%
+      mutate(slugTeamLeading = case_when(marginScore == 0 ~ "Tie", marginScore < 0 ~ "Away", TRUE ~ "Home"))
   }
 
   if (data %>% has_name("nameGroup") &&
@@ -3088,7 +3084,7 @@ munge_nba_data <- function(data) {
   }
 
   id_names <-
-    data %>% dplyr::select(dplyr::matches("idTeam", "idPlayer")) %>% names()
+    data %>% dplyr::select(one_of("idTeam", "idPlayer")) %>% names()
 
   if (id_names %>% length() > 0) {
     data <-
