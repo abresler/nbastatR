@@ -46,8 +46,8 @@
 
     data <-
       data %>%
-      mutate_at(c("idPlayer", "numberTeamAward", "idTeam"),
-                funs(. %>% as.numeric())) %>%
+      mutate(across((c("idPlayer", "numberTeamAward", "idTeam"),
+                ~as.numeric(.x)) %>%
       suppressWarnings() %>%
       mutate(
         dateMonthAward = lubridate::mdy(dateMonthAward),
@@ -186,7 +186,7 @@ players_awards <-
                       sep = "\\, ") %>%
       unite(namePlayer, nameFirst, nameLast, sep = " ") %>%
       mutate_if(is.character,
-                funs(ifelse(. == "", NA_character_, .))) %>%
+                ~ifelse(.x == "", NA_character_, .x)) %>%
       remove_na_columns() %>%
       dplyr::select(idPlayer, namePlayer, everything())
 
@@ -238,7 +238,7 @@ players_bios <-
     if (nest_data) {
       all_data <-
         all_data %>%
-        nest(-c(idPlayer, namePlayer, typeResult), .key = 'dataBio')
+        nest(dataBio = -c(idPlayer, namePlayer, typeResult))
     }
 
     all_data
@@ -374,7 +374,7 @@ player_profiles <- function(players = NULL,
       all_data %>%
         filter(nameTable == table) %>%
         select(-nameTable) %>%
-        unnest()
+        unnest(cols = where(is.list))
     })
 
   all_data <-
@@ -435,7 +435,7 @@ player_profiles <- function(players = NULL,
   if (nest_data) {
     all_data <-
       all_data %>%
-      nest(-c(idPlayer, namePlayer), .key = 'dataPlayerProfiles')
+      nest(dataPlayerProfiles = -c(idPlayer, namePlayer))
   }
 
   all_data

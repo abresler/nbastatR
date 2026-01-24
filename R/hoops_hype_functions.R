@@ -165,7 +165,7 @@ hoops_hype_salary_summary <-
       page %>%
       html_table(header = T) %>%
       data.frame() %>%
-      tbl_df()
+      as_tibble()
 
     team_name_df <-
       .get_hoopshype_teams_ids()
@@ -179,16 +179,16 @@ hoops_hype_salary_summary <-
       suppressMessages()
 
 
+    x_cols <- salary_table_df %>% select(dplyr::matches("X")) %>% names()
     salary_table_df <-
       salary_table_df %>%
-      mutate_at(salary_table_df %>% select(dplyr::matches("X")) %>% names(),
-                funs(. %>%  as.character() %>% parse_number()))
+      mutate(across(all_of(x_cols), ~parse_number(as.character(.x))))
 
     salary_data <-
       salary_table_df %>%
-      gather(slugSeason,
-             amountSalary,
-             -c(nameTeam, nameTeam, slugTeam, urlTeamSalaryHoopsHype)) %>%
+      tidyr::pivot_longer(cols = -c(nameTeam, slugTeam, urlTeamSalaryHoopsHype),
+             names_to = "slugSeason",
+             values_to = "amountSalary") %>%
       mutate(
         slugSeason = slugSeason %>% str_replace('\\.', '\\-') %>% str_replace("X", '') %>% factor(ordered = T),
         amountSalary = amountSalary %>% as.character() %>% parse_number()
@@ -576,7 +576,7 @@ hoopshype_salaries <-
     if (nest_data) {
       all_data <-
         all_data %>%
-        nest(-c(nameTeam, urlTeamSalaryHoopsHype), .key = "dataSalaries")
+        nest(dataSalaries = -c(nameTeam, urlTeamSalaryHoopsHype))
     }
     all_data
   }

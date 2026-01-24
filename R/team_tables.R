@@ -53,7 +53,7 @@
         remove_na_columns()
 
       data %>%
-        nest(-c(nameTable, nameTeam, idTeam), .key = 'dataTable')
+        nest(dataTable = -c(nameTable, nameTeam, idTeam))
     })
   data
 }
@@ -152,7 +152,7 @@ teams_details <-
         df_row <-
           all_data %>%
           filter(nameTable == table) %>%
-          unnest() %>%
+          unnest(cols = where(is.list)) %>%
           distinct()
 
         if (df_row %>% has_name("capacityArena")) {
@@ -192,7 +192,7 @@ teams_details <-
 
 
         df_row %>%
-          nest(-c(nameTable), .key = 'dataTable')
+          nest(dataTable = -c(nameTable))
       })
 
     if (assign_to_environment) {
@@ -205,7 +205,7 @@ teams_details <-
             all_data %>%
             filter(nameTable == table) %>%
             select(-nameTable) %>%
-            unnest() %>%
+            unnest(cols = where(is.list)) %>%
             distinct()
           assign(table_name, df_table, envir = .GlobalEnv)
         })
@@ -350,7 +350,7 @@ teams_annual_stats <-
     if (nest_data) {
       all_data <-
         all_data %>%
-        nest(-c(slugSeason), .key = 'dataTeamSeasonPerformance')
+        nest(dataTeamSeasonPerformance = -c(slugSeason))
     }
 
 
@@ -369,7 +369,7 @@ teams_annual_stats <-
     if (nest_data) {
       all_data <-
         all_data %>%
-        nest(-idTeam, .key = 'dataTeamYearlyStats')
+        nest(dataTeamYearlyStats = -idTeam)
     }
 
     all_data

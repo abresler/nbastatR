@@ -2903,10 +2903,9 @@ munge_nba_data <- function(data) {
       separate(timeGame,
                into = c("hours", "minutes"),
                sep = "\\:") %>%
-      mutate_at(c("hours", "minutes"),
-                funs(. %>% as.numeric())) %>%
+      mutate(across(c("hours", "minutes"), as.numeric)) %>%
       mutate(lengthGameMinutes = (hours * 60) + minutes) %>%
-      dplyr::select(-one_of(c("hours", "minutes")))
+      dplyr::select(-any_of(c("hours", "minutes")))
   }
 
   if (data %>% has_name("minutes")) {
@@ -2915,8 +2914,7 @@ munge_nba_data <- function(data) {
         separate(minutes,
                  into = c("min", "seconds"),
                  sep = "\\:") %>%
-        mutate_at(c("min", "seconds"),
-                  funs(. %>% as.numeric())) %>%
+        mutate(across(c("min", "seconds"), as.numeric)) %>%
         mutate(seconds = seconds / 60,
                minExact = min + seconds) %>%
         dplyr::select(-c(min, seconds)) %>%
@@ -2931,12 +2929,11 @@ munge_nba_data <- function(data) {
     data %>% dplyr::select(dplyr::matches(char_words())) %>% names()
 
   num_names <-
-    data %>% dplyr::select(-one_of(char_names)) %>% names()
+    data %>% dplyr::select(-any_of(char_names)) %>% names()
 
   data <-
     data %>%
-    mutate_at(num_names,
-              funs(. %>% as.numeric())) %>%
+    mutate(across(all_of(num_names), as.numeric)) %>%
     suppressWarnings()
 
   if (data %>% has_name("fga") &&
@@ -2962,7 +2959,7 @@ munge_nba_data <- function(data) {
         remove = F
       ) %>%
       dplyr::select(-remove) %>%
-      mutate_if(is.character, funs(. %>% str_trim())) %>%
+      mutate(across(where(is.character), str_trim)) %>%
       dplyr::select(slugSeason:outcomeGame, locationGame, everything())
   }
 
@@ -3001,7 +2998,7 @@ munge_nba_data <- function(data) {
         sep = "\\ - ",
         remove = F
       ) %>%
-      mutate_at(c("scoreHome", "scoreAway"), funs(. %>% as.numeric())) %>%
+      mutate(across(c("scoreHome", "scoreAway"), as.numeric)) %>%
       mutate(slugTeamLeading = case_when(marginScore == 0 ~ "Tie", marginScore < 0 ~ "Away", TRUE ~ "Home"))
   }
 
@@ -3022,10 +3019,10 @@ munge_nba_data <- function(data) {
         sep = "\\:",
         remove = F
       ) %>%
-      mutate_at(
+      mutate(across(
         c("minuteRemainingQuarter", "secondsRemainingQuarter"),
-        funs(. %>% as.numeric())
-      ) %>%
+        as.numeric
+      )) %>%
 
       mutate(
         minuteGame = ((numberPeriod - 1) * 12) + (12 - minuteRemainingQuarter) + (((
@@ -3055,8 +3052,7 @@ munge_nba_data <- function(data) {
         into = c("winsTeam", "lossesTeam"),
         remove = F
       ) %>%
-      mutate_at(c("winsTeam", "lossesTeam"),
-                funs(. %>% as.numeric())) %>%
+      mutate(across(c("winsTeam", "lossesTeam"), as.numeric)) %>%
       mutate(
         countGamesTeam = winsTeam + lossesTeam,
         pctWinTeam = winsTeam / (countGamesTeam)
@@ -3069,10 +3065,8 @@ munge_nba_data <- function(data) {
   }
   data <-
     data %>%
-    mutate_if(is.character,
-              funs(str_trim)) %>%
-    mutate_if(is.character,
-              funs(ifelse(. == "", NA, .)))
+    mutate(across(where(is.character), str_trim)) %>%
+    mutate(across(where(is.character), ~ifelse(.x == "", NA, .x)))
 
   logicial_names <-
     data %>% dplyr::select(dplyr::matches("^has[A-Z]|^is[A-Z]")) %>% names()
@@ -3080,18 +3074,16 @@ munge_nba_data <- function(data) {
   if (logicial_names %>% length() > 0) {
     data <-
       data %>%
-      mutate_at(logicial_names,
-                funs(. %>% as.numeric() %>% as.logical()))
+      mutate(across(all_of(logicial_names), ~as.logical(as.numeric(.x))))
   }
 
   id_names <-
-    data %>% dplyr::select(one_of("idTeam", "idPlayer")) %>% names()
+    data %>% dplyr::select(any_of(c("idTeam", "idPlayer"))) %>% names()
 
   if (id_names %>% length() > 0) {
     data <-
       data %>%
-      mutate_at(id_names,
-                funs(. %>% as.numeric()))
+      mutate(across(all_of(id_names), as.numeric))
   }
 
   if (data %>% has_name("teamName") &
@@ -3190,21 +3182,21 @@ munge_nba_data <- function(data) {
              yearSeasonLast = yearSeasonLast + 1)
   }
 
+  pts_blk_names <- data %>% select(dplyr::matches("^pts|^blk")) %>% names()
   data <-
     data %>%
-    mutate_at(.vars = data %>% select(dplyr::matches("^pts|^blk")) %>% names(),
-              funs(. %>% as.numeric()))
+    mutate(across(all_of(pts_blk_names), as.numeric))
 
   data <-
     data %>%
     dplyr::select(which(colMeans(is.na(.)) < 1))
 
   char_names <-
-    data %>% select_if(is.character) %>% names()
+    data %>% select(where(is.character)) %>% names()
 
   data <-
     data %>%
-    dplyr::select(one_of(char_names), everything()) %>%
+    dplyr::select(any_of(char_names), everything()) %>%
     dplyr::select(
       dplyr::matches(
         "slugTable|group[A-Z]|type[A-Z]|mode[A-Z]|id[A-Z]|name[A-Z]|year|slug[A-Z]|number[A-Z]|date|outcome|^url|gp|gs|minutes[A-Z]|passes|^fg|^pct[A-Z]"
@@ -3214,8 +3206,7 @@ munge_nba_data <- function(data) {
 
   data <-
     data %>%
-    mutate_if(is.numeric,
-              funs(ifelse(. %>% is.nan(), 0 , .)))
+    mutate(across(where(is.numeric), ~ifelse(is.nan(.x), 0, .x)))
 
   data
 }

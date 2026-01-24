@@ -166,7 +166,7 @@
       set_names(names_md) %>%
       mutate(dateGame = dateGame %>% lubridate::mdy()) %>%
       mutate_at(c("idGame", "idTeamHome", "idTeamAway", "ptsTotalTeamHome", "ptsTotalTeamAway"),
-                funs(. %>% as.integer())
+                ~as.integer(.x)
       ) %>%
       select(-dplyr::matches("pts"))
 
@@ -253,7 +253,7 @@ win_probability <-
     if (nest_data) {
       all_data <-
         all_data %>%
-        nest(-c(dateGame, idGame, nameTeamHome, idTeamHome, slugTeamHome, nameTeamAway, idTeamAway, slugTamAway), .key = 'dataWinProbability')
+        nest(dataWinProbability = -c(dateGame, idGame, nameTeamHome, idTeamHome, slugTeamHome, nameTeamAway, idTeamAway, slugTamAway))
     }
     all_data
   }
@@ -293,7 +293,7 @@ play_by_play <-
     if (nest_data) {
       all_data <-
         all_data %>%
-        nest(-c(idGame), .key = 'dataPlayByPlay')
+        nest(dataPlayByPlay = -c(idGame))
     }
       all_data
   }
@@ -332,7 +332,7 @@ play_by_play_v2 <-
     if (nest_data) {
       all_data <-
         all_data %>%
-        nest(-c(idGame), .key = 'dataPlayByPlay')
+        nest(dataPlayByPlay = -c(idGame))
     }
     all_data
   }
@@ -375,7 +375,7 @@ fanduel_summary <-
     if (nest_data) {
       all_data <-
         all_data %>%
-        nest(-c(idGame), .key = 'dataFanDuel')
+        nest(dataFanDuel = -c(idGame))
     }
     all_data
   }

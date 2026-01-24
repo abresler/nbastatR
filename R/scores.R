@@ -95,7 +95,7 @@
         }
 
         data %>%
-          nest(-c(nameTable, dateGame), .key = "dataTable")
+          nest(dataTable = -c(nameTable, dateGame))
       })
     data
   }
@@ -163,10 +163,10 @@ days_scores <-
         df_row <-
           all_data %>%
           filter(nameTable == table) %>%
-          unnest() %>%
+          unnest(cols = where(is.list)) %>%
           distinct()
         df_row %>%
-          nest(-c(nameTable), .key = "dataTable")
+          nest(dataTable = -c(nameTable))
       })
 
     if (assign_to_environment) {
@@ -177,7 +177,7 @@ days_scores <-
           df_row <-
             all_data %>%
             filter(nameTable == table) %>%
-            unnest() %>%
+            unnest(cols = where(is.list)) %>%
             select(-nameTable) %>%
             distinct()
 

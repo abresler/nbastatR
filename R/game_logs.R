@@ -125,8 +125,7 @@
           isB2BSecond = ifelse(lag(countDaysNextGameTeam) == 0, TRUE, FALSE)
         ) %>%
         ungroup() %>%
-        mutate_if(is.logical,
-                  funs(ifelse(. %>% is.na(), FALSE, .)))
+        mutate(across(where(is.logical), ~ifelse(is.na(.x), FALSE, .x)))
 
       data <-
         data %>%
@@ -196,8 +195,7 @@
           countDaysRestPlayer = countDaysRestPlayer %>% as.numeric()
         ) %>%
         ungroup() %>%
-        mutate_if(is.logical,
-                  funs(ifelse(. %>% is.na(), FALSE, .)))
+        mutate(across(where(is.logical), ~ifelse(is.na(.x), FALSE, .x)))
 
       data <-
         data %>%
@@ -319,7 +317,7 @@ game_logs <-
       all_data <-
         all_data %>%
         select(-typeResult) %>%
-        unnest()
+        unnest(cols = where(is.list))
 
       return(all_data)
     }
@@ -333,7 +331,7 @@ game_logs <-
             all_data %>%
             filter(typeResult == result) %>%
             select(-typeResult) %>%
-            unnest()
+            unnest(cols = where(is.list))
 
           col_order <-
             c(
@@ -393,7 +391,7 @@ game_logs <-
           if (nest_data) {
             df_table <-
               df_table %>%
-              nest(-c(typeSeason, slugSeason, yearSeason), .key = "dataGameLogs")
+              nest(dataGameLogs = -c(typeSeason, slugSeason, yearSeason))
           }
 
 
@@ -434,7 +432,7 @@ game_logs <-
         season_type = season_type,
         return_message = return_message
       ) %>%
-      unnest()
+      unnest(cols = where(is.list))
     data <-
       data %>%
       select(one_of(
@@ -479,15 +477,15 @@ game_logs <-
           df_box_scores %>%
             filter(typeResult == "player") %>%
             select(dataBoxScore) %>%
-            unnest() %>%
-            nest(-c(idGame, slugTeam), .key = "dataBoxScorePlayer")
+            unnest(cols = dataBoxScore) %>%
+            nest(dataBoxScorePlayer = -c(idGame, slugTeam))
         ) %>%
         left_join(
           df_box_scores %>%
             filter(typeResult == "team") %>%
             select(dataBoxScore) %>%
-            unnest() %>%
-            nest(-c(idGame, slugTeam), .key = "dataBoxScoreTeam")
+            unnest(cols = dataBoxScore) %>%
+            nest(dataBoxScoreTeam = -c(idGame, slugTeam))
         ) %>%
         mutate(isTeamWinner = ifelse(slugTeamWinner == slugTeam, TRUE, FALSE)) %>%
         suppressMessages() %>%
@@ -559,7 +557,7 @@ seasons_schedule <-
     if (nest_data) {
       all_data <-
         all_data %>%
-        nest(-c(typeSeason, slugSeason), .key = "dataSchedule")
+        nest(dataSchedule = -c(typeSeason, slugSeason))
     }
     all_data
   }

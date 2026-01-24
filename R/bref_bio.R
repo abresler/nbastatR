@@ -385,8 +385,7 @@
           into = c("yearHighSchool", "rankHighSchool"),
           sep = "\\ "
         ) %>%
-        mutate_at(c("yearHighSchool", "rankHighSchool"),
-                  funs(. %>% as.character() %>% parse_number()))
+        mutate(across(c("yearHighSchool", "rankHighSchool"), ~parse_number(as.character(.x))))
 
     }
 
@@ -569,7 +568,7 @@ bref_bios <-
             all_data %>%
             filter(nameTable == table) %>%
             select(-nameTable) %>%
-            unnest()
+            unnest(cols = where(is.list))
 
           table_name <-
             glue("dataBREFPlayers{table}") %>% as.character()

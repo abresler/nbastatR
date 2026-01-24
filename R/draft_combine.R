@@ -77,7 +77,7 @@
     data <-
       json$resultSets$rowSet %>%
       data.frame(stringsAsFactors = F) %>%
-      tbl_df()
+      as_tibble()
 
     headers <-
       json$resultSets$headers %>% flatten_chr()
@@ -93,8 +93,7 @@
 
     data <-
       data %>%
-      mutate_at(num_names,
-                funs(. %>% as.character() %>% parse_number())) %>%
+      mutate(across(all_of(num_names), ~parse_number(as.character(.x)))) %>%
       dplyr::rename(slugPosition = groupPosition)
 
     if (actual_names[actual_names %>% str_detect("set")] %>% length() > 0) {
@@ -159,7 +158,7 @@ draft_combines <-
     if (nest_data) {
       all_data <-
         all_data %>%
-        nest(-yearCombine, .key = 'dataCombine') %>%
+        nest(dataCombine = -yearCombine) %>%
         mutate(countPlayers = dataCombine %>% map_dbl(nrow)) %>%
         select(yearCombine, countPlayers, dataCombine)
     }

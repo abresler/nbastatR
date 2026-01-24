@@ -45,7 +45,7 @@
       var_df <-
         var_data %>%
         flatten_df() %>%
-        mutate_all(funs(. %>% as.character() %>% parse_number())) %>%
+        mutate(across(everything(), ~parse_number(as.character(.x)))) %>%
         set_names(var_names) %>%
         mutate(idTeam = teams) %>%
         suppressWarnings()
@@ -111,7 +111,7 @@ teams_rankings <-
     if (nest_data) {
       all_data <-
         all_data %>%
-        nest(-c(slugSeason), .key = "dataRankings")
+        nest(dataRankings = -c(slugSeason))
     }
     all_data
   }

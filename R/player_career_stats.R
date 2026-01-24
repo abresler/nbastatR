@@ -100,7 +100,7 @@
         data <-
           data %>%
           dplyr::select(-one_of("idLeague")) %>%
-          nest(-c(nameTable, modeSearch, idPlayer, namePlayer), .key = 'dataTable') %>%
+          nest(dataTable = -c(nameTable, modeSearch, idPlayer, namePlayer)) %>%
           mutate(urlNBAAPI = url) %>%
           suppressWarnings()
 

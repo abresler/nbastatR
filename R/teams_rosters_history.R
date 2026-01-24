@@ -178,7 +178,7 @@ team_season_roster <-
     data_roster <-
       json_data$resultSets$rowSet[1] %>%
       data.frame(stringsAsFactors = F) %>%
-      tbl_df()
+      as_tibble()
     actual_names <- c(
       "idTeam",
       "yearSeason",
@@ -294,7 +294,7 @@ teams_rosters <-
     if (nest_data) {
       all_data <-
         all_data %>%
-        nest(-c(slugSeason, nameTeam, idTeam), .key = 'dataRoster') %>%
+        nest(dataRoster = -c(slugSeason, nameTeam, idTeam)) %>%
         mutate(countPlayers = dataRoster %>% map_dbl(nrow))
     }
 
@@ -344,7 +344,7 @@ teams_rosters <-
     data_roster <-
       json_data$resultSets$rowSet[2] %>%
       data.frame(stringsAsFactors = F) %>%
-      tbl_df()
+      as_tibble()
 
     if (data_roster %>% nrow() == 0) {
       return(invisible())
@@ -444,7 +444,7 @@ teams_coaches <-
     if (nest_data) {
       all_data <-
         all_data %>%
-        nest(-c(slugSeason, nameTeam, idTeam), .key = 'dataCoaches') %>%
+        nest(dataCoaches = -c(slugSeason, nameTeam, idTeam)) %>%
         mutate(countCoaches = dataRoster %>% map_dbl(nrow))
     }
 

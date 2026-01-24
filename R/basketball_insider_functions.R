@@ -277,8 +277,8 @@ nba_team_salaries <-
 
 
     salary_data <-
-      salary_data %>%  mutate_if(is.character,
-                                 funs(. %>% str_replace_all("\\\\", "") %>% str_trim()))
+      salary_data %>%
+      mutate(across(where(is.character), ~str_trim(str_replace_all(.x, "\\\\", ""))))
 
 
     year_1_salary <-

@@ -232,7 +232,7 @@ seasons_rosters <-
     if (nest_data) {
       all_data <-
         all_data %>%
-        nest(-c(slugSeason), .key = 'dataRosters')
+        nest(dataRosters = -c(slugSeason))
     }
     all_data
   }

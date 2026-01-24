@@ -204,7 +204,7 @@ gather_data <-
 
     data <-
       data %>%
-      gather(UQ(variable_name), value, -gather_cols)
+      tidyr::pivot_longer(cols = -all_of(gather_cols), names_to = variable_name, values_to = "value")
 
     if (!unite_columns %>% is_null()) {
       df_unite <- unite_columns %>% flatten_df()
@@ -287,11 +287,11 @@ spread_data <-
 
     data <-
       data %>%
-      spread(variable_name, value_name)
+      tidyr::pivot_wider(names_from = all_of(variable_name), values_from = all_of(value_name))
 
     if (perserve_order) {
       data <-
-        data %>% dplyr::select(one_of(col_order))
+        data %>% dplyr::select(any_of(col_order))
     }
     data
   }
@@ -307,7 +307,7 @@ get_data_classes <- function(data) {
     data %>%
     future_map(class) %>%
     as_tibble() %>%
-    gather(column,class) %>%
+    tidyr::pivot_longer(cols = everything(), names_to = "column", values_to = "class") %>%
     mutate(idColumn = 1:n()) %>%
     select(idColumn, everything()) %>%
     mutate(isNested = class %>% str_detect("list|data.frame|tbl|tibble|data"))
@@ -349,10 +349,8 @@ get_data_classes <- function(data) {
     df_classes <-
       df_classes %>%
       left_join(df_nested_cols) %>%
-      mutate_if(is_logical,
-                funs(ifelse(. %>% is.na(), FALSE, .))) %>%
-      mutate_if(is_double,
-                funs(ifelse(. %>% is.na(), 0, .))) %>%
+      mutate(across(where(is_logical), ~ifelse(is.na(.x), FALSE, .x))) %>%
+      mutate(across(where(is_double), ~ifelse(is.na(.x), 0, .x))) %>%
       suppressMessages()
   }
 
@@ -424,10 +422,9 @@ summarise_per_minute <-
     data <-
       data %>%
       mutate(minutes := min_totals) %>%
-      dplyr::select(-one_of(min_var)) %>%
-      dplyr::select(one_of("minutes", id_columns), everything()) %>%
-      mutate_at(munge_cols,
-                funs(. / minutes))
+      dplyr::select(-any_of(min_var)) %>%
+      dplyr::select(any_of(c("minutes", id_columns)), everything()) %>%
+      mutate(across(all_of(munge_cols), ~.x / minutes))
 
     names(data) <-
       names(data) %>% str_replace_all("Totals|Advanced|PerGame|PerPossesion|Per36", "")
@@ -493,9 +490,8 @@ scale_per_minute <-
     }
     data <-
       data %>%
-      dplyr::select(one_of("minutes"), everything()) %>%
-      mutate_at(munge_cols,
-                funs(. / minutes))
+      dplyr::select(any_of("minutes"), everything()) %>%
+      mutate(across(all_of(munge_cols), ~.x / minutes))
     if (!is_team) {
     names(data) <-
       names(data) %>% str_replace_all("Totals|Advanced|PerGame|PerPossesion|Per36", "")

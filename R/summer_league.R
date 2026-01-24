@@ -63,7 +63,7 @@ sl_players <-
           df_teams <-
             data %>%
             select(idPlayer, dataTeams) %>%
-            unnest()
+            unnest(cols = where(is.list))
 
           if (df_teams %>% nrow() > 0) {
           df_teams <-
@@ -72,7 +72,7 @@ sl_players <-
             resolve_nba_names()) %>%
             munge_nba_data()
 
-          df_teams <- df_teams %>% nest(-idPlayer, .key = 'dataTeams')
+          df_teams <- df_teams %>% nest(dataTeams = -idPlayer)
 
           df <-
             df %>%

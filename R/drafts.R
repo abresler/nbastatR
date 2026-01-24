@@ -117,7 +117,7 @@ drafts <-
     if (nest_data) {
       all_data <-
         all_data %>%
-        nest(-c(yearDraft), .key = "dataDraft")
+        nest(dataDraft = -c(yearDraft))
     }
 
     all_data

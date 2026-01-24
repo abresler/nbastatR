@@ -18052,7 +18052,7 @@ current_schedule <-
     df_descriptions <-
       tibble(descriptionGame = json_data$nugget$text) %>%
       mutate(idRow = 1:n()) %>%
-      mutate_all(funs(ifelse(. == "", NA, .)))
+      mutate(across(everything(), ~ifelse(.x == "", NA, .x)))
 
     df_home <-
       json_data$hTeam %>% flatten() %>% dplyr::as_tibble() %>%
@@ -18129,8 +18129,7 @@ coaching_staffs <-
           "nameCollegeCoach"
         )
       ) %>%
-      mutate_at(c("idCoach", "numberSort", "idTeam"),
-                funs(. %>% as.numeric())) %>%
+      mutate(across(c("idCoach", "numberSort", "idTeam"), as.numeric)) %>%
       select(-numberSort)
 
     data <-
@@ -18208,7 +18207,7 @@ nbastats_api_parameters <-
           "hasGamesPlayedFlag"
         )
       ) %>%
-      mutate_at(
+      mutate(across(
         c(
           "idPlayer",
           "isActive",
@@ -18216,8 +18215,8 @@ nbastats_api_parameters <-
           "yearSeasonLast",
           "yearSeasonFirst"
         ),
-        funs(. %>% as.integer())
-      ) %>%
+        as.integer
+      )) %>%
       mutate(
         isActive = as.logical(isActive),
         countSeasons = (yearSeasonLast - yearSeasonFirst)
@@ -18307,9 +18306,8 @@ parse_for_seasons_data <-
       })
 
     seasons %>%
-      mutate_all(as.character) %>%
-      mutate_at(c("yearDataEnd", "idLeagueSeasonType", "yearDataStart"),
-                funs(. %>% as.numeric()))
+      mutate(across(everything(), as.character)) %>%
+      mutate(across(c("yearDataEnd", "idLeagueSeasonType", "yearDataStart"), as.numeric))
   }
 
 .parse_for_teams <-
@@ -18355,7 +18353,7 @@ parse_for_seasons_data <-
           "colorsTeam"
         )
       ) %>%
-      mutate_at(
+      mutate(across(
         c(
           "idTeam",
           "idConference",
@@ -18364,11 +18362,10 @@ parse_for_seasons_data <-
           "yearPlayedLast",
           "idLeague"
         ),
-        funs(. %>% as.integer())
-      ) %>%
+        as.integer
+      )) %>%
       mutate(nameTeam = str_c(cityTeam, teamNameFull, sep = " ")) %>%
-      mutate_if(is.character,
-                funs(ifelse(. == "", NA, .))) %>%
+      mutate(across(where(is.character), ~ifelse(.x == "", NA, .x))) %>%
       dplyr::select(nameTeam, everything())
 
     df_teams <-
