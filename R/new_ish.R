@@ -476,12 +476,13 @@ nba_player_ids <-
 
 #' NBA team ids
 #'
-#' Resolve NBA team ID
+#' Resolve NBA team ID for specified teams.
 #'
 #' @param teams vector of team names
 #' @param team_ids vector of team ids
+#' @param all_active_teams if \code{TRUE} returns all active team ids
 #'
-#' @return a `tibble`
+#' @return a vector of team ids
 #' @family ids
 #' @export
 #'

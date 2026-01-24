@@ -126,14 +126,17 @@ fix_name <- function(data, fix_name = "Weeks12") {
 #' \item new_column_2 : new_column 2
 #' \item sep : separator
 #' }
-#' @param remove_na removes NA columns
-#' @return a \code{tibble}
+#' @param remove_na if \code{TRUE} removes NA columns
+#' @return a \code{tibble} in long format
 #' @export
 #' @import dplyr stringr
 #' @importFrom rlang UQ
 #' @importFrom tidyr gather
 #' @importFrom purrr is_null
 #' @examples
+#' \dontrun{
+#' gather_data(data = df, numeric_ids = c("id"))
+#' }
 gather_data <-
   function(data,
            variable_name = 'item',
@@ -233,18 +236,23 @@ gather_data <-
 
 #' Spread gathered data frame
 #'
-#' @param data a \code{tibble}
+#' Converts a gathered data frame to wide format.
+#'
+#' @param data a \code{tibble} in long format
 #' @param variable_name name of variable vector
 #' @param value_name name of value vector
-#' @param perserve_order if \code{TRUE} preserve order
-#' @param unite_columns
-#' @param separate_columns
+#' @param perserve_order if \code{TRUE} preserve column order
+#' @param unite_columns list of columns to unite before spreading
+#' @param separate_columns list of columns to separate before spreading
 #'
-#' @return a \code{tibble}
+#' @return a \code{tibble} in wide format
 #' @export
 #' @import dplyr
 #' @importFrom tidyr spread
 #' @examples
+#' \dontrun{
+#' spread_data(data = df, variable_name = "item", value_name = "value")
+#' }
 spread_data <-
   function(data,
            variable_name = "item",
@@ -375,15 +383,20 @@ get.json_data <-
 # normalizing -------------------------------------------------------------
 #' Summarize data per minute
 #'
-#' @param data a data frame
-#' @param id_columns vector of id columns
-#' @param scale_columns vector of columns to scale
+#' Normalizes statistics to per-minute values.
 #'
-#' @return a \code{tibble}
+#' @param data a data frame containing statistics
+#' @param id_columns vector of id columns to preserve
+#' @param scale_columns vector of columns to scale per minute
+#'
+#' @return a \code{tibble} with per-minute statistics
 #' @export
 #' @import dplyr stringr purrr
 #' @importFrom glue glue
 #' @examples
+#' \dontrun{
+#' summarise_per_minute(data = player_stats, id_columns = c("idPlayer"))
+#' }
 summarise_per_minute <-
   function(data,
            id_columns = c("idPlayerSeason"),
@@ -430,16 +443,21 @@ summarise_per_minute <-
   }
 
 
-#' Summarise data per minute
+#' Scale data per minute
 #'
-#' @param data a data frame
-#' @param scale_columns vector of columns to scale
+#' Scales specified columns to per-minute values.
 #'
-#' @return
+#' @param data a data frame containing statistics
+#' @param scale_columns vector of columns to scale per minute
+#'
+#' @return a \code{tibble} with scaled per-minute statistics
 #' @export
 #' @import dplyr stringr purrr rlang
 #' @importFrom glue glue
 #' @examples
+#' \dontrun{
+#' scale_per_minute(data = player_stats, scale_columns = c("pts", "ast"))
+#' }
 scale_per_minute <-
   function(data,
            scale_columns = NULL) {

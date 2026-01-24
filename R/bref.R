@@ -571,13 +571,18 @@ get_bref_name_df <-
 
 #' Widens basketball reference table data
 #'
-#' @param data
+#' Converts basketball reference table data from long to wide format.
 #'
-#' @return a `tibble`
+#' @param data a \code{tibble} of basketball reference data
+#'
+#' @return a \code{tibble} in wide format
 #' @export
 #' @import dplyr stringr tidyr
 #'
 #' @examples
+#' \dontrun{
+#' widen_bref_data(data = bref_data)
+#' }
 widen_bref_data <-
   memoise(function(data) {
     gather_cols <-
@@ -1154,18 +1159,23 @@ widen_bref_data <-
 
 #' Assign nested BREF data to environment
 #'
+#' Assigns basketball reference data to your global environment.
+#'
 #' @param data a \code{tibble} of tables
-#' @param type type of BREF data are `teams` and `players`
+#' @param type type of BREF data, options are \code{teams} and \code{players}
 #' @param widen_data if \code{TRUE} widens data
 #' @param join_data if \code{TRUE} joins tables
 #' @param nest_data if \code{TRUE} nests data
 #' @param assign_to_environment if \code{TRUE} assigns data to your environment
-#' @param include_all_nba if `TRUE` include all NBA teams
+#' @param include_all_nba if \code{TRUE} include all NBA teams
 #'
-#' @return a `tibble`
+#' @return a \code{tibble}
 #' @export
 #' @import dplyr purrr stringr tibble tidyr
 #' @examples
+#' \dontrun{
+#' assign_bref_data(data = bref_data, type = "players")
+#' }
 assign_bref_data <-
   function(data,
            type = "Players",
@@ -1301,12 +1311,19 @@ dictionary_bref_players <-
 
 #' All NBA Teams
 #'
-#' @param return_message
+#' Returns historical All-NBA team selections from basketball-reference.com.
 #'
-#' @return \code{tibble}
+#' @param return_message if \code{TRUE} returns a message
+#'
+#' @return a \code{tibble}
 #' @export
+#' @family BREF
+#' @family awards
 #'
 #' @examples
+#' \dontrun{
+#' all_nba_teams()
+#' }
 all_nba_teams <-
   memoise(function(return_message = TRUE) {
   if (return_message) {

@@ -12,10 +12,17 @@
 
 #' Cached player photo dictionary
 #'
-#' @return \code{tibble}
+#' Returns a cached dictionary of NBA player photo availability.
+#'
+#' @return a \code{tibble} with player IDs and photo availability flags
 #' @export
+#' @family dictionary
+#' @family NBA players
 #'
 #' @examples
+#' \dontrun{
+#' dictionary_player_photos()
+#' }
 dictionary_player_photos <-
   function() {
     structure(
@@ -17556,12 +17563,18 @@ dictionary_player_photos <-
 
 #' Validate NBA Player photos
 #'
-#' @param sleep_time if not \code{NULL} sleep time
+#' Validates availability of NBA player photos by checking URLs.
 #'
-#' @return \code{tibble}
+#' @param sleep_time sleep time between requests in seconds
+#'
+#' @return a \code{tibble} with player IDs and photo availability flags
 #' @export
+#' @family NBA players
 #'
 #' @examples
+#' \dontrun{
+#' validate_nba_player_photos(sleep_time = 2)
+#' }
 validate_nba_player_photos <-
   function(sleep_time = 2) {
     dict_players <- nba_players()
