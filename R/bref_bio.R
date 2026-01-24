@@ -303,7 +303,7 @@
       mutate(nameActual = actual_names) %>%
       select(nameActual, value) %>%
       spread(nameActual, value) %>%
-      dplyr::select(one_of(actual_names))
+      dplyr::select(any_of(actual_names))
 
     if (all_data %>% has_name("heightInches")) {
       all_data <-

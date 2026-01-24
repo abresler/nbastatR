@@ -51,8 +51,8 @@
 
     data %>%
       left_join(df_params) %>%
-      dplyr::select(one_of(actual_params), everything()) %>%
-      select(-one_of("numberTable", "idLeague")) %>%
+      dplyr::select(any_of(actual_params), everything()) %>%
+      select(-any_of("numberTable", "idLeague")) %>%
       suppressMessages()
 
 
@@ -203,9 +203,9 @@ metrics_leaders <-
       dplyr::rename(nameTeam = slugTeam)
 
     data %>%
-      left_join(df_params %>% select(-one_of("idLeague", "idTeam"))) %>%
-      dplyr::select(one_of(actual_params), everything()) %>%
-      select(-one_of("numberTable", "idLeague")) %>%
+      left_join(df_params %>% select(-any_of("idLeague", "idTeam"))) %>%
+      dplyr::select(any_of(actual_params), everything()) %>%
+      select(-any_of("numberTable", "idLeague")) %>%
       suppressMessages() %>%
       suppressWarnings()
 

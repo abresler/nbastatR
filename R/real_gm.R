@@ -423,7 +423,7 @@
     agent_players_df <-
       agent_players_df %>%
       left_join(metadata_df) %>%
-      dplyr::select(one_of(c("nameAgency","nameAgent")), everything()) %>%
+      dplyr::select(any_of(c("nameAgency","nameAgent")), everything()) %>%
       dplyr::select(which(colMeans(is.na(.)) < 1)) %>%
       suppressMessages()
     agent_players_df

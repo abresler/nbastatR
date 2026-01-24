@@ -255,8 +255,7 @@ teams_details <-
 
   data <-
     data %>%
-    mutate_at(num_cols,
-              funs(. %>% as.numeric())) %>%
+    mutate(across(all_of(num_cols), ~as.numeric(.x))) %>%
     mutate(modeSearch = mode) %>%
     dplyr::select(modeSearch, everything())
 

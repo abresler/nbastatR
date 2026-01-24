@@ -46,8 +46,7 @@
 
     data <-
       data %>%
-      mutate(across((c("idPlayer", "numberTeamAward", "idTeam"),
-                ~as.numeric(.x)) %>%
+      mutate(across(c("idPlayer", "numberTeamAward", "idTeam"), ~as.numeric(.x))) %>%
       suppressWarnings() %>%
       mutate(
         dateMonthAward = lubridate::mdy(dateMonthAward),
@@ -315,7 +314,7 @@ players_bios <-
 
         df_table <-
           df_table %>%
-          dplyr::select(-one_of("idLeague")) %>%
+          dplyr::select(-any_of("idLeague")) %>%
           dplyr::select(-dplyr::matches("Group")) %>%
           nest(-c(nameTable, idPlayer, namePlayer),
                .key = 'dataTable') %>%
@@ -382,7 +381,7 @@ player_profiles <- function(players = NULL,
     reduce(left_join) %>%
     mutate(heightInches = heightInches %>% map_dbl(height_in_inches)) %>%
     dplyr::select(
-      one_of(
+      any_of(
         "idPlayer",
         "namePlayer",
         "datetimeBirth",

@@ -18334,7 +18334,7 @@ parse_for_seasons_data <-
           spread(items, values)
 
       }) %>%
-      dplyr::select(one_of(
+      dplyr::select(any_of(
         c("V1", "V2", "V3", "V4", "V5", "V6", "V7", "V8", "V9", "V10",
           "V11")
       )) %>%
@@ -18414,7 +18414,7 @@ nba_teams <-
     if (join_blg) {
       df_teams <-
         df_teams %>%
-        left_join(.blg_teams() %>% select(-one_of(c(
+        left_join(.blg_teams() %>% select(-any_of(c(
           "teamName", "cityTeam"
         )))) %>%
         suppressMessages()

@@ -675,12 +675,10 @@
           df_parameters %>%
           set_names(names(df_parameters) %>% resolve_nba_names())
 
+        is_cols <- df_parameters %>% dplyr::select(dplyr::matches("is[A-Z]")) %>% names()
         df_parameters <-
           df_parameters %>%
-          mutate_at(
-            df_parameters %>% dplyr::select(dplyr::matches("is[A-Z]")) %>% names(),
-            funs(ifelse(. == "Y", 1, 0) %>% as.logical())
-          ) %>%
+          mutate(across(all_of(is_cols), ~as.logical(ifelse(.x == "Y", 1, 0)))) %>%
           mutate(numberTable = table_id) %>%
           select(numberTable, everything())
 
@@ -780,10 +778,10 @@
 
         df_table <-
           df_table %>%
-          left_join(df_parameters %>% select(-one_of(c("idTeam")))) %>%
-          dplyr::select(one_of(names(df_parameters)), everything()) %>%
+          left_join(df_parameters %>% select(-any_of(c("idTeam")))) %>%
+          dplyr::select(any_of(names(df_parameters)), everything()) %>%
           suppressMessages() %>%
-          select(-one_of(c("numberTable"))) %>%
+          select(-any_of(c("numberTable"))) %>%
           suppressWarnings()
 
         df_table <-
@@ -796,7 +794,7 @@
 
         df_table <-
           df_table %>%
-          dplyr::select(-one_of("idLeague")) %>%
+          dplyr::select(-any_of("idLeague")) %>%
           dplyr::select(-dplyr::matches("Group")) %>%
           nest(-c(nameTable, slugSeason, yearSeason, modeSearch, typeSeason),
                .key = 'dataTable')

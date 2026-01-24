@@ -179,7 +179,7 @@
       munge_nba_data() %>%
       dplyr::rename(slugLocationPossession = locationGame) %>%
       left_join(df_metadata) %>%
-      select(one_of(names_md), everything()) %>%
+      select(any_of(names_md), everything()) %>%
       suppressMessages()
 
     data

@@ -9,7 +9,7 @@
     .get_team_season_info(season = season,
                          team_id = team_id,
                          season_type = season_type) %>%
-    select(one_of(
+    select(any_of(
       c(
         "yearSeason",
         "idTeam",
@@ -35,10 +35,10 @@
 
       df_parameters <-
         df_parameters %>%
-        mutate_at(
-          df_parameters %>% dplyr::select(dplyr::matches("is[A-Z]")) %>% names(),
-          funs(ifelse(. == "Y", 1, 0) %>% as.logical())
-        ) %>%
+        mutate(across(
+          dplyr::matches("is[A-Z]"),
+          ~as.logical(ifelse(.x == "Y", 1, 0))
+        )) %>%
         mutate(numberTable = x) %>%
         select(numberTable, everything())
 
@@ -89,11 +89,11 @@
       data <-
         data %>%
         left_join(df_parameters, by = "numberTable") %>%
-        dplyr::select(one_of(names(df_parameters)), everything()) %>%
+        dplyr::select(any_of(names(df_parameters)), everything()) %>%
         select(-numberTable) %>%
         mutate(nameTable = table_name) %>%
         select(nameTable, everything()) %>%
-        dplyr::select(-one_of("idLeague")) %>%
+        dplyr::select(-any_of("idLeague")) %>%
         remove_zero_sum_cols() %>%
         left_join(df_team_season) %>%
         mutate(slugTable = table_slug,
@@ -107,7 +107,7 @@
 
       data <-
         data %>%
-        dplyr::select(-one_of(
+        dplyr::select(-any_of(
           c(
             "resultGame",
             "locationGame",
@@ -142,7 +142,7 @@
         data <-
           data %>%
           dplyr::rename(idPlayerAssistedBy = idPlayer) %>%
-          dplyr::select(-one_of("namePlayer")) %>%
+          dplyr::select(-any_of("namePlayer")) %>%
           left_join(
             df_dict_nba_players %>% select(
               idPlayerAssistedBy = idPlayer,
@@ -503,7 +503,7 @@ teams_seasons_info <-
              modeSearch = mode,
              slugSeason = season_slug,
              yearSeason = season) %>%
-      dplyr::select(one_of(c("nameTable", "typeMeasure", "modeSearch", "slugSeason", "yearSeason",
+      dplyr::select(any_of(c("nameTable", "typeMeasure", "modeSearch", "slugSeason", "yearSeason",
                              "typeSeason", "slugSeasonSearch",
                              "idTeam", "nameTeam", "nameConference", "nameDivision", "slugTable",
                              "urlTeamSeasonLogo",
@@ -779,7 +779,7 @@ teams_tables <-
           df_tables <-
             all_data %>%
             filter(tableSlugName == table) %>%
-            select(-one_of(c("slugTable", "tableSlugName"))) %>%
+            select(-any_of(c("slugTable", "tableSlugName"))) %>%
             unnest(cols = where(is.list)) %>%
             remove_na_columns()
 
@@ -924,17 +924,15 @@ teams_tables <-
     data <-
       data %>%
       left_join(df_params) %>%
-      select(one_of(param_names), everything()) %>%
+      select(any_of(param_names), everything()) %>%
       remove_zero_sum_cols() %>%
-      select(-one_of(c("numberTable", "idLeague"))) %>%
-      mutate_if(is.character,
-                funs(ifelse(. == "", NA, .))) %>%
+      select(-any_of(c("numberTable", "idLeague"))) %>%
+      mutate(across(where(is.character), ~ifelse(.x == "", NA, .x))) %>%
       remove_na_columns() %>%
-      mutate_at(c("locationX", "locationY"),
-                funs(. %>% as.character() %>% parse_number())) %>%
+      mutate(across(c("locationX", "locationY"), ~parse_number(as.character(.x)))) %>%
       suppressWarnings() %>%
       suppressMessages() %>%
-      select(dplyr::matches("yearSeason", "slugSeason", "nameTeam"), everything()) %>%
+      select(dplyr::matches("yearSeason|slugSeason|nameTeam"), everything()) %>%
       separate(zoneArea, into = c("nameZone", "slugZone"), sep = "\\(") %>%
       mutate(slugZone = slugZone %>% str_replace_all("\\)", ""))
 

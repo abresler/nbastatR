@@ -245,7 +245,7 @@
 
     data_players <-
       data %>%
-      dplyr::select(one_of(c(
+      dplyr::select(any_of(c(
         "namePlayer", "slugPlayerBREF", "yearSeason"
       ))) %>%
       distinct()
@@ -503,7 +503,7 @@
 
     data_players <-
       data_players %>%
-      select(-one_of(remove_names)) %>%
+      select(-any_of(remove_names)) %>%
       left_join(
         df_nba_stats_players %>% select(-namePlayer)
       ) %>%
@@ -512,7 +512,7 @@
 
 
     has_double <-
-      data_players %>% select(one_of(c(
+      data_players %>% select(any_of(c(
         "namePlayer", "namePlayerNBA", "slugPlayerBREF", "idPlayerNBA"
       ))) %>% distinct() %>% count(slugPlayerBREF) %>%
       filter(n > 1) %>% nrow() > 0
@@ -520,7 +520,7 @@
     if (has_double) {
       data_players <-
         data_players %>%
-        left_join(data_players %>% select(one_of(
+        left_join(data_players %>% select(any_of(
           c("namePlayer", "namePlayerNBA", "idPlayer", "idPlayerNBA")
         )) %>% distinct() %>% count(idPlayer)) %>%
         suppressMessages()
@@ -619,7 +619,7 @@
       df_good %>%
       bind_rows(df_na_players) %>%
       distinct() %>%
-      dplyr::select(-one_of("namePlayerNBA")) %>%
+      dplyr::select(-any_of("namePlayerNBA")) %>%
       suppressWarnings() %>%
       filter(!is.na(idPlayerNBA)) %>%
       arrange(namePlayer)

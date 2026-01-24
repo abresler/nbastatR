@@ -131,7 +131,7 @@
         data %>%
         left_join(df_teams_games,
                   by = c("slugTeam", "dateGame", "idTeam", "yearSeason")) %>%
-        select(one_of(
+        select(any_of(
           c(
             "typeResult",
             "yearSeason",
@@ -383,7 +383,7 @@ game_logs <-
 
           df_table <-
             df_table %>%
-            select(one_of(col_order), everything()) %>%
+            select(any_of(col_order), everything()) %>%
             suppressWarnings()
 
 
@@ -435,7 +435,7 @@ game_logs <-
       unnest(cols = where(is.list))
     data <-
       data %>%
-      select(one_of(
+      select(any_of(
         c(
           "typeSeason",
           "slugSeason",

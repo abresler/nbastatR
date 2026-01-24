@@ -216,7 +216,7 @@ assign_tables_modes <-
                     df <- df %>% select(-dplyr::matches("Rank"))
                   }
                   df <-
-                    df %>% select(-one_of(c("modeSearch", "typeMeasure")))
+                    df %>% select(-any_of(c("modeSearch", "typeMeasure")))
 
                   if (add_mode_names) {
                     df_table_names <-
@@ -247,7 +247,7 @@ assign_tables_modes <-
                   }
 
                   df %>%
-                    dplyr::select(one_of(
+                    dplyr::select(any_of(
                       c(
                         "slugSeason",
                         "slugTeam",
@@ -322,7 +322,7 @@ assign_tables_modes <-
 
               df_table <-
                 df_table %>%
-                dplyr::select(one_of(
+                dplyr::select(any_of(
                   c(
                     "slugSeason",
                     "slugTeam",
@@ -2918,7 +2918,7 @@ munge_nba_data <- function(data) {
         mutate(seconds = seconds / 60,
                minExact = min + seconds) %>%
         dplyr::select(-c(min, seconds)) %>%
-        dplyr::select(one_of(c(
+        dplyr::select(any_of(c(
           "idGame", "descriptionComment", "minExact"
         )), everything()) %>%
         suppressWarnings()
@@ -3097,7 +3097,7 @@ munge_nba_data <- function(data) {
     assign_nba_players()
     data <-
       data %>%
-      dplyr::select(-one_of("namePlayerOnOff")) %>%
+      dplyr::select(-any_of("namePlayerOnOff")) %>%
       left_join(
         df_dict_nba_players %>% select(idPlayerOnOff = idPlayer,
                                        namePlayerOnOff = namePlayer)
@@ -3125,7 +3125,7 @@ munge_nba_data <- function(data) {
     assign_nba_players()
     data <-
       data %>%
-      dplyr::select(-one_of("namePlayerPasser")) %>%
+      dplyr::select(-any_of("namePlayerPasser")) %>%
       dplyr::rename(idPlayerPasserPassTo = idPlayerPasser) %>%
       left_join(
         df_dict_nba_players %>% select(
@@ -3143,7 +3143,7 @@ munge_nba_data <- function(data) {
     data <-
       data %>%
       dplyr::rename(idPlayerPasserPassTo = idPlayerPasser) %>%
-      dplyr::select(-one_of("namePlayerPassTo")) %>%
+      dplyr::select(-any_of("namePlayerPassTo")) %>%
       left_join(
         df_dict_nba_players %>% select(
           idPlayerPasserPassTo = idPlayer,
@@ -3159,7 +3159,7 @@ munge_nba_data <- function(data) {
   data <-
     data %>%
     dplyr::select(-dplyr::matches("CIF")) %>%
-    dplyr::select(-one_of(
+    dplyr::select(-any_of(
       c(
         "orderSort",
         "idLeague",

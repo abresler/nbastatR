@@ -45,16 +45,14 @@ sl_players <-
           munge_nba_data()
 
         if (df %>% has_name("dateBirth")) {
-          df <- df %>% mutate_at('dateBirth',
-                                 funs(lubridate::ymd))
+          df <- df %>% mutate(across('dateBirth', lubridate::ymd))
         }
         if (height_cols %>% length() > 0) {
           height_change <- height_cols[height_cols %in% names(df)]
 
           df <-
             df %>%
-            mutate_at(height_change,
-                      funs(. %>% as.numeric()))  %>%
+            mutate(across(all_of(height_change), ~as.numeric(.x)))  %>%
             mutate(heightPlayer = (12 * heightFeet) + heightInches) %>%
             suppressWarnings()
         }
@@ -155,8 +153,7 @@ sl_teams <-
         data <-
           data %>%
           munge_nba_data() %>%
-          mutate_if(is.character,
-                    funs(ifelse(. == "", NA_character_, .)))
+          mutate(across(where(is.character), ~ifelse(.x == "", NA_character_, .x)))
 
         if (assign_to_environment) {
           league_slug <- case_when(league == "standard" ~ "",

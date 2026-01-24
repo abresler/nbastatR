@@ -598,7 +598,7 @@ widen_bref_data <-
       unite(metric, metric, timeframeData, typeData, sep = "")
 
     base_cols <-
-      data %>% dplyr::select(-one_of(c("metric", "value"))) %>% names()
+      data %>% dplyr::select(-any_of(c("metric", "value"))) %>% names()
 
     col_order <- c(base_cols, data$metric %>% unique())
 
@@ -722,14 +722,14 @@ widen_bref_data <-
         }
         df_table <-
           df_table %>%
-          dplyr::select(-one_of("timeframeData", "typeData")) %>%
+          dplyr::select(-any_of("timeframeData", "typeData")) %>%
           suppressWarnings()
 
         col_order <-
           c(names(df_table)[!names(df_table) %>% str_detect("value|item")], "item", "value")
         df_table <-
           df_table %>%
-          select(one_of(col_order)) %>%
+          select(any_of(col_order)) %>%
           distinct()
 
         if (widen_data) {
@@ -858,7 +858,7 @@ widen_bref_data <-
 
         data_players <-
           df_table %>%
-          dplyr::select(one_of(c("namePlayer", "slugPlayerBREF"))) %>%
+          dplyr::select(any_of(c("namePlayer", "slugPlayerBREF"))) %>%
           distinct()
 
         data_players <-
@@ -963,7 +963,7 @@ widen_bref_data <-
           df_table %>%
           select(-namePlayer) %>%
           left_join(data_players, by = "slugPlayerBREF") %>%
-          select(one_of(names(df_table)), everything())
+          select(any_of(names(df_table)), everything())
 
 
         if (!table == "Advanced") {
@@ -993,7 +993,7 @@ widen_bref_data <-
 
           df_table <-
             df_table %>%
-            select(one_of(col_order))
+            select(any_of(col_order))
         } else {
           df_table <-
             df_table %>%
@@ -1011,12 +1011,12 @@ widen_bref_data <-
 
           df_table <-
             df_table %>%
-            select(one_of(col_order))
+            select(any_of(col_order))
         }
 
         df_table <-
           df_table %>%
-          dplyr::select(-one_of("typeData")) %>%
+          dplyr::select(-any_of("typeData")) %>%
           distinct()
 
         if (df_table %>% has_name("yearSeasonStart")) {
@@ -1080,7 +1080,7 @@ widen_bref_data <-
 
         all_data <-
           all_data %>%
-          select(one_of(col_order))
+          select(any_of(col_order))
       }
 
       all_data <-
@@ -1282,7 +1282,7 @@ dictionary_bref_players <-
             "https://www.basketball-reference.com/players/{letterLastName}/{slugPlayerBREF}.html"
           ) %>% as.character()
       ) %>%
-      select(-one_of("letterLastName"))
+      select(-any_of("letterLastName"))
 
     all_years <-
       data %>%
@@ -1953,7 +1953,7 @@ bref_players_stats <-
     data <-
       data[,df_names$idColumn] %>%
       set_names(df_names$nameActual) %>%
-      dplyr::select(-one_of("idRank"))
+      dplyr::select(-any_of("idRank"))
 
 
     numeric_names <-
@@ -2017,7 +2017,7 @@ bref_players_stats <-
     data <-
       data %>%
       set_names(actual_names) %>%
-      dplyr::select(-one_of("idRank"))
+      dplyr::select(-any_of("idRank"))
 
     numeric_names <-
       data %>% dplyr::select(-dplyr::matches("name|arena")) %>% names()
@@ -2078,7 +2078,7 @@ bref_players_stats <-
     data <-
       data %>%
       set_names(actual_names) %>%
-      dplyr::select(-one_of("idRank"))
+      dplyr::select(-any_of("idRank"))
 
     numeric_names <-
       data %>% dplyr::select(-dplyr::matches("nameTeam|nameArena")) %>% names()
@@ -2136,7 +2136,7 @@ bref_players_stats <-
     data <-
       data %>%
       set_names(actual_names[1:ncol(data)]) %>%
-      dplyr::select(-one_of("idRank"))
+      dplyr::select(-any_of("idRank"))
 
     numeric_names <-
       data %>% dplyr::select(-dplyr::matches("nameTeam|nameArena")) %>% names()
@@ -2284,7 +2284,7 @@ bref_players_stats <-
 
           df_urls <-
             df_urls %>%
-            select(-one_of(c("slugTeamBREF"))) %>%
+            select(-any_of(c("slugTeamBREF"))) %>%
             set_names(c("namePlayer", "urlPlayer")) %>%
             suppressWarnings()
 

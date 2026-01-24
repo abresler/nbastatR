@@ -20,12 +20,12 @@
         set_names(names(df_parameters) %>% resolve_nba_names()) %>%
         munge_nba_data() %>%
         select(-matches("remove"))
+      is_cols <- df_parameters %>% dplyr::select(dplyr::matches("is[A-Z]")) %>% names()
       df_parameters <-
         df_parameters %>%
-        mutate_at(df_parameters %>% dplyr::select(dplyr::matches("is[A-Z]")) %>% names(),
-                  funs(ifelse(. == "Y", 1, 0) %>% as.logical())) %>%
+        mutate(across(all_of(is_cols), ~as.logical(ifelse(.x == "Y", 1, 0)))) %>%
         mutate(numberTable = x,) %>%
-        select(one_of(c("numberTable", "typeMeasure", "modeSearch")), everything()) %>%
+        select(any_of(c("numberTable", "typeMeasure", "modeSearch")), everything()) %>%
         suppressWarnings()
 
       json_names <-
@@ -55,7 +55,7 @@
                typeMeasure = measure,
                modeSearch = mode,
                typeSeason = season_type) %>%
-        dplyr::select(one_of(
+        dplyr::select(any_of(
           c(
             "typeSeason",
             "modeSearch",
@@ -114,12 +114,12 @@
       data <-
         data %>%
         left_join(df_parameters) %>%
-        dplyr::select(one_of(names(df_parameters)), everything()) %>%
+        dplyr::select(any_of(names(df_parameters)), everything()) %>%
         suppressMessages() %>%
         select(-numberTable) %>%
         mutate(nameTable = table_name) %>%
         select(nameTable, everything()) %>%
-        dplyr::select(-one_of("idLeague")) %>%
+        dplyr::select(-any_of("idLeague")) %>%
         remove_zero_sum_cols() %>%
         mutate(slugTable = table_slug,
                yearSeason = season) %>%
@@ -132,7 +132,7 @@
 
       data <-
         data %>%
-        dplyr::select(-one_of(c( "resultGame", "locationGame",
+        dplyr::select(-any_of(c( "resultGame", "locationGame",
                                  "nameSeasonMonth", "segmentSeason", "rangeDaysRest"))) %>%
         suppressWarnings()
 
@@ -160,7 +160,7 @@
         data <-
           data %>%
           dplyr::rename(idPlayerAssistedBy = idPlayer) %>%
-          dplyr::select(-one_of("namePlayer")) %>%
+          dplyr::select(-any_of("namePlayer")) %>%
           left_join(
             df_dict_nba_players %>% select(idPlayerAssistedBy = idPlayer,
                                            namePlayerAssistedBy = namePlayer)
@@ -380,7 +380,7 @@
              modeSearch = mode,
              slugSeason = season_slug,
              yearSeason = season)  %>%
-      dplyr::select(one_of(c("nameTable", "typeMeasure", "modeSearch", "slugSeason", "yearSeason",
+      dplyr::select(any_of(c("nameTable", "typeMeasure", "modeSearch", "slugSeason", "yearSeason",
                              "typeSeason", "slugSeasonSearch",
                              "idPlayer", "namePlayer", "slugTable",
                              "dataTable")
@@ -643,7 +643,7 @@ players_tables <-
           df_tables <-
             all_data %>%
             filter(tableSlugName == table) %>%
-            select(-one_of(c("slugTable", "tableSlugName"))) %>%
+            select(-any_of(c("slugTable", "tableSlugName"))) %>%
             unnest(cols = where(is.list)) %>%
             remove_na_columns()
 

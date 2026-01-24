@@ -24,14 +24,11 @@
       data %>%
       set_names(actual_names) %>%
       unite(namePlayer, nameFirst, nameLast, sep = " ") %>%
-      mutate_at(c("idUpdate", "idPlayer", "idRotoWorld", "dateISO", "numberPriority"),
-                funs(. %>% as.numeric())) %>%
-      mutate_at(c("datetimePublished", "datetimeUpdatedLast"),
-                funs(. %>% lubridate::mdy_hms())) %>%
+      mutate(across(c("idUpdate", "idPlayer", "idRotoWorld", "dateISO", "numberPriority"), as.numeric)) %>%
+      mutate(across(c("datetimePublished", "datetimeUpdatedLast"), lubridate::mdy_hms)) %>%
       mutate(isInjured = !slugInjured %>% str_detect("NO")) %>%
       dplyr::select(idPlayer, namePlayer, slugTeam, codeTeam, datetimePublished, articleHeadline, everything()) %>%
-      mutate_if(is.character,
-                funs(ifelse(. == "", NA_character_, .)))
+      mutate(across(where(is.character), ~ifelse(.x == "", NA_character_, .x)))
 
     if (return_message) {
       glue("Acquired {nrow(data)} Roto Wire articles for {data$namePlayer %>% unique()}") %>% cat(fill = T)
@@ -201,10 +198,9 @@ players_rotowire <-
       as_tibble() %>%
       set_names(c("title", "descriptionTransaction", "idTeam", "nameTeamFrom",
                          "idPlayer", "dateTransaction", "idTransaction", "meta")) %>%
-      mutate_at(c("idPlayer", "idTransaction", "idTeam"),
-                funs(. %>% as.numeric())) %>%
+      mutate(across(c("idPlayer", "idTransaction", "idTeam"), ~as.numeric(.x))) %>%
       mutate(dateTransaction = lubridate::mdy(dateTransaction)) %>%
-      select(-one_of("title", "nameTeamFrom", "meta")) %>%
+      select(-any_of("title", "nameTeamFrom", "meta")) %>%
       suppressWarnings()
 
     if (!'df_nba_team_dict' %>% exists()) {
@@ -297,7 +293,7 @@ transactions <-
       left_join(df_nba_player_dict %>% dplyr::select(idPlayer, namePlayer)) %>%
       left_join(df_nba_team_dict %>% dplyr::select(idTeam, nameTeam)) %>%
       left_join(df_nba_team_dict %>% dplyr::select(idTeamFrom = idTeam, nameTeamFrom = nameTeam)) %>%
-      dplyr::select(-one_of("remove")) %>%
+      dplyr::select(-any_of("remove")) %>%
       suppressMessages()
 
     data <-

@@ -154,7 +154,7 @@
             df_stats <-
               df_stats %>%
               left_join(df_base) %>%
-              select(one_of(names(df_base)), everything()) %>%
+              select(any_of(names(df_base)), everything()) %>%
               suppressMessages() %>%
               rename(slugPositionStarter = slugPosition)
 
@@ -172,7 +172,7 @@
       all_data <-
         all_data %>%
         left_join(df_base) %>%
-        select(one_of(names(df_base)), everything()) %>%
+        select(any_of(names(df_base)), everything()) %>%
         suppressMessages()
 
       data <-
@@ -296,7 +296,7 @@
           df_team %>% unite(nameTeam, nameCityTeam, teamName, sep = " ") %>%
             select(idTeam, nameTeam, slugTeam, locationGame)
         ) %>%
-        select(-one_of(c(
+        select(-any_of(c(
           "typeBoxScore", "typeDataSet", "orderBoxScore"
         ))) %>%
         select(idGame, slugTeam, nameTeam, locationGame, everything()) %>%
@@ -439,14 +439,14 @@ box_scores <-
               if (table_slug == "usage") {
                 data <-
                   data %>%
-                  dplyr::select(-one_of("pctUSG"))
+                  dplyr::select(-any_of("pctUSG"))
               }
 
               if (table_slug %in% c("tracking", "defense", "hustle")) {
 
                 data <-
                   data %>%
-                  dplyr::select(-one_of(
+                  dplyr::select(-any_of(
                     c(
                       "pctFG",
                       "groupStartPosition",
@@ -464,7 +464,7 @@ box_scores <-
               if (table_slug == "four factors") {
                 data <-
                   data %>%
-                  dplyr::select(-one_of(c(
+                  dplyr::select(-any_of(c(
                     "pctOREB", "pctTOVTeam", "pctEFG"
                   )))
               }

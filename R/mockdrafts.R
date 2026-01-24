@@ -487,7 +487,7 @@
     draft_data <-
       draft_data %>%
       left_join(class_df) %>%
-      dplyr::select(-one_of(c(
+      dplyr::select(-any_of(c(
         "name.team.nbadraft_net",
         "school.actual",
         "name.player.nba",
@@ -573,7 +573,7 @@ nbadraftnet_mock_drafts <-
       all_data <-
         all_data %>%
         left_join(df_nba_player_dict %>% select(
-          one_of(
+          any_of(
             "isActive",
             "isRookie",
             "namePlayer",

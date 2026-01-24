@@ -210,7 +210,7 @@ team_season_roster <-
 
     data_roster <-
       data_roster %>%
-      mutate_at(
+      mutate(across(
         c(
           "idTeam",
           "yearSeason",
@@ -220,15 +220,15 @@ team_season_roster <-
           "countSeasons",
           "idPlayer"
         ),
-        funs(. %>% as.character() %>% parse_number())
-      ) %>%
+        ~parse_number(as.character(.x))
+      )) %>%
       mutate(
         dateBirth = lubridate::mdy(dateBirth),
         heightInches = heightInches %>% map_dbl(height_in_inches),
         countSeasons = ifelse(countSeasons %>% is.na(), 0, countSeasons),
         isRookie = ifelse(countSeasons == 0, TRUE, FALSE)
       ) %>%
-      dplyr::select(-one_of(c("idLeague"))) %>%
+      dplyr::select(-any_of(c("idLeague"))) %>%
       suppressMessages() %>%
       suppressWarnings()
 
@@ -365,19 +365,19 @@ teams_rosters <-
       mutate(slugSeason,
              nameTeam = team) %>%
       dplyr::select(slugSeason, yearSeason, nameTeam, everything()) %>%
-      select(-one_of(c("nameFirst", "nameLast", "remove"))) %>%
+      select(-any_of(c("nameFirst", "nameLast", "remove"))) %>%
       suppressWarnings()
 
 
     data_roster <-
       data_roster %>%
-      mutate_at(
+      mutate(across(
         c(
           "idTeam",
           "yearSeason"
         ),
-        funs(. %>% as.character() %>%  parse_number())
-      ) %>%
+        ~parse_number(as.character(.x))
+      )) %>%
       separate(schoolCoach, into = c("typeSchoolCoach", "nameSchoolCoach"), sep = "\\ - ") %>%
       suppressMessages() %>%
       suppressWarnings()

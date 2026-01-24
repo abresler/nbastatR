@@ -82,7 +82,7 @@ seasons_players <-
 
     all_data <-
       all_data %>%
-      dplyr::select(-one_of(c("idTeam","cityTeam","teamName","slugTeam","codeTeam" )))
+      dplyr::select(-any_of(c("idTeam","cityTeam","teamName","slugTeam","codeTeam" )))
     if (nest_data) {
       all_data  <-
         all_data %>%

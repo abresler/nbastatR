@@ -278,7 +278,7 @@ spread_data <-
         suppressMessages()
     }
 
-    base_cols <- data %>% dplyr::select(-one_of(c(variable_name, value_name))) %>% names()
+    base_cols <- data %>% dplyr::select(-any_of(c(variable_name, value_name))) %>% names()
 
     variables <- data %>% pull(variable_name) %>% unique()
 
@@ -405,7 +405,7 @@ summarise_per_minute <-
 
     data <-
       data %>%
-      dplyr::select(-one_of("minutes")) %>%
+      dplyr::select(-any_of("minutes")) %>%
       suppressWarnings()
 
     min_var <-
@@ -417,7 +417,7 @@ summarise_per_minute <-
       data %>% dplyr::select(dplyr::matches(cols_to_match)) %>% names()
     data <-
       data %>%
-      dplyr::select(one_of(c(id_columns, min_var, munge_cols)))
+      dplyr::select(any_of(c(id_columns, min_var, munge_cols)))
 
     data <-
       data %>%
@@ -435,7 +435,7 @@ summarise_per_minute <-
 
     data <-
       data %>%
-      select(one_of(c(id_columns, "minutes")), everything())
+      select(any_of(c(id_columns, "minutes")), everything())
     data
   }
 
@@ -485,7 +485,7 @@ scale_per_minute <-
     if (!min_var == "minutes") {
       data <-
         data %>%
-        dplyr::select(-one_of(min_var)) %>%
+        dplyr::select(-any_of(min_var)) %>%
         suppressMessages()
     }
     data <-
@@ -505,7 +505,7 @@ scale_per_minute <-
 
     data <-
       data %>%
-      dplyr::select(one_of(c(start_vars, "minutes")), everything())
+      dplyr::select(any_of(c(start_vars, "minutes")), everything())
 
     data
   }

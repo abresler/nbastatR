@@ -134,10 +134,9 @@
         separate(heightInches,
                         sep = "\\-",
                         into = c("feet", "inches")) %>%
-        mutate_at(c("feet", "inches"),
-                  funs(. %>% as.numeric())) %>%
+        mutate(across(c("feet", "inches"), ~as.numeric(.x))) %>%
         mutate(heightInches = (12 * feet) + inches) %>%
-        select(-one_of(c("feet", "inches"))) %>%
+        select(-any_of(c("feet", "inches"))) %>%
         select(slugSeason, idTeam:weightLBS, heightInches, everything())
     }
 

@@ -6,7 +6,7 @@
   function(data, record_column = "recordTiedAtHalf") {
     df_set <-
       data %>%
-      select(one_of(record_column)) %>%
+      select(any_of(record_column)) %>%
       distinct()
 
     all_data <-
@@ -95,8 +95,7 @@ current_standings <-
       set_names(actual_names) %>%
       dplyr::select(-dplyr::matches("Remove")) %>%
       munge_nba_data() %>%
-      mutate_at(c("pctLosses", "pctWins"),
-                funs(. / 100)) %>%
+      mutate(across(c("pctLosses", "pctWins"), ~.x / 100)) %>%
       left_join(df_dict_nba_teams %>% select(idTeam, slugTeam, nameTeam, dplyr::matches("url"))) %>%
       mutate(dateData = Sys.Date(),
              rankTeam = 1:n()) %>%

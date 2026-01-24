@@ -4,7 +4,7 @@
   memoise(function(data, set_column = "setSpot15CornerLeftCollege") {
     df_set <-
       data %>%
-      select(one_of(set_column)) %>%
+      select(any_of(set_column)) %>%
       distinct()
 
     all_data <-
