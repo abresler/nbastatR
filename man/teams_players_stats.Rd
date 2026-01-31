@@ -321,10 +321,11 @@ a `tibble`
 Gets NBA summary statistics tables
 }
 \examples{
+\dontrun{
 teams_players_stats(seasons = 2018, types = c("player", "team"),
  modes = c("PerGame", "Totals"),
  tables = c("general", "defense", "clutch", "hustle", "shots", "shot locations"))
- )
+}
 }
 \seealso{
 Other players: 

@@ -24,8 +24,9 @@ a  \code{tibble}
 Acquires NBA players agents
 }
 \examples{
+\dontrun{
 agents_players(agents = c("Jeff Schwartz"))
-
+}
 }
 \seealso{
 Other agents: 

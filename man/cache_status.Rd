@@ -16,6 +16,11 @@ a \code{tibble} with cache status information
 Returns information about the current state of memoized function caches.
 Shows which functions have cached data and approximate cache age.
 }
+\examples{
+\dontrun{
+cache_status()
+}
+}
 \seealso{
 Other cache management: 
 \code{\link{cache_clear}()},

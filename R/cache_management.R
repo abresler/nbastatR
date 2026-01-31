@@ -35,7 +35,7 @@
 #' @family cache management
 #'
 #' @examples
-#' \dontrun
+#' \dontrun{
 #' cache_status()
 #' }
 cache_status <- function(verbose = TRUE) {

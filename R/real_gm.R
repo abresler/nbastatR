@@ -485,8 +485,9 @@
 #' @family agents
 #' @import dplyr rvest stringr tidyr purrr xml2 readr magrittr
 #' @examples
+#' \dontrun{
 #' agents_players(agents = c("Jeff Schwartz"))
-#'
+#' }
 agents_players <-
   function(agents = "Jeff Schwartz",
            all_agents = F,
