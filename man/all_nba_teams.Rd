@@ -7,11 +7,34 @@
 all_nba_teams(return_message = TRUE)
 }
 \arguments{
-\item{return_message}{}
+\item{return_message}{if \code{TRUE} returns a message}
 }
 \value{
-\code{tibble}
+a \code{tibble}
 }
 \description{
-All NBA Teams
+Returns historical All-NBA team selections from basketball-reference.com.
 }
+\examples{
+\dontrun{
+all_nba_teams()
+}
+}
+\seealso{
+Other BREF: 
+\code{\link{bref_awards}()},
+\code{\link{bref_awards_votes}()},
+\code{\link{bref_bios}()},
+\code{\link{bref_players_stats}()},
+\code{\link{bref_teams_stats}()},
+\code{\link{dictionary_bref_coaches}()},
+\code{\link{dictionary_bref_players}()},
+\code{\link{dictionary_bref_teams}()}
+
+Other awards: 
+\code{\link{bref_awards}()},
+\code{\link{bref_awards_votes}()},
+\code{\link{players_awards}()}
+}
+\concept{BREF}
+\concept{awards}

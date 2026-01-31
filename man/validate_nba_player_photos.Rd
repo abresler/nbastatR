@@ -7,11 +7,23 @@
 validate_nba_player_photos(sleep_time = 2)
 }
 \arguments{
-\item{sleep_time}{if not \code{NULL} sleep time}
+\item{sleep_time}{sleep time between requests in seconds}
 }
 \value{
-\code{tibble}
+a \code{tibble} with player IDs and photo availability flags
 }
 \description{
-Validate NBA Player photos
+Validates availability of NBA player photos by checking URLs.
 }
+\examples{
+\dontrun{
+validate_nba_player_photos(sleep_time = 2)
+}
+}
+\seealso{
+Other NBA players: 
+\code{\link{assign_nba_players}()},
+\code{\link{dictionary_bref_players}()},
+\code{\link{dictionary_player_photos}()}
+}
+\concept{NBA players}

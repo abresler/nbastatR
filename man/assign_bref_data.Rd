@@ -17,11 +17,11 @@ assign_bref_data(
 \arguments{
 \item{data}{a \code{tibble} of tables}
 
-\item{type}{type of BREF data are `teams` and `players`}
+\item{type}{type of BREF data, options are \code{teams} and \code{players}}
 
 \item{widen_data}{if \code{TRUE} widens data}
 
-\item{include_all_nba}{if `TRUE` include all NBA teams}
+\item{include_all_nba}{if \code{TRUE} include all NBA teams}
 
 \item{join_data}{if \code{TRUE} joins tables}
 
@@ -30,8 +30,13 @@ assign_bref_data(
 \item{assign_to_environment}{if \code{TRUE} assigns data to your environment}
 }
 \value{
-a `tibble`
+a \code{tibble}
 }
 \description{
-Assign nested BREF data to environment
+Assigns basketball reference data to your global environment.
+}
+\examples{
+\dontrun{
+assign_bref_data(data = bref_data, type = "players")
+}
 }

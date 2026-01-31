@@ -47,6 +47,7 @@ bref_awards(awards = c("Most Valuable Player", "Rookie of the Year", "Defensive 
 }
 \seealso{
 Other BREF: 
+\code{\link{all_nba_teams}()},
 \code{\link{bref_awards_votes}()},
 \code{\link{bref_bios}()},
 \code{\link{bref_players_stats}()},
@@ -56,6 +57,7 @@ Other BREF:
 \code{\link{dictionary_bref_teams}()}
 
 Other awards: 
+\code{\link{all_nba_teams}()},
 \code{\link{bref_awards_votes}()},
 \code{\link{players_awards}()}
 }

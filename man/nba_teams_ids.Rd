@@ -10,12 +10,14 @@ nba_teams_ids(teams = NULL, team_ids = NULL, all_active_teams = F)
 \item{teams}{vector of team names}
 
 \item{team_ids}{vector of team ids}
+
+\item{all_active_teams}{if \code{TRUE} returns all active team ids}
 }
 \value{
-a `tibble`
+a vector of team ids
 }
 \description{
-Resolve NBA team ID
+Resolve NBA team ID for specified teams.
 }
 \examples{
 nba_teams_ids(teams = c("Brooklyn Nets", "Denver Nuggets"))

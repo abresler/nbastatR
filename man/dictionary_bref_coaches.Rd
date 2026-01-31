@@ -20,9 +20,11 @@ Other dictionary:
 \code{\link{assign_nba_players}()},
 \code{\link{assign_nba_teams}()},
 \code{\link{dictionary_bref_players}()},
-\code{\link{dictionary_bref_teams}()}
+\code{\link{dictionary_bref_teams}()},
+\code{\link{dictionary_player_photos}()}
 
 Other BREF: 
+\code{\link{all_nba_teams}()},
 \code{\link{bref_awards}()},
 \code{\link{bref_awards_votes}()},
 \code{\link{bref_bios}()},

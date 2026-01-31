@@ -7,8 +7,28 @@
 dictionary_player_photos()
 }
 \value{
-\code{tibble}
+a \code{tibble} with player IDs and photo availability flags
 }
 \description{
-Cached player photo dictionary
+Returns a cached dictionary of NBA player photo availability.
 }
+\examples{
+\dontrun{
+dictionary_player_photos()
+}
+}
+\seealso{
+Other dictionary: 
+\code{\link{assign_nba_players}()},
+\code{\link{assign_nba_teams}()},
+\code{\link{dictionary_bref_coaches}()},
+\code{\link{dictionary_bref_players}()},
+\code{\link{dictionary_bref_teams}()}
+
+Other NBA players: 
+\code{\link{assign_nba_players}()},
+\code{\link{dictionary_bref_players}()},
+\code{\link{validate_nba_player_photos}()}
+}
+\concept{NBA players}
+\concept{dictionary}

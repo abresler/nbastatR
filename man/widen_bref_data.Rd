@@ -7,11 +7,16 @@
 widen_bref_data(data)
 }
 \arguments{
-\item{data}{}
+\item{data}{a \code{tibble} of basketball reference data}
 }
 \value{
-a `tibble`
+a \code{tibble} in wide format
 }
 \description{
-Widens basketball reference table data
+Converts basketball reference table data from long to wide format.
+}
+\examples{
+\dontrun{
+widen_bref_data(data = bref_data)
+}
 }

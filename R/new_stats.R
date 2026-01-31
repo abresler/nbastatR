@@ -18389,6 +18389,7 @@ parse_for_seasons_data <-
 #'
 #' Returns team dictionary
 #'
+#' @param league league to query, one of \code{"NBA"} or \code{"WNBA"}
 #' @param join_blg if \code{TRUE} joins BLG team features data
 #'
 #' @return a `tibble`

@@ -29,6 +29,7 @@ bref_awards_votes(2017)
 }
 \seealso{
 Other BREF: 
+\code{\link{all_nba_teams}()},
 \code{\link{bref_awards}()},
 \code{\link{bref_bios}()},
 \code{\link{bref_players_stats}()},
@@ -38,6 +39,7 @@ Other BREF:
 \code{\link{dictionary_bref_teams}()}
 
 Other awards: 
+\code{\link{all_nba_teams}()},
 \code{\link{bref_awards}()},
 \code{\link{players_awards}()}
 }

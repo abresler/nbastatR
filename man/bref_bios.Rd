@@ -35,6 +35,7 @@ assign_to_environment = TRUE)
 }
 \seealso{
 Other BREF: 
+\code{\link{all_nba_teams}()},
 \code{\link{bref_awards}()},
 \code{\link{bref_awards_votes}()},
 \code{\link{bref_players_stats}()},

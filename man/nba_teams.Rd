@@ -7,6 +7,8 @@
 nba_teams(league = "NBA", join_blg = F)
 }
 \arguments{
+\item{league}{league to query, one of \code{"NBA"} or \code{"WNBA"}}
+
 \item{join_blg}{if \code{TRUE} joins BLG team features data}
 }
 \value{

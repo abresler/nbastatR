@@ -20,7 +20,8 @@ Other dictionary:
 \code{\link{assign_nba_players}()},
 \code{\link{dictionary_bref_coaches}()},
 \code{\link{dictionary_bref_players}()},
-\code{\link{dictionary_bref_teams}()}
+\code{\link{dictionary_bref_teams}()},
+\code{\link{dictionary_player_photos}()}
 }
 \concept{NBA teams}
 \concept{dictionary}

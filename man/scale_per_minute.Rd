@@ -2,15 +2,23 @@
 % Please edit documentation in R/utils.R
 \name{scale_per_minute}
 \alias{scale_per_minute}
-\title{Summarise data per minute}
+\title{Scale data per minute}
 \usage{
 scale_per_minute(data, scale_columns = NULL)
 }
 \arguments{
-\item{data}{a data frame}
+\item{data}{a data frame containing statistics}
 
-\item{scale_columns}{vector of columns to scale}
+\item{scale_columns}{vector of columns to scale per minute}
+}
+\value{
+a \code{tibble} with scaled per-minute statistics
 }
 \description{
-Summarise data per minute
+Scales specified columns to per-minute values.
+}
+\examples{
+\dontrun{
+scale_per_minute(data = player_stats, scale_columns = c("pts", "ast"))
+}
 }

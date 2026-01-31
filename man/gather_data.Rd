@@ -43,11 +43,16 @@ gather_data(
 
 \item{use_date_keys}{if \code{TRUE} uses dates as a key}
 
-\item{remove_na}{removes NA columns}
+\item{remove_na}{if \code{TRUE} removes NA columns}
 }
 \value{
-a \code{tibble}
+a \code{tibble} in long format
 }
 \description{
 Gather a data frame
+}
+\examples{
+\dontrun{
+gather_data(data = df, numeric_ids = c("id"))
+}
 }

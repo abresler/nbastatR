@@ -14,19 +14,26 @@ spread_data(
 )
 }
 \arguments{
-\item{data}{a \code{tibble}}
+\item{data}{a \code{tibble} in long format}
 
 \item{variable_name}{name of variable vector}
 
 \item{value_name}{name of value vector}
 
-\item{perserve_order}{if \code{TRUE} preserve order}
+\item{perserve_order}{if \code{TRUE} preserve column order}
 
-\item{separate_columns}{}
+\item{unite_columns}{list of columns to unite before spreading}
+
+\item{separate_columns}{list of columns to separate before spreading}
 }
 \value{
-a \code{tibble}
+a \code{tibble} in wide format
 }
 \description{
-Spread gathered data frame
+Converts a gathered data frame to wide format.
+}
+\examples{
+\dontrun{
+spread_data(data = df, variable_name = "item", value_name = "value")
+}
 }

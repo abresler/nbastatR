@@ -18,6 +18,8 @@ box_scores(
 \arguments{
 \item{game_ids}{vector of game ids}
 
+\item{league}{league to query, one of \code{"NBA"}, \code{"WNBA"}, or \code{"GLEAGUE"}}
+
 \item{box_score_types}{vector of box score types options include \itemize{
 \item traditional
 \item advanced

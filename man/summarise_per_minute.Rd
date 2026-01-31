@@ -12,15 +12,20 @@ summarise_per_minute(
 )
 }
 \arguments{
-\item{data}{a data frame}
+\item{data}{a data frame containing statistics}
 
-\item{id_columns}{vector of id columns}
+\item{id_columns}{vector of id columns to preserve}
 
-\item{scale_columns}{vector of columns to scale}
+\item{scale_columns}{vector of columns to scale per minute}
 }
 \value{
-a \code{tibble}
+a \code{tibble} with per-minute statistics
 }
 \description{
-Summarize data per minute
+Normalizes statistics to per-minute values.
+}
+\examples{
+\dontrun{
+summarise_per_minute(data = player_stats, id_columns = c("idPlayer"))
+}
 }

@@ -41,6 +41,7 @@ Other player:
 \code{\link{players_tables}()}
 
 Other awards: 
+\code{\link{all_nba_teams}()},
 \code{\link{bref_awards}()},
 \code{\link{bref_awards_votes}()}
 }

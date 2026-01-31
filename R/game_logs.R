@@ -247,9 +247,9 @@
 #' }
 #' @param nest_data if \code{TRUE} nests data
 #' @param assign_to_environment assigns individual table to environment
-#' @param league league name defaults to WNBA
-#' @param ...
-#' @param return_message
+#' @param league league name, one of \code{"NBA"}, \code{"WNBA"}, or \code{"GLEAGUE"}
+#' @param return_message if \code{TRUE} returns a message
+#' @param ... additional arguments passed to internal functions
 #'
 #' @return a `tibble`
 #' @family game

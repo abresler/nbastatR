@@ -19,7 +19,7 @@ game_logs(
 \arguments{
 \item{seasons}{vector of seasons where season is year ending}
 
-\item{league}{league name defaults to WNBA}
+\item{league}{league name, one of \code{"NBA"}, \code{"WNBA"}, or \code{"GLEAGUE"}}
 
 \item{result_types}{vector of result types \itemize{
 \item player
@@ -37,7 +37,9 @@ game_logs(
 
 \item{assign_to_environment}{assigns individual table to environment}
 
-\item{return_message}{}
+\item{return_message}{if \code{TRUE} returns a message}
+
+\item{...}{additional arguments passed to internal functions}
 }
 \value{
 a `tibble`
