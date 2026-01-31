@@ -1,0 +1,14 @@
+{
+  "package": "nbastatR",
+  "cleanup_id": "20260131-102014",
+  "started_at": "2026-01-31T10:20:14Z",
+  "status": "IN_PROGRESS",
+  "mode": "semi-auto",
+  "working_dir": "/Users/alexbresler/Desktop/r_packages/nbastatR",
+  "before": {},
+  "after": {},
+  "phases": {},
+  "gates": {
+    "preflight": {"passed": true, "note": "Tests had 1 pre-existing failure"}
+  }
+}
