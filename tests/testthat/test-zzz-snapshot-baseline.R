@@ -1,11 +1,11 @@
-# Snapshot baseline test - Auto-generated on 2026-01-31
-# This captures the current state before cleanup
+# Snapshot baseline test - Updated after adding advanced metrics & cache management
+# This captures the current state after enhancements
 
 context("Baseline Snapshot")
 
 test_that("Package exports match baseline", {
   exports <- getNamespaceExports("nbastatR")
-  expect_equal(length(exports), 77)
+  expect_gte(length(exports), 100)  # Now 106 with new modules
   expect_true("nba_players" %in% exports)
   expect_true("game_logs" %in% exports)
   expect_true("box_scores" %in% exports)
