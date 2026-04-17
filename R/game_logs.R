@@ -291,9 +291,6 @@ game_logs <-
       as_tibble() %>%
       arrange(season)
 
-    .get_season_gamelog_safe <-
-      possibly(.get_season_gamelog, tibble())
-
     all_data <-
       1:nrow(input_df) %>%
       map_df(function(x) {
@@ -423,7 +420,6 @@ game_logs <-
              "tracking"
            ),
            return_message = TRUE) {
-    .get_season_gamelog_safe <- possibly(.get_season_gamelog, tibble())
     data <-
       .get_season_gamelog(
         season = season,
