@@ -3226,7 +3226,7 @@ nba_json_to_df <-
       json$resultSets$headers[[table_id]]
     data <-
       json$resultSets$rowSet[table_id] %>%
-      data.frame(stringsAsFactors = F) %>%
+      data.frame() %>%
       dplyr::as_tibble() %>%
       set_names(json_names)
 

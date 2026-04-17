@@ -17771,8 +17771,7 @@ generate_team_seasons_logos_data <-
            slug_teams = "SAC") {
     input_df <-
       expand.grid(season = seasons,
-                  slug_team = slug_teams,
-                  stringsAsFactors = F) %>%
+                  slug_team = slug_teams) %>%
       as_tibble()
     generate_team_season_logo_safe <-
       possibly(generate_team_season_logo, NULL)
@@ -17833,7 +17832,7 @@ parse.nba.json_data <-
 
     data <-
       json_data$resultSets$rowSet %>%
-      data.frame(stringsAsFactors = F) %>%
+      data.frame() %>%
       dplyr::as_tibble() %>%
       set_names(names_actual)
 
@@ -18443,7 +18442,7 @@ nba_teams_seasons <- function() {
 
   data <-
     json$resultSets$rowSet[[1]] %>%
-    data.frame(stringsAsFactors = F) %>%
+    data.frame() %>%
     as_tibble() %>%
     set_names(actual_names) %>%
     munge_nba_data() %>%

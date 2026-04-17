@@ -142,7 +142,7 @@ current_standings <-
         table_name <- tables_data$name[[x]]
         data <-
           tables_data$rowSet[[x]] %>%
-          data.frame(stringsAsFactors = F) %>%
+          data.frame() %>%
           as_tibble()
 
         if (data %>% nrow() == 0) {
@@ -229,8 +229,7 @@ playoff_pictures <-
       stop("Please enter seasons")
     }
     input_df <-
-      expand.grid(season = seasons,
-                  stringsAsFactors = F) %>%
+      expand.grid(season = seasons) %>%
       dplyr::as_tibble()
     .get_season_playoff_picture_safe <-
       possibly(.get_season_playoff_picture, tibble())
@@ -340,8 +339,7 @@ standings <-
     input_df <-
       expand.grid(
         season = seasons,
-        season_type = season_types,
-        stringsAsFactors = F
+        season_type = season_types
       ) %>%
       dplyr::as_tibble()
 

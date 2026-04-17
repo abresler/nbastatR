@@ -37,7 +37,7 @@
 
       data <-
         json$resultSets$rowSet[[x]] %>%
-        data.frame(stringsAsFactors = F) %>%
+        data.frame() %>%
         dplyr::as_tibble() %>%
         select(-matches("remove"))
 
@@ -565,8 +565,7 @@ players_tables <-
         game_segment = game_segments,
         period = periods,
         shot_clock = shot_clocks,
-        last_n_games = last_n_games,
-        stringsAsFactors = F
+        last_n_games = last_n_games
       ) %>%
       dplyr::as_tibble()
     get_player_table_data_safe <-

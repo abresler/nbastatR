@@ -56,7 +56,7 @@
 
         data <-
           json$resultSets$rowSet[[x]] %>%
-          data.frame(stringsAsFactors = F) %>%
+          data.frame() %>%
           as_tibble()
         if (data %>% nrow() == 0) {
           return(invisible())
@@ -171,8 +171,7 @@ players_careers <-
     df_input <-
       expand.grid(
         player_id = ids %>% unique() %>% sort(),
-        mode = modes,
-        stringsAsFactors = F
+        mode = modes
       ) %>%
       dplyr::as_tibble()
 

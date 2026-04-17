@@ -33,7 +33,7 @@
       table_name <- tables_data$name[[x]]
       data <-
         tables_data$rowSet[[x]] %>%
-        data.frame(stringsAsFactors = F) %>%
+        data.frame() %>%
         as_tibble()
 
       if (data %>% nrow() == 0) {
@@ -233,7 +233,7 @@ teams_details <-
 
   data <-
     json$resultSets$rowSet[[1]] %>%
-    data.frame(stringsAsFactors = F) %>%
+    data.frame() %>%
     dplyr::as_tibble()
 
   actual_names <-
@@ -328,8 +328,7 @@ teams_annual_stats <-
       expand.grid(
         team_id = teams_ids,
         season_type =  season_types,
-        mode = modes,
-        stringsAsFactors = F
+        mode = modes
       ) %>%
       as_tibble()
 

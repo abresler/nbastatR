@@ -190,7 +190,7 @@
 
     data <-
       json$resultSets$rowSet[[table_id]] %>%
-      data.frame(stringsAsFactors = F) %>%
+      data.frame() %>%
       as_tibble()
 
     if (data %>% nrow() == 0) {
@@ -275,7 +275,7 @@
     if (league == "WNBA" && table_id == 2) {
       df_team <-
         json$resultSets$rowSet[[3]] %>%
-        data.frame(stringsAsFactors = F) %>%
+        data.frame() %>%
         as_tibble()
 
 
@@ -386,8 +386,7 @@ box_scores <-
     input_df <-
       expand.grid(game_id = game_ids,
                   result_type = result_types,
-                  boxscore = box_score_types,
-                  stringsAsFactors = F) %>%
+                  boxscore = box_score_types) %>%
       dplyr::as_tibble()
 
 

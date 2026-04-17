@@ -285,8 +285,7 @@ game_logs <-
       expand.grid(
         season = seasons,
         result = result_types,
-        season_type = season_types,
-        stringsAsFactors = F
+        season_type = season_types
       ) %>%
       as_tibble() %>%
       arrange(season)
@@ -520,8 +519,7 @@ seasons_schedule <-
     input_df <-
       expand.grid(
         season = seasons,
-        season_type = season_types,
-        stringsAsFactors = F
+        season_type = season_types
       ) %>%
       as_tibble() %>%
       arrange(season)

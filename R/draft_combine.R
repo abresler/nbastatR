@@ -76,7 +76,7 @@
 
     data <-
       json$resultSets$rowSet %>%
-      data.frame(stringsAsFactors = F) %>%
+      data.frame() %>%
       tbl_df()
 
     headers <-
