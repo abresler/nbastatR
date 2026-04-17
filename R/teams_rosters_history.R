@@ -32,7 +32,7 @@ nba_franchise_history <-
 
     active_data <-
       team_data$resultSets$rowSet[1] %>%
-      data.frame(stringsAsFactors = F) %>%
+      data.frame() %>%
       as_tibble()
 
 
@@ -45,7 +45,7 @@ nba_franchise_history <-
 
     defunct_data <-
       team_data$resultSets$rowSet[2] %>%
-      data.frame(stringsAsFactors = F) %>%
+      data.frame() %>%
       as_tibble()
 
     names(defunct_data) <-
@@ -177,7 +177,7 @@ team_season_roster <-
 
     data_roster <-
       json_data$resultSets$rowSet[1] %>%
-      data.frame(stringsAsFactors = F) %>%
+      data.frame() %>%
       tbl_df()
     actual_names <- c(
       "idTeam",
@@ -343,7 +343,7 @@ teams_rosters <-
 
     data_roster <-
       json_data$resultSets$rowSet[2] %>%
-      data.frame(stringsAsFactors = F) %>%
+      data.frame() %>%
       tbl_df()
 
     if (data_roster %>% nrow() == 0) {

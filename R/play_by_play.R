@@ -23,7 +23,7 @@
 
     data <-
       json$resultSets$rowSet[[1]] %>%
-      data.frame(stringsAsFactors = F) %>%
+      data.frame() %>%
       as_tibble()
 
     json_names <-
@@ -64,7 +64,7 @@
 
     data <-
       json$resultSets$rowSet[[1]] %>%
-      data.frame(stringsAsFactors = F) %>%
+      data.frame() %>%
       as_tibble()
 
     json_names <-
@@ -100,7 +100,7 @@
 
     data <-
       json$resultSets$rowSet[[1]] %>%
-      data.frame(stringsAsFactors = F) %>%
+      data.frame() %>%
       as_tibble()
 
     json_names <-
@@ -142,7 +142,7 @@
 
     data <-
       json$resultSets$rowSet[[1]] %>%
-      data.frame(stringsAsFactors = F) %>%
+      data.frame() %>%
       as_tibble()
 
     json_names <-
@@ -153,7 +153,7 @@
 
     df_metadata <-
       json$resultSets$rowSet[[2]] %>%
-      data.frame(stringsAsFactors = F) %>%
+      data.frame() %>%
       as_tibble()
 
     names_md <-

@@ -16,7 +16,7 @@
 
     data <-
       json$resultSets$rowSet[[1]] %>%
-      data.frame(stringsAsFactors = F) %>%
+      data.frame() %>%
       dplyr::as_tibble()
 
     if (data %>% ncol() == 0) {

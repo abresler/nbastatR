@@ -1434,7 +1434,7 @@ all_nba_teams <-
       page %>%
       html_table() %>%
       .[[1]] %>%
-      data.frame(stringsAsFactors = F) %>%
+      data.frame() %>%
       as_tibble() %>%
       dplyr::rename(slugSeason = Season,
         slugLeague = Lg,
@@ -1656,7 +1656,7 @@ all_nba_teams <-
         page %>%
         html_table() %>%
         .[[1]] %>%
-        data.frame(stringsAsFactors = FALSE) %>%
+        data.frame() %>%
         as_tibble() %>%
         dplyr::select(-dplyr::matches("Var"))
 

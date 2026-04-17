@@ -60,7 +60,7 @@
         }
         data <-
           tables_data$rowSet[[x]] %>%
-          data.frame(stringsAsFactors = F) %>%
+          data.frame() %>%
           as_tibble()
 
         if (data %>% nrow() == 0) {
@@ -133,8 +133,7 @@ days_scores <-
     }
     input_df <-
       expand.grid(game_date = game_dates,
-                  day_offset = day_offset,
-                  stringsAsFactors = F) %>%
+                  day_offset = day_offset) %>%
       as_tibble()
 
     .get_day_nba_scores_safe <-

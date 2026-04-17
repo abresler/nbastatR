@@ -689,7 +689,7 @@
           if (type %>% str_to_lower() == "player") {
             df_table <-
               json$resultSets$rowSet %>%
-              data.frame(stringsAsFactors = F) %>%
+              data.frame() %>%
               as_tibble()
 
             actual_names <-
@@ -732,7 +732,7 @@
           } else {
             df_table <-
               json$resultSets$rowSet %>%
-              data.frame(stringsAsFactors = F) %>%
+              data.frame() %>%
               as_tibble()
             actual_names <-
               c(
@@ -1138,7 +1138,7 @@ teams_players_stats <-
                   height = heights,
                   shot_clock_range = shot_clock_ranges,
                   starter_bench = starters_bench
-                  ,stringsAsFactors = F) %>%
+                  ) %>%
       dplyr::as_tibble()
     players_teams_season_summary_safe <-
       possibly(.players_teams_season_summary, tibble())

@@ -43,7 +43,7 @@
 
     data <-
       json$resultSet$rowSet %>%
-      data.frame(stringsAsFactors = F) %>%
+      data.frame() %>%
       dplyr::as_tibble() %>%
       set_names(actual_names) %>%
       munge_nba_data() %>%
@@ -120,8 +120,7 @@ metrics_leaders <-
      expand.grid(season = seasons,
                metric = metric,
                season_type = season_types,
-               mode = modes,
-               stringsAsFactors = F) %>%
+               mode = modes) %>%
       dplyr::as_tibble()
    .get_season_metric_league_leaders_safe <-
      possibly(.get_season_metric_league_leaders, tibble())
@@ -303,8 +302,7 @@ franchise_leaders <-
       expand.grid(
         team_id = ids,
         mode = modes,
-        season_type = season_types,
-        stringsAsFactors = F
+        season_type = season_types
       ) %>%
       dplyr::as_tibble()
     .get_franchise_leaders_safe <-

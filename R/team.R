@@ -51,7 +51,7 @@
 
       data <-
         json$resultSets$rowSet[[x]] %>%
-        data.frame(stringsAsFactors = F) %>%
+        data.frame() %>%
         dplyr::as_tibble()
 
       if (data %>% nrow() == 0) {
@@ -207,7 +207,7 @@
 
     df_md <-
       json$resultSets$rowSet[[1]] %>%
-      data.frame(stringsAsFactors = F) %>%
+      data.frame() %>%
       dplyr::as_tibble() %>%
       set_names(names_md) %>%
       munge_nba_data()
@@ -217,7 +217,7 @@
 
     df_md2 <-
       json$resultSets$rowSet[[2]] %>%
-      data.frame(stringsAsFactors = F) %>%
+      data.frame() %>%
       dplyr::as_tibble() %>%
       set_names(names_md) %>%
       munge_nba_data() %>%
@@ -291,8 +291,7 @@ teams_seasons_info <-
       expand.grid(
         team_id = team_ids,
         season_type =  season_types,
-        season = seasons,
-        stringsAsFactors = F
+        season = seasons
       ) %>%
       as_tibble()
 
@@ -706,8 +705,7 @@ teams_tables <-
         game_segment = game_segments,
         period = periods,
         shot_clock = shot_clocks,
-        last_n_games = last_n_games,
-        stringsAsFactors = F
+        last_n_games = last_n_games
       ) %>%
       dplyr::as_tibble()
     .get_team_table_data_safe <-
@@ -996,8 +994,7 @@ teams_shots <-
         period = periods,
         month = months,
         date_from = NA,
-        date_to  = NA,
-        stringsAsFactors = F
+        date_to  = NA
       ) %>%
       as_tibble()
 
