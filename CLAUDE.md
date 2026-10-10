@@ -36,15 +36,40 @@ testthat::test_file("tests/testthat/test-nbastatR.R")
 
 ## Code Architecture
 
-### Core Files (by function)
+### File Organization by Data Source
+
+| Data Source | Primary File(s) | Functions |
+|-------------|-----------------|-----------|
+| **NBA Stats API** | `new_stats.R` (18k lines), `game_logs.R`, `box_scores.R`, `play_by_play.R`, `standings.R` | `game_logs()`, `box_scores()`, `nba_players()`, `nba_teams()` |
+| **Basketball-Reference** | `bref.R`, `bref_bio.R` | `bref_players_stats()`, `bref_awards()`, `bref_bios()` |
+| **HoopsHype** | `hoops_hype_functions.R` | `hoopshype_salaries()` |
+| **RealGM** | `real_gm.R` | `transactions()` |
+| **nbadraft.net** | `mockdrafts.R` | `nbadraftnet_mock_drafts()` |
+| **Basketball Insiders** | `basketball_insider_functions.R` | `nba_insider_salaries()` |
+
+### Core Infrastructure Files
 
 | File | Purpose |
 |------|---------|
-| `R/new_stats.R` | NBA Stats API interface (largest file, ~18k lines) |
-| `R/bref.R` | Basketball-Reference scraping |
-| `R/new_ish.R` | Additional API helpers |
-| `R/utils.R` | Shared utilities including `make_url()` for API URL construction |
+| `R/xis_ecmo.R` | `.curl_chinazi()` - Core HTTP wrapper for NBA Stats API with required headers |
+| `R/utils.R` | `make_url()` for API URL construction, data transformation utilities |
 | `R/resolver.R` | Player name resolution across data sources |
+| `R/new_ish.R` | Dictionary functions, team/player ID lookups |
+
+### NBA Stats API Pattern
+
+All NBA Stats API calls go through `.curl_chinazi()` in `xis_ecmo.R`. This function:
+1. Sets required HTTP headers (User-Agent, x-nba-stats-token, x-nba-stats-origin)
+2. Makes GET request via httr
+3. Parses JSON response
+
+Example flow:
+```r
+# game_logs.R
+url <- glue("https://stats.nba.com/stats/leaguegamelog?...")
+json <- .curl_chinazi(url = url)
+data <- json %>% nba_json_to_df()
+```
 
 ### Key Patterns
 
@@ -62,13 +87,26 @@ game_logs(seasons = 2010:2019)  # Runs in parallel
 
 **Internal Functions**: Prefixed with `.` (e.g., `.curl_chinazi()`, `.get_current_season()`)
 
-**Name Resolution**: Player names differ across sources. `resolver.R` and `.resolve_bref_players()` in `bref.R` handle mapping.
+**Name Resolution**: Player names differ across sources. `resolver.R` and `.resolve_bref_players()` in `bref.R` handle mapping (150+ hardcoded name corrections).
 
 ### Naming Conventions
 
-- Exported functions: `snake_case` (e.g., `game_logs()`, `box_scores()`)
-- Internal functions: `.dot_prefix` (e.g., `.get_current_season()`)
-- Section headers in files: `# section_name ---`
+**Functions:**
+- Exported: `snake_case` (e.g., `game_logs()`, `box_scores()`)
+- Internal: `.dot_prefix` (e.g., `.get_current_season()`)
+- Section headers: `# section_name ---`
+
+**Column Prefixes:**
+| Prefix | Meaning | Examples |
+|--------|---------|----------|
+| `id*` | Numeric identifier | `idPlayer`, `idTeam`, `idGame` |
+| `name*` | Display name | `namePlayer`, `nameTeam` |
+| `slug*` | Short code | `slugTeam` (e.g., "LAL"), `slugSeason` (e.g., "2019-20") |
+| `type*` | Category/type | `typeSeason`, `typeResult` |
+| `date*` | Date field | `dateGame` |
+| `url*` | URL reference | `urlPlayerThumbnail`, `urlTeamSeasonLogo` |
+| `is*` | Boolean flag | `isActive`, `isWin` |
+| `count*` | Numeric count | `countSeasons` |
 
 ## Testing
 
@@ -76,4 +114,28 @@ Tests are in `tests/testthat/`. Current coverage is minimal. Tests make live API
 
 ## API Notes
 
-The NBA Stats API requires specific headers. The package handles this via custom curl wrappers. If API calls fail, check if endpoints have changed - the NBA occasionally updates their API structure.
+The NBA Stats API requires specific headers. The package handles this via `.curl_chinazi()` in `xis_ecmo.R`. If API calls fail, check if endpoints have changed - the NBA occasionally updates their API structure.
+
+## Navigating new_stats.R
+
+This 18,685-line file contains mostly static data (player photo dictionaries, etc.) and helper functions. Key exports are near the end:
+- `nba_teams()` - line ~18401
+- `nba_teams_seasons()` - line ~18435
+- `nba_stats_api_items()` - line ~18463
+- `nba_players()` - line ~18505
+
+Use grep to find specific functions: `grep -n "^function_name" R/new_stats.R`
+
+## Large File Handling - MANDATORY
+
+**NEVER read large files directly.** Use `tools/sheldon-toolkit/` scripts to inspect, sample, or extract what you need.
+
+| Need | Command |
+|------|---------|
+| Understand structure | `python ~/.claude/tools/sheldon-toolkit/inspector.py <file>` |
+| Sample rows | `python ~/.claude/tools/sheldon-toolkit/sampler.py <file> --count 10` |
+| Get slice | `python ~/.claude/tools/sheldon-toolkit/slicer.py <file> --start 0 --end 100` |
+| Infer schema | `python ~/.claude/tools/sheldon-toolkit/structurer.py <file>` |
+| Filter rows | `python ~/.claude/tools/sheldon-toolkit/filterer.py <file> --field X --value Y` |
+
+**Thresholds:** Code >300 lines, Data >100 rows = use toolkit first.
